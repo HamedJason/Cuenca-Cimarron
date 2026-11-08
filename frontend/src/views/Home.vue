@@ -25,7 +25,6 @@ const mapHref = (shelter) =>
     <section class="band band-green" aria-labelledby="titulo-911">
       <div class="wrap hero-911">
         <div class="hero-911-text">
-          <p class="hero-place">Tijuana, Baja California</p>
           <h1 id="titulo-911">¿Es una emergencia?</h1>
           <p class="hero-lead">
             Llama al 911: contestan policía, ambulancia y bomberos
@@ -60,7 +59,9 @@ const mapHref = (shelter) =>
             Tijuana está en emergencia preventiva por El Niño
           </h2>
           <p>
-            Las lluvias más fuertes se esperan en diciembre y enero ·
+            Las lluvias más fuertes se esperan en diciembre y enero
+          </p>
+          <p>
             Declaratoria del Cabildo, 5 de noviembre de 2026
           </p>
         </div>
@@ -115,10 +116,13 @@ const mapHref = (shelter) =>
           <h2 id="titulo-refugios" class="section-title">
             Refugios temporales
           </h2>
-          <p class="section-note">
-            Para entrar a un refugio, llama a tu delegación; si hay peligro, al
-            911
-          </p>
+          <a
+            class="text-link"
+            :href="emergency.sheltersUrl"
+            target="_blank"
+            rel="noopener"
+            >Lista oficial de refugios</a
+          >
           <ul class="shelter-list">
             <li v-for="shelter in emergency.shelters" :key="shelter.name">
               <span
@@ -135,13 +139,7 @@ const mapHref = (shelter) =>
               >
             </li>
           </ul>
-          <a
-            class="text-link"
-            :href="emergency.sheltersUrl"
-            target="_blank"
-            rel="noopener"
-            >Lista oficial de refugios</a
-          >
+          
         </section>
 
         <section class="risk-card" aria-labelledby="titulo-riesgo">

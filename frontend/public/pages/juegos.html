@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="../brand/cimarron.svg">
+  <title>Juegos | Cuenca Cimarrona</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/interface-refresh.css?v=20261107-9">
+  <script src="../js/app.js?v=20261107-6" defer></script>
+</head>
+<body class="subpage games-page">
+  <a class="skip-link" href="#contenido">Saltar al contenido principal</a>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="../index.html"><img src="../brand/uabc-escudo-menu.png" alt="Escudo UABC" width="26" height="36"><span><strong>CUENCA</strong><b>CIMARRONA</b></span></a>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="siteNav">Menú <span>☰</span></button>
+    <nav class="site-nav" id="siteNav" aria-label="Navegación principal"><a href="../index.html">Inicio</a><a href="juegos.html">Juegos</a><a href="aprende.html">Aprende</a><a href="recursos.html">Consejos</a></nav>
+  </div></header>
+
+  <main class="page-main games-library" id="contenido" tabindex="-1">
+    <section class="page-intro tone-green games-intro" aria-labelledby="games-title">
+      <div class="games-intro-copy"><p class="eyebrow">APRENDA JUGANDO</p><h1 id="games-title">Juegos para tomar mejores decisiones.</h1><p>Explore las dinámicas, converse con su equipo y practique cómo actuar ante una tormenta.</p><div class="games-intro-note"><span aria-hidden="true">✦</span><span>Actividades para aprender participando</span></div></div>
+      <div class="games-intro-art" aria-hidden="true"><span class="games-art-cloud"></span><span class="games-art-rain rain-a"></span><span class="games-art-rain rain-b"></span><span class="games-art-rain rain-c"></span><svg viewBox="0 0 460 280" role="presentation"><path class="route-shadow" d="M28 224 C94 220 91 157 160 168 S249 232 292 172 342 91 432 52"/><path class="route-line" d="M28 224 C94 220 91 157 160 168 S249 232 292 172 342 91 432 52"/><circle class="route-point" cx="28" cy="224" r="12"/><circle class="route-point" cx="160" cy="168" r="12"/><circle class="route-point" cx="292" cy="172" r="12"/><g class="route-pin" transform="translate(405 40)"><path d="M27 0C12 0 0 12 0 27c0 20 27 48 27 48s27-28 27-48C54 12 42 0 27 0Z"/><circle cx="27" cy="27" r="10"/></g><path class="art-hill" d="M0 258c66-28 95 13 155-7s99-33 156-9 94 23 149 2v36H0Z"/></svg><span class="games-art-label">RUTA SEGURA</span></div>
+    </section>
+    <section class="games-collection" aria-labelledby="all-games-title"><div class="section-head library-heading"><div><p class="eyebrow">COLECCIÓN DE ACTIVIDADES</p><h2 id="all-games-title">Elija una dinámica</h2><p class="games-collection-lead">Cada juego propone una forma distinta de prepararse y tomar decisiones.</p></div></div>
+      <div class="game-library-grid">
+        <article class="game-library-card featured-game"><div class="game-card-image"><img src="../assets/images/game-rally.png" alt="Ilustración de una ruta de rally durante la lluvia" loading="lazy"><span class="game-image-mark" aria-hidden="true">01</span><span class="game-playing-badge" aria-label="8 personas jugando"><i aria-hidden="true"></i><strong>08</strong><span>jugando</span></span></div><div class="game-card-body"><span class="game-tag">RALLY · EQUIPOS</span><h3>Escape de la tormenta</h3><p>Resuelva retos sobre rutas seguras, mochila de emergencia y decisiones ante la lluvia.</p><button class="button button-primary game-action" type="button" data-game="rally" aria-controls="gameDetail" aria-expanded="false">Ver dinámica <span aria-hidden="true">↗</span></button></div></article>
+        <article class="game-library-card"><div class="game-card-image"><img src="../assets/images/game-decisions.png" alt="Ilustración de caminos que representan distintas decisiones" loading="lazy"><span class="game-image-mark" aria-hidden="true">02</span><span class="game-playing-badge" aria-label="11 personas jugando"><i aria-hidden="true"></i><strong>11</strong><span>jugando</span></span></div><div class="game-card-body"><span class="game-tag blue-tag">DECISIONES · INTERACTIVO</span><h3>Cada decisión cuenta</h3><p>Seleccione una opción y observe cómo cambia el recorrido ante una situación de lluvia.</p><button class="button button-primary game-action" type="button" data-game="decisiones" aria-controls="gameDetail" aria-expanded="false">Ver dinámica <span aria-hidden="true">↗</span></button></div></article>
+        <article class="game-library-card"><div class="game-card-image"><img src="../assets/images/game-backpack.png" alt="Ilustración de una mochila con artículos de emergencia" loading="lazy"><span class="game-image-mark" aria-hidden="true">03</span><span class="game-playing-badge" aria-label="6 personas jugando"><i aria-hidden="true"></i><strong>06</strong><span>jugando</span></span></div><div class="game-card-body"><span class="game-tag green-tag">RETO · 60 SEGUNDOS</span><h3>Arme su mochila</h3><p>Reconozca los artículos indispensables para prepararse ante una tormenta.</p><button class="button button-primary game-action" type="button" data-game="mochila" aria-controls="gameDetail" aria-expanded="false">Ver dinámica <span aria-hidden="true">↗</span></button></div></article>
+      </div>
+      <aside class="game-detail-panel" id="gameDetail" aria-live="polite" aria-labelledby="game-detail-title" hidden><div><p class="eyebrow">DETALLE DE LA DINÁMICA</p><h2 id="game-detail-title"></h2><p class="game-detail-text"></p></div><div class="game-detail-steps"><strong>Cómo participar</strong><ol></ol></div></aside>
+    </section>
+  </main>
+  <footer class="simple-footer"><a href="../index.html">← Volver al inicio</a><span>Cuenca Cimarrona · UABC</span></footer>
+</body>
+</html>

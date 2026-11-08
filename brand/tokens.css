@@ -1,0 +1,26 @@
+:root {
+  --uabc-green: #00723f;
+  --uabc-gold: #dd971a;
+  --green-deep: #003d24;
+  --gold-text: #8a5a00;
+  --paper: #ffffff;
+  --surface: #ffffff;
+  --ink: #1c2621;
+  --muted: #4a5650;
+  --line: #dce3de;
+  --control-line: #7c8a82;
+  --green-tint: #e6f4ec;
+  --gold-tint: #fff1d6;
+  --font-heading: "Barlow Condensed", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+  --radius-card: 20px;
+  --radius-block: 24px;
+  --radius-button: 14px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+}

@@ -23,10 +23,10 @@ def outline(text, x, y, size, tracking=0, color='#00723F'):
 
 mascot = (root / 'frontend/public/brand/cimarron.svg').read_text(encoding='utf-8')
 body = mascot.split('>', 1)[1].rsplit('</svg>', 1)[0]
-logo = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 550 210"><title>Cuenca Cimarrón</title>'
+logo = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 550 210"><title>Cuenca Cimarrona</title>'
 logo += f'<g transform="translate(5 5)">{body}</g>'
 logo += outline('CUENCA', 226, 80, 55, 6)
-logo += outline('CIMARRÓN', 223, 151, 79, 0)
+logo += outline('CIMARRONA', 223, 151, 70, 0)
 logo += '<circle cx="525" cy="146" r="5" fill="#DD971A"/>'
 logo += outline('CONOCER. PREVENIR. CUIDARNOS.', 226, 181, 18, 1.4)
 logo += '</svg>'

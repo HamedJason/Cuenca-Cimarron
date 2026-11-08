@@ -67,7 +67,7 @@ function downloadIcon(name) {
 
     <section class="brand-hero" aria-label="Marca">
       <img src="/brand/uabc-escudo-menu.png" alt="Escudo UABC" width="72" height="96" />
-      <strong>Cuenca Cimarrón</strong>
+      <strong>Cuenca Cimarrona</strong>
       <div class="brand-downloads">
         <a class="button secondary" href="/brand/cuenca-logo.svg" download>
           <Icon name="download" :size="18" /> Logo SVG

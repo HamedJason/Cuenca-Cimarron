@@ -34,6 +34,6 @@ const router = createRouter({
   scrollBehavior: () => ({ top: 0 }),
 });
 router.afterEach((to) => {
-  document.title = `${to.meta.title} · Cuenca Cimarrón`;
+  document.title = `${to.meta.title} · Cuenca Cimarrona`;
 });
 createApp(App).use(router).mount("#app");

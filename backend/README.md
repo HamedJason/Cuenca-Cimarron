@@ -1,4 +1,4 @@
-# Backend de Cuenca Cimarrón
+# Backend de Cuenca Cimarrona
 
 API en Laravel que guarda el contador de visitas del sitio en PostgreSQL.
 

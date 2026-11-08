@@ -1,33 +1,30 @@
-# Cuenca Cimarrón
+# Cuenca Cimarrona
 
-Sitio para familias de Tijuana sobre qué hacer durante la temporada de El Niño. Lo hicimos estudiantes de la UABC.
+Proyecto académico de prevención y preparación ante lluvias y El Niño en Tijuana. Se organiza con una aplicación web en Vue/Vite y una API en Laravel.
 
-No es un sitio oficial de Protección Civil y no publica alertas en vivo. Los números y avisos enlazan a las fuentes oficiales.
+## Integración de interfaces
 
-## Qué tiene
+Esta versión combina elementos de la interfaz desarrollada por Hamed en [Cuenca-Cimarron](https://github.com/HamedJason/Cuenca-Cimarron) con la interfaz que trabajamos en la rama `hambu`. La integración busca mejorar la experiencia actual: mantener a la mano la información de emergencia, ordenar la navegación y reunir Juegos, Información y Consejos bajo un estilo visual consistente. También conserva los apartados de El Niño, Plan familiar y Mochila de emergencia.
 
-- **Emergencias:** el 911, los teléfonos de Protección Civil, Bomberos y denuncia anónima, los refugios temporales con ruta en Google Maps y el mapa de riesgo del municipio
-- **El Niño:** qué es, qué cambia en el Pacífico y qué se espera en Tijuana
-- **Plan familiar:** cuatro pasos con sus acciones. El avance se guarda en el navegador y se puede imprimir
-- **Mochila:** doce cosas para tener listas, con lista para marcar e imprimir
-- **Estilos:** colores, letras e iconos del proyecto. Se abre desde el pie de página
+## Estructura
 
-## Cómo correrlo
-
-Necesitas Docker Desktop y Node.js 24.
-
-```powershell
-node infra/init.mjs
-docker compose up -d --build
+```text
+frontend/
+  src/            Aplicación Vue: vistas, componentes y datos
+  public/         Recursos del sitio y páginas de Juegos, Información y Consejos
+  package.json    Dependencias y comandos de desarrollo
+backend/
+  app/            API Laravel y controladores
+  routes/         Rutas HTTP
+  database/       Migraciones
+docs/             Investigación y decisiones del proyecto
+infra/            Inicialización del entorno local
+compose.yaml      Frontend, API y PostgreSQL
 ```
 
-Luego abre http://localhost:8090
+Los archivos de la raíz (`index.html`, `assets/`, `css/`, `js/` y `pages/`) se conservan como paquete de vista previa para abrir el estado integrado actual. Para desarrollar la aplicación modular, trabaje desde `frontend/` y `backend/`.
 
-`init.mjs` crea el archivo `.env` con claves al azar. Ese archivo no se sube a Git.
-
-Cada vez que cambies código, vuelve a correr `docker compose up -d --build` para ver los cambios en el 8090.
-
-## Trabajar en la interfaz
+## Ejecutar el frontend
 
 ```powershell
 cd frontend
@@ -35,50 +32,27 @@ npm ci
 npm run dev
 ```
 
-Se abre en http://localhost:5173 y los cambios se ven al instante. Para que funcione el contador de visitas, Docker tiene que estar encendido.
-
-## Dónde está cada cosa
-
-```text
-frontend/src/views/          Las páginas
-frontend/src/components/     Piezas que se repiten (iconos, ventanas, escenas animadas)
-frontend/src/data.js         Textos, teléfonos, refugios, pasos y artículos
-frontend/src/style.css       Todos los estilos
-frontend/public/brand/       Logo, escudo y variables de color
-backend/                     API en Laravel para el contador de visitas
-docs/                        Investigación sobre Tijuana y guía de estilos
-infra/                       Scripts para preparar y probar el proyecto
-```
-
-Las reglas de diseño están en `docs/estilos.md`.
-
-## Contador de visitas
-
-El navegador guarda un identificador al azar para no contar cada recarga como una persona nueva. No se guardan nombres, correos ni direcciones IP. Si alguien entra desde otro navegador o borra sus datos, cuenta como otra visita, así que el número es aproximado.
-
-El plan familiar y la mochila solo se guardan en el navegador de cada persona, nunca en el servidor.
-
-## Pruebas
+Vite abre la aplicación en `http://127.0.0.1:5173`. Para compilar:
 
 ```powershell
-cd frontend
-npm test
 npm run build
 ```
 
-Para probar la API:
+## Ejecutar el proyecto completo
+
+Se requiere Docker Desktop y Node.js. Desde la raíz:
 
 ```powershell
-docker compose exec -e DB_CONNECTION=sqlite -e DB_DATABASE=:memory: -e CACHE_STORE=array backend php artisan test
+node infra/init.mjs
+docker compose up -d --build
 ```
 
-## Antes de publicarlo
+El sitio queda en `http://localhost:8090`; la API utiliza el puerto `8091`. El archivo `.env` se genera localmente y no se debe subir al repositorio.
 
-Ahora corre como entorno de desarrollo. Para ponerlo en internet falta configurar HTTPS, un servidor PHP de producción y copias de seguridad de la base de datos. También conviene que el equipo revise el contenido antes.
+## Tecnologías
 
-## Fuentes
+- **Frontend:** Vue 3, Vue Router y Vite.
+- **Backend:** Laravel y PostgreSQL.
+- **Interfaz adicional:** páginas estáticas de dinámicas, información y consejos en `frontend/public/pages/`.
 
-- [CENAPRED, plan familiar](https://www1.cenapred.unam.mx/es/Publicaciones/archivos/288-INFOGRAFAPLANFAMILIARDEPROTECCINCIVIL.PDF)
-- [CENAPRED, mochila de emergencia](https://www.gob.mx/cenapred/articulos/la-seguridad-empieza-en-casa-prepara-tu-mochila-de-emergencia-228213)
-- [NOAA, El Niño](https://www.noaa.gov/understanding-el-nino)
-- Investigación de Tijuana en `docs/investigacion-tijuana.md`
+Consulte `docs/` para la investigación y los criterios visuales del proyecto.

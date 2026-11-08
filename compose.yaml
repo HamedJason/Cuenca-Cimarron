@@ -11,7 +11,7 @@ services:
   backend:
     build: ./backend
     environment:
-      APP_NAME: Cuenca Cimarrón
+      APP_NAME: Cuenca Cimarrona
       APP_ENV: local
       APP_DEBUG: "false"
       APP_KEY: ${APP_KEY:?Ejecuta primero el script de inicialización}
