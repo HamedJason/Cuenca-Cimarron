@@ -240,7 +240,7 @@ function downloadIcon(name) {
         <ul class="motion-rules">
           <li>Cada animación cuenta algo: la lluvia cae, la mochila se llena</li>
           <li>Nada se sale de su tarjeta ni crece más de 8 %</li>
-          <li>Todo se detiene con «Pausar animaciones» o si el sistema pide menos movimiento</li>
+          <li>Todo se detiene si el sistema pide menos movimiento</li>
         </ul>
 
         <h3 class="styles-sub">Variables CSS</h3>

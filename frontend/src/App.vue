@@ -5,32 +5,11 @@ import Icon from "./components/Icon.vue";
 import Modal from "./components/Modal.vue";
 import { storageAvailable } from "./composables/useProgress";
 const route = useRoute();
-const motionKey = "cuenca.motion";
-const readMotion = () => {
-  try {
-    return localStorage.getItem(motionKey) !== "off";
-  } catch {
-    return true;
-  }
-};
-const motionOn = ref(readMotion());
 function recoverLogo(event) {
   const image = event.currentTarget;
   if (image.dataset.fallbackApplied) return;
   image.dataset.fallbackApplied = "true";
   image.src = "/brand/cuenca/icono-192.png";
-}
-const applyMotion = () =>
-  document.documentElement.classList.toggle("motion-off", !motionOn.value);
-applyMotion();
-function toggleMotion() {
-  motionOn.value = !motionOn.value;
-  applyMotion();
-  try {
-    localStorage.setItem(motionKey, motionOn.value ? "on" : "off");
-  } catch {
-    /* Sin almacenamiento: el cambio dura solo esta visita. */
-  }
 }
 const showStats = ref(false);
 const stats = ref(null);
@@ -161,7 +140,7 @@ onMounted(() => {
     </div>
     <!-- Agua que corre por la cuenca: una línea de olas bajo el encabezado -->
     <div class="header-wave-wrap" aria-hidden="true"><svg class="header-wave" viewBox="0 0 240 12" preserveAspectRatio="none">
-      <path class="hw-back" d="M0 6c20-6 40-6 60 0s40 6 60 0 40-6 60 0 40 6 60 0v6H0Z" />
+      <path class="hw-fill" d="M0 0V8c20-5 40-5 60 0s40 5 60 0 40-5 60 0 40 5 60 0V0Z" />
       <path class="hw-front" d="M0 8c20-5 40-5 60 0s40 5 60 0 40-5 60 0 40 5 60 0" />
     </svg></div>
   </header>
@@ -204,13 +183,6 @@ onMounted(() => {
         </nav>
       </div>
       <div class="footer-tools">
-        <button
-          class="motion-toggle"
-          :aria-pressed="!motionOn"
-          @click="toggleMotion"
-        >
-          {{ motionOn ? "Pausar animaciones" : "Reanudar animaciones" }}
-        </button>
         <RouterLink to="/estilos" class="footer-link">Estilos</RouterLink>
         <button class="visits-tag" @click="showStats = true">
           <span

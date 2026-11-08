@@ -1,0 +1,325 @@
+/* Estilo cartoon para Información y Consejos: colores sólidos, esquinas
+   redondas, títulos en Barlow Condensed y sin sombras difusas. */
+body.cartoon {
+  background: #fff;
+}
+.cartoon main h1,
+.cartoon main h2,
+.cartoon main h3 {
+  font-family: "Barlow Condensed", "DM Sans", sans-serif !important;
+  letter-spacing: 0 !important;
+  color: var(--green-deep);
+}
+.cartoon .backpack-intro-card h3,
+.cartoon .backpack-intro-card p {
+  color: #fff !important;
+}
+.cartoon main h1 {
+  font-weight: 800;
+  font-size: clamp(48px, 7vw, 76px) !important;
+  line-height: 0.95 !important;
+}
+.cartoon main h2 {
+  font-weight: 800;
+  font-size: clamp(34px, 4.5vw, 44px) !important;
+  line-height: 1 !important;
+}
+.cartoon main h3 {
+  font-weight: 700;
+  font-size: 26px !important;
+  line-height: 1.05 !important;
+}
+.cartoon .eyebrow,
+.cartoon .learn-intro-link,
+.cartoon .advice-start-link,
+.cartoon .learn-art-note,
+.cartoon .advice-art-note,
+.cartoon .advice-spark,
+.cartoon .resource-card-arrow,
+.cartoon .prepare-shortcut b,
+.cartoon .directory-card b {
+  display: none !important;
+}
+
+/* Fuera sombras difusas, desenfoques, degradados y adornos de línea. */
+.cartoon main * {
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+.cartoon .page-intro::after,
+.cartoon .learn-intro-art::after,
+.cartoon .advice-intro-art::after,
+.cartoon .lesson-card-image::after,
+.cartoon .lesson-image::after,
+.cartoon .lesson-copy::before,
+.cartoon .prepare-shortcut::after,
+.cartoon .checklist article::after,
+.cartoon .backpack-intro-card::before {
+  display: none !important;
+}
+
+/* Portadas de color sólido. */
+.cartoon .page-intro {
+  background: #eaf2ff !important;
+  border: 0 !important;
+  border-radius: 24px !important;
+}
+.cartoon .advice-intro {
+  background: var(--gold-tint) !important;
+}
+.cartoon .page-intro p,
+.cartoon .detail-intro {
+  font-size: 19px;
+  color: #23302a;
+}
+.cartoon .learn-intro-art img,
+.cartoon .advice-intro-art img,
+.cartoon .lesson-detail-hero img {
+  border-radius: 20px !important;
+  border: 4px solid #fff;
+}
+
+/* Tarjetas: fondo sólido, sin borde gris y un canto al pasar el puntero.
+   Nada sube ni crece. */
+.cartoon .prepare-shortcut,
+.cartoon .lesson-card,
+.cartoon .info-card,
+.cartoon .activity-card,
+.cartoon .resource-card,
+.cartoon .checklist article,
+.cartoon .outlook-card,
+.cartoon .topic-section,
+.cartoon .lesson-detail-content > *,
+.cartoon .plan-step-card,
+.cartoon .backpack-supply-group,
+.cartoon .backpack-progress-card {
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 20px !important;
+  transform: none !important;
+  transition: box-shadow 0.15s ease !important;
+}
+.cartoon .prepare-shortcut:hover,
+.cartoon .lesson-card:hover,
+.cartoon .resource-card:hover,
+.cartoon .info-card:hover,
+.cartoon .activity-card:hover,
+.cartoon .checklist article:hover {
+  box-shadow: 0 6px 0 rgb(0 61 36 / 0.22) !important;
+}
+.cartoon .lesson-card-image img,
+.cartoon .game-card-image img {
+  transform: none !important;
+}
+.cartoon .info-card-blue,
+.cartoon .activity-card-blue,
+.cartoon .lesson-blue,
+.cartoon .card-blue,
+.cartoon .outlook-3 {
+  background-color: #eaf2ff !important;
+}
+.cartoon .info-card-yellow,
+.cartoon .activity-card-yellow,
+.cartoon .lesson-yellow,
+.cartoon .card-yellow,
+.cartoon .outlook-2 {
+  background-color: var(--gold-tint) !important;
+}
+.cartoon .info-card-green,
+.cartoon .activity-card-green,
+.cartoon .lesson-green,
+.cartoon .card-green,
+.cartoon .outlook-1 {
+  background-color: var(--green-tint) !important;
+}
+.cartoon .prepare-shortcut:nth-child(1) {
+  background-color: var(--green-tint) !important;
+}
+.cartoon .prepare-shortcut:nth-child(2) {
+  background-color: var(--gold-tint) !important;
+}
+.cartoon .checklist article,
+.cartoon .lesson-detail-content > *,
+.cartoon .topic-section {
+  background-color: #f4f8f5 !important;
+}
+.cartoon .checklist article:nth-child(1) {
+  background-color: var(--gold-tint) !important;
+}
+.cartoon .checklist article:nth-child(2) {
+  background-color: #eaf2ff !important;
+}
+.cartoon .checklist article:nth-child(3) {
+  background-color: #fff1e6 !important;
+}
+.cartoon .checklist article:nth-child(4) {
+  background-color: var(--green-tint) !important;
+}
+.cartoon .prepare-shortcut strong,
+.cartoon .resource-card h3 {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 800;
+  font-size: 26px;
+  color: var(--green-deep);
+}
+
+/* Texto de tarjetas legible para todas las edades. */
+.cartoon main article p,
+.cartoon main .lesson-card-copy p,
+.cartoon main .prepare-shortcut small,
+.cartoon main .resource-card p,
+.cartoon main .topic-lead,
+.cartoon main .detail-body,
+.cartoon main .detail-points li {
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  color: #2c3a33 !important;
+}
+
+/* Tarjeta de avance de la mochila: verde sólido para que el texto blanco se lea. */
+.cartoon .backpack-progress-card {
+  background-color: var(--uabc-green) !important;
+}
+
+/* Números de tarjeta: placa ocre, como los pasos del plan. */
+.cartoon .info-card-number,
+.cartoon .activity-number,
+.cartoon .outlook-number,
+.cartoon .lesson-card-number,
+.cartoon .resource-card-index,
+.cartoon .plan-step-number {
+  display: inline-grid !important;
+  place-items: center;
+  min-width: 40px;
+  height: 34px;
+  padding: 0 8px;
+  border: 0 !important;
+  border-radius: 10px !important;
+  background: var(--uabc-gold) !important;
+  color: var(--green-deep) !important;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+}
+
+/* Iconos en círculo blanco que se mueven cuando les pasas el puntero. */
+.cartoon .risk-icon,
+.cartoon .activity-icon,
+.cartoon .prepare-shortcut-icon,
+.cartoon .resource-icon,
+.cartoon .check-icon {
+  background: #fff !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  color: var(--uabc-green) !important;
+}
+@keyframes cartoon-wiggle {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  30% {
+    transform: rotate(-12deg);
+  }
+  65% {
+    transform: rotate(10deg);
+  }
+}
+@keyframes cartoon-rain {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+}
+.cartoon .info-card:hover .risk-icon svg,
+.cartoon .activity-card:hover .activity-icon svg,
+.cartoon .prepare-shortcut:hover .prepare-shortcut-icon svg,
+.cartoon .resource-card:hover .resource-icon svg,
+.cartoon .checklist article:hover .check-icon svg {
+  animation: cartoon-wiggle 0.5s ease-in-out;
+}
+.cartoon .info-card-blue .risk-icon svg {
+  animation: cartoon-rain 1.6s ease-in-out infinite;
+}
+
+/* Fases de Consejos: etiqueta normal, no en mayúsculas. */
+.cartoon .advice-phase {
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--gold-text);
+}
+
+/* Directorio: bloque verde con tarjetas blancas y números grandes. */
+.cartoon .directory-section {
+  background: var(--uabc-green) !important;
+  border-radius: 24px !important;
+}
+.cartoon .directory-section h2,
+.cartoon .directory-note {
+  color: #fff !important;
+}
+.cartoon .directory-card {
+  border: 0 !important;
+  border-radius: 18px !important;
+  background: #fff !important;
+  transform: none !important;
+}
+.cartoon .directory-card:hover {
+  box-shadow: 0 5px 0 var(--green-deep) !important;
+}
+.cartoon .directory-card strong {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 800;
+  font-size: 30px;
+  color: var(--green-deep);
+}
+.cartoon .directory-card-main strong {
+  color: #b3121f;
+}
+.cartoon .official-links a {
+  color: #fff;
+}
+
+/* Botones y enlaces. */
+.cartoon .text-link,
+.cartoon .lesson-more,
+.cartoon .topic-source-links a {
+  color: var(--uabc-green);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.cartoon .topic-source-links a {
+  padding: 8px 16px;
+  border: 2px solid var(--uabc-green) !important;
+  border-radius: 999px !important;
+  background: #fff !important;
+  text-decoration: none;
+}
+.cartoon .ocean-mode-switch .button[aria-pressed="true"],
+.cartoon .weather-control[aria-pressed="true"] {
+  box-shadow: 0 4px 0 var(--green-deep) !important;
+}
+.cartoon .backpack-print-button {
+  border-radius: 14px !important;
+  box-shadow: 0 4px 0 var(--green-deep) !important;
+}
+.cartoon .topic-source-note {
+  border: 0 !important;
+  border-radius: 16px !important;
+  background: var(--gold-tint) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cartoon * {
+    animation: none !important;
+  }
+}
+

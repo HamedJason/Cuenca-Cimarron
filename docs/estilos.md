@@ -120,7 +120,7 @@ Son las acciones principales de emergencia y de juego. Llevan la clase `.cta` y 
 
 - "Aprende jugando" no crece al señalarlo: ya brinca cada 5 s, y al señalarlo el brinco se detiene
 - Un llamado nuevo se agrega a esta tabla antes de darle la clase `.cta`. Si todo crece, nada destaca
-- Todo se detiene con "Pausar animaciones" (clase `motion-off` en `<html>`) o cuando el sistema pide menos movimiento
+- Todo se detiene cuando el sistema pide menos movimiento
 - Las escenas en `<canvas>` usan `useCanvasScene`, que además las pausa cuando no se ven en pantalla
 
 ## Formas con significado

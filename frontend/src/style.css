@@ -1736,7 +1736,6 @@ input[type="checkbox"]:checked {
   flex-wrap: wrap;
   gap: 10px;
 }
-.motion-toggle,
 .footer-link {
   display: inline-flex;
   align-items: center;
@@ -1747,15 +1746,11 @@ input[type="checkbox"]:checked {
   font-size: 15px;
   color: var(--muted);
 }
-.motion-toggle:hover,
 .footer-link:hover {
   border-color: var(--uabc-green);
   color: var(--green-deep);
 }
-.motion-toggle[aria-pressed="true"] {
-  background: var(--green-tint);
-  color: var(--green-deep);
-}
+
 
 .call-main {
   overflow: hidden;
@@ -3883,7 +3878,6 @@ article.game-card .game-card-body {
     text-decoration-color: var(--uabc-gold);
     text-decoration-thickness: 4px;
   }
-  .motion-toggle:hover,
   .footer-link:hover,
   .visits-tag:hover {
     background: var(--green-tint);
@@ -3916,7 +3910,6 @@ article.game-card .game-card-body {
 }
 /* En celular: respuesta inmediata al tocar */
 .secondary:active,
-.motion-toggle:active,
 .footer-link:active,
 .visits-tag:active,
 .menu-toggle:active {
@@ -4582,15 +4575,13 @@ a.game-card:active,
 .site-header.scrolled .header-row {
   padding-block: 6px;
 }
-.site-header.scrolled {
-  box-shadow: 0 4px 0 #00723f1a;
-}
+
 .header-wave-wrap {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -11px;
-  height: 12px;
+  bottom: -12px;
+  height: 13px;
   overflow: hidden;
   pointer-events: none;
 }
@@ -4600,7 +4591,7 @@ a.game-card:active,
   height: 12px;
   animation: header-flow 14s linear infinite;
 }
-.hw-back {
+.hw-fill {
   fill: var(--surface);
 }
 .hw-front {
