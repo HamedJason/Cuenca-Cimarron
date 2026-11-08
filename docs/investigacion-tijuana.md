@@ -16,17 +16,17 @@ No se confirmó un número directo de Cruz Roja Tijuana: según Zeta Tijuana, lo
 ## Enlaces oficiales
 
 - Comunicados de Protección Civil Tijuana: https://proteccioncivil.tijuana.gob.mx/noticialistadoDependencia.aspx
-- Refugios temporales: https://proteccioncivil.tijuana.gob.mx/refugios.aspx. Hay 7 sedes (unidades deportivas Reforma, Independencia, CREA, Salvatierra, Tijuana y Mariano Matamoros, y el Albergue de Migrantes Tijuana). Nota oficial: en emergencia llamar al 911; para activar un refugio, contactar a la delegación correspondiente.
+- Refugios temporales: https://proteccioncivil.tijuana.gob.mx/refugios.aspx. Hay 7 sedes (unidades deportivas Reforma, Independencia, CREA, Salvatierra, Tijuana y Mariano Matamoros, y el Albergue de Migrantes Tijuana). Nota oficial: en emergencia hay que llamar al 911. Para activar un refugio, se contacta a la delegación correspondiente.
 - Atlas de Riesgo Municipal 2024 (PDF): https://proteccioncivil.tijuana.gob.mx/pdf/amrt/AMRT2024.pdf
 - Visor interactivo del Atlas de Riesgo: https://gemelodigital.implantijuana.gob.mx/atlas-de-riesgo-tijuana-2024
 - Avisos meteorológicos (SMN/CONAGUA): https://smn.conagua.gob.mx/
 
 ## El Niño en Tijuana (noviembre de 2026)
 
-- El 5 de noviembre de 2026, el Cabildo aprobó por unanimidad una declaratoria de emergencia y desastre natural ante El Niño (Punto Norte; comunicado de Protección Civil Tijuana del 5 de noviembre).
-- Según el director de Protección Civil Municipal, las lluvias empezarían a finales de noviembre; lo más fuerte se espera desde la segunda semana de diciembre y en enero, y podrían seguir hasta febrero o marzo de 2027. El alcalde aclaró que el pronóstico puede cambiar.
+- El 5 de noviembre de 2026, el Cabildo aprobó por unanimidad una declaratoria de emergencia y desastre natural ante El Niño (Punto Norte y comunicado de Protección Civil Tijuana del 5 de noviembre).
+- Según el director de Protección Civil Municipal, las lluvias empezarían a finales de noviembre. Lo más fuerte se espera desde la segunda semana de diciembre y en enero, y podrían seguir hasta febrero o marzo de 2027. El alcalde aclaró que el pronóstico puede cambiar.
 - Riesgos señalados: inundaciones, deslizamientos, inestabilidad de laderas y daños a viviendas.
-- Zonas mencionadas en la prensa: San Antonio de los Buenos, Sánchez Taboada y Playas de Tijuana (reportes de la declaratoria); el director estatal de Protección Civil mencionó Camino Verde, Sánchez Taboada y Tres de Octubre (En Línea BC, 6 de noviembre). Las fuentes no coinciden del todo: citar siempre la fuente.
+- Zonas mencionadas en la prensa: San Antonio de los Buenos, Sánchez Taboada y Playas de Tijuana (reportes de la declaratoria). El director estatal de Protección Civil mencionó Camino Verde, Sánchez Taboada y Tres de Octubre (En Línea BC, 6 de noviembre). Las fuentes no coinciden del todo: citar siempre la fuente.
 - Cada delegación funcionará como centro de operaciones y orientación (alcalde, en Punto Norte).
 - "El más fuerte en los últimos cien años" es una afirmación de autoridades municipales, no de un pronóstico independiente: si se usa, atribuirla.
 
@@ -37,7 +37,7 @@ Fuentes de prensa:
 ## Guías de diseño para información de emergencia
 
 - Canada.ca, lista de verificación para contenido de crisis: https://design.canada.ca/crisis/content.html. Recomienda diseño pensado primero para celular, una sola página central, estructura tipo noticia, sin contenido duplicado y fecha y hora visibles cuando la información cambia.
-- California, lenguaje claro en una crisis: https://hub.innovation.ca.gov/content-design/plain-language-in-a-crisis. El texto debe entenderse a la primera lectura; las personas en crisis están saturadas.
+- California, lenguaje claro en una crisis: https://hub.innovation.ca.gov/content-design/plain-language-in-a-crisis. El texto debe entenderse a la primera lectura porque las personas en crisis están saturadas.
 - Clearleft, diseñar para personas en crisis: https://clearleft.com/thinking/designing-for-people-in-crisis
 - Para el texto: oraciones de menos de 20 palabras, acciones en voz activa, vocabulario consistente.
 
