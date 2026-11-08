@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import Icon from "../components/Icon.vue";
+import MascotGuide from "../components/MascotGuide.vue";
 import { icons, iconSvg } from "../icons";
 
 const brandColors = [
@@ -66,11 +67,23 @@ function downloadIcon(name) {
     </div>
 
     <section class="brand-hero" aria-label="Marca">
-      <img src="/brand/uabc-escudo-menu.png" alt="Escudo UABC" width="72" height="96" />
-      <strong>Cuenca Cimarrona</strong>
+      <img
+        class="brand-hero-seal"
+        src="/brand/cuenca/sello-480.webp"
+        alt="Sello circular de Cuenca Cimarrona"
+        width="140"
+        height="140"
+      />
+      <strong class="wordmark">Cuenca Cimarrona</strong>
       <div class="brand-downloads">
-        <a class="button secondary" href="/brand/cuenca-logo.svg" download>
-          <Icon name="download" :size="18" /> Logo SVG
+        <a class="button secondary" href="/brand/cuenca/icono-512.png" download>
+          <Icon name="download" :size="18" /> Sello PNG
+        </a>
+        <a class="button secondary" href="/brand/cuenca/firma-horizontal-claro.webp" download>
+          <Icon name="download" :size="18" /> Firma horizontal
+        </a>
+        <a class="button secondary" href="/brand/cuenca/mascota-480.webp" download>
+          <Icon name="download" :size="18" /> Mascota
         </a>
         <a class="button secondary" href="/brand/uabc-escudo.png" download>
           <Icon name="download" :size="18" /> Escudo UABC
@@ -78,9 +91,43 @@ function downloadIcon(name) {
       </div>
     </section>
     <p class="styles-note">
-      El escudo UABC se usa tal como está: sin recortarlo, cambiarle colores ni
-      deformarlo
+      Las reglas completas están en el Manual de identidad de Cuenca Cimarrona
+      (docs/identidad). El escudo UABC se usa tal como está: sin recortarlo,
+      cambiarle colores ni deformarlo
     </p>
+
+    <section aria-labelledby="titulo-mascota">
+      <h2 id="titulo-mascota" class="section-title">Cimarrón guía</h2>
+      <div class="mascot-rules">
+        <div class="mascot-demo">
+          <MascotGuide :size="180" bubble="¡Aquí te explico!" eager />
+          <span class="mascot-demo-target">Lo que presenta</span>
+        </div>
+        <ul class="mascot-list">
+          <li><strong>Siempre a la izquierda</strong> de lo que presenta: su mano abierta señala a la derecha. Nunca se voltea</li>
+          <li><strong>No se gira, estira ni deforma.</strong> Solo entra deslizándose y flota 5 px</li>
+          <li><strong>Mínimo 88 px de ancho.</strong> Más chico se usa el sello o el icono</li>
+          <li><strong>Globo opcional</strong> con una frase de 2 a 4 palabras, arriba del personaje, fuera de su área de respeto</li>
+          <li><strong>Uno por pantalla.</strong> Aparece en momentos clave: juegos, instrucciones y el mapa de riesgo. Nunca junto al 911</li>
+        </ul>
+      </div>
+      <h3 class="styles-sub">Silueta</h3>
+      <div class="silhouette-demo">
+        <div class="silhouette-swatch on-light">
+          <span class="cc-silhouette" aria-hidden="true"></span>
+          <small>Marca de agua en tarjetas · 8 %</small>
+        </div>
+        <div class="silhouette-swatch on-green">
+          <span class="cc-silhouette" aria-hidden="true"></span>
+          <small>Encabezados verdes · blanco 10 %</small>
+        </div>
+      </div>
+      <p class="styles-note">
+        La silueta solo va de fondo, en tarjetas de 160 px o más, en la esquina
+        inferior derecha. Puede recortarse por el borde, nunca girarse ni
+        voltearse
+      </p>
+    </section>
 
     <section aria-labelledby="titulo-colores">
       <h2 id="titulo-colores" class="section-title">Colores</h2>
@@ -126,6 +173,10 @@ function downloadIcon(name) {
     <section aria-labelledby="titulo-letras">
       <h2 id="titulo-letras" class="section-title">Letras</h2>
       <div class="type-pair">
+        <div>
+          <span class="type-name">Lilita One · nombre de la marca</span>
+          <p class="type-big wordmark brand-sample">Cuenca Cimarrona</p>
+        </div>
         <div>
           <span class="type-name">Barlow Condensed · títulos</span>
           <p class="type-big">Prepárate antes de que llueva</p>

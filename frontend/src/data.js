@@ -235,3 +235,95 @@ export const emergency = {
     "https://gemelodigital.implantijuana.gob.mx/atlas-de-riesgo-tijuana-2024",
   riskAtlasPdf: "https://proteccioncivil.tijuana.gob.mx/pdf/amrt/AMRT2024.pdf",
 };
+
+// Dinámicas de juego (vienen de la rama hambu, ya en tú y sin cifras inventadas)
+export const games = [
+  {
+    id: "rally",
+    icon: "route",
+    meta: [
+      { icon: "people", text: "Equipos de 2 a 5" },
+      { icon: "check", text: "3 pasos" },
+    ],
+    title: "Escape de la tormenta",
+    tag: "Rally en equipos",
+    tone: "gold",
+    image: "/assets/images/game-rally.webp",
+    alt: "Ruta ilustrada durante una tormenta",
+    short: "Encuentra la ruta segura antes de que suba el agua",
+    text: "Recorre estaciones, resuelve retos breves y elige decisiones que te mantengan a salvo durante una lluvia intensa",
+    steps: [
+      "Forma un equipo de 2 a 5 personas",
+      "Completa las estaciones y reúne las pistas",
+      "Compara la ruta que eligieron y explica por qué es segura",
+    ],
+    stepIcons: ["people", "map", "shield"],
+  },
+  {
+    id: "decisiones",
+    icon: "signpost",
+    meta: [{ icon: "check", text: "3 pasos" }],
+    title: "Cada decisión cuenta",
+    tag: "Decisiones",
+    tone: "blue",
+    image: "/assets/images/game-decisions.webp",
+    alt: "Caminos ilustrados que representan decisiones",
+    short: "Elige qué hacer y mira cómo cambia el camino",
+    text: "Elige qué hacer ante una situación de lluvia y mira cómo cada decisión cambia el recorrido",
+    steps: [
+      "Lee la situación inicial",
+      "Elige una de las opciones",
+      "Revisa qué pasó y aprende de tu decisión",
+    ],
+    stepIcons: ["book", "signpost", "spark"],
+  },
+  {
+    id: "mochila",
+    icon: "backpack",
+    meta: [
+      { icon: "clock", text: "60 segundos" },
+      { icon: "check", text: "3 pasos" },
+    ],
+    title: "Arma tu mochila",
+    tag: "Reto de 60 segundos",
+    tone: "green",
+    image: "/assets/images/game-backpack.webp",
+    alt: "Mochila ilustrada con artículos de emergencia",
+    short: "¿Qué cosas sí van en la mochila? Tienes 60 segundos",
+    text: "Encuentra en 60 segundos las cosas que de verdad necesitas para una emergencia",
+    steps: [
+      "Toma los objetos disponibles",
+      "Separa lo indispensable de lo que no sirve",
+      "Revisa tus respuestas y comparte un consejo",
+    ],
+    stepIcons: ["backpack", "check", "heart"],
+  },
+];
+
+// Consejos para antes, durante y después de la lluvia
+export const advice = [
+  {
+    id: "antes",
+    icon: "umbrella",
+    tone: "gold",
+    title: "Antes de la lluvia",
+    text: "Revisa coladeras, techos y cosas importantes antes de que empiece",
+    href: "/pages/recursos.html#antes",
+  },
+  {
+    id: "durante",
+    icon: "storm",
+    tone: "blue",
+    title: "Durante una tormenta",
+    text: "No cruces arroyos y sigue la información oficial",
+    href: "/pages/recursos.html#durante",
+  },
+  {
+    id: "despues",
+    icon: "home",
+    tone: "green",
+    title: "Después de la lluvia",
+    text: "Revisa tu entorno y reporta riesgos",
+    href: "/pages/recursos.html#despues",
+  },
+];

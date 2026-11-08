@@ -214,7 +214,7 @@ const facts = [
             </g>
           </svg>
           <p class="pac-axis" aria-hidden="true">
-            <span>← Asia y Australia</span><span>América →</span>
+            <span><Icon name="arrow" :size="16" class="flip-x" /> Asia y Australia</span><span>América <Icon name="arrow" :size="16" /></span>
           </p>
           <ul class="pac-legend" aria-hidden="true">
             <li><span class="lg lg-warm"></span>Agua caliente</li>

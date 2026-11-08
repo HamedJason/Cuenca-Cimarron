@@ -114,7 +114,10 @@ const print = () => window.print();
       <article v-for="step in steps" :key="step.id">
         <h2>{{ step.number }}. {{ step.title }}</h2>
         <p v-for="(task, i) in step.tasks" :key="i">
-          {{ planTasks.includes(taskId(step, i)) ? "☑" : "☐" }} {{ task }}
+          <span class="print-box" aria-hidden="true"
+            ><Icon v-if="planTasks.includes(taskId(step, i))" name="check" :size="14"
+          /></span>
+          {{ task }}
         </p>
       </article>
     </section>

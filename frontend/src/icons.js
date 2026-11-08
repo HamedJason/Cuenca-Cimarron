@@ -4,6 +4,9 @@ export const icons = {
   map: '<path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2ZM9 3v16m6-14v16"/>',
   backpack:
     '<path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M5 12H3v7h2m14-7h2v7h-2M9 10h6"/><rect x="5" y="6" width="14" height="16" rx="5"/><rect x="8" y="14" width="8" height="5" rx="1"/>',
+  signpost: '<path d="M12 3v18M12 5h7l2.5 2.5L19 10h-7M12 12H5l-2.5 2.5L5 17h7"/>',
+  gamepad:
+    '<g transform="translate(0 0.75)"><path d="M7.6 5h8.8a5 5 0 0 1 4.9 4.1l1 5.4a3 3 0 0 1-5.2 2.6L14.8 14.8H9.2l-2.3 2.3a3 3 0 0 1-5.2-2.6l1-5.4A5 5 0 0 1 7.6 5Z"/><path d="M6.5 10.5h4M8.5 8.5v4"/><circle cx="15.5" cy="11.6" r="1.1" fill="currentColor" stroke="none"/><circle cx="17.8" cy="9.4" r="1.1" fill="currentColor" stroke="none"/></g>',
   game: '<path d="M7 8h10c4 0 6 12 3 12-2 0-4-4-4-4H8s-2 4-4 4C1 20 3 8 7 8Z M7 10v5m-2-2.5h4M16 11h.01M18 14h.01M12 8V4"/>',
   palette:
     '<path d="M12 3a9 9 0 1 0 0 18h2a2 2 0 0 0 1-4c-2-1-1-3 1-3h3c4 0 2-11-7-11Z"/><path d="M7 9h.01M11 6h.01M16 8h.01M6 14h.01"/>',

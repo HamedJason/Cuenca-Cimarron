@@ -1,9 +1,11 @@
 <script setup>
-import { ref, watch, onBeforeUnmount, nextTick } from "vue";
+import { ref, watch, onBeforeUnmount, nextTick, useId } from "vue";
 import Icon from "./Icon.vue";
-const props = defineProps({ open: Boolean, title: String });
+const props = defineProps({ open: Boolean, title: String, wide: Boolean });
 const emit = defineEmits(["close"]);
 const dialog = ref(null);
+// Id propio: puede haber varias ventanas en la misma página.
+const titleId = useId();
 let trigger;
 watch(
   () => props.open,
@@ -27,8 +29,8 @@ onBeforeUnmount(() => {
 <template>
   <dialog
     ref="dialog"
-    class="modal"
-    aria-labelledby="modal-title"
+    :class="['modal', { 'modal-wide': wide }]"
+    :aria-labelledby="titleId"
     @cancel.prevent="emit('close')"
     @click="
       (e) => {
@@ -44,7 +46,7 @@ onBeforeUnmount(() => {
       >
         <Icon name="close" />
       </button>
-      <h2 id="modal-title">{{ title }}</h2>
+      <h2 :id="titleId">{{ title }}</h2>
       <slot />
     </div>
   </dialog>

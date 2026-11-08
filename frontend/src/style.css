@@ -1217,10 +1217,11 @@ input[type="checkbox"]:checked:hover {
     height: 15px;
   }
   .supply-row input:checked:after {
-    content: "✓";
+    content: "";
     display: block;
-    font-size: 14px;
-    line-height: 13px;
+    width: 13px;
+    height: 13px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/70% no-repeat;
   }
   .supply-list {
     gap: 15px;
@@ -3101,4 +3102,2076 @@ input[type="checkbox"]:checked {
     transition: none !important;
     animation: none !important;
   }
+}
+
+/* ===== Integración de la rama hambu, con el estilo del sitio ===== */
+
+/* Menú en celular: el botón despliega la lista dentro del encabezado, sin tapar el contenido */
+.menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 112px; /* mismo ancho con "Menú" y "Cerrar" */
+  min-height: 44px;
+  padding: 0 10px;
+  border: 2px solid var(--uabc-green);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--green-deep);
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+}
+.menu-toggle[aria-expanded="true"] {
+  background: var(--green-tint);
+}
+@media (max-width: 760px) {
+  .menu-toggle {
+    display: inline-flex;
+  }
+  .site-nav {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    padding-top: 4px;
+  }
+  .site-nav.open {
+    display: flex;
+  }
+  .nav-link {
+    min-height: 48px;
+    padding: 0 16px;
+    font-size: 18px;
+  }
+}
+
+/* Encabezados de sección con acción a la derecha */
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin-bottom: 20px;
+}
+.section-head .section-title {
+  margin-bottom: 4px;
+}
+.section-lead {
+  color: var(--muted);
+  font-size: 18px;
+  margin: 0 0 16px;
+}
+.section-head .section-lead {
+  margin: 0;
+}
+.label.on-green {
+  color: var(--uabc-gold);
+  margin-bottom: 8px;
+}
+
+/* Tonos compartidos por tarjetas de juegos y consejos */
+.tone-gold {
+  --tone-bg: var(--gold-tint);
+  --tone-ink: var(--green-deep);
+  --tone-strong: var(--uabc-gold);
+  --tone-edge: var(--gold-text);
+}
+.tone-blue {
+  --tone-bg: #eaf2ff;
+  --tone-ink: #0b4fa8;
+  --tone-strong: #0b4fa8;
+  --tone-edge: #083a7c;
+}
+.tone-green {
+  --tone-bg: var(--green-tint);
+  --tone-ink: var(--green-deep);
+  --tone-strong: var(--uabc-green);
+  --tone-edge: var(--green-deep);
+}
+
+/* Tarjetas de juego */
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px 16px;
+}
+.game-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 3px solid var(--tone-strong);
+  border-radius: var(--radius-block);
+  background: var(--tone-bg);
+  color: var(--tone-ink);
+  box-shadow: 0 6px 0 var(--tone-edge);
+  transition: background 0.12s;
+}
+a.game-card:hover {
+  background: #fff;
+}
+.game-card.selected {
+  outline: 4px solid var(--uabc-gold);
+  outline-offset: 3px;
+}
+.game-card-art {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  background: var(--tone-strong);
+}
+.game-card-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Hexágono: en la guía de diseño, la forma de los juegos */
+.game-number {
+  position: absolute;
+  left: 16px;
+  bottom: -24px;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 54px;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  background: var(--green-deep);
+  color: var(--uabc-gold);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 26px;
+}
+.game-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 20px 22px;
+}
+article.game-card .game-card-body {
+  padding-top: 36px;
+}
+.game-card strong,
+.game-card h3 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 1;
+  color: var(--tone-ink);
+}
+.game-tag {
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--tone-strong);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+.tone-gold .game-tag {
+  color: var(--green-deep);
+}
+.game-card-body .button {
+  margin-top: auto;
+  align-self: flex-start;
+}
+.game-detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px 32px;
+  margin-top: 32px;
+  padding: 28px;
+  border-radius: var(--radius-block);
+  background: var(--tone-bg);
+  border: 3px solid var(--tone-strong);
+  color: var(--tone-ink);
+}
+.game-detail h2 {
+  font-size: 40px;
+  margin: 4px 0 8px;
+}
+.game-steps {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: paso;
+}
+.game-steps li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 10px 14px 10px 60px;
+  border-radius: 14px;
+  background: #fff;
+  font-weight: 600;
+  counter-increment: paso;
+}
+.game-steps li::before {
+  content: counter(paso);
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  translate: 0 -50%;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--uabc-gold);
+  color: var(--green-deep);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 22px;
+}
+@media (max-width: 760px) {
+  .game-detail {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+  .game-card strong,
+  .game-card h3 {
+    font-size: 28px;
+  }
+}
+
+/* Consejos: antes, durante y después */
+.advice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+.advice-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 190px;
+  padding: 24px;
+  border: 3px solid transparent;
+  border-radius: var(--radius-block);
+  background: var(--tone-bg);
+  color: var(--tone-ink);
+  transition: background 0.12s, border-color 0.12s;
+}
+.advice-card:hover {
+  background: #fff;
+  border-color: var(--tone-strong);
+}
+.advice-card strong {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 1;
+}
+.advice-icon {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 6px;
+  border-radius: 16px;
+  background: var(--tone-strong);
+  color: #fff;
+}
+.tone-gold .advice-icon {
+  color: var(--green-deep);
+}
+.advice-icon svg {
+  width: 38px;
+  height: 38px;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.advice-umbrella .umbrella-canopy {
+  transform-origin: 24px 23px;
+  animation: advice-sway 2.8s ease-in-out infinite;
+}
+.advice-icon .drop-line {
+  stroke-dasharray: 7 8;
+  animation: advice-rain 0.85s linear infinite;
+}
+.advice-icon .rain-b {
+  animation-delay: -0.3s;
+}
+.advice-icon .rain-c {
+  animation-delay: -0.55s;
+}
+.advice-storm .storm-cloud {
+  animation: advice-drift 3.8s ease-in-out infinite;
+}
+.advice-home .home-sun {
+  fill: var(--uabc-gold);
+  stroke: none;
+}
+.advice-home .home-rays {
+  stroke: var(--uabc-gold);
+  transform-origin: 34px 13px;
+  animation: advice-turn 12s linear infinite;
+}
+@keyframes advice-sway {
+  50% {
+    transform: rotate(-6deg);
+  }
+}
+@keyframes advice-rain {
+  to {
+    stroke-dashoffset: -15;
+  }
+}
+@keyframes advice-drift {
+  50% {
+    transform: translateX(2px);
+  }
+}
+@keyframes advice-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Pie de página con redes */
+.footer {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+  padding-bottom: 104px; /* deja libre el botón flotante */
+}
+.footer-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+.footer-brand img {
+  display: block;
+  width: 40px;
+  height: auto;
+}
+.footer-copy {
+  color: var(--muted);
+  font-size: 15px;
+}
+.social-links {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+.social-links a {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--green-tint);
+  color: var(--green-deep);
+  transition: background 0.12s, color 0.12s;
+}
+.social-links a:hover {
+  background: var(--uabc-green);
+  color: #fff;
+}
+.social-links svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.footer-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Botón flotante "Aprende jugando": amarillo UABC, mando y un brinco cartoon cada 5 s */
+.play-fab {
+  --fab: var(--uabc-gold);
+  --fab-edge: var(--green-deep);
+  position: fixed;
+  z-index: 40;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 62px;
+  padding: 6px 22px 6px 6px;
+  border: 3px solid var(--fab-edge);
+  border-radius: 999px;
+  background: var(--fab);
+  color: var(--green-deep);
+  transform-origin: 50% 100%;
+  animation: fab-hop 5s ease-in-out 1.5s infinite;
+  transition:
+    background 0.15s,
+    box-shadow 0.15s;
+}
+.play-fab-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  background: var(--green-deep);
+  color: #fff;
+  transition: transform 0.2s;
+}
+.play-fab-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+.play-fab-text strong {
+  font-family: var(--font-play);
+  font-weight: 800;
+  font-size: 23px;
+  letter-spacing: 0.2px;
+}
+/* Al señalarlo: se ilumina, sale un anillo y el mando se ladea */
+.play-fab:hover,
+.play-fab:focus-visible {
+  background: #f0ad2c;
+  box-shadow: 0 0 0 6px #dd971a55;
+  animation-play-state: paused;
+}
+.play-fab:hover .play-fab-icon,
+.play-fab:focus-visible .play-fab-icon {
+  transform: rotate(-14deg) scale(1.08);
+}
+.play-fab:focus-visible {
+  outline: 3px solid var(--green-deep);
+  outline-offset: 4px;
+}
+.play-fab:active {
+  animation: none;
+  transform: scale(0.96);
+}
+/* Agacharse, saltar, caer aplastado y rebotar: el ciclo dura 5 s y el salto menos de 1 s.
+   Nunca se estira más de 8 % (docs/estilos.md). */
+@keyframes fab-hop {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  83% {
+    transform: translateY(0) scale(1.06, 0.92);
+  }
+  87% {
+    transform: translateY(-18px) scale(0.95, 1.06);
+  }
+  91% {
+    transform: translateY(0) scale(1.08, 0.92);
+  }
+  94% {
+    transform: translateY(-5px) scale(0.98, 1.03);
+  }
+  97% {
+    transform: translateY(0) scale(1.02, 0.98);
+  }
+}
+/* Celular: una sola línea, sin subtítulo, para tapar menos contenido */
+@media (max-width: 480px) {
+  .play-fab {
+    min-height: 48px;
+    gap: 8px;
+    padding: 4px 16px 4px 4px;
+    border-width: 2px;
+  }
+  .play-fab-icon {
+    width: 36px;
+    height: 36px;
+  }
+  .play-fab-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  .play-fab-text strong {
+    font-size: 18px;
+  }
+}
+@media (max-width: 760px) {
+  .header-row {
+    gap: 8px;
+  }
+  .brand {
+    font-size: 24px;
+  }
+}
+@media print {
+  .play-fab {
+    display: none;
+  }
+}
+@media (max-width: 360px) {
+  .brand {
+    font-size: 20px;
+  }
+  .menu-toggle {
+    min-width: 96px;
+    padding: 0 8px;
+    font-size: 15px;
+  }
+}
+
+/* ===== Refugios: lista desplegable con una sola tarjeta ===== */
+.shelter-picker {
+  display: grid;
+  gap: 10px;
+}
+.field-label {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--green-deep);
+}
+.select-wrap {
+  position: relative;
+}
+.select {
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 48px 12px 16px;
+  border: 2px solid var(--uabc-green);
+  border-radius: var(--radius-button);
+  background: #fff;
+  color: var(--green-deep);
+  font: inherit;
+  font-weight: 700;
+  font-size: 17px;
+  appearance: none;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--green-deep);
+  transition:
+    background 0.15s,
+    box-shadow 0.15s;
+}
+.select-chevron {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  translate: 0 -50%;
+  rotate: 90deg;
+  color: var(--uabc-green);
+  pointer-events: none;
+}
+.select:focus-visible {
+  outline: 3px solid var(--uabc-gold);
+  outline-offset: 3px;
+}
+.shelter-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px 14px;
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--green-tint);
+}
+.shelter-pin {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--uabc-green);
+  color: #fff;
+}
+.shelter-info {
+  display: grid;
+  gap: 2px;
+}
+.shelter-info strong {
+  color: var(--green-deep);
+}
+.shelter-info span {
+  color: var(--muted);
+  font-size: 16px;
+}
+.shelter-card .pill {
+  gap: 6px;
+  background: #fff;
+}
+/* Sin esto, el fondo blanco de arriba le gana al verde del hover y el texto blanco desaparece */
+.shelter-card .pill:hover,
+.shelter-card .pill:active {
+  background: var(--uabc-green);
+  color: #fff;
+}
+@media (max-width: 520px) {
+  .shelter-card {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .shelter-card .pill {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+}
+
+/* ===== Mapa de riesgo en una ventana dentro del sitio ===== */
+.modal-wide {
+  width: min(1100px, calc(100vw - 32px));
+}
+.modal-wide .modal-body {
+  display: grid;
+  gap: 12px;
+  padding: 28px;
+}
+.modal-wide h2 {
+  margin-bottom: 0;
+}
+.modal-wide .modal-intro {
+  margin: 0;
+}
+.map-frame {
+  position: relative;
+  height: min(70dvh, 640px);
+  border: 3px solid var(--uabc-green);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: var(--green-tint);
+}
+.map-frame iframe {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.map-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0;
+  color: var(--green-deep);
+  font-weight: 700;
+}
+@media (max-width: 760px) {
+  .modal-wide {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+  }
+  .modal-wide .modal-body {
+    height: 100%;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    padding: 20px 16px max(16px, env(safe-area-inset-bottom));
+  }
+  .modal-wide h2 {
+    font-size: 30px;
+  }
+  .map-frame {
+    height: auto;
+  }
+}
+
+/* ===== 911: al señalarlo crece un poco, se ilumina y el teléfono suena más fuerte ===== */
+.call-main {
+  transition:
+    background 0.15s,
+    transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.18s;
+}
+.call-number {
+  transition: color 0.15s;
+}
+.call-ring {
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 0.15s;
+}
+@media (hover: hover) {
+  .call-main:hover {
+    transform: scale(1.04);
+    box-shadow:
+      0 6px 0 var(--green-deep),
+      0 0 0 6px #ffffff66,
+      0 0 0 12px #ffffff26;
+  }
+  .call-main:hover .call-ring {
+    transform: scale(1.1);
+  }
+  .call-main:hover .call-ring svg {
+    animation-duration: 0.5s;
+  }
+  .call-main:hover .call-number {
+    color: #d62828;
+  }
+}
+.call-main:focus-visible {
+  outline: 4px solid var(--uabc-gold);
+  outline-offset: 5px;
+  transform: scale(1.04);
+}
+.call-main:focus-visible .call-number {
+  color: #d62828;
+}
+
+/* ===== Estados de selección en todo el sitio =====
+   Con mouse se ven al pasar encima; con teclado al enfocar; en celular al tocar (:active).
+   Cada uno agrega un detalle: canto sólido, anillo, línea ocre o un icono que se mueve. */
+.button .icon,
+.button svg,
+.pill svg {
+  transition: transform 0.18s;
+}
+@media (hover: hover) {
+  .primary:hover {
+    box-shadow:
+      0 4px 0 var(--green-deep),
+      inset 0 0 0 3px #ffffff55;
+  }
+  .primary:hover svg,
+  .pill:hover svg,
+  .secondary:hover svg {
+    transform: translateX(3px);
+  }
+  .secondary:hover {
+    border-color: var(--green-deep);
+    box-shadow: 0 4px 0 var(--green-deep);
+  }
+  .dark:hover {
+    box-shadow: inset 0 0 0 3px var(--uabc-gold);
+  }
+  .pill:hover {
+    box-shadow: 0 0 0 4px var(--green-tint);
+  }
+  .text-link:hover {
+    text-decoration-color: var(--uabc-gold);
+  }
+  .text-link.on-gold:hover {
+    text-decoration-color: var(--green-deep);
+  }
+  .nav-link:not(.active):hover {
+    box-shadow: inset 0 -3px 0 var(--uabc-gold);
+  }
+  .menu-toggle:hover {
+    background: var(--green-tint);
+    box-shadow: 0 3px 0 var(--green-deep);
+  }
+  .select:hover {
+    background: var(--green-tint);
+  }
+  .prep-card:hover {
+    box-shadow: 0 0 0 4px var(--uabc-gold);
+  }
+  a.game-card:hover {
+    box-shadow:
+      0 6px 0 var(--tone-edge),
+      0 0 0 4px var(--uabc-gold);
+  }
+  .advice-card:hover .advice-icon {
+    transform: rotate(-8deg);
+  }
+  .phone-card a:hover {
+    text-decoration-color: var(--uabc-gold);
+    text-decoration-thickness: 4px;
+  }
+  .motion-toggle:hover,
+  .footer-link:hover,
+  .visits-tag:hover {
+    background: var(--green-tint);
+    box-shadow: 0 3px 0 var(--green-deep);
+  }
+  .social-links a:hover {
+    box-shadow: 0 0 0 4px var(--green-tint);
+  }
+  .step-action:hover {
+    box-shadow: inset 0 -4px 0 var(--uabc-gold);
+  }
+  .sources-section > a:hover {
+    box-shadow: inset 0 0 0 2px var(--uabc-green);
+  }
+  .sources-section > a:hover svg {
+    transform: translateX(3px);
+  }
+  .icon-button:hover {
+    box-shadow: 0 0 0 4px var(--green-tint);
+  }
+  .supply-row:hover {
+    box-shadow: inset 0 0 0 2px var(--uabc-green);
+  }
+}
+.advice-icon {
+  transition: transform 0.2s;
+}
+.sources-section > a svg {
+  transition: transform 0.18s;
+}
+/* En celular: respuesta inmediata al tocar */
+.secondary:active,
+.motion-toggle:active,
+.footer-link:active,
+.visits-tag:active,
+.menu-toggle:active {
+  background: var(--green-tint);
+}
+.prep-card:active,
+a.game-card:active,
+.advice-card:active {
+  box-shadow: 0 0 0 4px var(--uabc-gold);
+}
+.pill:active {
+  background: var(--uabc-green);
+  color: #fff;
+}
+.phone-card a:active {
+  text-decoration-color: var(--uabc-gold);
+}
+
+/* Iconos en lugar de símbolos de texto (en celular algunos se vuelven emoji) */
+.flip-x {
+  transform: scaleX(-1);
+}
+.pac-axis span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.print-box {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  border: 1.5px solid #000;
+  vertical-align: -2px;
+}
+@media (hover: hover) {
+  .lab-toggle button:not([aria-pressed="true"]):hover {
+    box-shadow: inset 0 -3px 0 var(--uabc-gold);
+  }
+  .reset-button:hover {
+    text-decoration-color: var(--uabc-gold);
+  }
+}
+
+/* ===== Juegos (/juegos): escena animada, mosaico de tarjetas y pasos con iconos =====
+   Reglas en docs/estilos.md, sección "Juegos". */
+
+/* Encabezado: banda verde a todo el ancho con la ruta segura que se dibuja */
+.gm-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: 24px 40px;
+  margin: 0 calc(50% - 50vw) 44px;
+  padding: 44px calc(50vw - 50%) 36px;
+  background: var(--uabc-green);
+  color: #fff;
+  overflow: hidden;
+}
+.gm-hero-copy {
+  display: grid;
+  gap: 14px;
+  justify-items: start;
+}
+.gm-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 10px;
+  border-radius: 999px;
+  background: var(--uabc-gold);
+  color: var(--green-deep);
+  font-family: var(--font-play);
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 1.2;
+}
+.gm-kicker svg {
+  animation: gm-wiggle 4s ease-in-out infinite;
+}
+.gm-hero h1 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(52px, 7vw, 84px);
+  line-height: 0.92;
+}
+.gm-hero p {
+  margin: 0;
+  color: #fff;
+  font-size: 20px;
+  max-width: 34ch;
+}
+.gm-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.gm-chips li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 2px solid #ffffff66;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 15px;
+}
+/* La escena va en una ventana redonda, como una tarjeta del sitio */
+.gm-scene {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 4px solid var(--green-deep);
+  border-radius: var(--radius-block);
+  background: #12894f;
+  box-shadow: 0 6px 0 var(--green-deep);
+}
+.gm-hill-back {
+  fill: #005f34;
+}
+.gm-hill-front {
+  fill: var(--green-deep);
+}
+.gm-cloud path {
+  fill: #ffffff;
+  opacity: 0.92;
+}
+.gm-cloud {
+  animation: gm-drift 7s ease-in-out infinite;
+}
+.gm-cloud-2 {
+  animation-duration: 9s;
+  animation-direction: reverse;
+}
+.gm-rain path {
+  fill: none;
+  stroke: #cfe9da;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 6 10;
+  animation: gm-rain 0.8s linear infinite;
+}
+.gm-route-base {
+  fill: none;
+  stroke: #ffffff40;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-dasharray: 2 12;
+}
+.gm-route {
+  fill: none;
+  stroke: var(--uabc-gold);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+  animation: gm-draw 7s ease-in-out infinite;
+}
+.gm-stop {
+  fill: #fff;
+  stroke: var(--uabc-gold);
+  stroke-width: 5;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: gm-pop 7s ease-in-out infinite;
+}
+.gm-stop-2 {
+  animation-delay: 0.7s;
+}
+.gm-stop-3 {
+  animation-delay: 1.4s;
+}
+.gm-pin path {
+  fill: var(--uabc-gold);
+  stroke: var(--green-deep);
+  stroke-width: 3;
+}
+.gm-pin circle {
+  fill: var(--green-deep);
+}
+.gm-pin {
+  animation: gm-pin 7s ease-in-out infinite;
+}
+.gm-token > path {
+  stroke: var(--green-deep);
+  stroke-width: 3;
+}
+.gm-token-1 > path {
+  fill: var(--uabc-gold);
+}
+.gm-token-2 > path {
+  fill: #eaf2ff;
+}
+.gm-token-3 > path {
+  fill: var(--green-tint);
+}
+.gm-token-icon {
+  fill: none;
+  stroke: var(--green-deep);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.gm-token-2 .gm-token-icon {
+  stroke: #0b4fa8;
+}
+.gm-token {
+  animation: gm-bob 3.6s ease-in-out infinite;
+}
+.gm-token-2 {
+  animation-delay: -1.2s;
+}
+.gm-token-3 {
+  animation-delay: -2.4s;
+}
+@keyframes gm-draw {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  40%,
+  85% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -100;
+  }
+}
+@keyframes gm-pop {
+  0%,
+  8% {
+    transform: scale(0.4);
+  }
+  14%,
+  85% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.4);
+  }
+}
+@keyframes gm-pin {
+  0%,
+  38% {
+    transform: translate(436px, 30px);
+    opacity: 0;
+  }
+  44% {
+    transform: translate(436px, 52px);
+    opacity: 1;
+  }
+  48% {
+    transform: translate(436px, 40px);
+  }
+  52%,
+  85% {
+    transform: translate(436px, 46px);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(436px, 46px);
+    opacity: 0;
+  }
+}
+@keyframes gm-drift {
+  50% {
+    transform: translateX(14px);
+  }
+}
+@keyframes gm-rain {
+  to {
+    stroke-dashoffset: -16;
+  }
+}
+@keyframes gm-bob {
+  50% {
+    translate: 0 -8px;
+  }
+}
+@keyframes gm-wiggle {
+  0%,
+  80%,
+  100% {
+    transform: rotate(0);
+  }
+  86% {
+    transform: rotate(-14deg);
+  }
+  92% {
+    transform: rotate(10deg);
+  }
+}
+
+/* Los tres juegos en una fila del mismo alto; en celular, una columna */
+.gm-section-head {
+  margin-bottom: 18px;
+}
+.gm-section-head .section-title {
+  margin-bottom: 2px;
+}
+.gm-section-head .section-lead {
+  margin: 0;
+}
+.gm-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.gm-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 3px solid var(--tone-strong);
+  border-radius: var(--radius-block);
+  background: var(--tone-bg);
+  color: var(--tone-ink);
+  box-shadow: 0 6px 0 var(--tone-edge);
+  animation: gm-in 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  animation-delay: calc(var(--i) * 110ms);
+  transition: box-shadow 0.15s;
+}
+.gm-card.selected {
+  box-shadow:
+    0 6px 0 var(--tone-edge),
+    0 0 0 5px var(--uabc-gold);
+}
+@keyframes gm-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+.gm-art {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--tone-strong);
+}
+
+.gm-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+/* Dentro de la imagen: la imagen recorta su zoom y no puede dejar salir el hexágono */
+.gm-number {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 56px;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  background: var(--green-deep);
+  color: var(--uabc-gold);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 28px;
+  z-index: 1;
+}
+.gm-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 3px solid var(--tone-edge);
+  border-radius: 16px;
+  background: #fff;
+  color: var(--tone-ink);
+}
+.gm-badge-rally svg {
+  stroke-dasharray: 60;
+  animation: gm-trace 3s ease-in-out infinite;
+}
+.gm-badge-decisiones svg {
+  transform-origin: 50% 90%;
+  animation: gm-sway 2.6s ease-in-out infinite;
+}
+.gm-badge-mochila svg {
+  transform-origin: 50% 100%;
+  animation: gm-squish 2.4s ease-in-out infinite;
+}
+@keyframes gm-trace {
+  0% {
+    stroke-dashoffset: 60;
+  }
+  50%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes gm-sway {
+  50% {
+    transform: rotate(-10deg);
+  }
+}
+@keyframes gm-squish {
+  0%,
+  60%,
+  100% {
+    transform: scale(1, 1);
+  }
+  70% {
+    transform: scale(1.1, 0.88);
+  }
+  80% {
+    transform: scale(0.94, 1.08) translateY(-3px);
+  }
+}
+.gm-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 22px 22px;
+}
+.gm-body .game-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.gm-body h3 {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1;
+}
+.gm-body p {
+  margin: 0;
+}
+.gm-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 2px 0 6px;
+  padding: 0;
+  list-style: none;
+}
+.gm-meta li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #fff;
+  font-size: 15px;
+  font-weight: 700;
+}
+.gm-play {
+  margin-top: auto;
+  align-self: flex-start;
+}
+@media (hover: hover) {
+  .gm-card:hover .gm-art img {
+    transform: scale(1.06);
+  }
+  .gm-card:not(.selected):hover {
+    box-shadow:
+      0 6px 0 var(--tone-edge),
+      0 0 0 4px var(--uabc-gold);
+  }
+}
+
+/* Panel de instrucciones: aparece con un deslizamiento y los pasos entran uno por uno */
+.gm-detail {
+  display: grid;
+  gap: 20px;
+  margin-top: 32px;
+  padding: 28px;
+  scroll-margin-top: 16px;
+  border: 3px solid var(--tone-strong);
+  border-radius: var(--radius-block);
+  background: var(--tone-bg);
+  color: var(--tone-ink);
+  box-shadow: 0 6px 0 var(--tone-edge);
+}
+.gm-detail-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 16px;
+}
+.gm-detail-icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 70px;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  background: var(--uabc-gold);
+  color: var(--green-deep);
+  animation: gm-wiggle 4s ease-in-out 0.6s infinite;
+}
+.gm-detail h2 {
+  margin: 2px 0 6px;
+  font-size: 44px;
+}
+.gm-detail h2:focus {
+  outline: none;
+}
+/* El título recibe el foco solo para que el lector de pantalla lo anuncie */
+.gm-detail h2:focus-visible {
+  outline: none;
+}
+.gm-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.gm-steps li {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  padding: 18px;
+  border-radius: 18px;
+  background: #fff;
+  font-weight: 600;
+  animation: gm-in 0.45s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  animation-delay: calc(0.15s + var(--n) * 120ms);
+}
+.gm-step-num {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 1;
+  color: var(--tone-strong);
+}
+.gm-step-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--tone-strong);
+  color: #fff;
+}
+.tone-gold .gm-step-icon {
+  color: var(--green-deep);
+}
+.gm-back {
+  justify-self: start;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+.gm-panel-enter-active {
+  transition:
+    opacity 0.3s ease,
+    transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+.gm-panel-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.gm-panel-leave-active {
+  transition: opacity 0.15s;
+}
+.gm-panel-leave-to {
+  opacity: 0;
+}
+
+@media (max-width: 900px) {
+  .gm-hero {
+    grid-template-columns: 1fr;
+    padding-block: 32px 24px;
+  }
+  .gm-scene {
+    max-width: 460px;
+    justify-self: center;
+  }
+  .gm-grid {
+    grid-template-columns: 1fr;
+  }
+  .gm-steps {
+    grid-template-columns: 1fr;
+  }
+  .gm-steps li {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    padding-right: 48px;
+  }
+}
+@media (max-width: 760px) {
+  .gm-hero h1 {
+    font-size: 54px;
+  }
+  .gm-hero p {
+    font-size: 18px;
+  }
+  .gm-detail {
+    padding: 20px;
+  }
+  .gm-detail h2 {
+    font-size: 34px;
+  }
+  .gm-detail-head {
+    grid-template-columns: 1fr;
+  }
+  .gm-body h3 {
+    font-size: 30px;
+  }
+}
+
+/* ===== Llamados a la acción (.cta) =====
+   Única excepción a "los botones no cambian de tamaño": las acciones principales de emergencia
+   y de juego crecen 4 % al señalarlas, con un rebote corto. Lista en docs/estilos.md. */
+.cta {
+  transition:
+    background 0.15s,
+    box-shadow 0.15s,
+    color 0.15s,
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@media (hover: hover) {
+  .button.cta:hover,
+  .phone-card a.cta:hover {
+    transform: scale(1.04);
+  }
+}
+.button.cta:focus-visible,
+.phone-card a.cta:focus-visible {
+  transform: scale(1.04);
+}
+.phone-card a.cta {
+  transform-origin: left center;
+}
+/* Al presionar se hunde un poco, también si el puntero está encima */
+.button.cta.cta:active,
+.phone-card a.cta.cta:active {
+  transform: scale(0.98);
+}
+
+/* ===== Encabezado del sitio: fijo arriba, menú con iconos y una línea de agua que corre ===== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 35;
+  border-bottom: 0;
+  background: var(--surface);
+  transition: box-shadow 0.2s;
+}
+.site-header .header-row {
+  transition: padding 0.2s;
+}
+.site-header.scrolled .header-row {
+  padding-block: 6px;
+}
+.site-header.scrolled {
+  box-shadow: 0 4px 0 #00723f1a;
+}
+.header-wave-wrap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -11px;
+  height: 12px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.header-wave {
+  display: block;
+  width: 200%;
+  height: 12px;
+  animation: header-flow 14s linear infinite;
+}
+.hw-back {
+  fill: var(--surface);
+}
+.hw-front {
+  fill: none;
+  stroke: var(--uabc-green);
+  stroke-width: 2.5;
+  vector-effect: non-scaling-stroke;
+}
+@keyframes header-flow {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Marca: el escudo se ladea al señalarlo y una gota cae junto al nombre */
+.brand img {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.brand-drop {
+  width: 13px;
+  height: 18px;
+  margin-left: -2px;
+  align-self: flex-start;
+  margin-top: 4px;
+  fill: #2b7fd6;
+  animation: brand-drop 3.2s ease-in infinite;
+}
+@keyframes brand-drop {
+  0%,
+  55% {
+    transform: translateY(-4px);
+    opacity: 0;
+  }
+  65% {
+    opacity: 1;
+  }
+  90% {
+    transform: translateY(8px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+}
+
+
+/* Enlaces del menú con icono en un círculo */
+.nav-link {
+  gap: 8px;
+  padding: 0 14px 0 6px;
+  border-radius: 999px;
+}
+.nav-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--green-tint);
+  color: var(--uabc-green);
+  transition:
+    background 0.15s,
+    color 0.15s,
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.nav-link.active .nav-icon {
+  background: var(--uabc-gold);
+  color: var(--green-deep);
+  animation: nav-hello 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+}
+@keyframes nav-hello {
+  0% {
+    transform: scale(0.6) rotate(-20deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+@media (hover: hover) {
+  .nav-link:not(.active):hover .nav-icon {
+    background: var(--uabc-green);
+    color: #fff;
+    transform: rotate(-12deg);
+  }
+}
+.nav-link:focus-visible .nav-icon {
+  background: var(--uabc-green);
+  color: #fff;
+}
+
+/* Botón de menú: el icono gira al abrir y cerrar */
+.menu-toggle-icon {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.menu-toggle[aria-expanded="true"] .menu-toggle-icon {
+  transform: rotate(90deg);
+}
+
+/* Celular: el menú abierto se ve como cuatro mosaicos con icono */
+@media (max-width: 760px) {
+  .site-nav.open {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 6px 0 14px;
+  }
+  .site-nav.open .nav-link {
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    min-height: 92px;
+    padding: 10px;
+    border: 2px solid var(--line);
+    border-radius: var(--radius-card);
+    font-size: 17px;
+    animation: gm-in 0.35s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  }
+  .site-nav.open .nav-link:nth-child(2) {
+    animation-delay: 0.05s;
+  }
+  .site-nav.open .nav-link:nth-child(3) {
+    animation-delay: 0.1s;
+  }
+  .site-nav.open .nav-link:nth-child(4) {
+    animation-delay: 0.15s;
+  }
+  .site-nav.open .nav-link.active {
+    border-color: var(--uabc-green);
+  }
+  .site-nav.open .nav-icon {
+    width: 44px;
+    height: 44px;
+  }
+  .site-nav.open .nav-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+/* En celular la gota no cabe junto al botón de menú */
+@media (max-width: 480px) {
+  .brand-drop {
+    display: none;
+  }
+}
+
+/* ===== Marca Cuenca Cimarrona (manual de identidad v1.1, docs/identidad/) ===== */
+
+/* Icono en el encabezado: se marca con un anillo, nunca se gira (manual pág. 10) */
+.brand-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  transition: box-shadow 0.2s;
+}
+@media (hover: hover) {
+  .brand:hover img.brand-icon {
+    transform: none;
+    box-shadow: 0 0 0 3px var(--uabc-gold);
+  }
+}
+@media (max-width: 480px) {
+  .brand-icon {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* Nombre de la marca en Lilita One (redonda y alegre), en verde profundo */
+.wordmark {
+  font-family: var(--font-brand);
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  line-height: 1;
+}
+.brand .wordmark {
+  font-size: 26px;
+  color: var(--green-deep);
+}
+@media (max-width: 760px) {
+  .brand .wordmark {
+    font-size: 22px;
+  }
+}
+@media (max-width: 480px) {
+  .brand .wordmark {
+    font-size: 19px;
+  }
+}
+@media (max-width: 360px) {
+  .brand .wordmark {
+    font-size: 16px;
+  }
+}
+.brand-hero strong.wordmark {
+  font-family: var(--font-brand);
+  font-weight: 400;
+}
+
+/* Pie: icono y nombre (firma horizontal), y aparte el escudo UABC */
+.footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.footer-brand img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+}
+.footer-brand .wordmark {
+  font-size: 22px;
+  color: var(--green-deep);
+}
+.footer-uabc {
+  width: 36px;
+  height: auto;
+}
+
+/* Cimarrón guía: entra deslizándose y flota; no se voltea, gira ni deforma */
+.mascot {
+  position: relative;
+  flex: none;
+  width: var(--mascot-w);
+  margin: 0;
+}
+.mascot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.6s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+.mascot.visible img {
+  opacity: 1;
+  transform: none;
+}
+/* Flota el personaje completo con su globo, para que se muevan juntos */
+.mascot.visible {
+  animation: mascot-float 4s ease-in-out 0.8s infinite;
+}
+@keyframes mascot-float {
+  50% {
+    translate: 0 -5px;
+  }
+}
+/* Globo de diálogo: arriba del personaje, fuera de su área de respeto */
+.mascot.has-bubble {
+  margin-top: 52px;
+}
+.mascot-bubble {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  /* Encima del personaje, sin invadir el texto que tiene a la derecha */
+  left: 6%;
+  padding: 4px 14px;
+  border: 3px solid var(--green-deep);
+  border-radius: 16px;
+  background: #fff;
+  color: var(--green-deep);
+  box-shadow: 0 3px 0 var(--green-deep);
+  font-family: var(--font-play);
+  font-weight: 800;
+  font-size: 17px;
+  line-height: 1.3;
+  white-space: nowrap;
+  opacity: 0;
+  transform: scale(0.6);
+  transform-origin: 10% 100%;
+  transition:
+    opacity 0.3s ease 0.45s,
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.45s;
+}
+.mascot-bubble::after {
+  content: "";
+  position: absolute;
+  left: 16px;
+  top: 100%;
+  width: 14px;
+  height: 10px;
+  background: var(--green-deep);
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+.mascot.visible .mascot-bubble {
+  opacity: 1;
+  transform: none;
+}
+
+/* Silueta: máscara plana del personaje (manual pág. 6), solo como marca de agua */
+.cc-silhouette {
+  display: block;
+  aspect-ratio: 1223 / 1195;
+  background: currentColor;
+  -webkit-mask: url("/brand/cuenca/silueta.png") center / contain no-repeat;
+  mask: url("/brand/cuenca/silueta.png") center / contain no-repeat;
+  pointer-events: none;
+}
+/* Tarjetas grandes (160 px o más) llevan la silueta en la esquina inferior derecha */
+.cc-watermark {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.cc-watermark::after {
+  content: "";
+  position: absolute;
+  right: -16px;
+  bottom: -18px;
+  z-index: -1;
+  width: 118px;
+  aspect-ratio: 1223 / 1195;
+  background: currentColor;
+  opacity: 0.08;
+  -webkit-mask: url("/brand/cuenca/silueta.png") center / contain no-repeat;
+  mask: url("/brand/cuenca/silueta.png") center / contain no-repeat;
+  pointer-events: none;
+  transition:
+    opacity 0.25s,
+    transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+@media (hover: hover) {
+  .cc-watermark:hover::after {
+    opacity: 0.16;
+    transform: translateY(-6px);
+  }
+}
+
+/* Encabezados verdes de las páginas interiores: silueta blanca asomándose por abajo */
+.page-heading {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.page-heading::after {
+  content: "";
+  position: absolute;
+  right: calc(50vw - 50%);
+  bottom: -40px;
+  z-index: -1;
+  width: 220px;
+  aspect-ratio: 1223 / 1195;
+  background: #fff;
+  opacity: 0.1;
+  -webkit-mask: url("/brand/cuenca/silueta.png") center / contain no-repeat;
+  mask: url("/brand/cuenca/silueta.png") center / contain no-repeat;
+  pointer-events: none;
+}
+
+/* Inicio: el cimarrón presenta los juegos */
+.section-head.has-mascot {
+  align-items: flex-end;
+  flex-wrap: nowrap;
+  column-gap: 48px; /* espacio para el globo, que es un poco más ancho que el cimarrón */
+}
+.section-head-text {
+  flex: 1;
+  min-width: 0;
+}
+.map-intro {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.map-intro .mascot img {
+  transform: none;
+}
+@media (max-width: 760px) {
+  .section-head.has-mascot {
+    flex-wrap: wrap;
+  }
+  .section-head.has-mascot .mascot {
+    --mascot-w: 110px !important;
+  }
+  .page-heading::after {
+    width: 140px;
+    bottom: -26px;
+  }
+}
+
+/* Juegos: el cimarrón presenta la ruta de la escena y los pasos */
+.gm-scene-wrap {
+  position: relative;
+}
+.gm-hero-mascot {
+  position: absolute;
+  left: -70px;
+  bottom: -30px;
+  z-index: 2;
+}
+.gm-section {
+  position: relative;
+  isolation: isolate;
+  /* Las siluetas de fondo se asoman por los lados sin crear scroll horizontal */
+  overflow-x: clip;
+  overflow-y: visible;
+}
+.gm-bg-sil {
+  position: absolute;
+  z-index: -1;
+  width: 280px;
+  color: var(--uabc-green);
+  opacity: 0.05;
+}
+.gm-bg-sil-1 {
+  left: -170px;
+  top: 30px;
+}
+.gm-bg-sil-2 {
+  right: -150px;
+  bottom: -30px;
+}
+.gm-detail-body {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: end;
+  gap: 8px 20px;
+}
+@media (max-width: 900px) {
+  .gm-hero-mascot {
+    left: -10px;
+    bottom: -26px;
+    --mascot-w: 120px !important;
+  }
+  .gm-detail-body {
+    grid-template-columns: 1fr;
+  }
+  .gm-detail-mascot {
+    --mascot-w: 110px !important;
+  }
+  .gm-bg-sil {
+    display: none;
+  }
+}
+
+/* Página de estilos: marca y cimarrón guía */
+.brand-hero img.brand-hero-seal {
+  width: 140px;
+  padding: 0;
+  border-radius: 50%;
+  background: none;
+}
+.mascot-rules {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: end;
+  gap: 16px 32px;
+}
+.mascot-demo {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+.mascot-demo-target {
+  padding: 14px 18px;
+  border: 3px dashed var(--uabc-gold);
+  border-radius: var(--radius-card);
+  font-weight: 700;
+  color: var(--gold-text);
+}
+.mascot-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mascot-list li {
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: var(--green-tint);
+}
+.silhouette-demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.silhouette-swatch {
+  position: relative;
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  width: 220px;
+  padding: 20px;
+  border-radius: var(--radius-card);
+}
+.silhouette-swatch .cc-silhouette {
+  width: 120px;
+}
+.silhouette-swatch.on-light {
+  background: var(--gold-tint);
+  color: #3b231414;
+}
+.silhouette-swatch.on-green {
+  background: var(--uabc-green);
+  color: #ffffff1a;
+}
+.silhouette-swatch small {
+  font-weight: 700;
+}
+.silhouette-swatch.on-light small {
+  color: var(--green-deep);
+}
+.silhouette-swatch.on-green small {
+  color: #fff;
+}
+@media (max-width: 760px) {
+  .mascot-rules {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 360px) {
+  .brand {
+    gap: 7px;
+  }
+  .brand-icon {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+/* ===== Tableta (761 a 1040 px) ===== */
+/* El menú cabe en una fila sin los iconos */
+@media (min-width: 761px) and (max-width: 1040px) {
+  .site-nav .nav-icon {
+    display: none;
+  }
+  .nav-link {
+    padding: 0 12px;
+  }
+}
+/* Tres tarjetas en una fila desde 700 px, para que ninguna quede sola */
+@media (min-width: 700px) {
+  .game-grid,
+  .advice-grid,
+  .prep-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 641px) and (max-width: 900px) {
+  .gm-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .gm-body {
+    padding: 16px 14px 18px;
+  }
+  .gm-body h3 {
+    font-size: 24px;
+  }
+  .gm-play {
+    align-self: stretch;
+  }
+}
+@media (max-width: 640px) {
+  .gm-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* En el encabezado de Juegos, el cimarrón entra a la escena y no tapa el texto */
+@media (min-width: 901px) and (max-width: 1200px) {
+  .gm-hero-mascot {
+    left: -24px;
+    bottom: -26px;
+    --mascot-w: 140px !important;
+  }
+}
+.type-big.brand-sample {
+  font-family: var(--font-brand);
+  font-weight: 400;
+  color: var(--green-deep);
 }

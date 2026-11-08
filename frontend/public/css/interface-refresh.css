@@ -405,7 +405,7 @@ h1,h2,h3,.brand strong{font-family:"DM Sans",Arial,sans-serif;font-weight:700;le
 .topic-lead{margin:9px 0 0;color:#60746a;font-size:14px;line-height:1.7}
 .topic-list{display:grid;gap:11px;margin:0;padding:0;list-style:none}
 .topic-list li{position:relative;padding-left:25px;color:#52685c;font-size:13px;line-height:1.65}
-.topic-list li:before{position:absolute;left:0;top:.08em;display:grid;place-items:center;width:17px;height:17px;border-radius:50%;color:#087343;background:#e1f1e5;font-size:11px;font-weight:800;content:"✓"}
+.topic-list li:before{position:absolute;left:0;top:.08em;display:grid;place-items:center;width:17px;height:17px;border-radius:50%;color:#087343;background:#e1f1e5 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23087343' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/70% no-repeat;content:""}
 .topic-section.ocean-topic{padding:24px;border:0;border-radius:24px;background:#eef6ff;box-shadow:none}
 .ocean-topic>h2{margin:0 0 14px;color:#003d24;font-family:"Barlow Condensed",sans-serif;font-size:clamp(29px,3.5vw,36px);font-weight:800;line-height:1.05;letter-spacing:-.025em}
 .ocean-mode-switch{display:inline-flex;flex-wrap:wrap;gap:6px;margin:0 0 16px;padding:6px;border-radius:16px;background:#fff}
@@ -609,3 +609,122 @@ h1,h2,h3,.brand strong{font-family:"DM Sans",Arial,sans-serif;font-weight:700;le
 @media(max-width:900px){.backpack-checklist-layout{grid-template-columns:1fr}.backpack-progress-card{position:relative;top:0;grid-row:1;min-height:0}.backpack-progress-card .backpack-summary-note{margin-bottom:12px}.backpack-intro-card{grid-template-columns:minmax(0,1fr) minmax(200px,.62fr)}}
 @media(max-width:620px){.backpack-intro-card{grid-template-columns:1fr;gap:8px;min-height:0;padding:23px 21px 10px;border-radius:21px}.backpack-intro-copy h3{font-size:27px}.backpack-hero-art{width:220px;height:135px;margin-top:0}.backpack-progress-card{padding:20px}.backpack-supply-group{padding:16px 15px 7px}.backpack-supply-row{grid-template-columns:38px minmax(0,1fr) 20px;gap:10px;min-height:67px}.backpack-supply-icon{width:36px;height:36px}.backpack-supply-copy strong{font-size:12px}.backpack-supply-copy small{font-size:9px}}
 @media(prefers-reduced-motion:reduce){.backpack-intro-card:before,.backpack-hero-art,.backpack-hero-art svg,.backpack-hero-art .bag-water,.backpack-hero-spark,.backpack-supply-group,.backpack-supply-row,.backpack-supply-icon,.backpack-summary-progress::-webkit-progress-value,.backpack-print-button{animation:none!important;transition:none!important}.backpack-supply-row:hover,.backpack-supply-row:hover .backpack-supply-icon,.backpack-print-button:hover{transform:none}}
+
+/* ===== Ajustes al estilo del sitio (docs/estilos.md) mientras estas páginas pasan a Vue ===== */
+@font-face{font-family:"Barlow Condensed";font-weight:700;font-display:swap;src:url("../assets/barlow-condensed-latin-700-normal-v1xN8_Wq.woff2") format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:800;font-display:swap;src:url("../assets/barlow-condensed-latin-800-normal-BKzMuPgK.woff2") format("woff2")}
+:root{--cream:#fff}
+body,body.subpage{background:#fff}
+/* Títulos en Barlow Condensed, como en el resto del sitio */
+h1,h2,h3{font-family:"Barlow Condensed",sans-serif!important;font-weight:800!important;letter-spacing:0!important;line-height:1.02}
+/* Colores sólidos: sin desenfoques */
+*{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+/* Nada sube ni crece al pasar el puntero */
+a:hover,a:hover *,button:hover,[class*="card"]:hover,[class*="card"]:hover *{translate:none!important;scale:none!important}
+[class*="card"]:hover{transform:none!important}
+/* Etiquetas sin mayúsculas forzadas */
+.eyebrow{text-transform:none!important;letter-spacing:0!important;font-size:15px!important;color:var(--gold-text,#8a5a00)!important}
+
+/* Menú en celular: botón que despliega la lista dentro del encabezado */
+.site-header .menu-toggle{display:none;align-items:center;justify-content:center;gap:6px;min-width:112px;min-height:44px;padding:0 10px;border:2px solid var(--uabc-green);border-radius:12px;background:#fff;color:var(--green-deep);font-weight:700;font-size:16px;cursor:pointer}
+.site-header .menu-toggle svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.site-header .menu-toggle[aria-expanded="true"]{background:var(--green-tint)}
+@media(max-width:760px){
+  .site-header .header-row{gap:8px}
+  .site-header .brand{font-size:24px}
+  .site-header .menu-toggle{display:inline-flex}
+  .site-header .site-nav,.site-header .site-nav.open{position:static;display:none;flex-direction:column;align-items:stretch;gap:4px;width:100%;padding:4px 0 0;border:0;border-radius:0;background:transparent;box-shadow:none}
+  .site-header .site-nav.open{display:flex}
+  .site-header .nav-link{min-height:48px;padding:0 16px;font-size:18px}
+}
+
+/* Botón flotante "Aprende jugando" (igual que en la app de Vue) */
+.play-fab{position:fixed;z-index:40;right:max(16px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));display:inline-flex;align-items:center;gap:10px;min-height:62px;padding:6px 22px 6px 6px;border:3px solid var(--green-deep);border-radius:999px;background:var(--uabc-gold);color:var(--green-deep);text-decoration:none;transform-origin:50% 100%;animation:fab-hop 5s ease-in-out 1.5s infinite;transition:background .15s,box-shadow .15s}
+.play-fab-icon{display:grid;place-items:center;width:46px;height:46px;border-radius:999px;background:var(--green-deep);color:#fff;transition:transform .2s}
+.play-fab-icon svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.play-fab-text{display:flex;flex-direction:column;line-height:1}
+.play-fab-text strong{font-family:var(--font-play);font-weight:800;font-size:23px}
+@media(hover:hover){.play-fab:hover{background:#f0ad2c;box-shadow:0 0 0 6px #dd971a55;animation-play-state:paused}.play-fab:hover .play-fab-icon{transform:rotate(-14deg) scale(1.08)}}
+.play-fab:focus-visible{outline:3px solid var(--green-deep);outline-offset:4px;animation-play-state:paused}
+.play-fab:active{animation:none;transform:scale(.96)}
+@keyframes fab-hop{0%,80%,100%{transform:translateY(0) scale(1,1)}83%{transform:translateY(0) scale(1.06,.92)}87%{transform:translateY(-18px) scale(.95,1.06)}91%{transform:translateY(0) scale(1.08,.92)}94%{transform:translateY(-5px) scale(.98,1.03)}97%{transform:translateY(0) scale(1.02,.98)}}
+@media(max-width:480px){.play-fab{min-height:48px;gap:8px;padding:4px 16px 4px 4px;border-width:2px}.play-fab-icon{width:36px;height:36px}.play-fab-icon svg{width:24px;height:24px}.play-fab-text strong{font-size:18px}}
+@media(prefers-reduced-motion:reduce){.play-fab{animation:none}}
+.simple-footer,.site-footer{padding-bottom:96px}
+@media print{.play-fab{display:none}}
+
+/* Estados de selección: un detalle visible además del cambio de color */
+.directory-card,.resource-card,.prepare-shortcut,.lesson-card,.info-card,.activity-card,.learn-intro-link,.advice-start-link,.back-link,.weather-control,.backpack-print-button,.backpack-reset-button,.text-button,.button,.nav-link,.menu-toggle{transition:background .15s,box-shadow .15s,border-color .15s,color .15s}
+@media(hover:hover){
+  .directory-card:hover,.resource-card:hover,.prepare-shortcut:hover,.lesson-card:hover,.info-card:hover,.activity-card:hover{box-shadow:0 0 0 4px var(--uabc-gold)!important}
+  .learn-intro-link:hover,.advice-start-link:hover,.button.secondary:hover,.backpack-print-button:hover,.backpack-reset-button:hover,.weather-control:hover,.menu-toggle:hover{box-shadow:0 4px 0 var(--green-deep)!important;border-color:var(--green-deep)!important}
+  .learn-intro-link:hover svg,.advice-start-link:hover svg{transform:translateY(3px)}
+  .text-link:hover,.text-button:hover,.back-link:hover{text-decoration:underline;text-decoration-color:var(--uabc-gold);text-decoration-thickness:3px;text-underline-offset:5px}
+  .site-header .nav-link:not(.active):hover{box-shadow:inset 0 -3px 0 var(--uabc-gold)}
+}
+.learn-intro-link svg,.advice-start-link svg{transition:transform .18s}
+.directory-card:active,.resource-card:active,.prepare-shortcut:active,.lesson-card:active,.info-card:active,.activity-card:active{box-shadow:0 0 0 4px var(--uabc-gold)!important}
+.learn-intro-link:active,.advice-start-link:active,.backpack-print-button:active,.backpack-reset-button:active,.weather-control:active{background:var(--green-tint)!important}
+:focus-visible{outline:3px solid var(--uabc-gold);outline-offset:3px}
+@media(max-width:360px){.site-header .brand{font-size:20px}.site-header .menu-toggle{min-width:96px;padding:0 8px;font-size:15px}}
+@media(max-width:360px){.site-header .menu-toggle{gap:4px}.site-header .menu-toggle svg{width:18px;height:18px}.site-header .header-row{width:calc(100% - 32px)}}
+
+.sym{display:inline-block;vertical-align:-0.15em;flex:none}
+
+/* Encabezado renovado (igual que en la app de Vue) */
+.site-header{position:sticky;top:0;z-index:35;border-bottom:0;background:#fff;transition:box-shadow .2s}
+.site-header .header-row{transition:padding .2s}
+.site-header.scrolled .header-row{padding-block:6px}
+.site-header.scrolled{box-shadow:0 4px 0 #00723f1a}
+.header-wave-wrap{position:absolute;left:0;right:0;bottom:-11px;height:12px;overflow:hidden;pointer-events:none}
+.header-wave{display:block;width:200%;height:12px;animation:header-flow 14s linear infinite}
+.hw-back{fill:#fff}.hw-front{fill:none;stroke:var(--uabc-green);stroke-width:2.5;vector-effect:non-scaling-stroke}
+@keyframes header-flow{to{transform:translateX(-50%)}}
+.site-header .brand img{transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.brand-drop{width:13px;height:18px;margin-left:-2px;align-self:flex-start;margin-top:4px;fill:#2b7fd6;animation:brand-drop 3.2s ease-in infinite}
+@keyframes brand-drop{0%,55%{transform:translateY(-4px);opacity:0}65%{opacity:1}90%{transform:translateY(8px);opacity:1}100%{transform:translateY(10px);opacity:0}}
+.site-header .nav-link{gap:8px;padding:0 14px 0 6px;border-radius:999px}
+.nav-icon{display:grid;place-items:center;width:32px;height:32px;border-radius:999px;background:var(--green-tint);color:var(--uabc-green);transition:background .15s,color .15s,transform .25s cubic-bezier(.34,1.56,.64,1)}
+.nav-icon svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.site-header .nav-link.active .nav-icon{background:var(--uabc-gold);color:var(--green-deep);animation:nav-hello .6s cubic-bezier(.34,1.56,.64,1) .2s both}
+@keyframes nav-hello{0%{transform:scale(.6) rotate(-20deg)}100%{transform:scale(1) rotate(0)}}
+@media(hover:hover){.site-header .nav-link:not(.active):hover .nav-icon{background:var(--uabc-green);color:#fff;transform:rotate(-12deg)}}
+.site-header .menu-toggle svg{transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.site-header .menu-toggle[aria-expanded="true"] svg{transform:rotate(90deg)}
+@media(max-width:760px){
+  .site-header .site-nav.open{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:6px 0 14px}
+  .site-header .site-nav.open .nav-link{flex-direction:column;justify-content:center;gap:6px;min-height:92px;padding:10px;border:2px solid var(--line);border-radius:20px;font-size:17px}
+  .site-header .site-nav.open .nav-link.active{border-color:var(--uabc-green)}
+  .site-header .site-nav.open .nav-icon{width:44px;height:44px}
+}
+@media(max-width:480px){.brand-drop{display:none}}
+@media(prefers-reduced-motion:reduce){.header-wave,.brand-drop,.nav-icon{animation:none!important}}
+
+/* Marca Cuenca Cimarrona en las páginas sueltas (manual de identidad v1.1) */
+.site-header .brand img.brand-icon{width:44px;height:44px;min-width:44px;flex:0 0 44px;border-radius:50%;transition:box-shadow .2s}
+@media(hover:hover){.site-header .brand:hover img.brand-icon{transform:none;box-shadow:0 0 0 3px var(--uabc-gold)}}
+@media(max-width:480px){.site-header .brand img.brand-icon{width:38px;height:38px;min-width:38px;flex-basis:38px}}
+
+.site-footer .footer-uabc{width:30px;height:auto;vertical-align:middle;margin-right:6px}
+.page-intro{position:relative;isolation:isolate;overflow:hidden}
+.page-intro::after{content:"";position:absolute;right:-20px;bottom:-24px;z-index:-1;width:200px;height:auto;aspect-ratio:1223/1195;border:0;border-radius:0;transform:none;background:var(--green-deep);opacity:.06;-webkit-mask:url("/brand/cuenca/silueta.png") center/contain no-repeat;mask:url("/brand/cuenca/silueta.png") center/contain no-repeat;pointer-events:none}
+
+/* Nombre en Lilita One (manual de identidad v1.2) */
+.wordmark{font-family:var(--font-brand);font-weight:400;letter-spacing:.3px;line-height:1}
+.site-header .brand .wordmark{font-size:26px;color:var(--green-deep)}
+@media(max-width:760px){.site-header .brand .wordmark{font-size:22px}}
+@media(max-width:480px){.site-header .brand .wordmark{font-size:19px}}
+@media(max-width:360px){.site-header .brand .wordmark{font-size:16px}}
+.site-footer .footer-brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.site-footer .footer-brand img.footer-icono{width:56px;height:56px;border-radius:50%}
+.site-footer .footer-brand .wordmark{display:block;margin:0;font-size:22px;color:#fff}
+@media(max-width:360px){.site-header .brand{gap:7px}.site-header .brand img.brand-icon{width:34px;height:34px;min-width:34px;flex-basis:34px}}
+
+/* Áreas táctiles de al menos 44 px en celular (guía: 48 × 48 en botones) */
+@media(max-width:760px){
+  .text-link,.back-link,.lesson-more,.official-links a{display:inline-flex;align-items:center;min-height:44px}
+  .learn-intro-link,.advice-start-link{min-height:48px}
+  .weather-control{min-height:44px;padding-inline:14px}
+  .site-footer .social-links a{min-width:44px;min-height:44px;justify-content:center}
+}
+@media(min-width:761px) and (max-width:1040px){.site-header .site-nav .nav-icon{display:none}.site-header .nav-link{padding:0 12px}}

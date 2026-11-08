@@ -1,0 +1,418 @@
+<title>Rediseño Cuenca Cimarrona</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+<style>
+/* Layout: una columna de lectura con bandas de color de lado a lado, como el sitio. Opciones en tarjetas con maqueta de celular. */
+:root {
+  --green: #00723f;
+  --gold: #dd971a;
+  --deep: #003d24;
+  --gold-text: #8a5a00;
+  --bg: #ffffff;
+  --fg: #1c2621;
+  --muted: #4a5650;
+  --line: #dce3de;
+  --tint: #e6f4ec;
+  --gold-tint: #fff1d6;
+  --blue: #0b4fa8;
+  --blue-tint: #eaf2ff;
+  --surface: #ffffff;
+  --on-green: #ffffff;
+  --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --body: "DM Sans", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --green: #2e9a62; --gold: #e3a63a; --deep: #9fd8b6; --gold-text: #e9b95a;
+    --bg: #121a24; --fg: #ede6d8; --muted: #b5b0a4; --line: #2b3646;
+    --tint: #18302a; --gold-tint: #2f2716; --blue: #8fb8f2; --blue-tint: #172540;
+    --surface: #18222f; --on-green: #ffffff; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --green: #2e9a62; --gold: #e3a63a; --deep: #9fd8b6; --gold-text: #e9b95a;
+  --bg: #121a24; --fg: #ede6d8; --muted: #b5b0a4; --line: #2b3646;
+  --tint: #18302a; --gold-tint: #2f2716; --blue: #8fb8f2; --blue-tint: #172540;
+  --surface: #18222f; --on-green: #ffffff; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 17px; line-height: 1.55; }
+.inner { max-width: 1040px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); font-weight: 800; line-height: 1.02; text-wrap: balance; margin: 0; }
+h2 { font-size: clamp(34px, 5vw, 46px); color: var(--deep); }
+h3 { font-size: 26px; color: var(--deep); }
+p { margin: 0; }
+a { color: var(--green); font-weight: 700; text-underline-offset: 4px; }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+.hero { background: #00723f; color: #fff; }
+.hero .inner { padding-block: 48px 52px; display: grid; gap: 14px; }
+.hero h1 { font-size: clamp(46px, 8vw, 78px); }
+.hero p { font-size: 19px; max-width: 64ch; }
+.kicker { font-weight: 700; font-size: 15px; color: #f3c160; }
+.hero-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.hero-chips a { color: #fff; background: #005f34; border: 2px solid #ffffff55; border-radius: 999px; padding: 6px 14px; font-size: 15px; text-decoration: none; }
+.hero-chips a:hover { background: #003d24; }
+
+section.block .inner { padding-block: 52px; display: grid; gap: 22px; }
+section.block + section.block .inner { border-top: 1px solid var(--line); }
+.lead { color: var(--muted); font-size: 18px; max-width: 70ch; }
+
+/* Tabla de readaptación */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 20px; }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 16px; }
+th, td { text-align: left; vertical-align: top; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+th { font-size: 14px; color: var(--gold-text); font-weight: 700; background: var(--gold-tint); }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 700; color: var(--deep); width: 30%; }
+.state { display: inline-block; font-size: 13px; font-weight: 700; padding: 2px 10px; border-radius: 999px; white-space: nowrap; }
+.done { background: var(--tint); color: var(--deep); }
+.todo { background: var(--gold-tint); color: var(--gold-text); }
+
+/* Lista de cambios de diseño */
+.groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.group { border-radius: 24px; padding: 22px; display: grid; gap: 12px; align-content: start; }
+.group.vis { background: var(--blue-tint); }
+.group.psy { background: var(--gold-tint); }
+.group.acc { background: var(--tint); }
+.group h3 { display: flex; align-items: center; gap: 10px; }
+.shape { width: 26px; height: 26px; flex: none; }
+.group ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.group li { background: var(--surface); border-radius: 14px; padding: 12px 14px; display: grid; gap: 4px; }
+.group li strong { font-size: 16px; }
+.group li span { font-size: 15px; color: var(--muted); }
+.tag { justify-self: start; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 999px; background: var(--gold-tint); color: var(--gold-text); }
+.tag.order { background: #b3121f1a; color: #b3121f; }
+:root[data-theme="dark"] .tag.order { color: #ff9aa2; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tag.order { color: #ff9aa2; } }
+
+/* Opciones */
+.options { display: grid; gap: 18px; }
+.option { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 24px; padding: 22px; border: 3px solid var(--line); border-radius: 24px; background: var(--surface); }
+.option.pick { border-color: var(--gold); }
+.option-body { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.option-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+.letter { font-family: var(--display); font-weight: 800; font-size: 22px; color: var(--gold-text); }
+.badge-pick { font-size: 13px; font-weight: 700; color: #003d24; background: #dd971a; border-radius: 999px; padding: 2px 10px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-top: 4px; }
+.fact { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; font-size: 14px; }
+.fact b { display: block; font-size: 12px; color: var(--gold-text); }
+.option ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 16px; }
+
+/* Maquetas de celular (dibujadas con CSS, colores del sitio fijos: son el producto, no el tema) */
+.phone { width: 190px; height: 360px; border: 8px solid #1c2621; border-radius: 28px; overflow: hidden; background: #fff; display: flex; flex-direction: column; gap: 6px; padding: 8px; font-family: var(--display); color: #003d24; justify-self: center; }
+.ph-bar { height: 16px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; font-weight: 800; }
+.ph-bar i { width: 18px; height: 10px; border: 2px solid #00723f; border-radius: 4px; }
+.ph-911 { background: #00723f; color: #fff; border-radius: 10px; padding: 8px; font-size: 15px; display: flex; justify-content: space-between; align-items: center; }
+.ph-911 b { background: #fff; color: #00723f; border-radius: 8px; padding: 2px 8px; font-size: 18px; }
+.ph-alert { background: #dd971a; border-radius: 8px; padding: 5px 8px; font-size: 11px; display: flex; gap: 6px; align-items: center; }
+.tri { width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-bottom: 12px solid #003d24; flex: none; }
+.bento { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; flex: 1; }
+.bento div { border-radius: 9px; padding: 6px; font-size: 11px; display: flex; align-items: flex-end; }
+.b-big { grid-column: span 2; background: #003d24; color: #fff; min-height: 64px; }
+.b-hex { background: #fff1d6; position: relative; }
+.b-hex::before { content: ""; position: absolute; top: 6px; left: 6px; width: 20px; height: 22px; background: #dd971a; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
+.b-blue { background: #eaf2ff; color: #0b4fa8; }
+.b-green { background: #e6f4ec; }
+.route { flex: 1; position: relative; display: grid; gap: 8px; padding-left: 4px; }
+.route::before { content: ""; position: absolute; left: 50%; top: 6px; bottom: 6px; border-left: 3px dashed #dd971a; }
+.stop { position: relative; width: 62%; border-radius: 10px; padding: 6px 8px; font-size: 12px; background: #e6f4ec; }
+.stop:nth-child(even) { justify-self: end; background: #eaf2ff; color: #0b4fa8; }
+.stop:nth-child(3) { background: #fff1d6; }
+.big-num { background: #fff1d6; border-radius: 10px; padding: 6px 8px; display: grid; }
+.big-num b { font-size: 34px; line-height: 1; }
+.big-num span { font-size: 11px; font-family: var(--body); }
+.icons { display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; padding: 4px 2px; }
+.icons i { aspect-ratio: 1; border-radius: 2px 2px 0 0; background: #c9d6cf; clip-path: polygon(50% 0, 100% 40%, 100% 100%, 0 100%, 0 40%); }
+.icons i.on { background: #00723f; }
+.flip { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+.flip div { border-radius: 9px; padding: 6px; font-size: 11px; min-height: 44px; }
+.flip .myth { background: #f2edff; color: #5b2ca8; }
+.flip .fact2 { background: #e6f4ec; }
+.cta { background: #00723f; color: #fff; border-radius: 9px; padding: 6px; text-align: center; font-size: 13px; box-shadow: 0 3px 0 #003d24; }
+.phone.night { background: #121a24; color: #ede6d8; }
+.night .ph-911 { background: #1f5a3c; }
+.night .ph-alert { background: #6b4a12; color: #ffe1a6; }
+.night .tri { border-bottom-color: #ffe1a6; }
+.night .card-n { background: #1b2735; border-radius: 9px; padding: 8px; font-size: 13px; }
+.night .card-n.big { font-size: 17px; }
+.toggle-row { display: flex; gap: 5px; }
+.toggle-row span { flex: 1; text-align: center; font-size: 11px; padding: 4px; border-radius: 8px; border: 2px solid #2e9a62; }
+.toggle-row span.on { background: #2e9a62; color: #fff; }
+
+/* Evidencia */
+.evidence { display: grid; gap: 12px; }
+.ev { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 16px; padding: 16px 18px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); }
+.ev-level { display: grid; gap: 6px; align-content: start; }
+.ev-level b { font-family: var(--display); font-size: 21px; color: var(--deep); line-height: 1.05; }
+.meter { display: flex; gap: 3px; }
+.meter i { height: 8px; flex: 1; border-radius: 4px; background: var(--line); }
+.meter i.on { background: var(--green); }
+.ev-level small { color: var(--muted); font-size: 13px; }
+.ev p { font-size: 16px; }
+.ev p + p { margin-top: 6px; color: var(--muted); font-size: 15px; }
+
+.sources ol { margin: 0; padding-left: 22px; display: grid; gap: 6px; font-size: 15px; }
+.sources a { font-weight: 500; word-break: break-word; }
+
+.note { background: var(--gold-tint); border-radius: 18px; padding: 16px 18px; font-size: 16px; }
+
+@media (max-width: 720px) {
+  .option { grid-template-columns: 1fr; }
+  .ev { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .b-hex::before { animation: wiggle 6s ease-in-out 1s infinite; }
+  @keyframes wiggle { 0%, 86%, 100% { transform: rotate(0); } 90% { transform: rotate(-12deg); } 94% { transform: rotate(9deg); } }
+}
+</style>
+
+<header class="hero">
+  <div class="inner">
+    <span class="kicker">Cuenca Cimarrona · rama rediseno-cartoon · 8 de noviembre de 2026</span>
+    <h1>Rediseño Cuenca Cimarrona</h1>
+    <p>Qué se readaptó del merge de Peraltita, qué se puede mejorar tocando solo el diseño, y cuatro opciones de refresco visual con la evidencia que las respalda. Todo respeta el contenido y el orden actual del sitio.</p>
+    <nav class="hero-chips" aria-label="Secciones">
+      <a href="#readaptado">Lo readaptado</a>
+      <a href="#solo-diseno">Cambios solo de diseño</a>
+      <a href="#opciones">Opciones de refresco</a>
+      <a href="#evidencia">Qué dice la investigación</a>
+    </nav>
+  </div>
+</header>
+
+<section class="block" id="readaptado">
+  <div class="inner">
+    <h2>Lo que se readaptó del merge de Peraltita</h2>
+    <p class="lead">Se revisó el commit 2dcaec3 contra docs/estilos.md, docs/revision-estilo-cartoon.md y la guía de diseño del portal. Las buenas ideas se quedaron, rehechas dentro de Vue con el estilo cartoon. Base de comparación: el commit anterior, 5ca9d18.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Qué rompía las reglas</th><th>Qué se hizo</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td>hambu-bridge.js reescribía la página después de cargar (encabezado, secciones con innerHTML, pie)</td><td>Se quitó. Juegos, Información y Consejos ahora son secciones de Home.vue; el pie con redes está en App.vue</td><td><span class="state done">Hecho</span></td></tr>
+          <tr><td>Menú inyectado sin botón en celular: se partía en dos líneas o quedaba abierto encima del contenido</td><td>Un solo menú (Inicio, Juegos, Información, Consejos, mismo orden) con botón Menú/Cerrar que despliega la lista dentro del encabezado. Probado a 320, 375 y 1280 px</td><td><span class="state done">Hecho</span></td></tr>
+          <tr><td>El sitio pasado a usted con reemplazos automáticos</td><td>Se borraron las dos funciones que lo hacían y se pasaron a tú unos 150 textos de las páginas sueltas y de app.js</td><td><span class="state done">Hecho</span></td></tr>
+          <tr><td>Etiquetas en mayúsculas, flechas ↗ en cada tarjeta, números inventados ("8 jugando")</td><td>Etiquetas en minúsculas y en tú, sin flechas, sin contadores falsos</td><td><span class="state done">Hecho</span></td></tr>
+          <tr><td>Títulos en DM Sans, desenfoques, fondo crema, tarjetas que suben al pasar el puntero</td><td>Barlow Condensed en títulos, colores sólidos, fondo blanco, nada cambia de tamaño ni de lugar</td><td><span class="state done">Hecho</span></td></tr>
+          <tr><td>Se perdieron "Tijuana, Baja California", la nota para entrar a un refugio, "Pausar animaciones" y el contador de visitas</td><td>Los cuatro regresaron</td><td><span class="state done">Hecho</span></td></tr>
+          <tr><td>Los enlaces a El Niño, Plan familiar y Mochila desaparecieron del menú</td><td>Se llega desde las tarjetas de "Prepárate antes de que llueva", que vuelven a abrir las vistas de Vue</td><td><span class="state done">Hecho</span></td></tr>
+          <tr><td>Ilustraciones de 2.6 a 2.8 MB cada una</td><td>Pasadas a WebP: de 50 a 86 KB cada una</td><td><span class="state done">Hecho</span></td></tr>
+          <tr><td>Página de juegos en HTML suelto</td><td>Ahora es la vista /juegos de Vue, con el panel "Cómo participar"; juegos.html se borró</td><td><span class="state done">Hecho</span></td></tr>
+          <tr><td>Información y Consejos siguen en HTML suelto, y queda la copia completa en la raíz del repo</td><td>Se les corrigió el menú, el tono y lo visual más grave con CSS. Falta pasarlos a Vue y borrar la copia de la raíz</td><td><span class="state todo">Pendiente</span></td></tr>
+          <tr><td>Por confirmar con el equipo</td><td>El nombre (Cimarrona o Cimarrón), el README y las direcciones reales de las redes: hoy apuntan a la portada de cada red</td><td><span class="state todo">Pendiente</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="solo-diseno">
+  <div class="inner">
+    <h2>Lo que se puede editar solo en el diseño</h2>
+    <p class="lead">Cambios que no tocan textos ni el orden de las secciones. Están agrupados por para qué sirven. Los marcados con "mueve algo" requieren cambiar una posición, y solo se proponen porque mejoran la accesibilidad.</p>
+    <div class="groups">
+      <div class="group vis">
+        <h3><svg class="shape" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="11" fill="#0b4fa8"/></svg>Visibilidad</h3>
+        <ul>
+          <li><strong>Lluvia del título "Prepárate antes de que llueva"</strong><span>Las 130 gotas pasan encima de las letras y lo hacen difícil de leer. Moverlas detrás del texto o bajar su opacidad</span></li>
+          <li><strong>Texto mínimo de 16 px</strong><span>"Toca para llamar", el pie de página y las etiquetas están en 14 y 15 px. La guía pide 16 px en celular</span></li>
+          <li><strong>Áreas táctiles de 48 px</strong><span>Botones "Cómo llegar", redes y pie miden 44 px. La guía pide 48 × 48 con 8 px de separación</span></li>
+          <li><strong>Iconos con trazo de 2 a 2.5 px</strong><span>Icon.vue usa 1.7 px; a esa medida se pierden en pantallas chicas</span></li>
+          <li><strong>Jerarquía por tamaño, no por color</strong><span>Las tres tarjetas de juegos y las de consejos miden igual. Hacer la primera de cada fila más grande, como pide el mosaico asimétrico de la guía</span></li>
+          <li><strong>Forma según el tipo de cosa</strong><span>Triángulo en el aviso de El Niño, círculo en información, rectángulo en acciones, hexágono en juegos (ya está en el botón flotante y las tarjetas de juego)</span></li>
+        </ul>
+      </div>
+      <div class="group psy">
+        <h3><svg class="shape" viewBox="0 0 26 26" aria-hidden="true"><path d="M13 2 24 8.5v9L13 24 2 17.5v-9Z" fill="#dd971a"/></svg>Psicología y atención</h3>
+        <ul>
+          <li><strong>Riesgo y acción en la misma vista</strong><span>En la tarjeta "¿Tu colonia es zona de riesgo?" el botón ya está; falta lo mismo en la banda de El Niño en celular, donde el botón queda abajo del pliegue</span></li>
+          <li><strong>Progreso visible en el inicio</strong><span>Mochila y Plan ya guardan avance. Mostrar una barra "Tu mochila 3 de 12" en sus tarjetas, con el dato que ya existe (efecto de meta cercana)</span></li>
+          <li><strong>El 911 primero, el juego después</strong><span>El botón "Aprende jugando" aparece hasta pasar el bloque del 911, para no competir con la llamada. Ya está hecho</span></li>
+          <li><strong>Movimiento que explica algo</strong><span>El saludo del hexágono cada 6 s llama la atención sin parpadear. Evitar parpadeos y rojo a pantalla completa</span></li>
+          <li><strong>El rojo solo para lo urgente</strong><span>Hoy el rojo está en el botón del 911 y en Ambulancia, lo cual es correcto. No usarlo para decorar</span></li>
+          <li><strong>Insignias y avance en Juegos</strong><span>Cuando lleguen los juegos nuevos: insignia por juego terminado, sin rachas que castiguen</span></li>
+        </ul>
+      </div>
+      <div class="group acc">
+        <h3><svg class="shape" viewBox="0 0 26 26" aria-hidden="true"><rect x="3" y="3" width="20" height="20" rx="4" fill="#00723f"/></svg>Accesibilidad</h3>
+        <ul>
+          <li><strong>Modo oscuro</strong><span>La guía lo pide como obligatorio: de noche, en tormenta o sin luz. Solo cambia colores, con los tokens que ya existen</span></li>
+          <li><strong>Modo simple</strong><span>Un interruptor que aumenta la letra un 20 % y oculta animaciones. Para personas mayores y momentos de estrés</span></li>
+          <li><strong>Movimiento reducido</strong><span>Ya respeta el ajuste del sistema y "Pausar animaciones"; revisar que las páginas sueltas también lo hagan</span></li>
+          <li><strong>Nunca solo color</strong><span>Los tonos de las tarjetas de servicios (azul, naranja, morado, rojo) ya llevan icono y nombre; mantener esa regla en lo nuevo</span></li>
+          <li><strong>Interruptores al inicio de la página</strong><span class="tag order">mueve algo</span><span>"Pausar animaciones" y el modo simple viven en el pie. Subirlos al encabezado los hace encontrables sin bajar toda la página</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="opciones">
+  <div class="inner">
+    <h2>Opciones de refresco visual</h2>
+    <p class="lead">Las cuatro usan la paleta UABC y el estilo cartoon, y conservan las secciones en el mismo orden: 911, aviso, números, refugios y riesgo, juegos, información y consejos. Cambia la forma de presentarlas, no lo que dicen.</p>
+    <div class="options">
+
+      <article class="option pick">
+        <div class="phone" aria-hidden="true">
+          <div class="ph-bar"><span>Cuenca Cimarrona</span><i></i></div>
+          <div class="ph-911">¿Emergencia? <b>911</b></div>
+          <div class="ph-alert"><span class="tri"></span>Emergencia preventiva</div>
+          <div class="bento">
+            <div class="b-big">Escape de la tormenta</div>
+            <div class="b-hex">Decisiones</div>
+            <div class="b-hex">Mochila</div>
+            <div class="b-blue">El Niño</div>
+            <div class="b-green">Plan</div>
+          </div>
+        </div>
+        <div class="option-body">
+          <div class="option-head"><span class="letter">A</span><h3>Mosaico cartoon</h3><span class="badge-pick">Recomendada para empezar</span></div>
+          <p>Las tarjetas dejan de medir todas igual: la más importante de cada sección es grande y las demás se acomodan alrededor, como una caja bento. Los juegos llevan su hexágono y el aviso su triángulo.</p>
+          <ul>
+            <li>En celular la jerarquía la da el alto de cada tarjeta, porque todas van en una sola columna</li>
+            <li>Máximo una o dos tarjetas grandes por pantalla; si todo es grande, nada destaca</li>
+            <li>Aplica directo la "codificación por formas" de la guía</li>
+          </ul>
+          <div class="facts">
+            <div class="fact"><b>Para quién</b>Todos; ayuda a quien solo escanea</div>
+            <div class="fact"><b>Esfuerzo</b>Bajo: solo CSS de las rejillas</div>
+            <div class="fact"><b>Riesgo</b>Poco, si el orden en el HTML no cambia</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option">
+        <div class="phone" aria-hidden="true">
+          <div class="ph-bar"><span>Cuenca Cimarrona</span><i></i></div>
+          <div class="ph-911">¿Emergencia? <b>911</b></div>
+          <div class="route">
+            <div class="stop">1 · Números y refugios</div>
+            <div class="stop">2 · Aprende jugando</div>
+            <div class="stop">3 · Prepárate</div>
+            <div class="stop">4 · Antes, durante, después</div>
+          </div>
+        </div>
+        <div class="option-body">
+          <div class="option-head"><span class="letter">B</span><h3>Ruta ilustrada</h3></div>
+          <p>Una línea punteada ocre une las secciones de arriba abajo en zigzag, como un camino por la cuenca. Cada sección es una parada. Es el "Impacto, comprensión, acción" de la guía hecho dibujo.</p>
+          <ul>
+            <li>Da sensación de avance sin agregar texto</li>
+            <li>La línea se dibuja con el scroll; con movimiento reducido aparece completa y quieta</li>
+            <li>El 911 queda fuera de la ruta: siempre primero y siempre a la vista</li>
+          </ul>
+          <div class="facts">
+            <div class="fact"><b>Para quién</b>Niñez y jóvenes; da un "juego" a la lectura</div>
+            <div class="fact"><b>Esfuerzo</b>Medio: SVG y animación al hacer scroll</div>
+            <div class="fact"><b>Riesgo</b>Puede alargar la página en celular</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option">
+        <div class="phone" aria-hidden="true">
+          <div class="ph-bar"><span>Cuenca Cimarrona</span><i></i></div>
+          <div class="big-num"><b>12</b><span>cosas en tu mochila de emergencia</span></div>
+          <div class="icons"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="flip"><div class="myth">Mito: si el agua se ve baja, se puede cruzar</div><div class="fact2">Realidad: aunque parezca poco profunda, no la cruces</div></div>
+          <div class="cta">Arma tu mochila</div>
+        </div>
+        <div class="option-body">
+          <div class="option-head"><span class="letter">C</span><h3>Datos que se ven</h3></div>
+          <p>Las cifras que ya tiene el sitio ("12 cosas", "4 pasos") se muestran en grande, con su significado al lado y un botón de acción debajo. El avance se dibuja con casitas que se llenan en vez de porcentajes.</p>
+          <ul>
+            <li>Las filas de iconos se entienden mejor que los números solos, sobre todo para quien no se lleva con las cifras</li>
+            <li>Cada cifra va con su acción: dato, qué significa y qué hacer</li>
+            <li>Las tarjetas de mito y realidad son para cuando haya ese contenido; la maqueta solo muestra la forma</li>
+          </ul>
+          <div class="facts">
+            <div class="fact"><b>Para quién</b>Personas mayores, baja escolaridad, docentes</div>
+            <div class="fact"><b>Esfuerzo</b>Medio: componentes nuevos de Vue</div>
+            <div class="fact"><b>Riesgo</b>Toda cifra necesita fuente verificada</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option">
+        <div class="phone night" aria-hidden="true">
+          <div class="ph-bar"><span>Cuenca Cimarrona</span><i></i></div>
+          <div class="toggle-row"><span class="on">Modo simple</span><span>Noche</span></div>
+          <div class="ph-911">¿Emergencia? <b>911</b></div>
+          <div class="ph-alert"><span class="tri"></span>Emergencia preventiva</div>
+          <div class="card-n big">Refugios cerca de ti</div>
+          <div class="card-n">Números de dependencias</div>
+        </div>
+        <div class="option-body">
+          <div class="option-head"><span class="letter">D</span><h3>Sereno de noche</h3></div>
+          <p>Una capa encima de cualquiera de las otras: modo oscuro con fondo azul noche y acentos menos saturados, y modo simple con letra 20 % más grande, sin animaciones y solo lo esencial.</p>
+          <ul>
+            <li>La guía pide el modo oscuro como obligatorio: la gente consulta de noche o sin luz</li>
+            <li>Se arma con los tokens de color que ya están en tokens.css</li>
+            <li>No compite con A, B ni C: se suma a la que se elija</li>
+          </ul>
+          <div class="facts">
+            <div class="fact"><b>Para quién</b>Personas mayores, momentos de estrés</div>
+            <div class="fact"><b>Esfuerzo</b>Bajo a medio: tokens y un interruptor</div>
+            <div class="fact"><b>Riesgo</b>Revisar contraste de cada tono en oscuro</div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+    <p class="note"><strong>Recomendación:</strong> empezar con A y D juntas. Son las de menor esfuerzo, no requieren datos nuevos y cumplen dos puntos de la guía (formas por estado y modo oscuro). C conviene cuando el equipo tenga las cifras con fuente. B es la más llamativa para niñas y niños, y puede venir con el refresco de juegos.</p>
+  </div>
+</section>
+
+<section class="block" id="evidencia">
+  <div class="inner">
+    <h2>Qué dice la investigación</h2>
+    <p class="lead">Cada forma de presentar información con su nivel de evidencia. Hay mucho artículo de agencia con cifras sin fuente ("17 veces más interacción"); aquí solo se cuenta lo que tiene estudio detrás, y se dice cuando es débil.</p>
+    <div class="evidence">
+      <div class="ev">
+        <div class="ev-level"><b>Miedo con salida</b><div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div><small>Evidencia media</small></div>
+        <div><p>El modelo de Witte (EPPM) dice que la amenaza sin acciones posibles lleva a negar el tema. La revisión de Popova (2012) encontró que los mensajes más efectivos combinan amenaza alta con acciones claras que funcionan. Apoya poner cada riesgo junto a su botón de acción.</p><p>Matiz: pocos estudios miden conducta real, y en un estudio de 2022 las predicciones del modelo solo se cumplieron al incluir la emoción negativa. La parte más sólida es la de dar acciones concretas.</p></div>
+      </div>
+      <div class="ev">
+        <div class="ev-level"><b>Filas de iconos</b><div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div><small>Evidencia media</small></div>
+        <div><p>Galesic, Garcia-Retamero y Gigerenzer (2009) encontraron que las filas de iconos ayudan a entender riesgos a personas con bajo manejo de números. Otro estudio de 2009 vio más aciertos con iconos en todos los niveles. Respalda la opción C.</p><p>Matiz: en un estudio en línea con 407 personas, los iconos no superaron con claridad a las barras. Las gráficas de pastel son las más difíciles de comparar.</p></div>
+      </div>
+      <div class="ev">
+        <div class="ev-level"><b>Barra de progreso</b><div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div><small>Evidencia media</small></div>
+        <div><p>Kivetz, Urminsky y Zheng (2006) mostraron que la gente acelera al acercarse a una meta: con una tarjeta de café que ya traía 2 sellos, terminaron más rápido. Respalda mostrar "Tu mochila 3 de 12" en el inicio.</p><p>Matiz: si la meta se ve muy lejos, el efecto no aparece. Conviene metas cortas, como completar una sección, no "100 % preparado".</p></div>
+      </div>
+      <div class="ev">
+        <div class="ev-level"><b>Historias con scroll</b><div class="meter"><i class="on"></i><i class="on"></i><i></i><i></i></div><small>Evidencia débil</small></div>
+        <div><p>Un estudio con 12 personas: el 58 % prefirió la versión con scroll y la sintió más atrapante. Otro de 2026, sobre políticas de privacidad, encontró más interés y menos esfuerzo mental que con texto plano, con tiempos de lectura parecidos. Respalda la opción B como experiencia, no como mejor memoria.</p><p>Matiz: muestras chicas; las cifras grandes que circulan son de empresas que venden la herramienta.</p></div>
+      </div>
+      <div class="ev">
+        <div class="ev-level"><b>Mosaico bento</b><div class="meter"><i class="on"></i><i class="on"></i><i></i><i></i></div><small>Práctica de diseño</small></div>
+        <div><p>Es el patrón más usado en 2025 y 2026, pero las fuentes son guías de agencias, no estudios. Su consejo coincide: en celular la jerarquía la da el orden y la altura, y no conviene más de una o dos tarjetas grandes por pantalla.</p><p>Por eso la opción A no cambia el orden del HTML, solo el tamaño.</p></div>
+      </div>
+      <div class="ev">
+        <div class="ev-level"><b>Botón flotante</b><div class="meter"><i class="on"></i><i class="on"></i><i></i><i></i></div><small>Evidencia mixta</small></div>
+        <div><p>Funciona para una sola acción principal y debe quedar al alcance del pulgar. Hay especialistas escépticos y un efecto negativo leve la primera vez que se usa, y puede tapar otros botones.</p><p>Por eso el de "Aprende jugando" dice qué hace (no es solo un icono), aparece después del 911 y deja espacio libre al final de cada página.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block sources">
+  <div class="inner">
+    <h2>Fuentes</h2>
+    <ol>
+      <li><a href="https://journals.sagepub.com/doi/full/10.1177/1090198111418108" target="_blank" rel="noopener">Popova (2012), The Extended Parallel Process Model: Illuminating the Gaps in Research</a></li>
+      <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9721130/" target="_blank" rel="noopener">EPPM y notificación de densidad mamaria (PMC)</a></li>
+      <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12933421/" target="_blank" rel="noopener">Simulación de mensajes de evacuación por huracán, Miami-Dade (PMC)</a></li>
+      <li><a href="https://pure.mpg.de/rest/items/item_2099767_4/component/file_2562291/content" target="_blank" rel="noopener">Galesic, Garcia-Retamero y Gigerenzer (2009), Using Icon Arrays to Communicate Medical Risks</a></li>
+      <li><a href="https://www.researchgate.net/publication/353422946_Comparing_the_impact_of_an_icon_array_versus_a_bar_graph_on_preference_and_understanding_of_risk_information_Results_from_an_online_randomized_study" target="_blank" rel="noopener">Icon array frente a barras: estudio aleatorio en línea</a></li>
+      <li><a href="https://business.columbia.edu/sites/default/files-efs/pubfiles/1200/goalgradient.pdf" target="_blank" rel="noopener">Kivetz, Urminsky y Zheng (2006), The Goal-Gradient Hypothesis Resurrected</a></li>
+      <li><a href="https://digitaleconomy.wales/documents/ecce-2023-papers/06-The-Impact-of-Scrollytelling.pdf" target="_blank" rel="noopener">The Impact of Scrollytelling on the Reading Experience of Long-Form Journalism</a></li>
+      <li><a href="https://arxiv.org/pdf/2603.04367" target="_blank" rel="noopener">Scrollytelling as an Alternative Format for Privacy Policies (2026)</a></li>
+      <li><a href="https://www.saasframe.io/blog/designing-bento-grids-that-actually-work-a-2026-practical-guide" target="_blank" rel="noopener">Designing Bento Grids That Actually Work (guía práctica, 2026)</a></li>
+      <li><a href="https://www.mdpi.com/1999-5903/11/7/148" target="_blank" rel="noopener">Usabilidad del botón flotante (Future Internet, 2019)</a></li>
+      <li><a href="https://www.justinmind.com/blog/3-alternatives-to-the-floating-action-button" target="_blank" rel="noopener">Alternativas al botón flotante (Justinmind)</a></li>
+    </ol>
+  </div>
+</section>

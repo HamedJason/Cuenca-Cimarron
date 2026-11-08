@@ -1,0 +1,30 @@
+[
+  {
+    "nombre": "Verde institucional",
+    "hex": "#00723F"
+  },
+  {
+    "nombre": "Verde oscuro",
+    "hex": "#092F29"
+  },
+  {
+    "nombre": "Ocre",
+    "hex": "#DD971A"
+  },
+  {
+    "nombre": "Amarillo",
+    "hex": "#FEBE10"
+  },
+  {
+    "nombre": "Azul de referencia",
+    "hex": "#20419A"
+  },
+  {
+    "nombre": "Café contorno",
+    "hex": "#3B2314"
+  },
+  {
+    "nombre": "Blanco",
+    "hex": "#FFFFFF"
+  }
+]

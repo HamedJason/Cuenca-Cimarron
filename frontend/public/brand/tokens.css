@@ -1,3 +1,23 @@
+/* Lilita One (OFL): letra del nombre "Cuenca Cimarrona" (manual de identidad v1.2) */
+@font-face {
+  font-family: "Lilita One";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/lilita-one-latin-400-normal.woff2") format("woff2");
+}
+/* Baloo 2 (OFL): letra juguetona del botón "Aprende jugando" */
+@font-face {
+  font-family: "Baloo 2";
+  font-weight: 700;
+  font-display: swap;
+  src: url("/assets/fonts/baloo-2-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Baloo 2";
+  font-weight: 800;
+  font-display: swap;
+  src: url("/assets/fonts/baloo-2-latin-800-normal.woff2") format("woff2");
+}
 :root {
   --uabc-green: #00723f;
   --uabc-gold: #dd971a;
@@ -13,6 +33,8 @@
   --gold-tint: #fff1d6;
   --font-heading: "Barlow Condensed", sans-serif;
   --font-body: "DM Sans", sans-serif;
+  --font-play: "Baloo 2", "Barlow Condensed", sans-serif;
+  --font-brand: "Lilita One", "Baloo 2", sans-serif;
   --radius-card: 20px;
   --radius-block: 24px;
   --radius-button: 14px;

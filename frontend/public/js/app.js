@@ -3,49 +3,56 @@ function renderSiteShell() {
   const root = isSubpage ? '../' : '';
   const currentPath = window.location.pathname;
   const navItems = [
-    { label: 'Inicio', href: `${root}index.html`, path: 'index.html' },
-    { label: 'Juegos', href: `${root}pages/juegos.html`, path: 'juegos.html' },
-    { label: 'Información', href: `${root}pages/aprende.html`, path: 'aprende.html' },
-    { label: 'Consejos', href: `${root}pages/recursos.html`, path: 'recursos.html' }
+    { label: 'Inicio', href: '/', path: '/', icon: '<path d="m3 10 9-7 9 7v10H3Z"/><path d="M9 20v-7h6v7"/>' },
+    { label: 'Juegos', href: '/#/juegos', path: '#/juegos', icon: '<g transform="translate(0 0.75)"><path d="M7.6 5h8.8a5 5 0 0 1 4.9 4.1l1 5.4a3 3 0 0 1-5.2 2.6L14.8 14.8H9.2l-2.3 2.3a3 3 0 0 1-5.2-2.6l1-5.4A5 5 0 0 1 7.6 5Z"/><path d="M6.5 10.5h4M8.5 8.5v4"/><circle cx="15.5" cy="11.6" r="1.1" fill="currentColor" stroke="none"/><circle cx="17.8" cy="9.4" r="1.1" fill="currentColor" stroke="none"/></g>' },
+    { label: 'Información', href: `${root}pages/aprende.html`, path: 'aprende.html', icon: '<path d="M12 5C8 2 3 3 3 3v16s5-1 9 2c4-3 9-2 9-2V3s-5-1-9 2Zm0 0v16"/>' },
+    { label: 'Consejos', href: `${root}pages/recursos.html`, path: 'recursos.html', icon: '<path d="m12 2 9 4v6c0 6-9 10-9 10S3 18 3 12V6Zm-5 10 3 3 7-7"/>' }
   ];
-  const activeItem = navItems.find((item) => currentPath.endsWith(item.path)) || (currentPath.endsWith('aprende-detalle.html') ? navItems[2] : navItems[0]);
-  const navMarkup = navItems.map((item) => `<a class="nav-link${item === activeItem ? ' active' : ''}" href="${item.href}"${item === activeItem ? ' aria-current="page"' : ''}>${item.label}</a>`).join('');
+  const activeItem = navItems.find((item) => item.path !== '/' && currentPath.endsWith(item.path)) || (currentPath.endsWith('aprende-detalle.html') ? navItems[2] : null);
+  const navMarkup = navItems.map((item) => `<a class="nav-link${item === activeItem ? ' active' : ''}" href="${item.href}"${item === activeItem ? ' aria-current="page"' : ''}><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20">${item.icon}</svg></span>${item.label}</a>`).join('');
   const header = document.querySelector('.site-header');
   if (header) {
-    header.outerHTML = `<header class="site-header"><div class="header-row"><a class="brand" href="${root}index.html" aria-label="Cuenca Cimarrona, inicio"><img src="${root}brand/uabc-escudo-menu.png" alt="Escudo UABC" width="26" height="36" onerror="this.onerror=null;this.src='${root}brand/uabc-escudo.png'"><span>Cuenca Cimarrona</span></a><nav class="site-nav" aria-label="Navegación principal">${navMarkup}</nav></div></header>`;
+    header.outerHTML = `<header class="site-header"><div class="header-row"><a class="brand" href="/" aria-label="Cuenca Cimarrona, inicio"><img class="brand-icon" src="/brand/cuenca/icono-96.webp" alt="" width="44" height="44" onerror="this.onerror=null;this.src='/brand/cuenca/icono-192.png'"><span class="wordmark">Cuenca Cimarrona</span></a><button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="siteNav"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span>Menú</span></button><nav class="site-nav" id="siteNav" aria-label="Navegación principal">${navMarkup}</nav></div><div class="header-wave-wrap" aria-hidden="true"><svg class="header-wave" viewBox="0 0 240 12" preserveAspectRatio="none"><path class="hw-back" d="M0 6c20-6 40-6 60 0s40 6 60 0 40-6 60 0 40 6 60 0v6H0Z"/><path class="hw-front" d="M0 8c20-5 40-5 60 0s40 5 60 0 40-5 60 0 40 5 60 0"/></svg></div></header>`;
+    const siteHeader = document.querySelector('.site-header');
+    const markScroll = () => siteHeader?.classList.toggle('scrolled', window.scrollY > 8);
+    markScroll();
+    window.addEventListener('scroll', markScroll, { passive: true });
+  }
+  // Botón flotante: lleva a los juegos desde cualquier página
+  if (!document.querySelector('.play-fab')) {
+    document.body.insertAdjacentHTML('beforeend', '<a class="play-fab" href="/#/juegos"><span class="play-fab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30"><g transform="translate(0 0.75)"><path d="M7.6 5h8.8a5 5 0 0 1 4.9 4.1l1 5.4a3 3 0 0 1-5.2 2.6L14.8 14.8H9.2l-2.3 2.3a3 3 0 0 1-5.2-2.6l1-5.4A5 5 0 0 1 7.6 5Z"/><path d="M6.5 10.5h4M8.5 8.5v4"/><circle cx="15.5" cy="11.6" r="1.1" fill="currentColor" stroke="none"/><circle cx="17.8" cy="9.4" r="1.1" fill="currentColor" stroke="none"/></g></svg></span><span class="play-fab-text"><strong>Aprende jugando</strong></span></a>');
   }
   const footer = document.querySelector('.site-footer, .simple-footer');
   if (footer) {
-    footer.outerHTML = `<footer class="site-footer" id="redes"><div class="footer-main"><a class="footer-brand" href="${root}index.html" aria-label="Cuenca Cimarrona, inicio"><img src="${root}assets/images/logo_uabc.png" alt="Escudo UABC"></a><span class="footer-copy">© 2026 · Proyecto académico UABC</span><nav class="social-block" aria-label="Redes sociales"><div class="social-links"><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1"></circle></svg></a><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 8.2a2.6 2.6 0 0 0-1.8-1.8C17.6 6 12 6 12 6s-5.6 0-7.2.4A2.6 2.6 0 0 0 3 8.2 27 27 0 0 0 2.6 12 27 27 0 0 0 3 15.8a2.6 2.6 0 0 0 1.8 1.8C6.4 18 12 18 12 18s5.6 0 7.2-.4a2.6 2.6 0 0 0 1.8-1.8 27 27 0 0 0 .4-3.8 27 27 0 0 0-.4-3.8Z"></path><path d="m10 15 5-3-5-3v6Z"></path></svg></a><a href="https://www.tiktok.com/" target="_blank" rel="noopener noreferrer" aria-label="TikTok" title="TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 4c.3 2.2 1.6 3.5 4 3.7v3.1c-1.4 0-2.7-.4-4-1.1v5.7a5.6 5.6 0 1 1-4.8-5.5v3.1a2.5 2.5 0 1 0 1.7 2.4V4H15Z"></path></svg></a><a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5h1.7V4a22 22 0 0 0-2.4-.1c-2.4 0-4 1.5-4 4.1V10H8v3h2.4v8h3.1Z"></path></svg></a></div></nav></div></footer>`;
+    footer.outerHTML = `<footer class="site-footer" id="redes"><div class="footer-main"><a class="footer-brand" href="/" aria-label="Cuenca Cimarrona, inicio"><img class="footer-icono" src="/brand/cuenca/icono-96.webp" alt="" width="56" height="56"><span class="wordmark" aria-hidden="true">Cuenca<br>Cimarrona</span></a><span class="footer-copy"><img class="footer-uabc" src="/assets/images/logo_uabc-80.webp" alt="Escudo UABC" width="30" height="39"> © 2026 · Proyecto académico UABC</span><nav class="social-block" aria-label="Redes sociales"><div class="social-links"><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1"></circle></svg></a><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 8.2a2.6 2.6 0 0 0-1.8-1.8C17.6 6 12 6 12 6s-5.6 0-7.2.4A2.6 2.6 0 0 0 3 8.2 27 27 0 0 0 2.6 12 27 27 0 0 0 3 15.8a2.6 2.6 0 0 0 1.8 1.8C6.4 18 12 18 12 18s5.6 0 7.2-.4a2.6 2.6 0 0 0 1.8-1.8 27 27 0 0 0 .4-3.8 27 27 0 0 0-.4-3.8Z"></path><path d="m10 15 5-3-5-3v6Z"></path></svg></a><a href="https://www.tiktok.com/" target="_blank" rel="noopener noreferrer" aria-label="TikTok" title="TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 4c.3 2.2 1.6 3.5 4 3.7v3.1c-1.4 0-2.7-.4-4-1.1v5.7a5.6 5.6 0 1 1-4.8-5.5v3.1a2.5 2.5 0 1 0 1.7 2.4V4H15Z"></path></svg></a><a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5h1.7V4a22 22 0 0 0-2.4-.1c-2.4 0-4 1.5-4 4.1V10H8v3h2.4v8h3.1Z"></path></svg></a></div></nav></div></footer>`;
   }
 }
 
 renderSiteShell();
 document.querySelectorAll('.brand b').forEach((element) => element.remove());
 document.title = document.title.replace(/Cuencia/gi, 'Cuenca');
-document.querySelectorAll('.brand strong, .footer-brand strong').forEach((element) => { element.textContent = 'CUENCA CIMARRONA'; });
 document.querySelector('.intro-strip strong')?.replaceChildren(document.createTextNode('Cuenca Cimarrona reúne propuestas elaboradas de manera colaborativa.'));
 document.querySelector('#directory-title')?.replaceChildren(document.createTextNode('Directorio de emergencia rápida'));
-document.querySelector('.directory-note')?.replaceChildren(document.createTextNode('Seleccione un contacto para llamar desde su dispositivo. Ante una emergencia inmediata, llame al 911.'));
+document.querySelector('.directory-note')?.replaceChildren(document.createTextNode('Selecciona un contacto para llamar desde tu dispositivo. Ante una emergencia inmediata, llama al 911.'));
 
 const resources = [
-  { category: 'advice', className: 'card-yellow', icon: '☂', title: 'Antes de la lluvia', text: 'Revise coladeras, rutas y objetos importantes antes de que comience.', action: '', href: '#antes' },
-  { category: 'advice', className: 'card-blue', icon: '⌁', title: 'Durante una tormenta', text: 'Evite cruzar arroyos y siga la información de fuentes confiables.', action: '', href: '#durante' },
-  { category: 'publication', className: 'card-green', icon: '♧', title: 'Comparta lo aprendido', text: 'Invite a su equipo y comparta una acción de prevención en redes.', action: '', href: '#redes' },
-  { category: 'advice', className: 'card-blue', icon: '⌂', title: 'Después de la lluvia', text: 'Revise su entorno, reporte riesgos y conserve las recomendaciones útiles.', action: '', href: '#despues' }
+  { category: 'advice', className: 'card-yellow', icon: 'umbrella', title: 'Antes de la lluvia', text: 'Revisa coladeras, rutas y objetos importantes antes de que comience.', action: '', href: '#antes' },
+  { category: 'advice', className: 'card-blue', icon: 'wind', title: 'Durante una tormenta', text: 'Evita cruzar arroyos y sigue la información de fuentes confiables.', action: '', href: '#durante' },
+  { category: 'publication', className: 'card-green', icon: 'share', title: 'Comparte lo aprendido', text: 'Invita a tu equipo y comparte una acción de prevención en redes.', action: '', href: '#redes' },
+  { category: 'advice', className: 'card-blue', icon: 'home', title: 'Después de la lluvia', text: 'Revisa tu entorno, reporta riesgos y conserva las recomendaciones útiles.', action: '', href: '#despues' }
 ];
 
 const resourceIconSvg = (icon) => ({
-  '☂': '<svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 18 0H3Z"/><path d="M12 12v7a2 2 0 0 0 4 0"/><path d="M7 8h.01M12 6h.01M17 8h.01"/></svg>',
-  '⌁': '<svg viewBox="0 0 24 24"><path d="M4 16h10a3 3 0 1 0-3-3"/><path d="M3 10h13a3 3 0 1 0-3-3"/><path d="M5 20h8"/></svg>',
-  '♧': '<svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"/></svg>',
-  '⌂': '<svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9M9 20v-6h6v6"/></svg>'
+  'umbrella': '<svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 18 0H3Z"/><path d="M12 12v7a2 2 0 0 0 4 0"/><path d="M7 8h.01M12 6h.01M17 8h.01"/></svg>',
+  'wind': '<svg viewBox="0 0 24 24"><path d="M4 16h10a3 3 0 1 0-3-3"/><path d="M3 10h13a3 3 0 1 0-3-3"/><path d="M5 20h8"/></svg>',
+  'share': '<svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"/></svg>',
+  'home': '<svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9M9 20v-6h6v6"/></svg>'
 })[icon] || '';
 
 const lessons = [
-  { number: '01', slug: 'conozca', title: 'Comprenda El Niño', text: 'Conozca cómo este fenómeno puede modificar las lluvias y las condiciones del clima en nuestra región.', image: '../assets/images/hero-el-nino.png', tone: 'lesson-blue' },
-  { number: '02', slug: 'planfamiliar', title: 'Organice un plan familiar', text: 'Acuerde rutas, responsabilidades, contactos y un punto de encuentro para su familia.', image: '../assets/images/game-decisions.png', tone: 'lesson-yellow' },
-  { number: '03', slug: 'mochila', title: 'Prepare su mochila', text: 'Identifique los artículos esenciales y adapte el contenido a las necesidades de su hogar.', image: '../assets/images/game-backpack.png', tone: 'lesson-green' }
+  { number: '01', slug: 'conoce', title: 'Comprende El Niño', text: 'Conoce cómo este fenómeno puede modificar las lluvias y las condiciones del clima en nuestra región.', image: '../assets/images/hero-el-nino.webp', tone: 'lesson-blue' },
+  { number: '02', slug: 'planfamiliar', title: 'Organiza un plan familiar', text: 'Acuerda rutas, responsabilidades, contactos y un punto de encuentro para tu familia.', image: '../assets/images/game-decisions.webp', tone: 'lesson-yellow' },
+  { number: '03', slug: 'mochila', title: 'Prepara tu mochila', text: 'Identifica los artículos esenciales y adapta el contenido a las necesidades de tu hogar.', image: '../assets/images/game-backpack.webp', tone: 'lesson-green' }
 ];
 
 function renderResources() {
@@ -55,9 +62,9 @@ function renderResources() {
   const isAdvicePage = document.body.classList.contains('advice-page');
   const visibleResources = isAdvicePage ? resources.filter((item) => item.category === 'advice') : resources;
   grid.innerHTML = visibleResources.map((item, index) => {
-    const body = `<span class="resource-icon" aria-hidden="true">${resourceIconSvg(item.icon)}</span><div>${isAdvicePage ? `<span class="resource-card-index">0${index + 1}</span>` : ''}<h3>${item.title}</h3><p>${item.text}</p>${item.action && !isAdvicePage ? `<a href="${adviceBase}${item.href}">${item.action} <span>→</span></a>` : ''}</div>`;
+    const body = `<span class="resource-icon" aria-hidden="true">${resourceIconSvg(item.icon)}</span><div>${isAdvicePage ? `<span class="resource-card-index">0${index + 1}</span>` : ''}<h3>${item.title}</h3><p>${item.text}</p>${item.action && !isAdvicePage ? `<a href="${adviceBase}${item.href}">${item.action}</a>` : ''}</div>`;
     return isAdvicePage
-      ? `<a class="resource-card ${item.className}" href="${item.href}" aria-label="${item.title}: consulte la recomendación">${body}<span class="resource-card-arrow" aria-hidden="true">↘</span></a>`
+      ? `<a class="resource-card ${item.className}" href="${item.href}" aria-label="${item.title}: consulta la recomendación">${body}</a>`
       : `<article class="resource-card ${item.className}">${body}</article>`;
   }).join('');
 }
@@ -65,35 +72,17 @@ function renderResources() {
 function renderLessons() {
   const grid = document.querySelector('#lessonCards');
   if (!grid) return;
-  grid.innerHTML = lessons.map((lesson) => `<article class="lesson-card ${lesson.tone}"><div class="lesson-card-image"><img src="${lesson.image}" alt=""><span class="lesson-card-number">${lesson.number}</span></div><div class="lesson-card-copy"><h3>${lesson.title}</h3><p>${lesson.text}</p><a class="text-link lesson-more" href="aprende-detalle.html?tema=${lesson.slug}">Ver información <span>→</span></a></div></article>`).join('');
+  grid.innerHTML = lessons.map((lesson) => `<article class="lesson-card ${lesson.tone}"><div class="lesson-card-image"><img src="${lesson.image}" alt=""><span class="lesson-card-number">${lesson.number}</span></div><div class="lesson-card-copy"><h3>${lesson.title}</h3><p>${lesson.text}</p><a class="text-link lesson-more" href="aprende-detalle.html?tema=${lesson.slug}">Ver información</a></div></article>`).join('');
 }
 
-function normalizeFormalCopy() {
-  const replacements = new Map([
-    ['Síguenos y comparte', 'Redes sociales'],
-    ['Avanza por las ideas principales y aprende a tu ritmo.', 'Avance por las ideas principales y aprenda a su ritmo.'],
-    ['Encuentra ideas rápidas y recomendaciones para antes, durante y después de una lluvia.', 'Encuentre ideas rápidas y recomendaciones para antes, durante y después de una lluvia.'],
-    ['Elige una dinámica', 'Elija una dinámica'],
-    ['Tu camino cuenta', 'Cada decisión cuenta'],
-    ['Arma tu mochila', 'Arme su mochila'],
-    ['Selecciona una opción', 'Seleccione una opción'],
-    ['Conoce dinámica', 'Conozca la dinámica'],
-    ['Comparte', 'Comparta'],
-    ['Ideas rápidas para prepararte', 'Ideas rápidas para prepararse']
-  ]);
-  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-  const nodes = [];
-  while (walker.nextNode()) nodes.push(walker.currentNode);
-  nodes.forEach((node) => { if (node.parentElement?.closest('script,style')) return; node.nodeValue = node.nodeValue.replace(/\btu\b/g, 'su').replace(/\bTu\b/g, 'Su'); replacements.forEach((value, key) => { node.nodeValue = node.nodeValue.replaceAll(key, value); }); });
-}
 
 function setupGameLibrary() {
   const panel = document.querySelector('#gameDetail');
   if (!panel) return;
   const details = {
-    rally: { title: 'Escape de la tormenta', text: 'Recorra estaciones, resuelva retos breves y elija decisiones que ayuden a mantenerse seguro durante una lluvia intensa.', steps: ['Forme un equipo de 2 a 5 jugadores.', 'Complete las estaciones y reúna las pistas.', 'Compare la ruta elegida y explique por qué es segura.'] },
-    decisiones: { title: 'Cada decisión cuenta', text: 'Elija qué hacer ante una situación de lluvia y observe cómo cada decisión cambia el recorrido.', steps: ['Lea la situación inicial.', 'Seleccione una de las opciones disponibles.', 'Revise la consecuencia y aprenda de la decisión.'] },
-    mochila: { title: 'Arme su mochila', text: 'Identifique en 60 segundos los artículos que realmente necesita para una emergencia.', steps: ['Tome los objetos disponibles.', 'Separe los artículos indispensables de los innecesarios.', 'Revise sus respuestas y comparta un consejo.'] }
+    rally: { title: 'Escape de la tormenta', text: 'Recorre estaciones, resuelve retos breves y elige decisiones que te ayuden a mantenerte a salvo durante una lluvia intensa.', steps: ['Forma un equipo de 2 a 5 jugadores.', 'Completa las estaciones y reúne las pistas.', 'Compara la ruta elegida y explica por qué es segura.'] },
+    decisiones: { title: 'Cada decisión cuenta', text: 'Elige qué hacer ante una situación de lluvia y observa cómo cada decisión cambia el recorrido.', steps: ['Lee la situación inicial.', 'Selecciona una de las opciones disponibles.', 'Revisa la consecuencia y aprende de la decisión.'] },
+    mochila: { title: 'Arma tu mochila', text: 'Identifica en 60 segundos los artículos que realmente necesitas para una emergencia.', steps: ['Toma los objetos disponibles.', 'Separa los artículos indispensables de los innecesarios.', 'Revisa tus respuestas y comparte un consejo.'] }
   };
   const title = panel.querySelector('h2');
   const text = panel.querySelector('.game-detail-text');
@@ -159,11 +148,11 @@ function setupLessonDetail() {
   };
 
   const content = {
-    conozca: { title: 'Comprenda El Niño', intro: 'El Niño es un fenómeno climático que puede modificar las lluvias, la temperatura y las condiciones del clima en nuestra región.', body: 'Conocer el fenómeno ayuda a interpretar mejor los avisos y a prepararse con anticipación. Sus efectos no son iguales en todos los lugares, por eso es importante consultar información oficial y observar las condiciones locales.', points: ['Puede modificar los patrones de lluvia.', 'Sus efectos pueden sentirse de manera distinta en cada zona.', 'La prevención comienza con información confiable.'], image: '../assets/images/hero-el-nino.png', alt: 'Ilustración de una zona urbana de Tijuana durante la lluvia', topic: 'nino' },
-    preparese: { title: 'Prepárese ante la lluvia', intro: 'Una preparación sencilla permite responder con más calma cuando las condiciones cambian.', body: 'Revise coladeras, techos, cables y rutas cercanas. Prepare una mochila con agua, linterna, documentos protegidos, botiquín y cargador portátil. Acuerde con su familia un punto de encuentro.', points: ['Identifique riesgos cercanos.', 'Prepare una mochila de emergencia.', 'Defina una ruta y un punto de encuentro.'], image: '../assets/images/game-backpack.png', alt: 'Mochila ilustrada con artículos para una emergencia' },
-    comparta: { title: 'Comparta lo aprendido', intro: 'La prevención se fortalece cuando las recomendaciones útiles llegan a más personas.', body: 'Comparta una acción concreta con su equipo, familia o comunidad. Una publicación, una conversación o una dinámica pueden ayudar a que más personas reconozcan qué hacer antes y durante una tormenta.', points: ['Explique una recomendación con claridad.', 'Invite a otras personas a participar.', 'Utilice información de fuentes confiables.'], image: '../assets/images/game-decisions.png', alt: 'Ilustración de caminos que representan decisiones' },
-    planfamiliar: { title: 'Prepare un plan familiar', intro: 'Organice en familia qué hacer, cómo comunicarse y dónde reunirse ante una emergencia.', body: 'Un plan familiar convierte recomendaciones generales en acuerdos que todas las personas del hogar conocen. Incluya las condiciones de su vivienda, las rutas posibles y las necesidades de niñas y niños, personas mayores, personas con discapacidad y mascotas.', points: ['Reconozca riesgos y zonas seguras.', 'Trace rutas y acuerde puntos de encuentro.', 'Asigne responsabilidades y practique simulacros.'], image: '../assets/images/hero-el-nino.png', alt: 'Ilustración de una comunidad durante una lluvia', topic: 'plan' },
-    mochila: { title: 'Prepare su mochila de emergencia', intro: 'Reúna lo esencial con tiempo y adapte la lista a las necesidades de quienes viven en su hogar.', body: 'Una mochila accesible ayuda a tener a mano artículos básicos si necesita resguardarse o trasladarse. Revise su contenido con regularidad, proteja documentos y considere medicamentos, artículos de higiene y alimento para mascotas según las necesidades de su familia.', points: ['Guarde agua, alimentos, linterna y botiquín.', 'Incluya documentos y contactos protegidos.', 'Revise la mochila y ajuste su contenido para su familia.'], image: '../assets/images/game-backpack.png', alt: 'Mochila ilustrada con artículos para una emergencia', topic: 'mochila' }
+    conozca: { title: 'Comprende El Niño', intro: 'El Niño es un fenómeno climático que puede modificar las lluvias, la temperatura y las condiciones del clima en nuestra región.', body: 'Conocer el fenómeno ayuda a interpretar mejor los avisos y a prepararse con anticipación. Sus efectos no son iguales en todos los lugares, por eso es importante consultar información oficial y observar las condiciones locales.', points: ['Puede modificar los patrones de lluvia.', 'Sus efectos pueden sentirse de manera distinta en cada zona.', 'La prevención comienza con información confiable.'], image: '../assets/images/hero-el-nino.webp', alt: 'Ilustración de una zona urbana de Tijuana durante la lluvia', topic: 'nino' },
+    preparese: { title: 'Prepárate ante la lluvia', intro: 'Una preparación sencilla permite responder con más calma cuando las condiciones cambian.', body: 'Revisa coladeras, techos, cables y rutas cercanas. Prepara una mochila con agua, linterna, documentos protegidos, botiquín y cargador portátil. Acuerda con tu familia un punto de encuentro.', points: ['Identifica riesgos cercanos.', 'Prepara una mochila de emergencia.', 'Define una ruta y un punto de encuentro.'], image: '../assets/images/game-backpack.webp', alt: 'Mochila ilustrada con artículos para una emergencia' },
+    comparta: { title: 'Comparte lo aprendido', intro: 'La prevención se fortalece cuando las recomendaciones útiles llegan a más personas.', body: 'Comparte una acción concreta con tu equipo, tu familia o tu comunidad. Una publicación, una conversación o una dinámica pueden ayudar a que más personas reconozcan qué hacer antes y durante una tormenta.', points: ['Explica una recomendación con claridad.', 'Invita a otras personas a participar.', 'Utilice información de fuentes confiables.'], image: '../assets/images/game-decisions.webp', alt: 'Ilustración de caminos que representan decisiones' },
+    planfamiliar: { title: 'Prepara un plan familiar', intro: 'Organiza en familia qué hacer, cómo comunicarse y dónde reunirse ante una emergencia.', body: 'Un plan familiar convierte recomendaciones generales en acuerdos que todas las personas del hogar conocen. Incluye las condiciones de tu vivienda, las rutas posibles y las necesidades de niñas y niños, personas mayores, personas con discapacidad y mascotas.', points: ['Reconoce riesgos y zonas seguras.', 'Traza rutas y acuerda puntos de encuentro.', 'Asigna responsabilidades y practica simulacros.'], image: '../assets/images/hero-el-nino.webp', alt: 'Ilustración de una comunidad durante una lluvia', topic: 'plan' },
+    mochila: { title: 'Prepara tu mochila de emergencia', intro: 'Reúne lo esencial con tiempo y adapta la lista a las necesidades de quienes viven en tu hogar.', body: 'Una mochila accesible ayuda a tener a mano artículos básicos si necesitas resguardarte o trasladarte. Revisa su contenido con regularidad, protege documentos y considera medicamentos, artículos de higiene y alimento para mascotas según las necesidades de tu familia.', points: ['Guarda agua, alimentos, linterna y botiquín.', 'Incluye documentos y contactos protegidos.', 'Revisa la mochila y ajusta su contenido para tu familia.'], image: '../assets/images/game-backpack.webp', alt: 'Mochila ilustrada con artículos para una emergencia', topic: 'mochila' }
   };
   const selected = content[new URLSearchParams(window.location.search).get('tema')] || content.conozca;
   detail.querySelector('h1').textContent = selected.title;
@@ -211,7 +200,7 @@ function setupLessonDetail() {
         </svg>
         <p class="weather-caption">Viento</p>
       </div>
-      <div class="weather-controls" role="group" aria-label="Seleccione una escena del tiempo"></div>`;
+      <div class="weather-controls" role="group" aria-label="Selecciona una escena del tiempo"></div>`;
     const modes = [
       { id: 'wind', label: 'Viento', description: 'Viento: un árbol y hojas se mueven con las ráfagas.' },
       { id: 'rain', label: 'Lluvia', description: 'Lluvia: las gotas caen desde una nube.' },
@@ -263,7 +252,7 @@ function setupLessonDetail() {
     oceanSection.append(oceanTitle);
     const modeGroup = make('div', 'ocean-mode-switch');
     modeGroup.setAttribute('role', 'group');
-    modeGroup.setAttribute('aria-label', 'Compare las condiciones del Pacífico');
+    modeGroup.setAttribute('aria-label', 'Compara las condiciones del Pacífico');
     const figure = make('div', 'pac-figure');
     const visual = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     visual.classList.add('pacific', 'is-normal');
@@ -293,7 +282,7 @@ function setupLessonDetail() {
       </g>`;
     const axis = make('p', 'pac-axis');
     axis.setAttribute('aria-hidden', 'true');
-    axis.append(make('span', '', '← Asia y Australia'), make('span', '', 'América →'));
+    axis.append(Object.assign(make('span', '', ''), { innerHTML: '<svg class="sym" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H4m6-6-6 6 6 6"/></svg> Asia y Australia' }), make('span', '', 'América'));
     const legend = make('ul', 'pac-legend');
     legend.setAttribute('aria-hidden', 'true');
     [['lg-warm', 'Agua caliente'], ['lg-cold', 'Agua fría'], ['lg-wind', 'Vientos alisios'], ['lg-rain', 'Nubes y lluvia']].forEach(([tone, label]) => {
@@ -368,12 +357,12 @@ function setupLessonDetail() {
     });
 
     const tijuanaSection = make('section', 'topic-section');
-    addSectionHeading(tijuanaSection, 'EN NUESTRA REGIÓN', '¿Qué significa para Tijuana?', 'El Niño modifica probabilidades, pero no permite asegurar por sí solo cuándo o cuánto lloverá en una colonia. Consulte los avisos oficiales y prepárese para riesgos locales.');
+    addSectionHeading(tijuanaSection, 'En nuestra región', '¿Qué significa para Tijuana?', 'El Niño modifica probabilidades, pero no permite asegurar por sí solo cuándo o cuánto lloverá en una colonia. Consulta los avisos oficiales y prepárate para riesgos locales.');
     const outlookGrid = make('div', 'outlook-grid');
     [
-      ['Pronóstico cambiante', 'Las autoridades municipales pidieron preparación anticipada ante el posible impacto del fenómeno. Revise las actualizaciones antes de tomar decisiones.'],
-      ['Inundaciones y deslaves', 'Las lluvias intensas pueden elevar el riesgo en calles bajas, arroyos y laderas. Identifique rutas y zonas seguras cerca de su vivienda.'],
-      ['No toda lluvia es El Niño', 'Una tormenta aislada no confirma por sí misma un episodio de El Niño. Siga los avisos meteorológicos y las instrucciones de Protección Civil.']
+      ['Pronóstico cambiante', 'Las autoridades municipales pidieron preparación anticipada ante el posible impacto del fenómeno. Revisa las actualizaciones antes de tomar decisiones.'],
+      ['Inundaciones y deslaves', 'Las lluvias intensas pueden elevar el riesgo en calles bajas, arroyos y laderas. Identifica rutas y zonas seguras cerca de tu vivienda.'],
+      ['No toda lluvia es El Niño', 'Una tormenta aislada no confirma por sí misma un episodio de El Niño. Sigue los avisos meteorológicos y las instrucciones de Protección Civil.']
     ].forEach(([title, text], index) => {
       const card = make('article', `outlook-card outlook-${index + 1}`);
       card.append(make('span', 'outlook-number', `0${index + 1}`), make('h3', '', title), make('p', '', text));
@@ -386,7 +375,7 @@ function setupLessonDetail() {
     topicContent.append(tijuanaSection);
 
     const resources = make('section', 'topic-section topic-resources');
-    addSectionHeading(resources, 'FUENTES PARA SEGUIR APRENDIENDO', 'Consulte información oficial', 'Use fuentes actualizadas para revisar el fenómeno y las condiciones locales.');
+    addSectionHeading(resources, 'Fuentes para seguir aprendiendo', 'Consulta información oficial', 'Use fuentes actualizadas para revisar el fenómeno y las condiciones locales.');
     const sourceLinks = make('div', 'topic-source-links');
     sourceLinks.append(makeLink('https://www.noaa.gov/understanding-el-nino', 'NOAA · Entender El Niño y ENOS'), makeLink('https://smn.conagua.gob.mx/', 'SMN / CONAGUA · Avisos meteorológicos'), makeLink('https://proteccioncivil.tijuana.gob.mx/', 'Protección Civil Tijuana · Comunicados'));
     resources.append(sourceLinks);
@@ -395,55 +384,55 @@ function setupLessonDetail() {
 
   if (selected.topic === 'plan') {
     const steps = [
-      { title: 'Reconozca los riesgos', description: 'Observe su entorno y ubique zonas seguras dentro y fuera de casa.', tasks: ['Recorra su vivienda y detecte objetos que podrían caer.', 'Identifique zonas expuestas a inundación y revise instalaciones.', 'Ubique zonas seguras y solicite apoyo para reparaciones necesarias.'], tip: 'Revise cada espacio en familia. No manipule instalaciones dañadas si no cuenta con capacitación.' },
-      { title: 'Trace rutas y puntos de encuentro', description: 'Defina cómo salir y dónde reunirse si no pueden permanecer en casa.', tasks: ['Dibuje un croquis con salidas y riesgos identificados.', 'Elija rutas accesibles y un punto de encuentro.', 'Comparta el croquis y los contactos de emergencia.'], tip: 'Incluya las necesidades de niñas y niños, personas mayores, personas con discapacidad y mascotas.' },
-      { title: 'Acuerde cómo actuar', description: 'Asigne responsabilidades y formas de comunicación para cada integrante.', tasks: ['Acuerde quién apoyará a cada persona y a las mascotas.', 'Defina dónde consultar avisos y cómo comunicarse.', 'Acuerde cómo seguir una indicación de evacuación.'], tip: 'No todas las emergencias requieren la misma respuesta. Atienda las indicaciones de las autoridades locales.' },
-      { title: 'Practique el plan', description: 'Realice simulacros y actualice los acuerdos cuando cambien sus necesidades.', tasks: ['Programe simulacros durante el año.', 'Practique rutas y puntos de encuentro sin exponerse a riesgos.', 'Revise lo aprendido y actualice el plan.'], tip: 'Un simulacro es una oportunidad para aprender y ajustar, no una competencia.' }
+      { title: 'Reconoce los riesgos', description: 'Observa tu entorno y ubica zonas seguras dentro y fuera de casa.', tasks: ['Recorre tu vivienda y detecta objetos que podrían caer.', 'Identifica zonas expuestas a inundación y revisa instalaciones.', 'Ubica zonas seguras y solicita apoyo para reparaciones necesarias.'], tip: 'Revisa cada espacio en familia. No manipules instalaciones dañadas si no cuenta con capacitación.' },
+      { title: 'Traza rutas y puntos de encuentro', description: 'Define cómo salir y dónde reunirse si no pueden permanecer en casa.', tasks: ['Dibuja un croquis con salidas y riesgos identificados.', 'Elige rutas accesibles y un punto de encuentro.', 'Comparte el croquis y los contactos de emergencia.'], tip: 'Incluye las necesidades de niñas y niños, personas mayores, personas con discapacidad y mascotas.' },
+      { title: 'Acuerda cómo actuar', description: 'Asigna responsabilidades y formas de comunicación para cada integrante.', tasks: ['Acuerda quién apoyará a cada persona y a las mascotas.', 'Define dónde consultar avisos y cómo comunicarse.', 'Acuerda cómo seguir una indicación de evacuación.'], tip: 'No todas las emergencias requieren la misma respuesta. Atiende las indicaciones de las autoridades locales.' },
+      { title: 'Practica el plan', description: 'Realice simulacros y actualiza los acuerdos cuando cambien sus necesidades.', tasks: ['Programe simulacros durante el año.', 'Practica rutas y puntos de encuentro sin exponerte a riesgos.', 'Revisa lo aprendido y actualiza el plan.'], tip: 'Un simulacro es una oportunidad para aprender y ajustar, no una competencia.' }
     ];
     renderChecklistTopic(topicContent, {
-      eyebrow: 'GUÍA FAMILIAR', title: 'Cuatro pasos para organizarse', intro: 'Marque los acuerdos que ya tienen. Su avance se guarda en este navegador.', storageKey: 'cuenca.planfamiliar.checks', groups: steps, completeLabel: 'pasos completados', checklistLabel: 'acciones marcadas'
+      eyebrow: 'Guía familiar', title: 'Cuatro pasos para organizarse', intro: 'Marca los acuerdos que ya tienen. Tu avance se guarda en este navegador.', storageKey: 'cuenca.planfamiliar.checks', groups: steps, completeLabel: 'pasos completados', checklistLabel: 'acciones marcadas'
     });
     const extra = make('section', 'topic-section plan-extra');
-    addSectionHeading(extra, 'PERSONALICE SU PLAN', 'Adáptelo a su hogar', 'Considere sus espacios, horarios, movilidad, medicamentos, apoyos y el cuidado de sus mascotas. Dibuje un croquis con habitaciones, salidas, riesgos y puntos de encuentro; colóquelo donde todas las personas puedan verlo.');
+    addSectionHeading(extra, 'Personaliza tu plan', 'Adáptalo a tu hogar', 'Considera tus espacios, horarios, movilidad, medicamentos, apoyos y el cuidado de tus mascotas. Dibuja un croquis con habitaciones, salidas, riesgos y puntos de encuentro; colóquelo donde todas las personas puedan verlo.');
     const links = make('div', 'topic-source-links');
-    links.append(makeLink('https://www.cenapred.gob.mx/es/Publicaciones/archivos/392-PLAN-FAMILIAR-DE-PROTECCION-CIVIL.PDF', 'Consultar guía de CENAPRED'), makeLink('aprende-detalle.html?tema=mochila', 'Prepare su mochila de emergencia'));
+    links.append(makeLink('https://www.cenapred.gob.mx/es/Publicaciones/archivos/392-PLAN-FAMILIAR-DE-PROTECCION-CIVIL.PDF', 'Consultar guía de CENAPRED'), makeLink('aprende-detalle.html?tema=mochila', 'Prepara tu mochila de emergencia'));
     extra.append(links);
     topicContent.append(extra);
   }
 
   if (selected.topic === 'mochila') {
     const supplies = [
-      { name: 'Agua potable', detail: 'En envases cerrados; revise su caducidad.', group: 'Lo esencial', tone: 'blue', icon: '<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11Z"/><path d="M9 15a3 3 0 0 0 3 3"/>' },
-      { name: 'Alimentos no perecederos', detail: 'Listos para consumir y adecuados para su familia.', group: 'Lo esencial', tone: 'orange', icon: '<path d="M5 7h14v13H5zM8 7V5h8v2M5 11h14"/><path d="M9 14h6"/>' },
+      { name: 'Agua potable', detail: 'En envases cerrados; revisa su caducidad.', group: 'Lo esencial', tone: 'blue', icon: '<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11Z"/><path d="M9 15a3 3 0 0 0 3 3"/>' },
+      { name: 'Alimentos no perecederos', detail: 'Listos para consumir y adecuados para tu familia.', group: 'Lo esencial', tone: 'orange', icon: '<path d="M5 7h14v13H5zM8 7V5h8v2M5 11h14"/><path d="M9 14h6"/>' },
       { name: 'Botiquín y medicamentos', detail: 'Material básico y tratamientos prescritos.', group: 'Lo esencial', tone: 'red', icon: '<rect x="4" y="7" width="16" height="13" rx="3"/><path d="M9 7V5a3 3 0 0 1 6 0v2m-3 3v7m-3.5-3.5h7"/>' },
-      { name: 'Linterna y pilas', detail: 'Verifique que funcionen y agregue repuestos.', group: 'Lo esencial', tone: 'gold', icon: '<path d="M9 4h6l2 5-3 2v8h-4v-8L7 9l2-5Z"/><path d="M10 7h4m-2 4v3"/>' },
+      { name: 'Linterna y pilas', detail: 'Verifica que funcionen y agrega repuestos.', group: 'Lo esencial', tone: 'gold', icon: '<path d="M9 4h6l2 5-3 2v8h-4v-8L7 9l2-5Z"/><path d="M10 7h4m-2 4v3"/>' },
       { name: 'Radio portátil', detail: 'De pilas, para escuchar información oficial.', group: 'Comunicación y documentos', tone: 'purple', icon: '<rect x="4" y="8" width="16" height="12" rx="3"/><path d="m8 8 2-4m2 8h5m-5 3h5"/><circle cx="8" cy="15" r="1.5"/>' },
       { name: 'Documentos importantes', detail: 'Copias protegidas del agua y un directorio familiar.', group: 'Comunicación y documentos', tone: 'cyan', icon: '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v5h5M10 12h5m-5 4h5"/>' },
-      { name: 'Dinero en efectivo', detail: 'Incluya monedas y billetes de baja denominación.', group: 'Comunicación y documentos', tone: 'green', icon: '<circle cx="12" cy="12" r="9"/><path d="M15 9.5c-.6-.7-1.5-1-2.7-1-1.4 0-2.3.7-2.3 1.7 0 2.8 5.5 1 5.5 4 0 1.1-1 2-2.7 2-1.2 0-2.3-.4-3-1.2M12 6.5v11"/>' },
+      { name: 'Dinero en efectivo', detail: 'Incluye monedas y billetes de baja denominación.', group: 'Comunicación y documentos', tone: 'green', icon: '<circle cx="12" cy="12" r="9"/><path d="M15 9.5c-.6-.7-1.5-1-2.7-1-1.4 0-2.3.7-2.3 1.7 0 2.8 5.5 1 5.5 4 0 1.1-1 2-2.7 2-1.2 0-2.3-.4-3-1.2M12 6.5v11"/>' },
       { name: 'Batería para el celular', detail: 'Cargada y con el cable compatible.', group: 'Comunicación y documentos', tone: 'lime', icon: '<rect x="5" y="7" width="13" height="12" rx="2"/><path d="M18 11h2v4h-2M12 9l-2 4h3l-2 4"/>' },
-      { name: 'Silbato', detail: 'Manténgalo a la mano para pedir ayuda.', group: 'Cuidado de su familia', tone: 'orange', icon: '<path d="M4 11h11l4-3v8l-4-3H4z"/><circle cx="7" cy="12" r="1.5"/><path d="M7 17v2"/>' },
-      { name: 'Manta y ropa de abrigo', detail: 'Considere el clima y una muda de ropa.', group: 'Cuidado de su familia', tone: 'blue', icon: '<path d="M5 5h14v14H5z"/><path d="m5 9 14 6M5 14l11 5M11 5l8 3"/>' },
-      { name: 'Artículos de higiene', detail: 'Incluya las necesidades de cada integrante.', group: 'Cuidado de su familia', tone: 'pink', icon: '<path d="M9 4h6m-5 0v4l-3 3v8h10v-8l-3-3V4"/><path d="M8 13h8"/>' },
-      { name: 'Kit para sus mascotas', detail: 'Si tiene mascotas, agregue alimento, agua, correa y sus documentos.', group: 'Cuidado de su familia', tone: 'brown', icon: '<circle cx="12" cy="15" r="4"/><circle cx="6.5" cy="9" r="1.7"/><circle cx="10.5" cy="6.5" r="1.7"/><circle cx="14.5" cy="6.5" r="1.7"/><circle cx="18" cy="9" r="1.7"/>' }
+      { name: 'Silbato', detail: 'Manténgalo a la mano para pedir ayuda.', group: 'Cuidado de tu familia', tone: 'orange', icon: '<path d="M4 11h11l4-3v8l-4-3H4z"/><circle cx="7" cy="12" r="1.5"/><path d="M7 17v2"/>' },
+      { name: 'Manta y ropa de abrigo', detail: 'Considera el clima y una muda de ropa.', group: 'Cuidado de tu familia', tone: 'blue', icon: '<path d="M5 5h14v14H5z"/><path d="m5 9 14 6M5 14l11 5M11 5l8 3"/>' },
+      { name: 'Artículos de higiene', detail: 'Incluye las necesidades de cada integrante.', group: 'Cuidado de tu familia', tone: 'pink', icon: '<path d="M9 4h6m-5 0v4l-3 3v8h10v-8l-3-3V4"/><path d="M8 13h8"/>' },
+      { name: 'Kit para tus mascotas', detail: 'Si tienes mascotas, agrega alimento, agua, correa y sus documentos.', group: 'Cuidado de tu familia', tone: 'brown', icon: '<circle cx="12" cy="15" r="4"/><circle cx="6.5" cy="9" r="1.7"/><circle cx="10.5" cy="6.5" r="1.7"/><circle cx="14.5" cy="6.5" r="1.7"/><circle cx="18" cy="9" r="1.7"/>' }
     ];
     renderBackpackChecklist(topicContent, supplies, 'cuenca.mochila.checks');
     const extra = make('section', 'topic-section backpack-extra');
-    addSectionHeading(extra, 'RECUERDE', 'Revise y personalice su mochila', 'Guárdela en un lugar accesible y compruebe su contenido con regularidad. Agregue artículos para niñas y niños, personas mayores, personas con discapacidad, tratamientos médicos o mascotas.');
+    addSectionHeading(extra, 'Recuerda', 'Revisa y personaliza tu mochila', 'Guárdala en un lugar accesible y comprueba su contenido con regularidad. Agrega artículos para niñas y niños, personas mayores, personas con discapacidad, tratamientos médicos o mascotas.');
     const linkRow = make('div', 'topic-source-links');
-    linkRow.append(makeLink('https://www.gob.mx/cenapred/es/articulos/la-seguridad-empieza-en-casa-prepara-tu-mochila-de-emergencia', 'Consultar recomendaciones de CENAPRED'), makeLink('aprende-detalle.html?tema=planfamiliar', 'Organice su plan familiar'));
+    linkRow.append(makeLink('https://www.gob.mx/cenapred/es/articulos/la-seguridad-empieza-en-casa-prepara-tu-mochila-de-emergencia', 'Consultar recomendaciones de CENAPRED'), makeLink('aprende-detalle.html?tema=planfamiliar', 'Organiza tu plan familiar'));
     extra.append(linkRow);
     topicContent.append(extra);
   }
 
   function renderBackpackChecklist(container, supplies, storageKey) {
     const section = make('section', 'topic-section backpack-topic');
-    addSectionHeading(section, 'LISTA PARA PREPARAR', 'Doce artículos para tener a la mano', 'Marque lo que ya tiene listo y adapte la mochila a las necesidades de su hogar. Su avance se guarda en este navegador.');
+    addSectionHeading(section, 'Lista para preparar', 'Doce artículos para tener a la mano', 'Marca lo que ya tienes listo y adapta la mochila a las necesidades de tu hogar. Tu avance se guarda en este navegador.');
 
     const hero = make('div', 'backpack-intro-card');
     const heroCopy = make('div', 'backpack-intro-copy');
-    heroCopy.append(make('span', 'backpack-hero-kicker', 'PREPÁRESE CON TIEMPO'), make('h3', '', 'Una mochila lista ayuda a actuar con más calma.'), make('p', '', 'Colóquela en un lugar accesible y revise periódicamente su contenido. Incluya lo que cada persona y mascota pueda necesitar.'));
+    heroCopy.append(make('span', 'backpack-hero-kicker', 'Prepárate con tiempo'), make('h3', '', 'Una mochila lista ayuda a actuar con más calma.'), make('p', '', 'Colócala en un lugar accesible y revisa periódicamente su contenido. Incluye lo que cada persona y mascota pueda necesitar.'));
     const heroImage = make('div', 'backpack-hero-art');
-    heroImage.innerHTML = '<svg viewBox="0 0 120 120" role="img" aria-label="Ilustración animada de una mochila de emergencia"><path class="bag-handle" d="M45 28v-7a15 15 0 0 1 30 0v7"/><path class="bag-body" d="M28 40a13 13 0 0 1 13-13h38a13 13 0 0 1 13 13v56a12 12 0 0 1-12 12H40a12 12 0 0 1-12-12V40Z"/><path class="bag-side" d="M28 52h-5v34h5m64-34h5v34h-5"/><path class="bag-pocket" d="M38 67a9 9 0 0 1 9-9h26a9 9 0 0 1 9 9v24H38V67Z"/><path class="bag-seam" d="M47 70h26m-26 8h26"/><rect class="bag-buckle" x="53" y="32" width="14" height="10" rx="3"/><path class="bag-water" d="M59 45s-7 8-7 13a7 7 0 0 0 14 0c0-5-7-13-7-13Z"/></svg><span class="backpack-hero-spark">✦</span>';
+    heroImage.innerHTML = '<svg viewBox="0 0 120 120" role="img" aria-label="Ilustración animada de una mochila de emergencia"><path class="bag-handle" d="M45 28v-7a15 15 0 0 1 30 0v7"/><path class="bag-body" d="M28 40a13 13 0 0 1 13-13h38a13 13 0 0 1 13 13v56a12 12 0 0 1-12 12H40a12 12 0 0 1-12-12V40Z"/><path class="bag-side" d="M28 52h-5v34h5m64-34h5v34h-5"/><path class="bag-pocket" d="M38 67a9 9 0 0 1 9-9h26a9 9 0 0 1 9 9v24H38V67Z"/><path class="bag-seam" d="M47 70h26m-26 8h26"/><rect class="bag-buckle" x="53" y="32" width="14" height="10" rx="3"/><path class="bag-water" d="M59 45s-7 8-7 13a7 7 0 0 0 14 0c0-5-7-13-7-13Z"/></svg><span class="backpack-hero-spark"><svg class="sym" viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true"><path fill="currentColor" d="M12 2c.7 4.8 2.6 7.6 10 10-7.4 2.4-9.3 5.2-10 10-.7-4.8-2.6-7.6-10-10 7.4-2.4 9.3-5.2 10-10Z"/></svg></span>';
     hero.append(heroCopy, heroImage);
     section.append(hero);
 
@@ -492,14 +481,14 @@ function setupLessonDetail() {
     });
 
     const summary = make('aside', 'backpack-progress-card');
-    summary.append(make('span', 'backpack-summary-kicker', 'SU AVANCE'));
+    summary.append(make('span', 'backpack-summary-kicker', 'Tu avance'));
     const count = make('strong', 'backpack-summary-count', `${saved.size} / ${supplies.length}`);
     const label = make('span', 'backpack-summary-label', 'artículos listos');
     const progress = make('progress', 'backpack-summary-progress');
     progress.max = supplies.length;
     progress.value = saved.size;
     progress.setAttribute('aria-label', `${saved.size} de ${supplies.length} artículos listos`);
-    const message = make('p', 'backpack-summary-note', 'Su avance se guarda automáticamente en este navegador.');
+    const message = make('p', 'backpack-summary-note', 'Tu avance se guarda automáticamente en este navegador.');
     const print = make('button', 'backpack-print-button', 'Imprimir mi lista');
     print.type = 'button';
     print.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8V3h10v5M7 17H5a2 2 0 0 1-2-2v-4a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v4a2 2 0 0 1-2 2h-2"/><path d="M7 14h10v7H7zM17 11h.01"/></svg> Imprimir mi lista';
@@ -614,16 +603,14 @@ function setupLessonDetail() {
 
 renderResources();
 renderLessons();
-normalizeFormalCopy();
 setupGameLibrary();
 setupLessonDetail();
-document.querySelectorAll('.site-nav a[href$="recursos.html"]').forEach((link) => { link.textContent = 'Consejos'; });
 const socialUrls = ['https://www.instagram.com/', 'https://www.youtube.com/', 'https://www.tiktok.com/', 'https://www.facebook.com/'];
 document.querySelectorAll('.social-links a').forEach((link, index) => { if (socialUrls[index]) { link.href = socialUrls[index]; link.target = '_blank'; link.rel = 'noopener'; } });
 
 const menuToggle = document.querySelector('#menuToggle');
 const siteNav = document.querySelector('#siteNav');
-menuToggle?.addEventListener('click', () => { const open = siteNav.classList.toggle('open'); menuToggle.setAttribute('aria-expanded', String(open)); });
+menuToggle?.addEventListener('click', () => { const open = siteNav.classList.toggle('open'); menuToggle.setAttribute('aria-expanded', String(open)); menuToggle.querySelector('span').textContent = open ? 'Cerrar' : 'Menú'; menuToggle.querySelector('path')?.setAttribute('d', open ? 'M6 6l12 12M18 6 6 18' : 'M3 6h18M3 12h18M3 18h18'); });
 siteNav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => { siteNav.classList.remove('open'); menuToggle?.setAttribute('aria-expanded', 'false'); }));
 
 const navLinks = [...document.querySelectorAll('.site-nav a:not(.nav-cta)')];

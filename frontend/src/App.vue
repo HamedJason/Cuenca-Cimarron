@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import Icon from "./components/Icon.vue";
 import Modal from "./components/Modal.vue";
@@ -18,7 +18,7 @@ function recoverLogo(event) {
   const image = event.currentTarget;
   if (image.dataset.fallbackApplied) return;
   image.dataset.fallbackApplied = "true";
-  image.src = "/brand/uabc-escudo.png";
+  image.src = "/brand/cuenca/icono-192.png";
 }
 const applyMotion = () =>
   document.documentElement.classList.toggle("motion-off", !motionOn.value);
@@ -35,11 +35,31 @@ function toggleMotion() {
 const showStats = ref(false);
 const stats = ref(null);
 const statsState = ref("loading");
+// Mismo orden que el menú que ya estaba publicado: Inicio, Juegos, Información, Consejos.
+// Información y Consejos siguen siendo páginas sueltas hasta que se pasen a Vue.
 const navigation = [
-  { to: "/", label: "Emergencias" },
-  { to: "/el-nino", label: "El Niño" },
-  { to: "/plan", label: "Plan familiar" },
-  { to: "/mochila", label: "Mochila" },
+  { to: "/", label: "Inicio", icon: "home" },
+  { to: "/juegos", label: "Juegos", icon: "gamepad" },
+  { href: "/pages/aprende.html", label: "Información", icon: "book", match: ["/el-nino", "/plan", "/mochila"] },
+  { href: "/pages/recursos.html", label: "Consejos", icon: "shield" },
+];
+const isActive = (item) =>
+  item.to === route.path || (item.match || []).includes(route.path);
+const menuOpen = ref(false);
+watch(
+  () => route.path,
+  () => {
+    menuOpen.value = false;
+  },
+);
+// El botón flotante no se muestra donde ya están los juegos.
+// Siempre visible, salvo en la página de juegos.
+const showPlayButton = computed(() => route.path !== "/juegos");
+const socials = [
+  { label: "Instagram", href: "https://www.instagram.com/", icon: '<rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/>' },
+  { label: "YouTube", href: "https://www.youtube.com/", icon: '<path d="M21 8.2a2.6 2.6 0 0 0-1.8-1.8C17.6 6 12 6 12 6s-5.6 0-7.2.4A2.6 2.6 0 0 0 3 8.2 27 27 0 0 0 2.6 12 27 27 0 0 0 3 15.8a2.6 2.6 0 0 0 1.8 1.8C6.4 18 12 18 12 18s5.6 0 7.2-.4a2.6 2.6 0 0 0 1.8-1.8 27 27 0 0 0 .4-3.8 27 27 0 0 0-.4-3.8Z"/><path d="m10 15 5-3-5-3v6Z"/>' },
+  { label: "TikTok", href: "https://www.tiktok.com/", icon: '<path d="M15 4c.3 2.2 1.6 3.5 4 3.7v3.1c-1.4 0-2.7-.4-4-1.1v5.7a5.6 5.6 0 1 1-4.8-5.5v3.1a2.5 2.5 0 1 0 1.7 2.4V4H15Z"/>' },
+  { label: "Facebook", href: "https://www.facebook.com/", icon: '<path d="M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5h1.7V4a22 22 0 0 0-2.4-.1c-2.4 0-4 1.5-4 4.1V10H8v3h2.4v8h3.1Z"/>' },
 ];
 async function loadStats() {
   statsState.value = "loading";
@@ -78,32 +98,72 @@ async function loadStats() {
     statsState.value = "offline";
   }
 }
-onMounted(loadStats);
+// El encabezado se compacta y marca su borde al bajar por la página.
+const scrolled = ref(false);
+const onScroll = () => {
+  scrolled.value = window.scrollY > 8;
+};
+onMounted(() => {
+  loadStats();
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+});
 </script>
 <template>
   <a class="skip-link" href="#main-content">Saltar al contenido</a>
-  <header class="site-header">
+  <header :class="['site-header', { scrolled, 'menu-open': menuOpen }]">
     <div class="wrap header-row">
-      <RouterLink class="brand" to="/"
+      <RouterLink class="brand" to="/" aria-label="Cuenca Cimarrona, inicio"
         ><img
-          src="/brand/uabc-escudo-menu.png"
-          alt="Escudo UABC"
-          width="26"
-          height="36"
+          class="brand-icon"
+          src="/brand/cuenca/icono-96.webp"
+          alt=""
+          width="44"
+          height="44"
           @error="recoverLogo"
-        /><span>Cuenca Cimarrona</span></RouterLink
+        /><span class="wordmark">Cuenca Cimarrona</span></RouterLink
       >
-      <nav class="site-nav" aria-label="Principal">
-        <RouterLink
-          v-for="item in navigation"
-          :key="item.to"
-          :to="item.to"
-          :class="['nav-link', { active: route.path === item.to }]"
-          :aria-current="route.path === item.to ? 'page' : undefined"
-          >{{ item.label }}</RouterLink
-        >
+      <button
+        class="menu-toggle"
+        type="button"
+        :aria-expanded="menuOpen"
+        aria-controls="menu-principal"
+        @click="menuOpen = !menuOpen"
+      >
+        <Icon :name="menuOpen ? 'close' : 'menu'" :size="22" class="menu-toggle-icon" />
+        {{ menuOpen ? "Cerrar" : "Menú" }}
+      </button>
+      <nav
+        id="menu-principal"
+        :class="['site-nav', { open: menuOpen }]"
+        aria-label="Principal"
+      >
+        <template v-for="item in navigation" :key="item.label">
+          <RouterLink
+            v-if="item.to"
+            :to="item.to"
+            :class="['nav-link', { active: isActive(item) }]"
+            :aria-current="isActive(item) ? 'page' : undefined"
+            ><span class="nav-icon" aria-hidden="true"
+              ><Icon :name="item.icon" :size="20" /></span
+            >{{ item.label }}</RouterLink
+          >
+          <a
+            v-else
+            :href="item.href"
+            :class="['nav-link', { active: isActive(item) }]"
+            ><span class="nav-icon" aria-hidden="true"
+              ><Icon :name="item.icon" :size="20" /></span
+            >{{ item.label }}</a
+          >
+        </template>
       </nav>
     </div>
+    <!-- Agua que corre por la cuenca: una línea de olas bajo el encabezado -->
+    <div class="header-wave-wrap" aria-hidden="true"><svg class="header-wave" viewBox="0 0 240 12" preserveAspectRatio="none">
+      <path class="hw-back" d="M0 6c20-6 40-6 60 0s40 6 60 0 40-6 60 0 40 6 60 0v6H0Z" />
+      <path class="hw-front" d="M0 8c20-5 40-5 60 0s40 5 60 0 40-5 60 0 40 5 60 0" />
+    </svg></div>
   </header>
   <div class="workspace">
     <main id="main-content" tabindex="-1">
@@ -114,28 +174,66 @@ onMounted(loadStats);
       <RouterView />
     </main>
     <footer class="footer">
-      <button
-        class="motion-toggle"
-        :aria-pressed="!motionOn"
-        @click="toggleMotion"
-      >
-        {{ motionOn ? "Pausar animaciones" : "Reanudar animaciones" }}
-      </button>
-      <RouterLink to="/estilos" class="footer-link">Estilos</RouterLink>
-      <button class="visits-tag" @click="showStats = true">
-        <span
-          class="status-dot"
-          :class="{ muted: statsState !== 'ready' }"
-        ></span
-        ><span v-if="statsState === 'ready'"
-          ><b>{{ stats.unique_visitors.toLocaleString("es-MX") }}</b> visitas
-          únicas</span
-        ><span v-else>{{
-          statsState === "loading" ? "Conectando…" : "Contador no disponible"
-        }}</span>
-      </button>
+      <div class="footer-main">
+        <RouterLink to="/" class="footer-brand" aria-label="Cuenca Cimarrona, inicio"
+          ><img src="/brand/cuenca/icono-96.webp" alt="" width="56" height="56" /><span
+            class="wordmark"
+            aria-hidden="true"
+            >Cuenca<br />Cimarrona</span
+          ></RouterLink
+        >
+        <img
+          class="footer-uabc"
+          src="/assets/images/logo_uabc-80.webp"
+          alt="Escudo UABC"
+          width="40"
+          height="52"
+        />
+        <span class="footer-copy">© 2026 · Proyecto académico UABC</span>
+        <nav class="social-links" aria-label="Redes sociales">
+          <a
+            v-for="social in socials"
+            :key="social.label"
+            :href="social.href"
+            target="_blank"
+            rel="noopener noreferrer"
+            :aria-label="social.label"
+            :title="social.label"
+            ><svg viewBox="0 0 24 24" aria-hidden="true" v-html="social.icon"
+          /></a>
+        </nav>
+      </div>
+      <div class="footer-tools">
+        <button
+          class="motion-toggle"
+          :aria-pressed="!motionOn"
+          @click="toggleMotion"
+        >
+          {{ motionOn ? "Pausar animaciones" : "Reanudar animaciones" }}
+        </button>
+        <RouterLink to="/estilos" class="footer-link">Estilos</RouterLink>
+        <button class="visits-tag" @click="showStats = true">
+          <span
+            class="status-dot"
+            :class="{ muted: statsState !== 'ready' }"
+          ></span
+          ><span v-if="statsState === 'ready'"
+            ><b>{{ stats.unique_visitors.toLocaleString("es-MX") }}</b> visitas
+            únicas</span
+          ><span v-else>{{
+            statsState === "loading" ? "Conectando…" : "Contador no disponible"
+          }}</span>
+        </button>
+      </div>
     </footer>
   </div>
+  <RouterLink v-if="showPlayButton" to="/juegos" class="play-fab cta"
+    ><span class="play-fab-icon" aria-hidden="true"
+      ><Icon name="gamepad" :size="30" /></span
+    ><span class="play-fab-text"
+      ><strong>Aprende jugando</strong></span
+    ></RouterLink
+  >
   <Modal :open="showStats" title="Visitas al sitio" @close="showStats = false">
     <div v-if="statsState === 'ready'" class="metrics">
       <div>
