@@ -4968,6 +4968,10 @@ a.game-card:active,
   .section-head.has-mascot .mascot {
     --mascot-w: 110px !important;
   }
+  /* En celular el título baja a su propia fila para que el globo no lo tape */
+  .section-head.has-mascot .section-head-text {
+    flex-basis: 100%;
+  }
   .page-heading::after {
     width: 140px;
     bottom: -26px;
