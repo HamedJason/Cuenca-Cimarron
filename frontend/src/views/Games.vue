@@ -182,7 +182,18 @@ watch(
                 <Icon :name="m.icon" :size="18" /> {{ m.text }}
               </li>
             </ul>
+            <a
+              v-if="game.href"
+              :href="game.href"
+              target="_blank"
+              rel="noopener"
+              class="button primary gm-play cta"
+            >
+              <Icon name="gamepad" :size="22" /> Jugar ahora
+              <span class="visually-hidden">(se abre en otra pestaña)</span>
+            </a>
             <button
+              v-else
               class="button primary gm-play cta"
               type="button"
               aria-controls="detalle-juego"

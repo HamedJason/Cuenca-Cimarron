@@ -298,6 +298,23 @@ export const games = [
     ],
     stepIcons: ["backpack", "check", "heart"],
   },
+  {
+    // Juego en línea hecho por otro equipo: la tarjeta lleva directo a jugarlo
+    id: "cien-estudiantes",
+    icon: "bell",
+    meta: [
+      { icon: "check", text: "6 preguntas" },
+      { icon: "people", text: "Top 10 en vivo" },
+    ],
+    title: "100 estudiantes dijeron",
+    tag: "Concurso en línea",
+    tone: "blue",
+    image: "/assets/images/game-cien-estudiantes.svg",
+    alt: "Tablero de concurso bajo la lluvia con casitas en los cerros",
+    short: "Adivina qué colonias de Tijuana sufren más con las lluvias",
+    text: "Adivina qué colonias de Tijuana tienen más problemas con las lluvias, según reportes reales, y entra al Top 10",
+    href: "https://cien-estudiantes-dijeron-production.up.railway.app/embed",
+  },
 ];
 
 // Consejos para antes, durante y después de la lluvia

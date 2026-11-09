@@ -1,6 +1,7 @@
 <script setup>
 import Icon from "../components/Icon.vue";
 import { ref, computed } from "vue";
+import { RouterLink } from "vue-router";
 import Modal from "../components/Modal.vue";
 import MascotGuide from "../components/MascotGuide.vue";
 import { emergency, games, advice } from "../data";
@@ -211,10 +212,15 @@ const mapHref = (shelter) =>
           >
         </div>
         <div class="game-grid">
-          <RouterLink
+          <component
+            :is="game.href ? 'a' : RouterLink"
             v-for="game in games"
             :key="game.id"
-            :to="{ path: '/juegos', query: { juego: game.id } }"
+            v-bind="
+              game.href
+                ? { href: game.href, target: '_blank', rel: 'noopener' }
+                : { to: { path: '/juegos', query: { juego: game.id } } }
+            "
             :class="['game-card', 'cc-watermark', `tone-${game.tone}`]"
             ><span class="game-card-art"
               ><img
@@ -227,7 +233,7 @@ const mapHref = (shelter) =>
               ><span class="game-tag">{{ game.tag }}</span
               ><strong>{{ game.title }}</strong
               ><span>{{ game.short }}</span></span
-            ></RouterLink
+            ></component
           >
         </div>
       </section>
