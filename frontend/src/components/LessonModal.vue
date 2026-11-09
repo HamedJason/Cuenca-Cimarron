@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import Icon from "./Icon.vue";
 import Modal from "./Modal.vue";
 import PacificLab from "./PacificLab.vue";
@@ -28,19 +28,30 @@ const groupCount = (group) =>
 const kitComplete = computed(() => kitDone.value.length === kitIds.length);
 
 const lesson = activeLesson;
-const scroller = (el) => el?.closest("dialog")?.scrollTo?.({ top: 0 });
-function goTo(id, event) {
+// Cada tema empieza desde arriba: la ventana se regresa al inicio al cerrarla
+// y al saltar de un tema a otro (cerrada ya no se puede mover).
+const modal = ref(null);
+const toTop = () => {
+  const dialog = modal.value?.$el;
+  if (dialog) dialog.scrollTop = 0;
+};
+function close() {
+  toTop();
+  closeLesson();
+}
+function goTo(id) {
   openLesson(id);
-  scroller(event.currentTarget);
+  toTop();
 }
 </script>
 <template>
   <Modal
+    ref="modal"
     :open="!!lesson"
     :title="lesson?.title"
     wide
     :class="['lesson-modal', lesson && `tone-${lesson.tone}`]"
-    @close="closeLesson"
+    @close="close"
   >
     <template v-if="lesson">
       <div class="lesson-top">

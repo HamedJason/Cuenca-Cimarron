@@ -19,6 +19,17 @@ function openFromQuery(tema) {
 onMounted(() => openFromQuery(route.query.tema));
 watch(() => route.query.tema, openFromQuery);
 const telHref = (number) => `tel:${number.replace(/\s/g, "")}`;
+// Servicios y enlaces que tenía el directorio de la página anterior
+const services = [
+  { name: "Fallas y atención CFE", number: "071", icon: "flashlight", theme: "cfe" },
+  { name: "CESPT, agua y drenaje", number: "073", icon: "drop", theme: "water" },
+];
+const officialLinks = [
+  { label: "Directorio oficial del Ayuntamiento", href: "https://www.tijuana.gob.mx/emergencias/" },
+  { label: "Seguridad Pública y denuncia anónima", href: "https://policia.tijuana.gob.mx/contacto.aspx" },
+  { label: "Protección Civil Tijuana", href: "https://proteccioncivil.tijuana.gob.mx/" },
+  { label: "Bomberos Tijuana", href: "https://bomberos.tijuana.gob.mx/" },
+];
 </script>
 <template>
   <div class="page info-page">
@@ -155,6 +166,33 @@ const telHref = (number) => `tel:${number.replace(/\s/g, "")}`;
             >{{ number }}</a
           >
         </div>
+        <div
+          v-for="item in services"
+          :key="item.number"
+          :class="['phone-card', `theme-${item.theme}`]"
+        >
+          <span class="phone-icon" aria-hidden="true"
+            ><Icon :name="item.icon" :size="26"
+          /></span>
+          <p class="phone-name">{{ item.name }}</p>
+          <a
+            :href="telHref(item.number)"
+            class="cta"
+            :aria-label="`Llamar al ${item.number}, ${item.name}`"
+            >{{ item.number }}</a
+          >
+        </div>
+      </div>
+      <div class="official-links">
+        <a
+          v-for="link in officialLinks"
+          :key="link.href"
+          class="button secondary"
+          :href="link.href"
+          target="_blank"
+          rel="noopener"
+          ><Icon name="external" :size="18" /> {{ link.label }}</a
+        >
       </div>
     </section>
   </div>

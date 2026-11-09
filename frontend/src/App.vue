@@ -43,7 +43,11 @@ const socials = [
 // El encabezado se compacta y marca su borde al bajar por la página.
 const scrolled = ref(false);
 const onScroll = () => {
-  scrolled.value = window.scrollY > 8;
+  // Con margen: al compactarse el encabezado la página se recorre unos píxeles,
+  // y con un solo límite eso lo hacía alternar (vibrar) cerca del inicio.
+  const y = window.scrollY;
+  if (!scrolled.value && y > 48) scrolled.value = true;
+  else if (scrolled.value && y < 8) scrolled.value = false;
 };
 onMounted(() => {
   loadStats();

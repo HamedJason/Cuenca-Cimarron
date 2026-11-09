@@ -307,14 +307,14 @@ const mapHref = (shelter) =>
               Pon a prueba lo que sabes de El Niño, tu colonia y tu mochila de emergencia
             </p>
           </div>
-          <RouterLink to="/juegos" class="button secondary"
+          <RouterLink to="/juegos" class="button secondary games-more-top"
             >Ver todos los juegos</RouterLink
           >
         </div>
         <div class="game-grid">
           <component
             :is="game.href ? 'a' : RouterLink"
-            v-for="game in games"
+            v-for="game in games.slice(0, 3)"
             :key="game.id"
             v-bind="
               game.href
@@ -336,6 +336,10 @@ const mapHref = (shelter) =>
             ></component
           >
         </div>
+        <!-- En celular el botón va abajo de las tarjetas -->
+        <RouterLink to="/juegos" class="button secondary games-more-bottom"
+          >Ver todos los juegos</RouterLink
+        >
       </section>
 
       <section aria-labelledby="titulo-prepara">

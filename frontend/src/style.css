@@ -5560,7 +5560,41 @@ a.game-card:active,
   flex-wrap: wrap;
   gap: 12px;
 }
-/* Cuatro números: dos y dos, y en pantalla grande los cuatro en fila */
+/* Inicio: tres juegos; "Ver todos los juegos" junto al título en computadora
+   y abajo, centrado, en celular */
+.games-more-bottom {
+  display: none;
+}
+@media (max-width: 760px) {
+  .games-more-top {
+    display: none;
+  }
+  .games-more-bottom {
+    display: flex;
+    width: fit-content;
+    margin: 24px auto 0;
+  }
+}
+/* Directorio de Información: números y enlaces oficiales */
+.theme-cfe {
+  background: var(--gold-tint);
+  --card-ink: var(--gold-text);
+  --card-ink-strong: #6b4500;
+  --card-edge: #6b4500;
+}
+.theme-water {
+  background: #e6f6f8;
+  --card-ink: #0b6577;
+  --card-ink-strong: #084a57;
+  --card-edge: #084a57;
+}
+.official-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+/* Seis números: tres y tres en computadora, dos y dos en tableta */
 @media (min-width: 640px) {
   .info-phones {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -5568,7 +5602,7 @@ a.game-card:active,
 }
 @media (min-width: 1000px) {
   .info-phones {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 .theme-911 {
