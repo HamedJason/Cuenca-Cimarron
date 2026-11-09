@@ -50,7 +50,6 @@ const officialLinks = [
           width="960"
           height="540"
         />
-        <MascotGuide class="info-hero-mascot" :size="150" eager />
       </div>
     </header>
 

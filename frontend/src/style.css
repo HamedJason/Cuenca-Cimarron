@@ -4108,8 +4108,21 @@ a.game-card:active,
 .gm-token-2 > path {
   fill: #eaf2ff;
 }
-.gm-token-3 > path {
+.gm-token-3 > path,
+.gm-token-4 > path {
   fill: var(--green-tint);
+}
+.gm-token-5 > path {
+  fill: #eaf2ff;
+}
+.gm-token-5 .gm-token-icon {
+  stroke: #0b4fa8;
+}
+.gm-token-4 {
+  animation-delay: -0.6s;
+}
+.gm-token-5 {
+  animation-delay: -1.8s;
 }
 .gm-token-icon {
   fill: none;

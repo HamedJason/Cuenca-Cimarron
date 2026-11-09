@@ -58,7 +58,19 @@ import { games } from "../data";
             <path d="M20 0C9 0 0 9 0 20c0 15 20 36 20 36s20-21 20-36C40 9 31 0 20 0Z" />
             <circle cx="20" cy="20" r="8" />
           </g>
-          <!-- Fichas hexagonales: una por juego (cronómetro, concurso y mochila) -->
+          <!-- Fichas hexagonales: una por juego (mapa, novela, cronómetro, concurso y mochila) -->
+          <g class="gm-token gm-token-4" transform="translate(326 92)">
+            <path d="M22 0 44 13v25L22 51 0 38V13Z" />
+            <svg x="10" y="13" width="24" height="24" viewBox="0 0 24 24" class="gm-token-icon">
+              <path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2ZM9 3v16m6-14v16" />
+            </svg>
+          </g>
+          <g class="gm-token gm-token-5" transform="translate(44 40)">
+            <path d="M22 0 44 13v25L22 51 0 38V13Z" />
+            <svg x="10" y="13" width="24" height="24" viewBox="0 0 24 24" class="gm-token-icon">
+              <path d="M12 5C8 2 3 3 3 3v16s5-1 9 2c4-3 9-2 9-2V3s-5-1-9 2Zm0 0v16" />
+            </svg>
+          </g>
           <g class="gm-token gm-token-1" transform="translate(250 40)">
             <path d="M26 0 52 15v30L26 60 0 45V15Z" />
             <svg x="12" y="16" width="28" height="28" viewBox="0 0 24 24" class="gm-token-icon">
