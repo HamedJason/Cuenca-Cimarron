@@ -10,6 +10,8 @@ Para el servidor no se usan los comandos de "Ejecutar el proyecto completo". Cad
 git clone https://github.com/HamedJason/Cuenca-Cimarron.git && sh Cuenca-Cimarron/instalar.sh
 ```
 
+El sitio queda en el puerto 8090. Para usar otro, se agrega al final, por ejemplo `sh Cuenca-Cimarron/instalar.sh 8080`. También sirve para cambiar el puerto después, volviendo a correr el script dentro de la carpeta.
+
 El detalle, los ajustes opcionales y cómo regresar a una versión anterior están en `docs/servidor.md`.
 
 ## Integración de interfaces

@@ -18,6 +18,8 @@ La forma corta es un solo comando, que descarga el repositorio, crea el `.env` c
 git clone https://github.com/HamedJason/Cuenca-Cimarron.git && sh Cuenca-Cimarron/instalar.sh
 ```
 
+Por defecto usa el puerto 8090. Para otro puerto se pone como argumento, por ejemplo `sh Cuenca-Cimarron/instalar.sh 8080`.
+
 Si se prefiere hacerlo a mano, estos son los mismos pasos que hace `instalar.sh`:
 
 1. Crear una carpeta y copiar ahí el archivo `compose.servidor.yaml` del repositorio.
