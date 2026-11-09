@@ -9,6 +9,8 @@ use Illuminate\Validation\Rule;
 
 class GameSessionController extends Controller
 {
+    // Registra una entrada al juego. Cuenta una por navegador y sesión,
+    // así recargar o volver a tocar el botón no infla la cifra.
     public function store(Request $request): JsonResponse
     {
         $data = $request->validate([
@@ -26,6 +28,25 @@ class GameSessionController extends Controller
             ]);
         });
 
-        return response()->json(['recorded' => true], $created ? 201 : 200);
+        return response()->json([
+            'recorded' => true,
+            'game' => $data['game'],
+            'plays' => DB::table('game_sessions')->where('game', $data['game'])->count(),
+        ], $created ? 201 : 200);
+    }
+
+    // Entradas de cada juego, para el ojito de las tarjetas.
+    public function stats(): JsonResponse
+    {
+        $counts = DB::table('game_sessions')
+            ->select('game', DB::raw('count(*) as plays'))
+            ->groupBy('game')
+            ->pluck('plays', 'game');
+        $plays = [];
+        foreach (config('games.enabled', []) as $game) {
+            $plays[$game] = (int) ($counts[$game] ?? 0);
+        }
+
+        return response()->json(['plays' => $plays])->header('Cache-Control', 'no-store');
     }
 }

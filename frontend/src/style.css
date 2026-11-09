@@ -5573,6 +5573,49 @@ a.game-card:active,
   flex-wrap: wrap;
   gap: 12px;
 }
+/* Etiqueta del juego y, a su derecha, la burbuja con el ojo y las entradas */
+.game-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.game-tag-row .game-tag {
+  align-self: auto;
+}
+.game-views {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px 3px 8px;
+  border: 2px solid var(--tone-strong);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--tone-ink);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+.game-views svg {
+  animation: views-blink 5s ease-in-out infinite;
+  transform-origin: 50% 50%;
+}
+@keyframes views-blink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.15);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .game-views svg {
+    animation: none;
+  }
+}
 /* Inicio: tres juegos; "Ver todos los juegos" junto al título en computadora
    y abajo, centrado, en celular */
 .games-more-bottom {

@@ -1,6 +1,12 @@
 <?php
 
 return [
-    // Add a stable slug here only when its game is implemented.
-    'enabled' => [],
+    // Slugs de los juegos que cuentan entradas (los mismos ids de frontend/src/data.js).
+    'enabled' => [
+        'mision-tijuana',
+        'novela-visual',
+        'cinco-segundos',
+        'cien-estudiantes',
+        'mochila',
+    ],
 ];

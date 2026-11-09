@@ -37,14 +37,27 @@ class CommunityTest extends TestCase
         $this->assertDatabaseCount('visitors', 0);
     }
 
-    public function test_juegos_futuros_tienen_lista_permitida_y_sesiones_idempotentes(): void
+    public function test_juegos_tienen_lista_permitida_y_sesiones_idempotentes(): void
     {
-        $data = ['visitor_id' => (string) Str::uuid(), 'session_id' => (string) Str::uuid(), 'game' => 'mochila'];
+        $data = ['visitor_id' => (string) Str::uuid(), 'session_id' => (string) Str::uuid(), 'game' => 'inventado'];
         $this->postJson('/api/game-sessions', $data)->assertUnprocessable();
-        config(['games.enabled' => ['mochila']]);
-        $this->postJson('/api/game-sessions', $data)->assertCreated();
-        $this->postJson('/api/game-sessions', $data)->assertOk();
+        $data['game'] = 'mochila';
+        $this->postJson('/api/game-sessions', $data)->assertCreated()->assertJson(['plays' => 1]);
+        $this->postJson('/api/game-sessions', $data)->assertOk()->assertJson(['plays' => 1]);
         $this->assertDatabaseCount('game_sessions', 1);
         $this->assertDatabaseCount('visits', 0);
+    }
+
+    public function test_cuenta_entradas_por_juego(): void
+    {
+        foreach (['mochila', 'mochila', 'mision-tijuana'] as $game) {
+            $this->postJson('/api/game-sessions', [
+                'visitor_id' => (string) Str::uuid(), 'session_id' => (string) Str::uuid(), 'game' => $game,
+            ])->assertCreated();
+        }
+        $this->getJson('/api/game-sessions')->assertOk()
+            ->assertJsonPath('plays.mochila', 2)
+            ->assertJsonPath('plays.mision-tijuana', 1)
+            ->assertJsonPath('plays.cinco-segundos', 0);
     }
 }

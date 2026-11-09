@@ -7,6 +7,9 @@ import MascotGuide from "../components/MascotGuide.vue";
 import { emergency, games, advice } from "../data";
 import { rand } from "../composables/useCanvasScene";
 import { openLesson } from "../composables/useLesson";
+import { useGamePlays } from "../composables/useGamePlays";
+const { plays, loadPlays, registerPlay } = useGamePlays();
+loadPlays();
 import { useVisits } from "../composables/useVisits";
 // Contador del propósito: sube de 0 a la cifra real una sola vez.
 // App.vue registra la visita; aquí solo se lee la cifra.
@@ -322,6 +325,7 @@ const mapHref = (shelter) =>
                 : { to: { path: '/juegos', query: { juego: game.id } } }
             "
             :class="['game-card', 'cc-watermark', `tone-${game.tone}`]"
+            @click="game.href && registerPlay(game.id)"
             ><span class="game-card-art"
               ><img
                 :src="game.image"
@@ -330,7 +334,17 @@ const mapHref = (shelter) =>
                 height="270"
                 loading="lazy" /></span
             ><span class="game-card-body"
-              ><span class="game-tag">{{ game.tag }}</span
+              ><span class="game-tag-row"
+                ><span class="game-tag">{{ game.tag }}</span
+                ><span
+                  v-if="Number.isInteger(plays[game.id])"
+                  class="game-views"
+                  ><Icon name="eye" :size="16" />
+                  <span aria-hidden="true">{{ plays[game.id].toLocaleString("es-MX") }}</span
+                  ><span class="visually-hidden"
+                    >{{ plays[game.id] }} entradas</span
+                  ></span
+                ></span
               ><strong>{{ game.title }}</strong
               ><span>{{ game.short }}</span></span
             ></component

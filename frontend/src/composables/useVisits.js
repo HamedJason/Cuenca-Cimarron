@@ -9,19 +9,25 @@ let pending = null;
 const uuidPattern =
   /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
+// Identificadores al azar del navegador y de la sesión (también los usa el contador de juegos).
+export function browserIds() {
+  let visitor = localStorage.getItem("cuenca.visitor");
+  let session = sessionStorage.getItem("cuenca.session");
+  if (!visitor || !uuidPattern.test(visitor)) {
+    visitor = crypto.randomUUID();
+    localStorage.setItem("cuenca.visitor", visitor);
+  }
+  if (!session || !uuidPattern.test(session)) {
+    session = crypto.randomUUID();
+    sessionStorage.setItem("cuenca.session", session);
+  }
+  return { visitor, session };
+}
+
 async function request() {
   statsState.value = "loading";
   try {
-    let visitor = localStorage.getItem("cuenca.visitor");
-    let session = sessionStorage.getItem("cuenca.session");
-    if (!visitor || !uuidPattern.test(visitor)) {
-      visitor = crypto.randomUUID();
-      localStorage.setItem("cuenca.visitor", visitor);
-    }
-    if (!session || !uuidPattern.test(session)) {
-      session = crypto.randomUUID();
-      sessionStorage.setItem("cuenca.session", session);
-    }
+    const { visitor, session } = browserIds();
     const response = await fetch("/api/visits", {
       method: "POST",
       headers: {

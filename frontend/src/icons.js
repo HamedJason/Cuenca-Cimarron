@@ -48,6 +48,7 @@ export const icons = {
   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 1v2m0 18v2M1 12h2m18 0h2M4 4l2 2m12 12 2 2M4 20l2-2M18 6l2-2"/>',
   shield: '<path d="m12 2 9 4v6c0 6-9 10-9 10S3 18 3 12V6Zm-5 10 3 3 7-7"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
   car: '<path d="M3 14h18l-1.5-5h-15ZM5 14v4m14-4v4M7 18h10M7 9l1-3h8l1 3"/><circle cx="7" cy="15.5" r=".8"/><circle cx="17" cy="15.5" r=".8"/>',
   hygiene: '<path d="M9 4h6m-5 0v4l-3 3v8h10v-8l-3-3V4"/><path d="M8 13h8"/>',
   book: '<path d="M12 5C8 2 3 3 3 3v16s5-1 9 2c4-3 9-2 9-2V3s-5-1-9 2Zm0 0v16"/>',

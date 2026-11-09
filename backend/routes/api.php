@@ -7,5 +7,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('throttle:60,1')->group(function (): void {
     Route::get('/stats', [VisitController::class, 'stats']);
     Route::post('/visits', [VisitController::class, 'store']);
+    Route::get('/game-sessions', [GameSessionController::class, 'stats']);
     Route::post('/game-sessions', [GameSessionController::class, 'store']);
 });

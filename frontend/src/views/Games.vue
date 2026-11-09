@@ -2,6 +2,10 @@
 import Icon from "../components/Icon.vue";
 import MascotGuide from "../components/MascotGuide.vue";
 import { games } from "../data";
+import { useGamePlays } from "../composables/useGamePlays";
+const { plays, loadPlays, registerPlay } = useGamePlays();
+loadPlays();
+const playsLabel = (n) => `${n.toLocaleString("es-MX")} ${n === 1 ? "entrada" : "entradas"}`;
 </script>
 <template>
   <div class="page games-page">
@@ -124,9 +128,19 @@ import { games } from "../data";
             /></span>
           </div>
           <div class="gm-body">
-            <span class="game-tag"
-              ><Icon :name="game.icon" :size="16" /> {{ game.tag }}</span
-            >
+            <div class="game-tag-row">
+              <span class="game-tag"
+                ><Icon :name="game.icon" :size="16" /> {{ game.tag }}</span
+              >
+              <span
+                v-if="Number.isInteger(plays[game.id])"
+                class="game-views"
+                :title="playsLabel(plays[game.id])"
+                ><Icon name="eye" :size="16" />
+                <span aria-hidden="true">{{ plays[game.id].toLocaleString("es-MX") }}</span
+                ><span class="visually-hidden">{{ playsLabel(plays[game.id]) }}</span></span
+              >
+            </div>
             <h3>{{ game.title }}</h3>
             <p>{{ game.text }}</p>
             <ul class="gm-meta">
@@ -139,6 +153,7 @@ import { games } from "../data";
               target="_blank"
               rel="noopener"
               class="button primary gm-play cta"
+              @click="registerPlay(game.id)"
             >
               <Icon name="gamepad" :size="22" /> Jugar ahora
               <span class="visually-hidden">(se abre en otra pestaña)</span>
