@@ -1,63 +1,7 @@
 <script setup>
-import { ref, watch, nextTick } from "vue";
-import { useRoute, useRouter } from "vue-router";
 import Icon from "../components/Icon.vue";
 import MascotGuide from "../components/MascotGuide.vue";
 import { games } from "../data";
-
-const route = useRoute();
-const router = useRouter();
-const selected = ref(null);
-const panel = ref(null);
-const panelTitle = ref(null);
-
-const reduceMotion = () =>
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-  document.documentElement.classList.contains("motion-off");
-
-// Lleva a las instrucciones y pone el foco en su título (también para lector de pantalla).
-function goToPanel() {
-  nextTick(() => {
-    panel.value?.scrollIntoView({
-      behavior: reduceMotion() ? "auto" : "smooth",
-      block: "start",
-    });
-    panelTitle.value?.focus({ preventScroll: true });
-  });
-}
-
-function pick(id) {
-  const same = selected.value?.id === id;
-  selected.value = same ? null : games.find((g) => g.id === id) || null;
-  router.replace({ query: selected.value ? { juego: selected.value.id } : {} });
-  if (selected.value) goToPanel();
-}
-
-// Cierra las instrucciones y regresa a las tarjetas.
-function backToList() {
-  selected.value = null;
-  router.replace({ query: {} });
-  nextTick(() =>
-    document.getElementById("titulo-dinamicas")?.scrollIntoView({
-      behavior: reduceMotion() ? "auto" : "smooth",
-      block: "start",
-    }),
-  );
-}
-
-// Si se llega desde una tarjeta del inicio, se abre esa dinámica.
-watch(
-  () => route.query.juego,
-  (id) => {
-    if (id && selected.value?.id !== id) {
-      // Los juegos con enlace no tienen panel de pasos
-      selected.value = games.find((g) => g.id === id && !g.href) || null;
-      // Espera a que el router termine su propio scroll al inicio de la página.
-      if (selected.value) setTimeout(goToPanel, 150);
-    }
-  },
-  { immediate: true },
-);
 </script>
 <template>
   <div class="page games-page">
@@ -69,13 +13,12 @@ watch(
         <h1>Juegos y dinámicas</h1>
         <p>Practica con tu familia o tu grupo cómo actuar ante una tormenta</p>
         <ul class="gm-chips">
-          <li><Icon name="game" :size="18" /> {{ games.length }} dinámicas</li>
+          <li><Icon name="game" :size="18" /> {{ games.length }} juegos</li>
           <li><Icon name="people" :size="18" /> En familia o en grupo</li>
         </ul>
       </div>
 
       <div class="gm-scene-wrap">
-      <!-- La ruta segura se dibuja bajo la lluvia: de eso trata el primer juego -->
         <svg
           class="gm-scene"
           viewBox="0 0 520 300"
@@ -115,17 +58,18 @@ watch(
             <path d="M20 0C9 0 0 9 0 20c0 15 20 36 20 36s20-21 20-36C40 9 31 0 20 0Z" />
             <circle cx="20" cy="20" r="8" />
           </g>
-          <!-- Fichas hexagonales: una por juego -->
+          <!-- Fichas hexagonales: una por juego (cronómetro, concurso y mochila) -->
           <g class="gm-token gm-token-1" transform="translate(250 40)">
             <path d="M26 0 52 15v30L26 60 0 45V15Z" />
             <svg x="12" y="16" width="28" height="28" viewBox="0 0 24 24" class="gm-token-icon">
-              <path d="M5 19V7a3 3 0 1 1 6 0v10a3 3 0 0 0 6 0V5m-3 3 3-3 3 3" />
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 7v5l3 2" />
             </svg>
           </g>
           <g class="gm-token gm-token-2" transform="translate(150 96)">
             <path d="M22 0 44 13v25L22 51 0 38V13Z" />
             <svg x="10" y="13" width="24" height="24" viewBox="0 0 24 24" class="gm-token-icon">
-              <path d="M12 3v18M12 5h7l2.5 2.5L19 10h-7M12 12H5l-2.5 2.5L5 17h7" />
+              <path d="M4 17h16l-2-4V8a6 6 0 0 0-12 0v5ZM9 21h6" />
             </svg>
           </g>
           <g class="gm-token gm-token-3" transform="translate(440 150)">
@@ -144,19 +88,14 @@ watch(
       <span class="cc-silhouette gm-bg-sil gm-bg-sil-1" aria-hidden="true"></span>
       <span class="cc-silhouette gm-bg-sil gm-bg-sil-2" aria-hidden="true"></span>
       <div class="gm-section-head">
-        <h2 id="titulo-dinamicas" class="section-title">Elige una dinámica</h2>
-        <p class="section-lead">Toca "Cómo se juega" para ver los pasos</p>
+        <h2 id="titulo-dinamicas" class="section-title">Elige un juego</h2>
+        <p class="section-lead">Cada juego se abre en otra pestaña</p>
       </div>
       <div class="gm-grid">
         <article
           v-for="(game, i) in games"
           :key="game.id"
-          :class="[
-            'gm-card',
-            'cc-watermark',
-            `tone-${game.tone}`,
-            { selected: selected?.id === game.id },
-          ]"
+          :class="['gm-card', 'cc-watermark', `tone-${game.tone}`]"
           :style="{ '--i': i }"
         >
           <div class="gm-art">
@@ -184,7 +123,6 @@ watch(
               </li>
             </ul>
             <a
-              v-if="game.href"
               :href="game.href"
               target="_blank"
               rel="noopener"
@@ -193,63 +131,9 @@ watch(
               <Icon name="gamepad" :size="22" /> Jugar ahora
               <span class="visually-hidden">(se abre en otra pestaña)</span>
             </a>
-            <button
-              v-else
-              class="button primary gm-play cta"
-              type="button"
-              aria-controls="detalle-juego"
-              :aria-expanded="selected?.id === game.id"
-              @click="pick(game.id)"
-            >
-              <Icon :name="selected?.id === game.id ? 'close' : 'gamepad'" :size="22" />
-              {{ selected?.id === game.id ? "Ocultar pasos" : "Cómo se juega" }}
-            </button>
           </div>
         </article>
       </div>
-
-      <Transition name="gm-panel">
-        <aside
-          v-if="selected"
-          id="detalle-juego"
-          ref="panel"
-          :key="selected.id"
-          :class="['gm-detail', `tone-${selected.tone}`]"
-          aria-labelledby="titulo-detalle"
-        >
-          <div class="gm-detail-head">
-            <span class="gm-detail-icon" aria-hidden="true"
-              ><Icon :name="selected.icon" :size="34"
-            /></span>
-            <div>
-              <span class="label">Cómo participar</span>
-              <h2 id="titulo-detalle" ref="panelTitle" tabindex="-1">
-                {{ selected.title }}
-              </h2>
-              <p>{{ selected.text }}</p>
-            </div>
-          </div>
-          <div class="gm-detail-body">
-          <MascotGuide class="gm-detail-mascot" :size="150" bubble="¡Así se juega!" eager />
-          <ol class="gm-steps">
-            <li
-              v-for="(step, n) in selected.steps"
-              :key="step"
-              :style="{ '--n': n }"
-            >
-              <span class="gm-step-num" aria-hidden="true">{{ n + 1 }}</span>
-              <span class="gm-step-icon" aria-hidden="true"
-                ><Icon :name="selected.stepIcons[n]" :size="24"
-              /></span>
-              <span>{{ step }}</span>
-            </li>
-          </ol>
-          </div>
-          <button class="text-link gm-back" type="button" @click="backToList">
-            <Icon name="arrow" :size="18" class="flip-x" /> Ver las otras dinámicas
-          </button>
-        </aside>
-      </Transition>
     </section>
   </div>
 </template>

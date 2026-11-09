@@ -236,63 +236,24 @@ export const emergency = {
   riskAtlasPdf: "https://proteccioncivil.tijuana.gob.mx/pdf/amrt/AMRT2024.pdf",
 };
 
-// Dinámicas de juego (vienen de la rama hambu, ya en tú y sin cifras inventadas)
+// Juegos: cada tarjeta abre el juego, hecho por el equipo o por otros equipos
 export const games = [
   {
-    id: "rally",
-    icon: "route",
+    // Genially de otro equipo
+    id: "cinco-segundos",
+    icon: "clock",
     meta: [
-      { icon: "people", text: "Equipos de 2 a 5" },
-      { icon: "check", text: "3 pasos" },
+      { icon: "clock", text: "5 segundos" },
+      { icon: "cloud", text: "Lluvia y sequía" },
     ],
-    title: "Escape de la tormenta",
-    tag: "Rally en equipos",
+    title: "5 segundos: Alerta El Niño",
+    tag: "Preguntas rápidas",
     tone: "gold",
-    image: "/assets/images/game-rally.webp",
-    alt: "Ruta ilustrada durante una tormenta",
-    short: "Encuentra la ruta segura antes de que suba el agua",
-    text: "Recorre estaciones, resuelve retos breves y elige decisiones que te mantengan a salvo durante una lluvia intensa",
-    steps: [
-      "Forma un equipo de 2 a 5 personas",
-      "Completa las estaciones y reúne las pistas",
-      "Compara la ruta que eligieron y explica por qué es segura",
-    ],
-    stepIcons: ["people", "map", "shield"],
-  },
-  {
-    id: "decisiones",
-    icon: "signpost",
-    meta: [{ icon: "check", text: "3 pasos" }],
-    title: "Cada decisión cuenta",
-    tag: "Decisiones",
-    tone: "blue",
-    image: "/assets/images/game-decisions.webp",
-    alt: "Caminos ilustrados que representan decisiones",
-    short: "Elige qué hacer y mira cómo cambia el camino",
-    text: "Elige qué hacer ante una situación de lluvia y mira cómo cada decisión cambia el recorrido",
-    steps: [
-      "Lee la situación inicial",
-      "Elige una de las opciones",
-      "Revisa qué pasó y aprende de tu decisión",
-    ],
-    stepIcons: ["book", "signpost", "spark"],
-  },
-  {
-    // El juego vive en public/juegos/reto-60-segundos y se abre aparte
-    id: "mochila",
-    icon: "backpack",
-    meta: [
-      { icon: "clock", text: "60 segundos" },
-      { icon: "backpack", text: "Hasta 12 kg" },
-    ],
-    title: "Arma tu mochila",
-    tag: "Reto de 60 segundos",
-    tone: "green",
-    image: "/assets/images/game-backpack.webp",
-    alt: "Mochila ilustrada con artículos de emergencia",
-    short: "¿Qué cosas sí van en la mochila? Tienes 60 segundos",
-    text: "Busca por la casa lo que necesitas para evacuar antes de que se acabe el tiempo, y luego compara con una mochila ya lista",
-    href: "/juegos/reto-60-segundos/index.html",
+    image: "/assets/images/game-cinco-segundos.webp",
+    alt: "Cronómetro sobre los cerros con lluvia de un lado y tierra seca del otro, y tres tarjetas con signos de pregunta",
+    short: "Demuestra cuánto sabes de los riesgos de El Niño",
+    text: "Contesta rápido y demuestra cuánto sabes de lluvias, inundaciones y sequía con El Niño",
+    href: "https://view.genially.com/6af0fd5be9a36c837522b2ad",
   },
   {
     // Juego en línea hecho por otro equipo: la tarjeta lleva directo a jugarlo
@@ -310,6 +271,23 @@ export const games = [
     short: "Adivina qué colonias de Tijuana sufren más con las lluvias",
     text: "Adivina qué colonias de Tijuana tienen más problemas con las lluvias, según reportes reales, y entra al Top 10",
     href: "https://cien-estudiantes-dijeron-production.up.railway.app/embed",
+  },
+  {
+    // El juego vive en public/juegos/reto-60-segundos y se abre aparte
+    id: "mochila",
+    icon: "backpack",
+    meta: [
+      { icon: "clock", text: "60 segundos" },
+      { icon: "backpack", text: "Hasta 12 kg" },
+    ],
+    title: "Arma tu mochila",
+    tag: "Reto de 60 segundos",
+    tone: "green",
+    image: "/assets/images/game-backpack.webp",
+    alt: "Mochila ilustrada con artículos de emergencia",
+    short: "¿Qué cosas sí van en la mochila? Tienes 60 segundos",
+    text: "Busca por la casa lo que necesitas para evacuar antes de que se acabe el tiempo, y luego compara con una mochila ya lista",
+    href: "/juegos/reto-60-segundos/index.html",
   },
 ];
 

@@ -303,7 +303,7 @@ const mapHref = (shelter) =>
             <span class="label">Aprende jugando</span>
             <h2 id="titulo-juegos" class="section-title">Juegos y dinámicas</h2>
             <p class="section-lead">
-              Practica rutas seguras, decisiones y tu mochila de emergencia
+              Pon a prueba lo que sabes de El Niño, tu colonia y tu mochila de emergencia
             </p>
           </div>
           <RouterLink to="/juegos" class="button secondary"
