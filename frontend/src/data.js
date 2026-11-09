@@ -256,6 +256,23 @@ export const games = [
     href: "/juegos/mision-tijuana/index.html",
   },
   {
+    // Versión web de Ren'Py (NOVELAVISUAL_FINAL), copiada a public/juegos/novela-visual
+    id: "novela-visual",
+    icon: "book",
+    meta: [
+      { icon: "book", text: "Novela visual" },
+      { icon: "signpost", text: "Tú decides" },
+    ],
+    title: "Un paso en falso: El Niño",
+    tag: "Historia interactiva",
+    tone: "blue",
+    image: "/juegos/novela-visual/game/images/FONDOS/MENU.jpg",
+    alt: "Huracán visto desde el espacio sobre el océano",
+    short: "Sales de clases con lluvia y cada decisión cambia cómo termina tu noche",
+    text: "Sales de clases en plena lluvia y tienes que llegar a casa. Elige qué hacer en la calle, con un cable caído y al llamar al 911",
+    href: "/juegos/novela-visual/index.html",
+  },
+  {
     // Genially de otro equipo
     id: "cinco-segundos",
     icon: "clock",
