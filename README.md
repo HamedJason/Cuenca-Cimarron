@@ -2,6 +2,16 @@
 
 Proyecto académico de prevención y preparación ante lluvias y El Niño en Tijuana. Se organiza con una aplicación web en Vue/Vite y una API en Laravel.
 
+## Servidor con actualización automática
+
+Para el servidor no se usan los comandos de "Ejecutar el proyecto completo". Cada cambio en `main` publica imágenes nuevas en GitHub y el servidor las toma solo con Watchtower, sin `git pull` ni compilar nada. Solo se instala una vez, con un comando:
+
+```bash
+git clone https://github.com/HamedJason/Cuenca-Cimarron.git && sh Cuenca-Cimarron/instalar.sh
+```
+
+El detalle, los ajustes opcionales y cómo regresar a una versión anterior están en `docs/servidor.md`.
+
 ## Integración de interfaces
 
 Esta versión combina elementos de la interfaz desarrollada por Hamed en [Cuenca-Cimarron](https://github.com/HamedJason/Cuenca-Cimarron) con la interfaz que trabajamos en la rama `hambu`. La integración busca mejorar la experiencia actual: mantener a la mano la información de emergencia, ordenar la navegación y reunir Juegos, Información y Consejos bajo un estilo visual consistente. También conserva los apartados de El Niño, Plan familiar y Mochila de emergencia.
@@ -48,17 +58,6 @@ docker compose up -d --build
 ```
 
 El sitio queda en `http://localhost:8090`; la API utiliza el puerto `8091`. El archivo `.env` se genera localmente y no se debe subir al repositorio.
-
-## Servidor con actualización automática
-
-Para el servidor no se usan los comandos de la sección anterior. Cada cambio en `main` publica imágenes nuevas en GitHub y el servidor las toma solo con Watchtower, sin `git pull` ni compilar nada. Solo se instala una vez, con un comando:
-
-```bash
-git clone https://github.com/HamedJason/Cuenca-Cimarron.git && sh Cuenca-Cimarron/instalar.sh
-```
-
-El detalle, los ajustes opcionales y cómo regresar a una versión anterior están en `docs/servidor.md`.
-
 ## Tecnologías
 
 - **Frontend:** Vue 3, Vue Router y Vite.
