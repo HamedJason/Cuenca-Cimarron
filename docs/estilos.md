@@ -103,7 +103,7 @@ Orden de arriba hacia abajo: propósito, 911, aviso de El Niño, números, refug
 
 Tres columnas en computadora; en celular, una debajo de otra.
 
-- **Marca y redes:** icono, nombre, escudo UABC y "Síguenos". Las redes que todavía no tienen cuenta (YouTube y TikTok) se ven con borde punteado y dicen "próximamente". Al tener la cuenta, solo se pone su enlace en `socials`, dentro de `App.vue`
+- **Marca y redes:** icono, nombre, escudo UABC y "Síguenos". Instagram, Facebook, TikTok y YouTube. Una red nueva sin enlace todavía se vería con borde punteado y "próximamente"; las redes están en `socials`, dentro de `frontend/src/data.js`
 - **Equipo de diseño:** Jason Alejandro Hamed Valdez, Fernando Onit Sibaja Gomez y Kevin Osmar Valdez Meza
 - **Contacto:** los correos del equipo, como enlaces que abren el correo
 
@@ -111,7 +111,8 @@ Tres columnas en computadora; en celular, una debajo de otra.
 
 Las redes están en `socials`, dentro de `frontend/src/data.js`. Una red sin enlace se ve como "próximamente" en el pie y no aparece en ningún otro lugar.
 
-- **Encabezado:** iconos de Instagram y Facebook a la derecha del menú, separados por una línea. En celular están dentro del menú, en una fila que dice "Síguenos"
+- **Encabezado:** iconos de Instagram, Facebook, TikTok y YouTube a la derecha del menú, separados por una línea. En celular están dentro del menú, en una fila que dice "Síguenos"
+- Para que el encabezado quepa en una sola fila con las cuatro redes: de 761 a 1100 px el menú va sin iconos, y de 761 a 910 px el encabezado muestra solo el icono del cimarrón, sin el nombre
 - **Inicio, "Síguenos en redes":** antes de "Quiénes somos". El cimarrón presenta botones grandes para cada red
 - **Videos:** se agregan en `videos`, dentro de `data.js` (YouTube o TikTok, con su número de video y título). Mientras la lista esté vacía se ve "Muy pronto, videos aquí". Cada video muestra primero una portada con botón de play y solo carga el reproductor al tocarlo: así la página no se hace lenta y YouTube (en modo sin cookies) o TikTok no rastrean a quien no lo reproduce
 - No hay botón flotante de redes: ya está "Aprende jugando" y competirían entre sí y con el 911

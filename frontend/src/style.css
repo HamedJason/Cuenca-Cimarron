@@ -5150,7 +5150,7 @@ a.game-card:active,
 
 /* ===== Tableta (761 a 1040 px) ===== */
 /* El menú cabe en una fila sin los iconos */
-@media (min-width: 761px) and (max-width: 1040px) {
+@media (min-width: 761px) and (max-width: 1100px) {
   .site-nav .nav-icon {
     display: none;
   }
@@ -6473,4 +6473,12 @@ button.prep-card {
 }
 .video-frame.is-tiktok {
   max-width: 300px;
+}
+
+/* Tableta angosta: con cuatro redes no cabe el nombre; queda el icono del cimarrón
+   (el enlace conserva "Cuenca Cimarrona, inicio" para lectores de pantalla) */
+@media (min-width: 761px) and (max-width: 910px) {
+  .site-header .brand .wordmark {
+    display: none;
+  }
 }
