@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#2c3333" />
+    <title>Después de la tormenta · Misión Tijuana</title>
+    <!-- Los estilos van en el HTML (no en el JS) para que la pantalla de carga se vea bien desde el primer momento. -->
+    <script type="module" crossorigin src="./assets/despues-CGglML1u.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/desbloqueo-C4Y22POx.js">
+    <link rel="modulepreload" crossorigin href="./assets/voxel-CAjESE0L.js">
+    <link rel="modulepreload" crossorigin href="./assets/reparto-51Sg4xnB.js">
+    <link rel="modulepreload" crossorigin href="./assets/motor-BUa69fIK.js">
+    <link rel="modulepreload" crossorigin href="./assets/piezas-oJe5CtjV.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-DK3Fl9T5.js">
+    <link rel="modulepreload" crossorigin href="./assets/ribera-del-bosque-mision-DZCCNH0C.js">
+    <link rel="stylesheet" crossorigin href="./assets/despues-BwGGhZ8U.css">
+  </head>
+  <body>
+    <h1 class="sr-only">Misión Tijuana: después de la tormenta en Ribera del Bosque</h1>
+    <div id="marcas" aria-hidden="true"></div>
+    <!-- La misma barra que las otras experiencias; los botones se conectan en src/design/barra.ts. -->
+    <header class="barra barra-experiencia">
+      <a class="brand barra-boton" href="./index.html" title="Volver al inicio" aria-label="Misión Tijuana: volver al inicio">
+        <svg class="home-ic" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <path d="M3 11 12 4l9 7M5 10v10h14V10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span class="titulo name">Misión Tijuana</span>
+      </a>
+      <p class="experiencia">Después de la tormenta · Ribera del Bosque</p>
+      <div class="tools">
+        <span id="misiones"></span>
+        <button id="movimiento" class="barra-boton icon" type="button" aria-pressed="false" title="Reducir animaciones"></button>
+        <button id="sonido" class="barra-boton icon" type="button" aria-pressed="true" title="Silenciar"></button>
+      </div>
+    </header>
+
+    <!-- Una sola línea de narración abajo, como subtítulo. -->
+    <p id="narracion" class="narracion" aria-live="polite" hidden></p>
+
+    <!-- Viñeta: acercamiento animado antes de decidir. -->
+    <div id="vineta" class="vineta" hidden>
+      <canvas></canvas>
+      <p id="vineta-texto" class="vineta-texto" aria-live="polite"></p>
+      <button id="vineta-seguir" class="btn btn-primary" type="button">Continuar</button>
+    </div>
+
+    <!-- Decisión: el juego se congela y el fondo se difumina. -->
+    <div id="decision" class="decision" role="dialog" aria-modal="true" aria-labelledby="dec-titulo" hidden></div>
+
+    <!-- Lo que pasó al elegir. -->
+    <div id="resultado" class="resultado" role="status" hidden></div>
+
+    <!-- Inicio y final. -->
+    <div id="tarjeta" class="tarjeta panel" hidden></div>
+
+    <div id="cargando" class="aviso-escena" role="status">
+      <div class="panel">
+        <h2>Cargando Ribera del Bosque</h2>
+        <p>Armando las calles y las casas reales.</p>
+        <div class="carga-barra"><i></i></div>
+      </div>
+    </div>
+  </body>
+</html>

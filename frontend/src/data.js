@@ -239,6 +239,23 @@ export const emergency = {
 // Juegos: cada tarjeta abre el juego, hecho por el equipo o por otros equipos
 export const games = [
   {
+    // Se compila en el repo Mision-Tijuana y su dist/ se copia a public/juegos/mision-tijuana
+    id: "mision-tijuana",
+    icon: "map",
+    meta: [
+      { icon: "map", text: "6 misiones" },
+      { icon: "signpost", text: "Tú decides" },
+    ],
+    title: "Misión Tijuana",
+    tag: "Recorrido en 3D",
+    tone: "green",
+    image: "/juegos/mision-tijuana/miniaturas/el-tecolote.webp",
+    alt: "Maqueta en 3D de una colonia de Tijuana en ladera, con calles, casas y un arroyo",
+    short: "Recorre tu colonia en 3D y decide qué hacer cuando llega la tormenta",
+    text: "Recorre en 3D colonias reales de Tijuana, mira cómo llega la tormenta y decide qué hacer. Cada decisión cambia lo que pasa",
+    href: "/juegos/mision-tijuana/index.html",
+  },
+  {
     // Genially de otro equipo
     id: "cinco-segundos",
     icon: "clock",

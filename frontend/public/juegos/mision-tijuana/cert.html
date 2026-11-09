@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#2c3333" />
+    <title>Curso CERT · Misión Tijuana</title>
+    <!-- Los estilos van en el HTML (no en el JS) para que la pantalla de carga se vea bien desde el primer momento. -->
+    <script type="module" crossorigin src="./assets/cert-EdRz7JZ1.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/desbloqueo-C4Y22POx.js">
+    <link rel="modulepreload" crossorigin href="./assets/reparto-51Sg4xnB.js">
+    <link rel="modulepreload" crossorigin href="./assets/motor-BUa69fIK.js">
+    <link rel="modulepreload" crossorigin href="./assets/salon-Cz6lR9Vc.js">
+    <link rel="stylesheet" crossorigin href="./assets/cert--ah0O8cJ.css">
+  </head>
+  <body>
+    <h1 class="sr-only">Misión Tijuana: curso CERT de primeros auxilios</h1>
+    <div id="marcas" aria-hidden="true"></div>
+    <!-- La misma barra que las otras experiencias; los botones se conectan en src/design/barra.ts. -->
+    <header class="barra barra-experiencia">
+      <a class="brand barra-boton" href="./index.html" title="Volver al inicio" aria-label="Misión Tijuana: volver al inicio">
+        <svg class="home-ic" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <path d="M3 11 12 4l9 7M5 10v10h14V10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span class="titulo name">Misión Tijuana</span>
+      </a>
+      <p class="experiencia">Curso CERT · Primeros auxilios</p>
+      <div class="tools">
+        <span id="misiones"></span>
+        <button id="movimiento" class="barra-boton icon" type="button" aria-pressed="false" title="Reducir animaciones"></button>
+        <button id="sonido" class="barra-boton icon" type="button" aria-pressed="true" title="Silenciar"></button>
+      </div>
+    </header>
+
+    <!-- Narración corta arriba. -->
+    <p id="narracion" class="narracion" aria-live="polite" hidden></p>
+
+    <!-- Viñeta: acercamiento animado antes de decidir. -->
+    <div id="vineta" class="vineta" hidden>
+      <canvas></canvas>
+      <p id="vineta-texto" class="vineta-texto" aria-live="polite"></p>
+      <button id="vineta-seguir" class="btn btn-primary" type="button">Continuar</button>
+    </div>
+
+    <!-- Decisión: el juego se congela y el fondo se difumina. -->
+    <div id="decision" class="decision" role="dialog" aria-modal="true" aria-labelledby="dec-titulo" hidden></div>
+
+    <!-- Dibujos paso a paso (la alerta, los primeros auxilios). -->
+    <div id="pasos" class="pasos" role="dialog" aria-modal="true" hidden></div>
+
+    <!-- Botones sobre la escena, lo que hay que hacer, el teléfono, la cuenta de 10 s y el ritmo de la RCP. -->
+    <div id="puntos" class="capa-puntos"></div>
+    <div id="tarea" class="tarea" aria-live="polite" hidden></div>
+    <div id="llamada" class="llamada" role="dialog" aria-label="Llamada al 911" hidden></div>
+    <div id="reloj-resp" class="reloj-resp" aria-live="polite" hidden></div>
+    <div id="ritmo" class="ritmo" hidden></div>
+
+    <!-- Corte de escena a negro. -->
+    <div id="corte" class="corte" aria-live="polite" hidden></div>
+
+    <!-- Lo que pasó al elegir. -->
+    <div id="resultado" class="resultado" role="status" hidden></div>
+
+    <!-- Inicio y final. -->
+    <div id="tarjeta" class="tarjeta panel" hidden></div>
+
+    <div id="cargando" class="aviso-escena" role="status">
+      <div class="panel">
+        <h2>Cargando el salón del curso</h2>
+        <p>Acomodando las mesas.</p>
+        <div class="carga-barra"><i></i></div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -4219,7 +4219,7 @@ a.game-card:active,
 }
 .gm-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
 }
 .gm-card {
@@ -5140,15 +5140,23 @@ a.game-card:active,
 }
 /* Tres tarjetas en una fila desde 700 px, para que ninguna quede sola */
 @media (min-width: 700px) {
-  .game-grid,
   .advice-grid,
   .prep-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+  /* Cuatro juegos: dos y dos, y en pantalla grande los cuatro en fila */
+  .game-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1100px) {
+  .game-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 @media (min-width: 641px) and (max-width: 900px) {
   .gm-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
   }
   .gm-body {

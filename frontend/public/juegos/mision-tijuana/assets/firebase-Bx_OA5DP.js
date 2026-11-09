@@ -1,0 +1,1 @@
+var e={apiKey:`AIzaSyB9P8SAuv09VPYRFK-_4zm7XGiahLkLKxY`,authDomain:`mision-tijuana.firebaseapp.com`,projectId:`mision-tijuana`,storageBucket:`mision-tijuana.firebasestorage.app`,messagingSenderId:`848497922079`,appId:`1:848497922079:web:d8d6a12b3fd19b93cf852a`};export{e as firebaseConfig};
