@@ -49,6 +49,10 @@ docker compose up -d --build
 
 El sitio queda en `http://localhost:8090`; la API utiliza el puerto `8091`. El archivo `.env` se genera localmente y no se debe subir al repositorio.
 
+## Servidor con actualización automática
+
+Cada cambio en `main` publica imágenes nuevas en GitHub y el servidor las toma solo con Watchtower. Los pasos de instalación están en `docs/servidor.md` y la configuración en `compose.servidor.yaml`.
+
 ## Tecnologías
 
 - **Frontend:** Vue 3, Vue Router y Vite.
