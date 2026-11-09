@@ -4124,6 +4124,12 @@ a.game-card:active,
 .gm-token-5 {
   animation-delay: -1.8s;
 }
+.gm-token-6 > path {
+  fill: var(--gold-tint);
+}
+.gm-token-6 {
+  animation-delay: -3s;
+}
 .gm-token-icon {
   fill: none;
   stroke: var(--green-deep);
@@ -4230,17 +4236,11 @@ a.game-card:active,
 .gm-section-head .section-lead {
   margin: 0;
 }
-/* Cinco juegos: tres arriba y dos centrados abajo */
+/* Seis juegos: dos filas de tres */
 .gm-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 20px;
-}
-.gm-grid > * {
-  grid-column: span 2;
-}
-.gm-grid > :nth-child(4) {
-  grid-column: 2 / span 2;
 }
 .gm-card {
   display: flex;
@@ -5160,24 +5160,16 @@ a.game-card:active,
 }
 /* Tres tarjetas en una fila desde 700 px, para que ninguna quede sola */
 @media (min-width: 700px) {
+  .game-grid,
   .advice-grid,
   .prep-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  /* Cinco juegos: tres arriba y dos abajo */
-  .game-grid {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-  }
-  .game-grid > * {
-    grid-column: span 2;
-  }
-  .game-grid > :nth-child(4) {
-    grid-column: 2 / span 2;
-  }
 }
+/* En tableta, de dos en dos: con seis juegos ninguno queda solo */
 @media (min-width: 641px) and (max-width: 900px) {
   .gm-grid {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
   }
   .gm-body {
@@ -5193,10 +5185,6 @@ a.game-card:active,
 @media (max-width: 640px) {
   .gm-grid {
     grid-template-columns: 1fr;
-  }
-  .gm-grid > *,
-  .gm-grid > :nth-child(4) {
-    grid-column: auto;
   }
 }
 /* En el encabezado de Juegos, el cimarrón entra a la escena y no tapa el texto */

@@ -256,6 +256,23 @@ export const games = [
     href: "/juegos/mision-tijuana/index.html",
   },
   {
+    // Simulador de otro equipo publicado en Netlify
+    id: "alerta-911",
+    icon: "phone",
+    meta: [
+      { icon: "signpost", text: "3 situaciones" },
+      { icon: "check", text: "Quiz de 10 preguntas" },
+    ],
+    title: "Alerta 911: Misión El Niño",
+    tag: "Simulador",
+    tone: "gold",
+    image: "/assets/images/hero-el-nino.webp",
+    alt: "Ilustración de Tijuana durante la lluvia",
+    short: "Practica qué hacer y cómo reportar una emergencia bajo la tormenta",
+    text: "Observa, decide y aprende a reportar en tres situaciones de lluvia, y luego pon a prueba lo que aprendiste con un quiz",
+    href: "https://lambent-trifle-f0f59f.netlify.app/",
+  },
+  {
     // Versión web de Ren'Py (NOVELAVISUAL_FINAL), copiada a public/juegos/novela-visual
     id: "novela-visual",
     icon: "book",

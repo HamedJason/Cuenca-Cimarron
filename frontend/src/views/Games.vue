@@ -62,7 +62,13 @@ const playsLabel = (n) => `${n.toLocaleString("es-MX")} ${n === 1 ? "entrada" : 
             <path d="M20 0C9 0 0 9 0 20c0 15 20 36 20 36s20-21 20-36C40 9 31 0 20 0Z" />
             <circle cx="20" cy="20" r="8" />
           </g>
-          <!-- Fichas hexagonales: una por juego (mapa, novela, cronómetro, concurso y mochila) -->
+          <!-- Fichas hexagonales: una por juego (mapa, teléfono, novela, cronómetro, concurso y mochila) -->
+          <g class="gm-token gm-token-6" transform="translate(462 214)">
+            <path d="M22 0 44 13v25L22 51 0 38V13Z" />
+            <svg x="10" y="13" width="24" height="24" viewBox="0 0 24 24" class="gm-token-icon">
+              <path d="M7.2 3.8 9.5 3a1.5 1.5 0 0 1 1.8.8l1.2 2.8a1.5 1.5 0 0 1-.4 1.7L10.5 9.7a14 14 0 0 0 3.8 3.8l1.4-1.6a1.5 1.5 0 0 1 1.7-.4l2.8 1.2a1.5 1.5 0 0 1 .8 1.8l-.8 2.3a2 2 0 0 1-2 1.4A15.5 15.5 0 0 1 5.8 5.8a2 2 0 0 1 1.4-2Z" />
+            </svg>
+          </g>
           <g class="gm-token gm-token-4" transform="translate(326 92)">
             <path d="M22 0 44 13v25L22 51 0 38V13Z" />
             <svg x="10" y="13" width="24" height="24" viewBox="0 0 24 24" class="gm-token-icon">
