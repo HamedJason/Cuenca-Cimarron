@@ -12,6 +12,14 @@ No hace falta git, Node ni PHP en el servidor.
 
 ## Primera instalación
 
+La forma corta es un solo comando, que descarga el repositorio, crea el `.env` con claves nuevas y levanta todo:
+
+```bash
+git clone https://github.com/HamedJason/Cuenca-Cimarron.git && sh Cuenca-Cimarron/instalar.sh
+```
+
+Si se prefiere hacerlo a mano, estos son los mismos pasos que hace `instalar.sh`:
+
 1. Crear una carpeta y copiar ahí el archivo `compose.servidor.yaml` del repositorio.
 
 2. En esa misma carpeta crear el archivo `.env` con claves nuevas:
