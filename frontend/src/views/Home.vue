@@ -107,8 +107,8 @@ const mapHref = (shelter) =>
               >
             </li>
             <li>
-              <RouterLink to="/plan"
-                ><Icon name="check" :size="22" /> Arma tu plan</RouterLink
+              <a href="/pages/aprende-detalle.html?tema=planfamiliar"
+                ><Icon name="check" :size="22" /> Arma tu plan</a
               >
             </li>
           </ul>
@@ -360,16 +360,16 @@ const mapHref = (shelter) =>
           Lo esencial sobre El Niño, tu familia y lo que conviene tener listo
         </p>
         <div class="prep-grid">
-          <RouterLink to="/el-nino" class="prep-card cc-watermark"
+          <a href="/pages/aprende-detalle.html?tema=conozca" class="prep-card cc-watermark"
             ><span class="prep-icon" aria-hidden="true"
               ><svg class="pi-wind" viewBox="0 0 48 48">
                 <path d="M4 16h26c5 0 6-8 1-8" />
                 <path d="M4 25h36" />
                 <path d="M4 34h22c5 0 6 8 1 8" /></svg></span
             ><strong>Qué es El Niño</strong
-            ><span>Y qué se espera en Tijuana</span></RouterLink
+            ><span>Y qué se espera en Tijuana</span></a
           >
-          <RouterLink to="/plan" class="prep-card cc-watermark"
+          <a href="/pages/aprende-detalle.html?tema=planfamiliar" class="prep-card cc-watermark"
             ><span class="prep-icon" aria-hidden="true"
               ><svg class="pi-fold" viewBox="0 0 48 48">
                 <path class="pf-left" d="M4 9 17 6v33L4 42Z" />
@@ -380,9 +380,9 @@ const mapHref = (shelter) =>
                   d="M10 30c6-8 10 4 17-6s10-2 13-8"
                 /></svg></span
             ><strong>Plan familiar</strong
-            ><span>4 pasos para decidir qué hacer</span></RouterLink
+            ><span>4 pasos para decidir qué hacer</span></a
           >
-          <RouterLink to="/mochila" class="prep-card cc-watermark"
+          <a href="/pages/aprende-detalle.html?tema=mochila" class="prep-card cc-watermark"
             ><span class="prep-icon" aria-hidden="true"
               ><svg class="pi-pack" viewBox="0 0 48 48">
                 <g class="pp-item">
@@ -442,7 +442,7 @@ const mapHref = (shelter) =>
                   />
                 </g></svg></span
             ><strong>Mochila de emergencia</strong
-            ><span>12 cosas para tener listas</span></RouterLink
+            ><span>12 cosas para tener listas</span></a
           >
         </div>
       </section>
