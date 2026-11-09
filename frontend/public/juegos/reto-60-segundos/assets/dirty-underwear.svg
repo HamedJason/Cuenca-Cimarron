@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Calzones sucios</title>
+  <desc id="desc">Ilustración plana de unos calzones azules con manchas de suciedad.</desc>
+  <path fill="#a9e2f5" d="M95 128h322l30 213c-41 6-83 18-123 39l-31 57c-19 7-73 7-92 0l-31-57c-40-21-82-33-123-39z"/>
+  <path fill="#128fda" d="M95 165h322l30 176c-43 7-83 18-123 39l-31 57c-19 7-73 7-92 0l-31-57c-40-21-80-32-123-39z"/>
+  <path fill="#8b5b3e" d="M163 281c16-9 33-6 46 7 9 10 10 28 2 41-9 15-29 18-45 9-15-9-22-28-15-42 3-7 7-12 12-15z" opacity=".9"/>
+  <path fill="#6b422e" d="M315 316c13-10 31-10 43 0 13 10 15 30 5 43-10 13-31 16-45 7-14-9-18-29-9-42 2-3 4-6 6-8z" opacity=".9"/>
+  <path fill="#a9784a" d="M254 383c13-5 28-4 39 4 7 5 7 14 0 18-14 8-39 8-53 0-7-4-7-13 0-18 4-2 9-3 14-4z" opacity=".9"/>
+  <path fill="none" stroke="#a9e2f5" stroke-width="18" stroke-linecap="round" d="M255 165v203M182 165l-38 160M330 165l38 160"/>
+  <path fill="none" stroke="#0875b6" stroke-width="8" stroke-linecap="round" d="M98 165h316"/>
+</svg>

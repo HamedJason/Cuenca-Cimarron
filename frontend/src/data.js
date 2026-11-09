@@ -278,11 +278,12 @@ export const games = [
     stepIcons: ["book", "signpost", "spark"],
   },
   {
+    // El juego vive en public/juegos/reto-60-segundos y se abre aparte
     id: "mochila",
     icon: "backpack",
     meta: [
       { icon: "clock", text: "60 segundos" },
-      { icon: "check", text: "3 pasos" },
+      { icon: "backpack", text: "Hasta 12 kg" },
     ],
     title: "Arma tu mochila",
     tag: "Reto de 60 segundos",
@@ -290,13 +291,8 @@ export const games = [
     image: "/assets/images/game-backpack.webp",
     alt: "Mochila ilustrada con artículos de emergencia",
     short: "¿Qué cosas sí van en la mochila? Tienes 60 segundos",
-    text: "Encuentra en 60 segundos las cosas que de verdad necesitas para una emergencia",
-    steps: [
-      "Toma los objetos disponibles",
-      "Separa lo indispensable de lo que no sirve",
-      "Revisa tus respuestas y comparte un consejo",
-    ],
-    stepIcons: ["backpack", "check", "heart"],
+    text: "Busca por la casa lo que necesitas para evacuar antes de que se acabe el tiempo, y luego compara con una mochila ya lista",
+    href: "/juegos/reto-60-segundos/index.html",
   },
   {
     // Juego en línea hecho por otro equipo: la tarjeta lleva directo a jugarlo
@@ -309,8 +305,8 @@ export const games = [
     title: "100 estudiantes dijeron",
     tag: "Concurso en línea",
     tone: "blue",
-    image: "/assets/images/game-cien-estudiantes.svg",
-    alt: "Tablero de concurso bajo la lluvia con casitas en los cerros",
+    image: "/assets/images/game-cien-estudiantes.webp",
+    alt: "Tablero verde y dorado con micrófono y botones de concurso, frente a un paisaje de casas y cerros bajo la lluvia",
     short: "Adivina qué colonias de Tijuana sufren más con las lluvias",
     text: "Adivina qué colonias de Tijuana tienen más problemas con las lluvias, según reportes reales, y entra al Top 10",
     href: "https://cien-estudiantes-dijeron-production.up.railway.app/embed",

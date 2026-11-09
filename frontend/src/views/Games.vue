@@ -50,7 +50,8 @@ watch(
   () => route.query.juego,
   (id) => {
     if (id && selected.value?.id !== id) {
-      selected.value = games.find((g) => g.id === id) || null;
+      // Los juegos con enlace no tienen panel de pasos
+      selected.value = games.find((g) => g.id === id && !g.href) || null;
       // Espera a que el router termine su propio scroll al inicio de la página.
       if (selected.value) setTimeout(goToPanel, 150);
     }
