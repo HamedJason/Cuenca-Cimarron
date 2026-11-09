@@ -51,7 +51,18 @@ El sitio queda en `http://localhost:8090`; la API utiliza el puerto `8091`. El a
 
 ## Servidor con actualización automática
 
-Cada cambio en `main` publica imágenes nuevas en GitHub y el servidor las toma solo con Watchtower. Los pasos de instalación están en `docs/servidor.md` y la configuración en `compose.servidor.yaml`.
+Para el servidor no se usan los comandos de la sección anterior. Cada cambio en `main` publica imágenes nuevas en GitHub y el servidor las toma solo con Watchtower, sin `git pull` ni compilar nada. Solo se instala una vez:
+
+```bash
+git clone https://github.com/HamedJason/Cuenca-Cimarron.git
+cd Cuenca-Cimarron
+echo "APP_KEY=base64:$(openssl rand -base64 32)" > .env
+echo "DB_PASSWORD=$(openssl rand -hex 24)" >> .env
+chmod 600 .env
+docker compose -f compose.servidor.yaml up -d
+```
+
+El detalle, los ajustes opcionales y cómo regresar a una versión anterior están en `docs/servidor.md`.
 
 ## Tecnologías
 
