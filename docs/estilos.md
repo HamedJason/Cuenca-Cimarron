@@ -35,6 +35,7 @@ El componente `MascotGuide.vue` pone al cimarrón presentando algo.
 | Dónde | Qué presenta |
 | --- | --- |
 | Inicio, "Juegos y dinámicas" | Los juegos, con "¡Practica conmigo!" |
+| Inicio, "Síguenos en redes" | Las redes, con "¡Síguenos!" |
 | Ventana del mapa de riesgo | El mapa |
 | Juegos, escena del encabezado | La ruta segura |
 | Juegos, panel "Cómo participar" | Los pasos, con "¡Así se juega!" |
@@ -95,9 +96,26 @@ Orden de arriba hacia abajo: propósito, 911, aviso de El Niño, números, refug
 - **Propósito** (`.purpose-hero`): va antes del 911 a pedido del equipo, como única excepción a "primero lo que sirve en una emergencia". Por eso en celular es compacto: el 911 empieza justo después del contador
 - **Contador** (`.purpose-counter`): la misma cifra del pie (visitas únicas por navegador, `composables/useVisits.js`). Dice "personas ya se están preparando": habla de un proceso en marcha, no promete que ya estén preparadas. Si la API falla no muestra número, solo "Súmate a la gente que ya se está preparando". Nunca se muestran cifras estimadas
 - **Invita a alguien**: abre el menú de compartir del teléfono; en computadora copia el enlace
+- En celular (600 px o menos) el contador es una sola fila chica: número, texto y botón de compartir solo con icono, para no competir con el 911
 - **Quiénes somos** (`.team`): foto del equipo y el enfoque DUA (Diseño Universal para el Aprendizaje: leer, jugar y hacer). La foto se pone en `teamPhoto`, dentro de `Home.vue`; mientras no exista se ve un marco punteado
 
-## Componentes
+## Pie de página
+
+Tres columnas en computadora; en celular, una debajo de otra.
+
+- **Marca y redes:** icono, nombre, escudo UABC y "Síguenos". Las redes que todavía no tienen cuenta (YouTube y TikTok) se ven con borde punteado y dicen "próximamente". Al tener la cuenta, solo se pone su enlace en `socials`, dentro de `App.vue`
+- **Equipo de diseño:** Jason Alejandro Hamed Valdez, Fernando Onit Sibaja Gomez y Kevin Osmar Valdez Meza
+- **Contacto:** los correos del equipo, como enlaces que abren el correo
+
+## Redes sociales
+
+Las redes están en `socials`, dentro de `frontend/src/data.js`. Una red sin enlace se ve como "próximamente" en el pie y no aparece en ningún otro lugar.
+
+- **Encabezado:** iconos de Instagram y Facebook a la derecha del menú, separados por una línea. En celular están dentro del menú, en una fila que dice "Síguenos"
+- **Inicio, "Síguenos en redes":** antes de "Quiénes somos". El cimarrón presenta botones grandes para cada red
+- **Videos:** se agregan en `videos`, dentro de `data.js` (YouTube o TikTok, con su número de video y título). Mientras la lista esté vacía se ve "Muy pronto, videos aquí". Cada video muestra primero una portada con botón de play y solo carga el reproductor al tocarlo: así la página no se hace lenta y YouTube (en modo sin cookies) o TikTok no rastrean a quien no lo reproduce
+- No hay botón flotante de redes: ya está "Aprende jugando" y competirían entre sí y con el 911
+
 
 | Clase | Uso |
 | --- | --- |

@@ -4,6 +4,7 @@ import { ref, computed, watch } from "vue";
 import { RouterLink } from "vue-router";
 import Modal from "../components/Modal.vue";
 import MascotGuide from "../components/MascotGuide.vue";
+import FollowSection from "../components/FollowSection.vue";
 import { emergency, games, advice } from "../data";
 import { rand } from "../composables/useCanvasScene";
 import { openLesson } from "../composables/useLesson";
@@ -132,9 +133,16 @@ const mapHref = (shelter) =>
             }}
           </p>
           <p class="counter-note">Cada persona informada ayuda a su colonia</p>
-          <button class="button counter-share" type="button" @click="shareSite">
+          <button
+            class="button counter-share"
+            type="button"
+            :aria-label="shareState || 'Invita a alguien'"
+            @click="shareSite"
+          >
             <Icon name="share" :size="20" />
-            {{ shareState || "Invita a alguien" }}
+            <span class="counter-share-text">{{
+              shareState || "Invita a alguien"
+            }}</span>
           </button>
         </div>
       </div>
@@ -526,6 +534,8 @@ const mapHref = (shelter) =>
           >
         </div>
       </section>
+      <FollowSection />
+
       <section class="team" aria-labelledby="titulo-equipo">
         <figure class="team-photo">
           <img

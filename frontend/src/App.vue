@@ -6,6 +6,8 @@ import Modal from "./components/Modal.vue";
 import LessonModal from "./components/LessonModal.vue";
 import { storageAvailable } from "./composables/useProgress";
 import { useVisits } from "./composables/useVisits";
+import { socials } from "./data";
+const liveSocials = socials.filter((social) => social.href);
 const route = useRoute();
 function recoverLogo(event) {
   const image = event.currentTarget;
@@ -34,11 +36,15 @@ watch(
 // El botón flotante no se muestra donde ya están los juegos.
 // Siempre visible, salvo en la página de juegos.
 const showPlayButton = computed(() => route.path !== "/juegos");
-const socials = [
-  { label: "Instagram", href: "https://www.instagram.com/", icon: '<rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/>' },
-  { label: "YouTube", href: "https://www.youtube.com/", icon: '<path d="M21 8.2a2.6 2.6 0 0 0-1.8-1.8C17.6 6 12 6 12 6s-5.6 0-7.2.4A2.6 2.6 0 0 0 3 8.2 27 27 0 0 0 2.6 12 27 27 0 0 0 3 15.8a2.6 2.6 0 0 0 1.8 1.8C6.4 18 12 18 12 18s5.6 0 7.2-.4a2.6 2.6 0 0 0 1.8-1.8 27 27 0 0 0 .4-3.8 27 27 0 0 0-.4-3.8Z"/><path d="m10 15 5-3-5-3v6Z"/>' },
-  { label: "TikTok", href: "https://www.tiktok.com/", icon: '<path d="M15 4c.3 2.2 1.6 3.5 4 3.7v3.1c-1.4 0-2.7-.4-4-1.1v5.7a5.6 5.6 0 1 1-4.8-5.5v3.1a2.5 2.5 0 1 0 1.7 2.4V4H15Z"/>' },
-  { label: "Facebook", href: "https://www.facebook.com/", icon: '<path d="M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5h1.7V4a22 22 0 0 0-2.4-.1c-2.4 0-4 1.5-4 4.1V10H8v3h2.4v8h3.1Z"/>' },
+const team = [
+  "Jason Alejandro Hamed Valdez",
+  "Fernando Onit Sibaja Gomez",
+  "Kevin Osmar Valdez Meza",
+];
+const contactEmails = [
+  "jason.hamed@uabc.edu.mx",
+  "onit.sibaja@uabc.edu.mx",
+  "k1288703@uabc.edu.mx",
 ];
 // El encabezado se compacta y marca su borde al bajar por la página.
 const scrolled = ref(false);
@@ -103,6 +109,20 @@ onMounted(() => {
             >{{ item.label }}</a
           >
         </template>
+        <div class="header-social">
+          <span class="header-social-label">Síguenos</span>
+          <a
+            v-for="social in liveSocials"
+            :key="social.label"
+            class="header-social-link"
+            :href="social.href"
+            target="_blank"
+            rel="noopener noreferrer"
+            :aria-label="`${social.label} de Cuenca Cimarrona`"
+            :title="social.label"
+            ><svg viewBox="0 0 24 24" aria-hidden="true" v-html="social.icon"
+          /></a>
+        </div>
       </nav>
     </div>
     <!-- Agua que corre por la cuenca: una línea de olas bajo el encabezado -->
@@ -120,34 +140,64 @@ onMounted(() => {
       <RouterView />
     </main>
     <footer class="footer">
-      <div class="footer-main">
-        <RouterLink to="/" class="footer-brand" aria-label="Cuenca Cimarrona, inicio"
-          ><img src="/brand/cuenca/icono-96.webp" alt="" width="56" height="56" /><span
-            class="wordmark"
-            aria-hidden="true"
-            >Cuenca<br />Cimarrona</span
-          ></RouterLink
-        >
-        <img
-          class="footer-uabc"
-          src="/assets/images/logo_uabc-80.webp"
-          alt="Escudo UABC"
-          width="40"
-          height="52"
-        />
-        <span class="footer-copy">© 2026 · Proyecto académico UABC</span>
-        <nav class="social-links" aria-label="Redes sociales">
-          <a
-            v-for="social in socials"
-            :key="social.label"
-            :href="social.href"
-            target="_blank"
-            rel="noopener noreferrer"
-            :aria-label="social.label"
-            :title="social.label"
-            ><svg viewBox="0 0 24 24" aria-hidden="true" v-html="social.icon"
-          /></a>
-        </nav>
+      <div class="footer-grid">
+        <div class="footer-id">
+          <div class="footer-logos">
+            <RouterLink to="/" class="footer-brand" aria-label="Cuenca Cimarrona, inicio"
+              ><img src="/brand/cuenca/icono-96.webp" alt="" width="56" height="56" /><span
+                class="wordmark"
+                aria-hidden="true"
+                >Cuenca<br />Cimarrona</span
+              ></RouterLink
+            >
+            <img
+              class="footer-uabc"
+              src="/assets/images/logo_uabc-80.webp"
+              alt="Escudo UABC"
+              width="40"
+              height="52"
+            />
+          </div>
+          <h2 class="footer-title">Síguenos</h2>
+          <ul class="social-links" aria-label="Redes sociales">
+            <li v-for="social in socials" :key="social.label">
+              <a
+                v-if="social.href"
+                :href="social.href"
+                target="_blank"
+                rel="noopener noreferrer"
+                :aria-label="social.label"
+                :title="social.label"
+                ><svg viewBox="0 0 24 24" aria-hidden="true" v-html="social.icon"
+              /></a>
+              <span
+                v-else
+                class="social-soon"
+                :title="`${social.label}: próximamente`"
+                ><svg viewBox="0 0 24 24" aria-hidden="true" v-html="social.icon" /><span
+                  class="sr-only"
+                  >{{ social.label }}: próximamente</span
+                ></span
+              >
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-title">Equipo de diseño</h2>
+          <ul class="footer-list">
+            <li v-for="name in team" :key="name">{{ name }}</li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-title">Contacto</h2>
+          <ul class="footer-list">
+            <li v-for="email in contactEmails" :key="email">
+              <a class="footer-mail" :href="`mailto:${email}`"
+                ><Icon name="mail" :size="18" />{{ email }}</a
+              >
+            </li>
+          </ul>
+        </div>
       </div>
       <div class="footer-tools">
         <RouterLink to="/estilos" class="footer-link">Estilos</RouterLink>
