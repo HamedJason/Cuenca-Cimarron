@@ -6,6 +6,7 @@ import Modal from "../components/Modal.vue";
 import MascotGuide from "../components/MascotGuide.vue";
 import { emergency, games, advice } from "../data";
 import { rand } from "../composables/useCanvasScene";
+import { openLesson } from "../composables/useLesson";
 import { useVisits } from "../composables/useVisits";
 // Contador del propósito: sube de 0 a la cifra real una sola vez.
 // App.vue registra la visita; aquí solo se lee la cifra.
@@ -97,8 +98,8 @@ const mapHref = (shelter) =>
           </p>
           <ul class="purpose-ways" aria-label="Formas de aprender en el sitio">
             <li>
-              <a href="/pages/aprende.html"
-                ><Icon name="book" :size="22" /> Lee lo esencial</a
+              <RouterLink to="/informacion"
+                ><Icon name="book" :size="22" /> Lee lo esencial</RouterLink
               >
             </li>
             <li>
@@ -107,8 +108,8 @@ const mapHref = (shelter) =>
               >
             </li>
             <li>
-              <a href="/pages/aprende-detalle.html?tema=planfamiliar"
-                ><Icon name="check" :size="22" /> Arma tu plan</a
+              <button type="button" @click="openLesson('planfamiliar')"
+                ><Icon name="check" :size="22" /> Arma tu plan</button
               >
             </li>
           </ul>
@@ -360,16 +361,16 @@ const mapHref = (shelter) =>
           Lo esencial sobre El Niño, tu familia y lo que conviene tener listo
         </p>
         <div class="prep-grid">
-          <a href="/pages/aprende-detalle.html?tema=conozca" class="prep-card cc-watermark"
+          <button type="button" class="prep-card cc-watermark" @click="openLesson('conozca')"
             ><span class="prep-icon" aria-hidden="true"
               ><svg class="pi-wind" viewBox="0 0 48 48">
                 <path d="M4 16h26c5 0 6-8 1-8" />
                 <path d="M4 25h36" />
                 <path d="M4 34h22c5 0 6 8 1 8" /></svg></span
             ><strong>Qué es El Niño</strong
-            ><span>Y qué se espera en Tijuana</span></a
+            ><span>Y qué se espera en Tijuana</span></button
           >
-          <a href="/pages/aprende-detalle.html?tema=planfamiliar" class="prep-card cc-watermark"
+          <button type="button" class="prep-card cc-watermark" @click="openLesson('planfamiliar')"
             ><span class="prep-icon" aria-hidden="true"
               ><svg class="pi-fold" viewBox="0 0 48 48">
                 <path class="pf-left" d="M4 9 17 6v33L4 42Z" />
@@ -380,9 +381,9 @@ const mapHref = (shelter) =>
                   d="M10 30c6-8 10 4 17-6s10-2 13-8"
                 /></svg></span
             ><strong>Plan familiar</strong
-            ><span>4 pasos para decidir qué hacer</span></a
+            ><span>4 pasos para decidir qué hacer</span></button
           >
-          <a href="/pages/aprende-detalle.html?tema=mochila" class="prep-card cc-watermark"
+          <button type="button" class="prep-card cc-watermark" @click="openLesson('mochila')"
             ><span class="prep-icon" aria-hidden="true"
               ><svg class="pi-pack" viewBox="0 0 48 48">
                 <g class="pp-item">
@@ -442,7 +443,7 @@ const mapHref = (shelter) =>
                   />
                 </g></svg></span
             ><strong>Mochila de emergencia</strong
-            ><span>12 cosas para tener listas</span></a
+            ><span>12 cosas para tener listas</span></button
           >
         </div>
       </section>
@@ -457,8 +458,8 @@ const mapHref = (shelter) =>
               Qué hacer antes, durante y después de la lluvia
             </p>
           </div>
-          <a href="/pages/recursos.html" class="button secondary"
-            >Ver todos los consejos</a
+          <RouterLink to="/consejos" class="button secondary"
+            >Ver todos los consejos</RouterLink
           >
         </div>
         <div class="advice-grid">

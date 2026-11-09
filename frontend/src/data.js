@@ -249,8 +249,8 @@ export const games = [
     title: "Misión Tijuana",
     tag: "Recorrido en 3D",
     tone: "green",
-    image: "/juegos/mision-tijuana/miniaturas/el-tecolote.webp",
-    alt: "Maqueta en 3D de una colonia de Tijuana en ladera, con calles, casas y un arroyo",
+    image: "/assets/images/game-mision-tijuana.webp",
+    alt: "Colonia ilustrada de Tijuana bajo la lluvia, con un marcador amarillo sobre una alcantarilla tapada y un arroyo crecido",
     short: "Recorre tu colonia en 3D y decide qué hacer cuando llega la tormenta",
     text: "Recorre en 3D colonias reales de Tijuana, mira cómo llega la tormenta y decide qué hacer. Cada decisión cambia lo que pasa",
     href: "/juegos/mision-tijuana/index.html",
@@ -266,8 +266,8 @@ export const games = [
     title: "Un paso en falso: El Niño",
     tag: "Historia interactiva",
     tone: "blue",
-    image: "/juegos/novela-visual/game/images/FONDOS/MENU.jpg",
-    alt: "Huracán visto desde el espacio sobre el océano",
+    image: "/assets/images/game-novela-visual.webp",
+    alt: "Vista desde un carro al atardecer lluvioso, con una calle anegada, un aviso meteorológico en el celular y una mochila",
     short: "Sales de clases con lluvia y cada decisión cambia cómo termina tu noche",
     text: "Sales de clases en plena lluvia y tienes que llegar a casa. Elige qué hacer en la calle, con un cable caído y al llamar al 911",
     href: "/juegos/novela-visual/index.html",
@@ -333,7 +333,7 @@ export const advice = [
     tone: "gold",
     title: "Antes de la lluvia",
     text: "Revisa coladeras, techos y cosas importantes antes de que empiece",
-    href: "/pages/recursos.html#antes",
+    href: "/#/consejos?momento=antes",
   },
   {
     id: "durante",
@@ -341,7 +341,7 @@ export const advice = [
     tone: "blue",
     title: "Durante una tormenta",
     text: "No cruces arroyos y sigue la información oficial",
-    href: "/pages/recursos.html#durante",
+    href: "/#/consejos?momento=durante",
   },
   {
     id: "despues",
@@ -349,6 +349,178 @@ export const advice = [
     tone: "green",
     title: "Después de la lluvia",
     text: "Revisa tu entorno y reporta riesgos",
-    href: "/pages/recursos.html#despues",
+    href: "/#/consejos?momento=despues",
   },
+];
+
+// Información: los tres temas se abren en una ventana (LessonModal.vue),
+// desde Información y desde "Prepárate antes de que llueva" en el inicio.
+export const lessons = [
+  {
+    id: "conozca",
+    icon: "cloud",
+    tone: "blue",
+    title: "Qué es El Niño",
+    short: "Cómo cambia la lluvia y el clima en Tijuana",
+    intro:
+      "Un calentamiento del océano Pacífico que cambia la lluvia, el viento y la temperatura",
+    body: "Saber cómo funciona te ayuda a entender los avisos y a prepararte antes. No pega igual en todos lados, por eso hay que seguir la información oficial y fijarse en lo que pasa en tu colonia",
+    points: [
+      "Cambia cuándo y cuánto llueve",
+      "No afecta igual a todas las zonas",
+      "Prepararse empieza con información confiable",
+    ],
+    image: "/assets/images/hero-el-nino.webp",
+    alt: "Ilustración de Tijuana durante la lluvia",
+  },
+  {
+    id: "planfamiliar",
+    icon: "map",
+    tone: "gold",
+    title: "Haz tu plan familiar",
+    short: "Rutas, tareas y un punto de encuentro",
+    intro:
+      "Decidan en familia qué hacer, cómo avisarse y dónde verse si pasa algo",
+    body: "El plan convierte los consejos en acuerdos que todos en casa conocen. Piensen en cómo es su casa, por dónde pueden salir y qué necesitan los niños, los abuelos, quien tenga alguna discapacidad y las mascotas",
+    points: [
+      "Ubiquen los riesgos y las zonas seguras",
+      "Elijan rutas y un punto de encuentro",
+      "Repartan tareas y practiquen",
+    ],
+    image: "/assets/images/game-decisions.webp",
+    alt: "Ilustración de caminos que llevan a un punto de encuentro",
+  },
+  {
+    id: "mochila",
+    icon: "backpack",
+    tone: "green",
+    title: "Prepara tu mochila",
+    short: "Lo indispensable para salir rápido",
+    intro: "Junta lo indispensable con tiempo y adáptalo a tu familia",
+    body: "Una mochila lista te permite salir rápido o resguardarte con lo básico. Revísala cada cierto tiempo, protege los documentos y agrega medicinas, cosas de higiene y comida para tus mascotas si hace falta",
+    points: [
+      "Agua, comida, lámpara y botiquín",
+      "Documentos y contactos protegidos del agua",
+      "Revísala y ajústala a tu familia",
+    ],
+    image: "/assets/images/game-backpack.webp",
+    alt: "Mochila ilustrada con artículos para una emergencia",
+  },
+];
+
+// Qué significa El Niño para Tijuana (comunicado municipal del 2 nov 2026)
+export const ninoOutlook = {
+  cards: [
+    {
+      title: "El pronóstico cambia",
+      text: "El municipio pidió prepararse desde ahora. Revisa los avisos antes de decidir",
+    },
+    {
+      title: "Inundaciones y deslaves",
+      text: "Con lluvia fuerte, las calles bajas, los arroyos y las laderas son más peligrosos. Ubica rutas y zonas seguras cerca de tu casa",
+    },
+    {
+      title: "No toda lluvia es El Niño",
+      text: "Una tormenta sola no quiere decir que ya llegó El Niño. Sigue los avisos del clima y de Protección Civil",
+    },
+  ],
+  note: "El 2 de noviembre de 2026 el municipio informó que las lluvias podrían empezar entre finales de noviembre y principios de diciembre. El pronóstico puede cambiar",
+  noteHref:
+    "https://apps.tijuana.gob.mx/webpanel/comunicado/comunicadoCompleto.aspx?iIdComunicado=+37235",
+  links: [
+    { label: "NOAA, qué es El Niño", href: "https://www.noaa.gov/understanding-el-nino" },
+    { label: "SMN, avisos del clima", href: "https://smn.conagua.gob.mx/" },
+    { label: "Protección Civil Tijuana", href: "https://proteccioncivil.tijuana.gob.mx/" },
+  ],
+};
+
+// Plan familiar en cuatro pasos. Las marcas se guardan con los mismos ids
+// ("paso-tarea") que usaba la página anterior, así no se pierde lo marcado.
+export const familyPlan = [
+  {
+    title: "Ubiquen los riesgos",
+    text: "Revisen su casa y encuentren las zonas seguras",
+    tasks: [
+      "Recorran la casa y busquen cosas que se puedan caer",
+      "Ubiquen zonas que se inundan y revisen las instalaciones",
+      "Elijan zonas seguras y pidan ayuda para lo que haya que arreglar",
+    ],
+    tip: "Revisen cada cuarto juntos. No toquen instalaciones dañadas si no saben cómo",
+  },
+  {
+    title: "Rutas y punto de encuentro",
+    text: "Decidan por dónde salir y dónde verse si no pueden quedarse en casa",
+    tasks: [
+      "Dibujen un croquis con salidas y riesgos",
+      "Elijan rutas fáciles y un punto de encuentro",
+      "Compartan el croquis y los teléfonos de emergencia",
+    ],
+    tip: "Piensen en los niños, los abuelos, quien tenga alguna discapacidad y las mascotas",
+  },
+  {
+    title: "Repartan tareas",
+    text: "Cada quien sabe qué le toca y cómo avisar",
+    tasks: [
+      "Decidan quién ayuda a cada persona y a las mascotas",
+      "Acuerden dónde ver los avisos y cómo comunicarse",
+      "Acuerden qué hacer si les piden salir de casa",
+    ],
+    tip: "No todas las emergencias se atienden igual. Sigan lo que indiquen las autoridades",
+  },
+  {
+    title: "Practiquen el plan",
+    text: "Hagan simulacros y actualicen el plan cuando algo cambie",
+    tasks: [
+      "Agenden simulacros durante el año",
+      "Practiquen las rutas sin ponerse en riesgo",
+      "Platiquen qué salió bien y ajusten el plan",
+    ],
+    tip: "Un simulacro es para aprender, no una competencia",
+  },
+];
+
+// Mochila: doce cosas en tres grupos. Los ids "item-n" son los de la página anterior.
+export const kitGroups = [
+  {
+    title: "Lo esencial",
+    items: [
+      { id: "item-0", icon: "drop", name: "Agua potable", detail: "En envases cerrados y sin caducar" },
+      { id: "item-1", icon: "food", name: "Alimentos no perecederos", detail: "Listos para comer y que le gusten a tu familia" },
+      { id: "item-2", icon: "medical", name: "Botiquín y medicamentos", detail: "Lo básico y las medicinas que toman en casa" },
+      { id: "item-3", icon: "flashlight", name: "Linterna y pilas", detail: "Que funcionen, con pilas de repuesto" },
+    ],
+  },
+  {
+    title: "Comunicación y documentos",
+    items: [
+      { id: "item-4", icon: "radio", name: "Radio portátil", detail: "De pilas, para oír los avisos oficiales" },
+      { id: "item-5", icon: "document", name: "Documentos importantes", detail: "Copias en bolsa contra agua y una lista de teléfonos" },
+      { id: "item-6", icon: "wallet", name: "Dinero en efectivo", detail: "Monedas y billetes chicos" },
+      { id: "item-7", icon: "battery", name: "Batería para el celular", detail: "Cargada y con su cable" },
+    ],
+  },
+  {
+    title: "Cuidado de tu familia",
+    items: [
+      { id: "item-8", icon: "whistle", name: "Silbato", detail: "A la mano para pedir ayuda" },
+      { id: "item-9", icon: "blanket", name: "Manta y ropa de abrigo", detail: "Según el clima, con una muda de ropa" },
+      { id: "item-10", icon: "hygiene", name: "Artículos de higiene", detail: "Lo que necesite cada quien" },
+      { id: "item-11", icon: "paw", name: "Kit para tus mascotas", detail: "Comida, agua, correa y su cartilla" },
+    ],
+  },
+];
+
+// Qué puede pasar en Tijuana
+export const risks = [
+  { icon: "cloud", tone: "blue", title: "Lluvias fuertes", text: "En poco tiempo se pierde visibilidad, el suelo se satura y moverse se vuelve difícil" },
+  { icon: "risk", tone: "gold", title: "Deslaves", text: "Con la tierra mojada, las laderas y cañadas se pueden venir abajo" },
+  { icon: "wave", tone: "green", title: "Inundaciones", text: "Arroyos, calles bajas y pasos a desnivel se llenan rápido. Nunca los cruces" },
+];
+
+// Consejos: qué hacer en cada momento
+export const tips = [
+  { id: "antes", icon: "home", tone: "gold", moment: "Antes de la lluvia", title: "Prepara tu casa", text: "Revisa coladeras, techos y cables sueltos. Guarda tus documentos en una bolsa que no deje pasar el agua y acuerda con tu familia cómo comunicarse" },
+  { id: "durante", icon: "wave", tone: "blue", moment: "Durante la tormenta", title: "Aléjate de las corrientes", text: "Quédate en un lugar seguro. No cruces arroyos ni calles inundadas, aunque el agua se vea baja" },
+  { id: "manejo", icon: "car", tone: "blue", moment: "Si vas manejando", title: "No cruces una calle inundada", text: "Baja la velocidad y busca otra ruta. Si el agua tapa el camino, detente en un lugar seguro y sigue las indicaciones oficiales" },
+  { id: "despues", icon: "shield", tone: "green", moment: "Después de la lluvia", title: "Revisa tu alrededor", text: "No te acerques a zonas dañadas ni toques cables caídos. Reporta los riesgos y sigue pendiente de los avisos oficiales" },
 ];

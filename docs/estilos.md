@@ -167,12 +167,18 @@ Además de cambiar de color, todo lo que se puede tocar muestra un detalle al se
 
 ## Juegos
 
-- Cada juego tiene un tono propio (ocre, azul o verde) en su tarjeta y en su panel de pasos
-- La tarjeta lleva: número en hexágono, etiqueta con icono, datos con icono (solo datos que estén en `data.js`, nunca cifras inventadas) y el botón "Cómo se juega"
-- En computadora el primer juego ocupa dos filas; en celular todas van en una columna, en el mismo orden
-- "Cómo se juega" lleva directo a las instrucciones y pone el foco en su título
-- Las animaciones de Juegos cuentan el reto: la ruta segura se dibuja bajo la lluvia, la mochila se llena, el letrero se mueve entre caminos
-- Las tarjetas y los pasos entran en orden al cargar; si las animaciones están pausadas, aparecen ya en su lugar
+- Cada juego tiene un tono propio (ocre, azul o verde) en su tarjeta
+- La tarjeta lleva: número en hexágono, etiqueta con icono, datos con icono (solo datos que estén en `data.js`, nunca cifras inventadas) y el botón "Jugar ahora", que abre el juego en otra pestaña
+- Misión Tijuana va primero en todas partes. Los juegos propios viven en `frontend/public/juegos/<id>`
+- Las tarjetas entran en orden al cargar; si las animaciones están pausadas, aparecen ya en su lugar
+
+## Información y Consejos
+
+- Son vistas de Vue (`/informacion` y `/consejos`) con la misma banda verde y las mismas tarjetas que Juegos
+- Los tres temas (Qué es El Niño, Plan familiar y Mochila) se abren en una ventana (`LessonModal.vue`), desde Información y desde "Prepárate antes de que llueva" en el inicio. Se abren con `openLesson("mochila")` o con `/informacion?tema=mochila`
+- El botón "Ver información" ocupa todo el ancho de la tarjeta
+- Las marcas del plan y de la mochila se guardan en el navegador con las mismas llaves que las páginas anteriores
+- Las direcciones viejas (`/pages/aprende.html`, `/pages/recursos.html`, `/#/plan`, `/#/mochila`, `/#/el-nino`) llevan a las nuevas
 
 ## Recursos de otros sitios
 

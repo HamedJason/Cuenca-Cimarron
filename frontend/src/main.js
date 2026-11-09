@@ -10,9 +10,8 @@ import "@fontsource/barlow-condensed/800.css";
 import App from "./App.vue";
 import Home from "./views/Home.vue";
 // El inicio carga de inmediato; las demás páginas se descargan al visitarlas.
-const Learn = () => import("./views/Learn.vue");
-const Plan = () => import("./views/Plan.vue");
-const Backpack = () => import("./views/Backpack.vue");
+const Info = () => import("./views/Info.vue");
+const Tips = () => import("./views/Tips.vue");
 const Styles = () => import("./views/Styles.vue");
 const Games = () => import("./views/Games.vue");
 import "./style.css";
@@ -20,13 +19,12 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     { path: "/", component: Home, meta: { title: "Emergencias" } },
-    {
-      path: "/el-nino",
-      component: Learn,
-      meta: { title: "El fenómeno de El Niño" },
-    },
-    { path: "/plan", component: Plan, meta: { title: "Mi plan familiar" } },
-    { path: "/mochila", component: Backpack, meta: { title: "Mi mochila" } },
+    { path: "/informacion", component: Info, meta: { title: "Información" } },
+    { path: "/consejos", component: Tips, meta: { title: "Consejos" } },
+    // Las páginas anteriores abren el mismo tema en Información
+    { path: "/el-nino", redirect: "/informacion?tema=conozca" },
+    { path: "/plan", redirect: "/informacion?tema=planfamiliar" },
+    { path: "/mochila", redirect: "/informacion?tema=mochila" },
     { path: "/estilos", component: Styles, meta: { title: "Estilos" } },
     { path: "/identidad", redirect: "/estilos" },
     { path: "/juegos", component: Games, meta: { title: "Juegos" } },

@@ -3,6 +3,7 @@ import { ref, computed, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import Icon from "./components/Icon.vue";
 import Modal from "./components/Modal.vue";
+import LessonModal from "./components/LessonModal.vue";
 import { storageAvailable } from "./composables/useProgress";
 import { useVisits } from "./composables/useVisits";
 const route = useRoute();
@@ -15,12 +16,11 @@ function recoverLogo(event) {
 const showStats = ref(false);
 const { stats, statsState, loadStats } = useVisits();
 // Mismo orden que el menú que ya estaba publicado: Inicio, Juegos, Información, Consejos.
-// Información y Consejos siguen siendo páginas sueltas hasta que se pasen a Vue.
 const navigation = [
   { to: "/", label: "Inicio", icon: "home" },
   { to: "/juegos", label: "Juegos", icon: "gamepad" },
-  { href: "/pages/aprende.html", label: "Información", icon: "book", match: ["/el-nino", "/plan", "/mochila"] },
-  { href: "/pages/recursos.html", label: "Consejos", icon: "shield" },
+  { to: "/informacion", label: "Información", icon: "book" },
+  { to: "/consejos", label: "Consejos", icon: "shield" },
 ];
 const isActive = (item) =>
   item.to === route.path || (item.match || []).includes(route.path);
@@ -202,4 +202,5 @@ onMounted(() => {
     >
       Volver a intentar <Icon name="reset" :size="18" /></button
   ></Modal>
+  <LessonModal />
 </template>
