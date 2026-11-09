@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 import Icon from "./components/Icon.vue";
 import Modal from "./components/Modal.vue";
 import { storageAvailable } from "./composables/useProgress";
+import { useVisits } from "./composables/useVisits";
 const route = useRoute();
 function recoverLogo(event) {
   const image = event.currentTarget;
@@ -12,8 +13,7 @@ function recoverLogo(event) {
   image.src = "/brand/cuenca/icono-192.png";
 }
 const showStats = ref(false);
-const stats = ref(null);
-const statsState = ref("loading");
+const { stats, statsState, loadStats } = useVisits();
 // Mismo orden que el menú que ya estaba publicado: Inicio, Juegos, Información, Consejos.
 // Información y Consejos siguen siendo páginas sueltas hasta que se pasen a Vue.
 const navigation = [
@@ -40,43 +40,6 @@ const socials = [
   { label: "TikTok", href: "https://www.tiktok.com/", icon: '<path d="M15 4c.3 2.2 1.6 3.5 4 3.7v3.1c-1.4 0-2.7-.4-4-1.1v5.7a5.6 5.6 0 1 1-4.8-5.5v3.1a2.5 2.5 0 1 0 1.7 2.4V4H15Z"/>' },
   { label: "Facebook", href: "https://www.facebook.com/", icon: '<path d="M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5h1.7V4a22 22 0 0 0-2.4-.1c-2.4 0-4 1.5-4 4.1V10H8v3h2.4v8h3.1Z"/>' },
 ];
-async function loadStats() {
-  statsState.value = "loading";
-  try {
-    let visitor = localStorage.getItem("cuenca.visitor");
-    let session = sessionStorage.getItem("cuenca.session");
-    const uuidPattern =
-      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-    if (!visitor || !uuidPattern.test(visitor)) {
-      visitor = crypto.randomUUID();
-      localStorage.setItem("cuenca.visitor", visitor);
-    }
-    if (!session || !uuidPattern.test(session)) {
-      session = crypto.randomUUID();
-      sessionStorage.setItem("cuenca.session", session);
-    }
-    const response = await fetch("/api/visits", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({ visitor_id: visitor, session_id: session }),
-      signal: AbortSignal.timeout(8000),
-    });
-    if (!response.ok) throw new Error("Unavailable");
-    const data = await response.json();
-    if (
-      !Number.isInteger(data.unique_visitors) ||
-      !Number.isInteger(data.total_visits)
-    )
-      throw new Error("Invalid metrics");
-    stats.value = data;
-    statsState.value = "ready";
-  } catch {
-    statsState.value = "offline";
-  }
-}
 // El encabezado se compacta y marca su borde al bajar por la página.
 const scrolled = ref(false);
 const onScroll = () => {
@@ -235,7 +198,7 @@ onMounted(() => {
     <button
       v-if="statsState === 'offline'"
       class="button primary"
-      @click="loadStats"
+      @click="loadStats()"
     >
       Volver a intentar <Icon name="reset" :size="18" /></button
   ></Modal>

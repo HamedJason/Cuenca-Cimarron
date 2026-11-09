@@ -1,11 +1,59 @@
 <script setup>
 import Icon from "../components/Icon.vue";
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { RouterLink } from "vue-router";
 import Modal from "../components/Modal.vue";
 import MascotGuide from "../components/MascotGuide.vue";
 import { emergency, games, advice } from "../data";
 import { rand } from "../composables/useCanvasScene";
+import { useVisits } from "../composables/useVisits";
+// Contador del propósito: sube de 0 a la cifra real una sola vez.
+// App.vue registra la visita; aquí solo se lee la cifra.
+const { stats, statsState } = useVisits();
+const shownCount = ref(0);
+const reduceMotion = () =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+  document.documentElement.classList.contains("motion-off");
+function countUp(target) {
+  if (reduceMotion() || target < 10) {
+    shownCount.value = target;
+    return;
+  }
+  const start = performance.now();
+  const step = (now) => {
+    const t = Math.min((now - start) / 1400, 1);
+    shownCount.value = Math.round(target * (1 - (1 - t) ** 3));
+    if (t < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+watch(
+  () => stats.value?.unique_visitors,
+  (value) => Number.isInteger(value) && countUp(value),
+  { immediate: true },
+);
+// Compartir: menú del teléfono si existe; si no, se copia el enlace.
+const shareState = ref("");
+async function shareSite() {
+  const data = {
+    title: "Cuenca Cimarrona",
+    text: "Prepárate para las lluvias de El Niño en Tijuana",
+    url: window.location.origin,
+  };
+  try {
+    if (navigator.share) {
+      await navigator.share(data);
+      return;
+    }
+    await navigator.clipboard.writeText(data.url);
+    shareState.value = "Enlace copiado";
+  } catch (error) {
+    if (error?.name !== "AbortError") shareState.value = "No se pudo copiar";
+  }
+  setTimeout(() => (shareState.value = ""), 2600);
+}
+// Foto del equipo: cuando exista, poner aquí la ruta (por ejemplo /assets/images/equipo.webp).
+const teamPhoto = ref("");
 const telHref = (number) => `tel:${number.replace(/\s/g, "")}`;
 const raindrops = Array.from({ length: 14 }, () => ({
   left: `${rand(45, 99).toFixed(1)}%`,
@@ -37,11 +85,62 @@ const mapHref = (shelter) =>
 </script>
 <template>
   <div class="home">
+    <section class="purpose-hero cc-watermark" aria-labelledby="titulo-proposito">
+      <div class="wrap purpose-row">
+        <div class="purpose-text">
+          <h1 id="titulo-proposito">Tijuana se prepara para El Niño</h1>
+          <p class="purpose-lead">
+            En la comunidad cimarrona nos unimos para que tu familia y tu colonia
+            sepan qué hacer antes, durante y después de las lluvias. Aquí
+            encuentras información clara, juegos para practicar y un plan para
+            armar en casa, todo gratis y pensado para toda Tijuana
+          </p>
+          <ul class="purpose-ways" aria-label="Formas de aprender en el sitio">
+            <li>
+              <a href="/pages/aprende.html"
+                ><Icon name="book" :size="22" /> Lee lo esencial</a
+              >
+            </li>
+            <li>
+              <RouterLink to="/juegos"
+                ><Icon name="gamepad" :size="22" /> Practica jugando</RouterLink
+              >
+            </li>
+            <li>
+              <RouterLink to="/plan"
+                ><Icon name="check" :size="22" /> Arma tu plan</RouterLink
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="purpose-counter" aria-live="polite">
+          <p v-if="statsState === 'ready'" class="counter-number">
+            {{ shownCount.toLocaleString("es-MX") }}
+          </p>
+          <p v-else-if="statsState === 'loading'" class="counter-number is-loading">
+            <span class="sr-only">Cargando el contador</span>
+          </p>
+          <p class="counter-label">
+            {{
+              statsState === "offline"
+                ? "Súmate a la gente que ya se está preparando"
+                : "personas ya se están preparando"
+            }}
+          </p>
+          <p class="counter-note">Cada persona informada ayuda a su colonia</p>
+          <button class="button counter-share" type="button" @click="shareSite">
+            <Icon name="share" :size="20" />
+            {{ shareState || "Invita a alguien" }}
+          </button>
+        </div>
+      </div>
+    </section>
+
     <section class="band band-green" aria-labelledby="titulo-911">
       <div class="wrap hero-911">
         <div class="hero-911-text">
           <p class="hero-place">Tijuana, Baja California</p>
-          <h1 id="titulo-911">¿Es una emergencia?</h1>
+          <h2 id="titulo-911" class="hero-911-title">¿Es una emergencia?</h2>
           <p class="hero-lead">
             Llama al 911: contestan policía, ambulancia y bomberos
           </p>
@@ -406,6 +505,59 @@ const mapHref = (shelter) =>
             ><strong>{{ item.title }}</strong
             ><span>{{ item.text }}</span></a
           >
+        </div>
+      </section>
+      <section class="team" aria-labelledby="titulo-equipo">
+        <figure class="team-photo">
+          <img
+            v-if="teamPhoto"
+            :src="teamPhoto"
+            alt="Equipo de profesores y estudiantes de Cuenca Cimarrona"
+            width="960"
+            height="640"
+            loading="lazy"
+            @error="teamPhoto = ''"
+          />
+          <div v-else class="team-photo-empty">
+            <Icon name="camera" :size="44" />
+            <span>Aquí va la foto del equipo</span>
+          </div>
+        </figure>
+        <div class="team-text">
+          <span class="label">Quiénes somos</span>
+          <h2 id="titulo-equipo" class="section-title">
+            Nació en las aulas cimarronas
+          </h2>
+          <p>
+            Cuenca Cimarrona es un proyecto de la comunidad cimarrona de la
+            UABC. Trabajamos en equipo para que las familias de Tijuana sepan
+            qué hacer antes, durante y después de las lluvias de El Niño, con
+            información clara y gratuita
+          </p>
+          <h3>Cada quien aprende distinto</h3>
+          <p>
+            Por eso usamos el Diseño Universal para el Aprendizaje (DUA): la
+            misma información viene en varias formas, para llegar a más personas
+          </p>
+          <ul class="team-ways">
+            <li>
+              <span class="team-way-icon" aria-hidden="true"
+                ><Icon name="book" :size="24" /></span
+              ><span><strong>Leer</strong> guías cortas, con iconos</span>
+            </li>
+            <li>
+              <span class="team-way-icon" aria-hidden="true"
+                ><Icon name="gamepad" :size="24" /></span
+              ><span><strong>Jugar</strong> retos para practicar decisiones</span>
+            </li>
+            <li>
+              <span class="team-way-icon" aria-hidden="true"
+                ><Icon name="people" :size="24" /></span
+              ><span
+                ><strong>Hacer</strong> un plan y una mochila en familia</span
+              >
+            </li>
+          </ul>
         </div>
       </section>
     </div>

@@ -1,5 +1,5 @@
 import { createApp } from "vue";
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHashHistory, START_LOCATION } from "vue-router";
 import "@fontsource/dm-sans/400.css";
 import "@fontsource/dm-sans/500.css";
 import "@fontsource/dm-sans/600.css";
@@ -32,9 +32,12 @@ const router = createRouter({
     { path: "/juegos", component: Games, meta: { title: "Juegos" } },
     { path: "/:pathMatch(.*)*", redirect: "/" },
   ],
+  // Al cargar o recargar, la página empieza hasta arriba (en el propósito).
   // Al cambiar de página se sube al inicio; si solo cambia la consulta (?juego=...)
   // se queda donde está, para que el botón pueda llevar a las instrucciones.
+  // Con atrás y adelante del navegador se vuelve a donde estabas.
   scrollBehavior: (to, from, saved) => {
+    if (from === START_LOCATION) return { top: 0 };
     if (saved) return saved;
     if (to.path === from.path) return false;
     return { top: 0 };
@@ -43,4 +46,6 @@ const router = createRouter({
 router.afterEach((to) => {
   document.title = `${to.meta.title} · Cuenca Cimarrona`;
 });
+// El navegador no restaura la posición al recargar: de eso se encarga el router.
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 createApp(App).use(router).mount("#app");

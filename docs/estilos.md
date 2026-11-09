@@ -88,6 +88,15 @@ Tarjetas de servicios (fondo / texto): Protección Civil `#EAF2FF` / `#0B4FA8`, 
 - Sin punto final en títulos, botones y textos de una sola oración
 - Sin eslóganes
 
+## Inicio
+
+Orden de arriba hacia abajo: propósito, 911, aviso de El Niño, números, refugios y mapa, juegos, preparación, consejos y quiénes somos.
+
+- **Propósito** (`.purpose-hero`): va antes del 911 a pedido del equipo, como única excepción a "primero lo que sirve en una emergencia". Por eso en celular es compacto: el 911 empieza justo después del contador
+- **Contador** (`.purpose-counter`): la misma cifra del pie (visitas únicas por navegador, `composables/useVisits.js`). Dice "personas ya se están preparando": habla de un proceso en marcha, no promete que ya estén preparadas. Si la API falla no muestra número, solo "Súmate a la gente que ya se está preparando". Nunca se muestran cifras estimadas
+- **Invita a alguien**: abre el menú de compartir del teléfono; en computadora copia el enlace
+- **Quiénes somos** (`.team`): foto del equipo y el enfoque DUA (Diseño Universal para el Aprendizaje: leer, jugar y hacer). La foto se pone en `teamPhoto`, dentro de `Home.vue`; mientras no exista se ve un marco punteado
+
 ## Componentes
 
 | Clase | Uso |
