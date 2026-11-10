@@ -37,6 +37,9 @@ function popup(item) {
   </div>`;
 }
 
+// Dibujo de un camión de bomberos, con trazo café como el resto de las ilustraciones.
+const pinIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.8 7.4h10.6M2.8 9h10.6M4.6 7.4V9M7 7.4V9M9.4 7.4V9M11.8 7.4V9" fill="none" stroke="#4a1500" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/><path d="M1.6 10h13v8.2h-13Z" fill="#e53935" stroke="#4a1500" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><path d="M14.6 11.2h4.3l3.5 3.8v3.2h-7.8Z" fill="#e53935" stroke="#4a1500" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><path d="M15.7 12.3h2.7l2.2 2.4h-4.9Z" fill="#bfe8ff" stroke="#4a1500" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/><path d="M16.1 11.2V9.8h1.8v1.4" fill="#ffc83d" stroke="#4a1500" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/><path d="M2.2 14.6h12M15 16.2h6.8" fill="none" stroke="#ffc83d" stroke-width="1.3" stroke-linecap="round"/><path d="M3.4 11.6h3.2v1.8H3.4ZM8.2 11.6h3.2v1.8H8.2Z" fill="#fff4e0" stroke="#4a1500" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/><circle cx="5.8" cy="18.4" r="2.3" fill="#3b2b26" stroke="#4a1500" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="5.8" cy="18.4" r=".8" fill="#fff"/><circle cx="18" cy="18.4" r="2.3" fill="#3b2b26" stroke="#4a1500" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="18" cy="18.4" r=".8" fill="#fff"/></svg>`;
+
 function draw(fit) {
   if (!map) return;
   layer.clearLayers();
@@ -48,10 +51,10 @@ function draw(fit) {
       alt: item.name,
       icon: L.divIcon({
         className: "",
-        html: `<span class="map-pin${central ? " is-central" : ""}"></span>`,
-        iconSize: [34, 34],
-        iconAnchor: [17, 34],
-        popupAnchor: [0, -32],
+        html: `<span class="map-pin${central ? " is-central" : ""}">${pinIcon}</span>`,
+        iconSize: [44, 52],
+        iconAnchor: [22, 52],
+        popupAnchor: [0, -48],
       }),
     })
       .bindPopup(popup(item))

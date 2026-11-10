@@ -6706,28 +6706,40 @@ button.prep-card {
   font-size: 14px;
   color: var(--muted);
 }
-/* Punto del mapa: gota naranja con borde oscuro, la Central en verde UABC. */
+/* Punto del mapa: escudo redondo con el dibujo y una punta abajo.
+   La Central va en verde UABC. */
 .map-pin {
-  display: block;
-  width: 34px;
-  height: 34px;
-  border-radius: 50% 50% 50% 0;
-  transform: rotate(-45deg);
-  background: #f4511e;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
   border: 3px solid #7a2400;
   box-shadow: 0 3px 0 #7a2400;
 }
 .map-pin::after {
   content: "";
   position: absolute;
-  inset: 8px;
-  border-radius: 50%;
-  background: #fff;
+  left: 50%;
+  bottom: -11px;
+  margin-left: -7px;
+  border: 7px solid transparent;
+  border-top: 9px solid #7a2400;
+  border-bottom: 0;
+}
+.map-pin svg {
+  width: 30px;
+  height: 30px;
 }
 .map-pin.is-central {
   background: var(--uabc-green);
   border-color: var(--green-deep);
   box-shadow: 0 3px 0 var(--green-deep);
+}
+.map-pin.is-central::after {
+  border-top-color: var(--green-deep);
 }
 .map-pop {
   display: flex;
