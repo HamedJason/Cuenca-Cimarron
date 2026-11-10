@@ -3,6 +3,7 @@ import Icon from "../components/Icon.vue";
 import { ref, computed, watch } from "vue";
 import { RouterLink } from "vue-router";
 import Modal from "../components/Modal.vue";
+import StationsMap from "../components/StationsMap.vue";
 import MascotGuide from "../components/MascotGuide.vue";
 import FollowSection from "../components/FollowSection.vue";
 import { emergency, games, advice } from "../data";
@@ -640,6 +641,13 @@ const stationMapHref = (item) =>
         Si hay fuego o alguien está en peligro, llama primero al
         <a href="tel:911" class="station-911">911</a>
       </p>
+      <StationsMap
+        v-if="showStations"
+        :stations="stations"
+        :central-phone="centralPhone"
+        :map-href="stationMapHref"
+      />
+      <p class="station-map-hint">Toca un punto para ver su teléfono y cómo llegar</p>
       <label for="buscar-estacion" class="field-label"
         >Busca por colonia o número de estación</label
       >

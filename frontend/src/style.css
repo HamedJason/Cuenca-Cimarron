@@ -6671,3 +6671,97 @@ button.prep-card {
     width: 100%;
   }
 }
+
+/* ===== Mapa de estaciones dentro de la ventana de bomberos ===== */
+.stations-map {
+  position: relative;
+}
+.stations-map-canvas {
+  height: min(52dvh, 380px);
+  border: 3px solid var(--uabc-green);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: var(--green-tint);
+  z-index: 0;
+}
+.stations-map-note {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 16px;
+  text-align: center;
+  color: var(--green-deep);
+  font-weight: 700;
+  pointer-events: none;
+}
+@media (max-width: 760px) {
+  .stations-map-canvas {
+    height: 300px;
+  }
+}
+.station-map-hint {
+  margin: -4px 0 4px;
+  font-size: 14px;
+  color: var(--muted);
+}
+/* Punto del mapa: gota naranja con borde oscuro, la Central en verde UABC. */
+.map-pin {
+  display: block;
+  width: 34px;
+  height: 34px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  background: #f4511e;
+  border: 3px solid #7a2400;
+  box-shadow: 0 3px 0 #7a2400;
+}
+.map-pin::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: #fff;
+}
+.map-pin.is-central {
+  background: var(--uabc-green);
+  border-color: var(--green-deep);
+  box-shadow: 0 3px 0 var(--green-deep);
+}
+.map-pop {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 170px;
+  font-family: var(--font-body);
+  font-size: 14px;
+}
+.map-pop strong {
+  font-family: var(--font-heading);
+  font-size: 19px;
+  color: #7a2400;
+}
+.map-pop small {
+  font-weight: 700;
+  color: #7a2400;
+}
+.map-pop a {
+  display: block;
+  padding: 6px 10px;
+  border: 2px solid currentColor;
+  border-radius: 999px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+}
+.map-pop .map-pop-call {
+  color: #a83200;
+}
+.map-pop .map-pop-route {
+  color: var(--uabc-green);
+}
+.stations-map .leaflet-popup-content-wrapper {
+  border-radius: 16px;
+  border: 2px solid #7a2400;
+}
