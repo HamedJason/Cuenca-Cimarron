@@ -14,6 +14,8 @@ watch(
     if (value) {
       trigger = document.activeElement;
       dialog.value.showModal();
+      // Cada vez que se abre, la ventana empieza desde arriba.
+      dialog.value.scrollTop = 0;
       document.body.style.overflow = "hidden";
     } else {
       dialog.value?.close();

@@ -87,6 +87,29 @@ const mapHref = (shelter) =>
   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     `${shelter.name}, ${shelter.address}, Tijuana, B.C.`,
   )}`;
+// Bomberos: la lista de estaciones se abre en una ventana con buscador.
+const showStations = ref(false);
+const stationQuery = ref("");
+const plain = (text) =>
+  (text || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+const stations = computed(() => {
+  const query = plain(stationQuery.value.trim());
+  if (!query) return emergency.fireStations;
+  return emergency.fireStations.filter((item) =>
+    plain(`${item.name} ${item.area} ${item.address}`).includes(query),
+  );
+});
+const centralPhone = emergency.fireStations[0].phone;
+function openStations() {
+  stationQuery.value = "";
+  showStations.value = true;
+}
+const stationMapHref = (item) =>
+  `https://www.google.com/maps/search/?api=1&query=${
+    item.lat
+      ? `${item.lat},${item.lng}`
+      : encodeURIComponent(`${item.address}, ${item.area}, Tijuana, B.C.`)
+  }`;
 </script>
 <template>
   <div class="home">
@@ -165,6 +188,23 @@ const mapHref = (shelter) =>
             ><span class="call-number">911</span></span
           ></a
         >
+      </div>
+    </section>
+
+    <section class="band band-fire" aria-labelledby="titulo-bomberos">
+      <div class="wrap fire-row">
+        <span class="fire-badge" aria-hidden="true"
+          ><Icon name="flame" :size="40"
+        /></span>
+        <div class="fire-text">
+          <h2 id="titulo-bomberos">Estaciones de bomberos</h2>
+          <p>
+            Ubica la más cercana a tu colonia, su teléfono y cómo llegar
+          </p>
+        </div>
+        <button class="button primary cta" type="button" @click="openStations">
+          <Icon name="pin" :size="20" /> Ver estaciones y teléfonos
+        </button>
       </div>
     </section>
 
@@ -590,6 +630,86 @@ const mapHref = (shelter) =>
         </div>
       </section>
     </div>
+    <Modal
+      :open="showStations"
+      title="Estaciones de bomberos"
+      wide
+      @close="showStations = false"
+    >
+      <p class="modal-intro">
+        Si hay fuego o alguien está en peligro, llama primero al
+        <a href="tel:911" class="station-911">911</a>
+      </p>
+      <label for="buscar-estacion" class="field-label"
+        >Busca por colonia o número de estación</label
+      >
+      <input
+        id="buscar-estacion"
+        v-model="stationQuery"
+        class="station-search"
+        type="search"
+        placeholder="Por ejemplo: La Mesa, Playas, 8"
+        autocomplete="off"
+      />
+      <p v-if="!stations.length" class="station-empty" role="status">
+        No encontramos esa colonia. Prueba con otra o llama a la Central al
+        <a :href="telHref(centralPhone)">{{ centralPhone }}</a>
+      </p>
+      <ul class="station-list">
+        <li
+          v-for="item in stations"
+          :key="item.id"
+          :class="['station-card', { 'is-central': item.id === 'central' }]"
+        >
+          <span class="station-icon" aria-hidden="true"
+            ><Icon name="flame" :size="24"
+          /></span>
+          <span class="station-info"
+            ><span v-if="item.id === 'central'" class="station-tag"
+              >Base principal</span
+            ><strong>{{ item.name }}</strong
+            ><span v-if="item.area">{{ item.area }}</span
+            ><span v-if="item.address" class="station-address">{{
+              item.address
+            }}</span></span
+          >
+          <span class="station-actions">
+            <a
+              v-if="item.phone"
+              class="pill station-call"
+              :href="telHref(item.phone)"
+              :aria-label="`Llamar a ${item.name}, ${item.phone}`"
+              ><Icon name="phone" :size="18" /> {{ item.phone }}</a
+            >
+            <span v-else class="station-central-call"
+              ><small>Sin teléfono propio, llama a la Central</small
+              ><a
+                class="pill station-call"
+                :href="telHref(centralPhone)"
+                :aria-label="`Llamar a la Central de Bomberos, ${centralPhone}`"
+                ><Icon name="phone" :size="18" /> Central
+                {{ centralPhone }}</a
+              ></span
+            >
+            <a
+              class="pill"
+              :href="stationMapHref(item)"
+              target="_blank"
+              rel="noopener"
+              :aria-label="`Cómo llegar a ${item.name}`"
+              ><Icon name="route" :size="18" /> Cómo llegar</a
+            >
+          </span>
+        </li>
+      </ul>
+      <a
+        class="text-link"
+        :href="emergency.fireStationsUrl"
+        target="_blank"
+        rel="noopener"
+        ><Icon name="external" :size="18" /> Directorio oficial de Bomberos Tijuana</a
+      >
+    </Modal>
     <Modal
       :open="showMap"
       title="Mapa de riesgo de Tijuana"

@@ -185,6 +185,33 @@ export const emergency = {
       source: "https://policia.tijuana.gob.mx/contacto.aspx",
     },
   ],
+  // Estaciones: ubicaciones del mapa .kmz de Bomberos Tijuana, domicilios y
+  // teléfonos de bomberos.tijuana.gob.mx/central.aspx (revisado el 10 de noviembre de 2026).
+  // Las estaciones sin teléfono publicado se atienden por la Central.
+  fireStationsUrl: "https://bomberos.tijuana.gob.mx/central.aspx",
+  fireStations: [
+    { id: "central", name: "Central de Bomberos", area: "Zona Norte", address: "Ave. Aldrete y Madero 8298", phone: "664 685 5555", lat: 32.539306, lng: -117.035378 },
+    { id: "estacion-1", name: "Estación 1", area: "Zona Centro", address: "Calle Emiliano Zapata y Ave. 5 de Mayo 7560", phone: "664 685 5556" },
+    { id: "estacion-2", name: "Estación 2", area: "La Mesa", address: "Calle Baburias 500, Fracc. Anáhuac", phone: "664 622 0391", lat: 32.506928, lng: -116.976146 },
+    { id: "estacion-3", name: "Estación 3", area: "El Florido", address: "Olivos y Camino Vecinal", phone: "664 629 3130", lat: 32.447903, lng: -116.885211 },
+    { id: "estacion-4", name: "Estación 4", area: "Ciudad Industrial Mesa de Otay", address: "Blvd. Industrial s/n", phone: "664 623 4164", lat: 32.537408, lng: -116.921998 },
+    { id: "estacion-5", name: "Estación 5", area: "Col. Sánchez Taboada", address: "Blvd. Sánchez Taboada s/n", phone: "664 626 6052", lat: 32.467604, lng: -116.971304 },
+    { id: "estacion-6", name: "Estación 6", area: "Col. La Obrera 2da. Sección", address: "Ave. Centenario y Francisco Hernández s/n", phone: "664 684 5944", lat: 32.488193, lng: -117.040864 },
+    { id: "estacion-7", name: "Estación 7", area: "Fracc. El Cortez", address: "Calle Veracruz y Mexiquito s/n", phone: "664 636 7622", lat: 32.509096, lng: -117.066572 },
+    { id: "estacion-8", name: "Estación 8", area: "Fracc. El Águila", address: "Ave. Águila Real s/n", phone: "664 627 4552", lat: 32.498642, lng: -116.905508 },
+    { id: "estacion-9", name: "Estación 9", area: "Col. La Presa", address: "Carretera libre a Tecate s/n", phone: "664 646 4682", lat: 32.44725, lng: -116.909382 },
+    { id: "estacion-10", name: "Estación 10", area: "Playas de Tijuana", address: "Paseo Pedregal y Parque Azteca s/n, Fracc. Jardines", phone: "664 631 8996", lat: 32.52138, lng: -117.112713 },
+    { id: "estacion-11", name: "Estación 11", area: "Col. Tierra y Libertad", address: "Calle Baylón Chacón y Ave. Santa Rosalía s/n", phone: "664 970 1100", lat: 32.494327, lng: -116.868554 },
+    { id: "estacion-12", name: "Estación 12", area: "Fracc. Pórticos de San Antonio, Santa Fe", address: "Ave. Sur y Suroeste s/n", phone: "664 975 1490", lat: 32.43863, lng: -117.042552 },
+    { id: "estacion-13", name: "Estación 13", area: "Fracc. El Refugio", address: "Ave. de los Cedros s/n", phone: "664 971 6565", lat: 32.458152, lng: -116.821333 },
+    { id: "estacion-14", name: "Estación 14 Salvavidas", area: "Playas de Tijuana", address: "Ave. del Agua y Paseo Costero s/n", phone: "664 630 9161", lat: 32.523135, lng: -117.123908 },
+    { id: "estacion-15", name: "Estación 15", area: "Fracc. Natura", address: "Blvd. Natura y Calle Bosques Azules s/n", lat: 32.375849, lng: -116.932512 },
+    { id: "estacion-16", name: "Estación 16", area: "Fracc. Parajes del Valle", address: "Calle Valle de los Encinos s/n", phone: "664 207 1460", lat: 32.514689, lng: -116.745709 },
+    { id: "estacion-17", name: "Estación 17", area: "Fracc. Altabrisa", address: "Calle Tomás Aquino y Damián Carmona s/n", phone: "664 210 0288", lat: 32.530263, lng: -116.978845 },
+    { id: "estacion-18", name: "Estación 18", area: "Fracc. Hacienda las Delicias", address: "Calle Arroyo del Campo s/n", lat: 32.407212, lng: -116.937039 },
+    { id: "forestal", name: "Estación Forestal", lat: 32.461893, lng: -116.880513 },
+    { id: "campo-de-entrenamiento", name: "Campo de Entrenamiento", lat: 32.458231, lng: -116.820471 },
+  ],
   notices: [
     {
       title: "Comunicados de Protección Civil Tijuana",
