@@ -31,6 +31,12 @@
   --control-line: #7c8a82;
   --green-tint: #e6f4ec;
   --gold-tint: #fff1d6;
+  /* Papeles del verde profundo: en modo claro valen lo mismo; en oscuro se separan */
+  --title: #003d24;
+  --edge: #003d24;
+  --shadow: #003d24;
+  --deep-fill: #003d24;
+  --link: #00723f;
   --font-heading: "Barlow Condensed", sans-serif;
   --font-body: "DM Sans", sans-serif;
   --font-play: "Baloo 2", "Barlow Condensed", sans-serif;
@@ -45,4 +51,28 @@
   --space-6: 24px;
   --space-8: 32px;
   --space-12: 48px;
+}
+
+/* ===== Modo oscuro (sin negro): grises carbón, verde y ocre desaturados =====
+   Se activa con data-theme="dark" en <html>; index.html lo pone según el sistema
+   o la elección guardada (botón del pie). Contrastes en docs/estilos.md */
+:root[data-theme="dark"] {
+  --uabc-green: #3a6f5a;
+  --uabc-gold: #c9a45e;
+  --green-deep: #fff1d6;
+  --gold-text: #c9a45e;
+  --paper: #25292b;
+  --surface: #2f3437;
+  --ink: #edeeeb;
+  --muted: #b5bbb7;
+  --line: #454c4f;
+  --control-line: #8e9893;
+  --green-tint: #393f42;
+  --gold-tint: #3a332e;
+  --title: #fff1d6;
+  --edge: #8e9893;
+  --shadow: #16191b;
+  --deep-fill: #2f4a3e;
+  --link: #a4c3b2;
+  color-scheme: dark;
 }

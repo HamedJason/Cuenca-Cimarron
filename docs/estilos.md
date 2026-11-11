@@ -75,6 +75,36 @@ El ocre UABC no sirve para texto sobre blanco: no tiene contraste suficiente. Pa
 
 Tarjetas de servicios (fondo / texto): Protección Civil `#EAF2FF` / `#0B4FA8`, Bomberos `#FFF1E6` / `#A83200`, Denuncia anónima `#F2EDFF` / `#5B2CA8`, Ambulancia `#FFEBEE` / `#B3121F`.
 
+## Modo oscuro
+
+Sin negro: grises carbón de base, y el verde y el ocre desaturados. Sigue el tema del teléfono o la computadora, y cambia si el sistema cambia. El botón de **media luna** del encabezado lo activa y desactiva a mano (la luna se rellena de ocre cuando está activo); esa elección se recuerda en ese navegador, y si coincide con la del sistema se borra para volver a seguirlo (`composables/useTheme.js`). `index.html` pone el tema antes de pintar para que no parpadee. Los juegos propios (Misión Tijuana y los demás) conservan su diseño.
+
+| Uso | Claro | Oscuro | Contraste en oscuro |
+| --- | --- | --- | --- |
+| Fondo de página `--paper` | `#FFFFFF` | `#25292B` gris carbón | |
+| Superficie `--surface` | `#FFFFFF` | `#2F3437` | |
+| Tarjeta tenue `--green-tint` | `#E6F4EC` | `#393F42` | |
+| Bloque cálido `--gold-tint` | `#FFF1D6` | `#3A332E` gris cálido | |
+| Títulos `--title` | `#003D24` | `#FFF1D6` crema | 13.1 : 1 |
+| Texto `--ink` | `#1C2621` | `#EDEEEB` | 12.6 : 1 |
+| Texto secundario `--muted` | `#4A5650` | `#B5BBB7` | 7.5 : 1 |
+| Contorno cartoon `--edge` | `#003D24` | `#8E9893` gris medio | 4.9 : 1 |
+| Sombra sólida `--shadow` | `#003D24` | `#16191B` gris muy oscuro | |
+| Relleno profundo `--deep-fill` | `#003D24` | `#2F4A3E` salvia oscuro | |
+| Enlaces `--link` | `#00723F` | `#A4C3B2` salvia claro | 7.7 : 1 |
+| Verde UABC `--uabc-green` | `#00723F` | `#3A6F5A` desaturado | blanco encima 5.8 : 1 |
+| Ocre UABC `--uabc-gold` | `#DD971A` | `#C9A45E` desaturado | como texto 6.3 : 1 |
+
+Reglas:
+
+- El verde profundo tenía dos papeles; ahora son variables separadas: `--title` (texto), `--edge` (contornos), `--shadow` (sombras) y `--deep-fill` (fondos). En modo claro las cuatro valen `#003D24`. Un estilo nuevo usa la que corresponde a su papel, nunca `--green-deep` directo
+- **Los iconos no cambian**: chips del menú, de consejos, de dependencias, de juegos, el fueguito de bomberos, el teléfono del 911 y las ilustraciones conservan los colores del modo claro. La lista está al final de `style.css` ("Modo oscuro: ajustes de componentes"); un icono nuevo se agrega ahí
+- El botón del 911 sigue claro (crema) para que sea lo que más destaca
+- La franja ocre de El Niño conserva el texto oscuro sobre el ocre
+- Las tarjetas de servicios conservan su color (azul, naranja, morado) en versión oscura con texto claro
+- Bienvenida: fondo gris y los seis logos juntos en una franja blanca, porque sus archivos traen fondo blanco y varios necesitan fondo claro para leerse
+- Los colores base del modo oscuro están en `brand/tokens.css` (`:root[data-theme="dark"]`)
+
 ## Letras
 
 - Títulos: Barlow Condensed 700 u 800
@@ -124,7 +154,7 @@ Tres columnas en computadora; en celular, una debajo de otra.
 Las redes están en `socials`, dentro de `frontend/src/data.js`. Una red sin enlace se ve como "próximamente" en el pie y no aparece en ningún otro lugar.
 
 - **Encabezado:** iconos de Instagram, Facebook, TikTok y YouTube a la derecha del menú, separados por una línea. En celular están dentro del menú, en una fila que dice "Síguenos"
-- Para que el encabezado quepa en una sola fila con las cuatro redes: de 761 a 1100 px el menú va sin iconos, y de 761 a 910 px el encabezado muestra solo el icono del cimarrón, sin el nombre
+- Para que el encabezado quepa en una sola fila con las cuatro redes y la media luna: de 761 a 1100 px el menú va sin iconos; de 761 a 960 px el encabezado muestra solo el icono del cimarrón, sin el nombre; y hasta 420 px el botón de menú va solo con su icono (conserva "Menú" para lectores de pantalla)
 - **Inicio, "Síguenos en redes":** antes de "Quiénes somos". El cimarrón presenta botones grandes para cada red
 - **Videos:** se agregan en `videos`, dentro de `data.js` (YouTube o TikTok, con su número de video y título). Mientras la lista esté vacía se ve "Muy pronto, videos aquí". Cada video muestra primero una portada con botón de play y solo carga el reproductor al tocarlo: así la página no se hace lenta y YouTube (en modo sin cookies) o TikTok no rastrean a quien no lo reproduce
 - No hay botón flotante de redes: ya está "Aprende jugando" y competirían entre sí y con el 911

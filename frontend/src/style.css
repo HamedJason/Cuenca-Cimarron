@@ -49,12 +49,12 @@ button:disabled {
 a:focus-visible,
 button:focus-visible,
 input:focus-visible {
-  outline: 3px solid var(--green-deep);
+  outline: 3px solid var(--edge);
   outline-offset: 3px;
 }
 .supply-row:has(input:focus-visible),
 .task-row:has(input:focus-visible) {
-  outline: 3px solid var(--green-deep);
+  outline: 3px solid var(--edge);
   outline-offset: 2px;
 }
 .supply-row input:focus-visible,
@@ -80,7 +80,7 @@ h3 {
   font-family: var(--font-heading);
   font-weight: 800;
   line-height: 1.02;
-  color: var(--green-deep);
+  color: var(--title);
 }
 h1 {
   font-size: 64px;
@@ -108,9 +108,9 @@ input[type="checkbox"] {
   height: 24px;
   flex-shrink: 0;
   margin: 0;
-  border: 2px solid var(--green-deep);
+  border: 2px solid var(--edge);
   border-radius: 7px;
-  background: #fff;
+  background: var(--surface);
   cursor: pointer;
   display: inline-grid;
   place-content: center;
@@ -135,7 +135,7 @@ input[type="checkbox"]:hover {
   background: var(--green-tint);
 }
 input[type="checkbox"]:checked:hover {
-  background: var(--green-deep);
+  background: var(--deep-fill);
 }
 
 /* Contenedor común */
@@ -167,7 +167,7 @@ input[type="checkbox"]:checked:hover {
   font-weight: 800;
   font-size: 27px;
   line-height: 1;
-  color: var(--green-deep);
+  color: var(--title);
 }
 .brand img {
   object-fit: contain;
@@ -183,7 +183,7 @@ input[type="checkbox"]:checked:hover {
   min-height: 44px;
   padding: 0 16px;
   border-radius: 12px;
-  color: var(--green-deep);
+  color: var(--title);
   font-weight: 600;
   font-size: 16px;
   transition: background 0.15s;
@@ -219,7 +219,7 @@ input[type="checkbox"]:checked:hover {
   background: var(--uabc-green);
   border-color: var(--uabc-green);
   color: #fff;
-  box-shadow: 0 4px 0 var(--green-deep);
+  box-shadow: 0 4px 0 var(--shadow);
 }
 .primary:hover {
   background: #005f34;
@@ -232,14 +232,14 @@ input[type="checkbox"]:checked:hover {
 .secondary {
   background: var(--surface);
   border-color: var(--uabc-green);
-  color: var(--green-deep);
+  color: var(--title);
 }
 .secondary:hover {
   background: var(--green-tint);
 }
 .dark {
-  background: var(--green-deep);
-  border-color: var(--green-deep);
+  background: var(--deep-fill);
+  border-color: var(--edge);
   color: #fff;
 }
 .dark:hover {
@@ -251,7 +251,7 @@ input[type="checkbox"]:checked:hover {
   align-items: center;
   gap: 8px;
   min-height: 44px;
-  color: var(--uabc-green);
+  color: var(--link);
   font-weight: 700;
   padding: 0;
   text-decoration: underline;
@@ -259,7 +259,7 @@ input[type="checkbox"]:checked:hover {
   text-underline-offset: 5px;
 }
 .text-link:hover {
-  color: var(--green-deep);
+  color: var(--title);
   text-decoration-thickness: 3px;
 }
 .pill {
@@ -269,7 +269,7 @@ input[type="checkbox"]:checked:hover {
   padding: 0 18px;
   border: 2px solid var(--uabc-green);
   border-radius: 999px;
-  color: var(--uabc-green);
+  color: var(--link);
   font-weight: 700;
   white-space: nowrap;
   transition:
@@ -323,10 +323,10 @@ input[type="checkbox"]:checked:hover {
   gap: 18px;
   min-height: 128px;
   padding: 18px 28px;
-  background: #fff;
-  color: var(--green-deep);
+  background: var(--surface);
+  color: var(--title);
   border-radius: var(--radius-block);
-  box-shadow: 0 6px 0 var(--green-deep);
+  box-shadow: 0 6px 0 var(--shadow);
   transition:
     background 0.12s,
     transform 0.08s;
@@ -347,11 +347,11 @@ input[type="checkbox"]:checked:hover {
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 84px;
-  color: var(--uabc-green);
+  color: var(--link);
 }
 .band-gold {
   background: var(--uabc-gold);
-  color: var(--green-deep);
+  color: var(--title);
 }
 .alert-row {
   display: flex;
@@ -371,7 +371,7 @@ input[type="checkbox"]:checked:hover {
   margin-bottom: 4px;
 }
 .alert-row p {
-  color: var(--green-deep);
+  color: var(--title);
   font-size: 18px;
   font-weight: 500;
 }
@@ -382,7 +382,7 @@ input[type="checkbox"]:checked:hover {
   gap: 8px 20px;
 }
 .text-link.on-gold {
-  color: var(--green-deep);
+  color: var(--title);
 }
 .home-body {
   display: flex;
@@ -405,7 +405,7 @@ input[type="checkbox"]:checked:hover {
   padding: 22px;
 }
 .phone-name {
-  color: var(--green-deep);
+  color: var(--title);
   font-weight: 700;
   font-size: 18px;
   margin-bottom: 6px;
@@ -418,13 +418,13 @@ input[type="checkbox"]:checked:hover {
   font-weight: 800;
   font-size: 40px;
   line-height: 1.1;
-  color: var(--uabc-green);
+  color: var(--link);
   text-decoration: underline;
   text-decoration-thickness: 3px;
   text-underline-offset: 6px;
 }
 .phone-card a:hover {
-  color: var(--green-deep);
+  color: var(--title);
 }
 .section-note {
   font-size: 15px;
@@ -470,7 +470,7 @@ input[type="checkbox"]:checked:hover {
 }
 .shelter-list strong {
   display: block;
-  color: var(--green-deep);
+  color: var(--title);
 }
 .shelter-list span span {
   font-size: 15px;
@@ -490,7 +490,7 @@ input[type="checkbox"]:checked:hover {
   padding: var(--pad);
 }
 .risk-card svg {
-  color: var(--green-deep);
+  color: var(--title);
 }
 .risk-card p {
   color: #3a3220;
@@ -508,7 +508,7 @@ input[type="checkbox"]:checked:hover {
   min-height: 160px;
   padding: 24px;
   border-radius: var(--radius-block);
-  background: var(--green-deep);
+  background: var(--deep-fill);
   color: #fff;
   transition: background 0.12s;
 }
@@ -583,13 +583,13 @@ input[type="checkbox"]:checked:hover {
   font-weight: 800;
   font-size: 30px;
   line-height: 1;
-  color: var(--green-deep);
+  color: var(--title);
   background: var(--uabc-gold);
   border-radius: 12px;
   padding: 8px 12px 6px;
 }
 .step-icon {
-  color: var(--uabc-green);
+  color: var(--link);
   display: grid;
   place-items: center;
 }
@@ -621,7 +621,7 @@ input[type="checkbox"]:checked:hover {
   background: #005f34;
 }
 .step-action:focus-visible {
-  outline-color: var(--green-deep);
+  outline-color: var(--edge);
   outline-offset: -5px;
   box-shadow: inset 0 0 0 5px #fff;
 }
@@ -655,7 +655,7 @@ input[type="checkbox"]:checked:hover {
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 30px;
-  color: var(--green-deep);
+  color: var(--title);
 }
 .plan-summary p {
   color: #3a3220;
@@ -728,13 +728,13 @@ input[type="checkbox"]:checked:hover {
   border-color: var(--uabc-green);
 }
 .supply-icon {
-  color: var(--uabc-green);
+  color: var(--link);
   width: 32px;
 }
 .supply-row strong {
   display: block;
   font-size: 17px;
-  color: var(--green-deep);
+  color: var(--title);
 }
 .supply-row small {
   display: block;
@@ -745,7 +745,7 @@ input[type="checkbox"]:checked:hover {
   margin-left: auto;
   font-size: 15px;
   font-weight: 700;
-  color: var(--uabc-green);
+  color: var(--link);
 }
 .backpack-summary {
   position: sticky;
@@ -764,10 +764,10 @@ input[type="checkbox"]:checked:hover {
   font-weight: 800;
   font-size: 80px;
   line-height: 1;
-  color: var(--uabc-green);
+  color: var(--link);
 }
 .backpack-number > span {
-  color: var(--green-deep);
+  color: var(--title);
   font-size: 40px;
 }
 .backpack-summary > p {
@@ -775,7 +775,7 @@ input[type="checkbox"]:checked:hover {
 }
 .backpack-summary .progress-track {
   margin: 16px 0 8px;
-  background: #fff;
+  background: var(--surface);
 }
 .micro {
   font-size: 14px;
@@ -798,7 +798,7 @@ input[type="checkbox"]:checked:hover {
   padding: 16px 18px;
   background: var(--green-tint);
   border-radius: 16px;
-  color: var(--uabc-green);
+  color: var(--link);
   text-align: left;
 }
 .note p {
@@ -809,14 +809,14 @@ input[type="checkbox"]:checked:hover {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: var(--uabc-green);
+  color: var(--link);
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 .backpack-summary .note {
   margin-top: 14px;
-  background: #fff;
+  background: var(--surface);
 }
 .sources-section {
   margin-top: 48px;
@@ -841,10 +841,10 @@ input[type="checkbox"]:checked:hover {
   background: #d3ecdd;
 }
 .sources-section > a svg {
-  color: var(--uabc-green);
+  color: var(--link);
 }
 .sources-section strong {
-  color: var(--green-deep);
+  color: var(--title);
 }
 
 /* Juegos */
@@ -874,7 +874,7 @@ input[type="checkbox"]:checked:hover {
   left: 50%;
   transform: translateX(-50%);
   max-width: calc(100vw - 32px);
-  background: var(--green-deep);
+  background: var(--deep-fill);
   color: #fff;
   padding: 12px 20px;
   border-radius: 14px;
@@ -916,7 +916,7 @@ input[type="checkbox"]:checked:hover {
   display: grid;
   place-items: center;
   background: var(--green-tint);
-  color: var(--green-deep);
+  color: var(--title);
 }
 .icon-button:hover {
   background: #cbe5d6;
@@ -965,7 +965,7 @@ input[type="checkbox"]:checked:hover {
   font-weight: 800;
   font-size: 52px;
   line-height: 1.05;
-  color: var(--uabc-green);
+  color: var(--link);
 }
 .metrics span {
   font-size: 15px;
@@ -1009,10 +1009,10 @@ input[type="checkbox"]:checked:hover {
 }
 .visits-tag:hover {
   border-color: var(--uabc-green);
-  color: var(--green-deep);
+  color: var(--title);
 }
 .visits-tag b {
-  color: var(--green-deep);
+  color: var(--title);
 }
 /* El punto indica si el contador respondió: verde con datos, gris sin ellos. */
 .status-dot {
@@ -1031,7 +1031,7 @@ input[type="checkbox"]:checked:hover {
   z-index: 100;
   padding: 14px;
   border-radius: 12px;
-  background: var(--green-deep);
+  background: var(--deep-fill);
   color: #fff;
 }
 .skip-link:focus {
@@ -1156,7 +1156,7 @@ input[type="checkbox"]:checked:hover {
 }
 @media print {
   body {
-    background: #fff;
+    background: var(--surface);
     color: #000;
     font-size: 12pt;
   }
@@ -1208,7 +1208,7 @@ input[type="checkbox"]:checked:hover {
     break-inside: avoid;
     padding: 8px;
     border-color: #ccc;
-    background: #fff;
+    background: var(--surface);
   }
   .supply-row input {
     appearance: none;
@@ -1248,7 +1248,7 @@ input[type="checkbox"]:checked:hover {
     margin: 8px 0;
   }
   .plan-summary {
-    background: #fff;
+    background: var(--surface);
   }
   .two-column {
     display: block;
@@ -1444,7 +1444,7 @@ input[type="checkbox"]:checked:hover {
   width: 3px;
   height: 22px;
   border-radius: 3px;
-  background: #fff;
+  background: var(--surface);
   animation: rain 1.4s linear infinite;
 }
 
@@ -1459,7 +1459,7 @@ input[type="checkbox"]:checked:hover {
 .phone-card:hover,
 .phone-card:focus-within {
   transform: translateY(-5px) rotate(-0.6deg);
-  box-shadow: 0 7px 0 var(--card-edge, var(--green-deep));
+  box-shadow: 0 7px 0 var(--card-edge, var(--shadow));
 }
 .phone-card:active {
   transform: translateY(2px);
@@ -1479,15 +1479,15 @@ input[type="checkbox"]:checked:hover {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: #fff;
-  color: var(--card-ink, var(--uabc-green));
+  background: var(--surface);
+  color: var(--card-ink, var(--link));
 }
 .phone-card .phone-name {
   padding-right: 58px;
-  color: var(--card-ink-strong, var(--green-deep));
+  color: var(--card-ink-strong, var(--title));
 }
 .phone-card a {
-  color: var(--card-ink, var(--uabc-green));
+  color: var(--card-ink, var(--link));
 }
 .phone-card:hover .phone-icon svg,
 .phone-card:focus-within .phone-icon svg {
@@ -1606,7 +1606,7 @@ input[type="checkbox"]:checked:hover {
 }
 .pill:hover,
 .pill:focus-visible {
-  box-shadow: 0 4px 0 var(--green-deep);
+  box-shadow: 0 4px 0 var(--shadow);
 }
 
 /* Accesos de preparación */
@@ -1748,7 +1748,7 @@ input[type="checkbox"]:checked {
 }
 .footer-link:hover {
   border-color: var(--uabc-green);
-  color: var(--green-deep);
+  color: var(--title);
 }
 
 
@@ -1814,14 +1814,14 @@ input[type="checkbox"]:checked {
   padding: 6px;
   margin-bottom: 16px;
   border-radius: 16px;
-  background: #fff;
+  background: var(--surface);
 }
 .lab-toggle button {
   min-height: 44px;
   padding: 0 18px;
   border-radius: 12px;
   font-weight: 700;
-  color: var(--green-deep);
+  color: var(--title);
 }
 .lab-toggle button:hover {
   background: var(--green-tint);
@@ -1837,7 +1837,7 @@ input[type="checkbox"]:checked {
 }
 .lab-note a,
 .learn-page .micro a {
-  color: var(--uabc-green);
+  color: var(--link);
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -1878,7 +1878,7 @@ input[type="checkbox"]:checked {
   width: 76px;
   height: 76px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--surface);
 }
 .fact-time {
   background: #fff1d6;
@@ -1898,7 +1898,7 @@ input[type="checkbox"]:checked {
 }
 .fc-green {
   background: var(--green-tint);
-  color: var(--uabc-green);
+  color: var(--link);
 }
 .fc-red {
   background: #ffebee;
@@ -2016,7 +2016,7 @@ input[type="checkbox"]:checked {
   flex-shrink: 0;
   border-radius: 14px;
   background: var(--tone-bg, var(--green-tint));
-  color: var(--tone, var(--uabc-green));
+  color: var(--tone, var(--link));
   animation: float-icon 2.6s ease-in-out infinite;
   animation-delay: calc(var(--i, 0) * -0.35s);
 }
@@ -2077,7 +2077,7 @@ input[type="checkbox"]:checked {
   font-weight: 800;
   font-size: 22px;
   line-height: 1;
-  color: var(--green-deep);
+  color: var(--title);
 }
 .wx-wind {
   background: #e3f2ff;
@@ -2137,8 +2137,8 @@ input[type="checkbox"]:checked {
   transition: background 0.3s ease, color 0.3s ease;
 }
 .wx-dots li.on {
-  background: #fff;
-  color: var(--green-deep);
+  background: var(--surface);
+  color: var(--title);
 }
 
 /* Diagrama del Pacífico: corte del océano en año normal y en año de El Niño. */
@@ -2199,7 +2199,7 @@ input[type="checkbox"]:checked {
   font-weight: 700;
 }
 .pac-tag.dark {
-  fill: var(--green-deep);
+  fill: var(--title);
 }
 .pac-upwell {
   fill: none;
@@ -2219,7 +2219,7 @@ input[type="checkbox"]:checked {
 /* La animación va en las flechas y la opacidad en el grupo, si no se pisan. */
 .pac-wind {
   fill: none;
-  stroke: var(--green-deep);
+  stroke: var(--title);
   stroke-width: 6;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -2286,9 +2286,9 @@ input[type="checkbox"]:checked {
   gap: 12px;
   padding: 12px 14px;
   border-radius: 16px;
-  background: #fff;
+  background: var(--surface);
   font-weight: 600;
-  color: var(--green-deep);
+  color: var(--title);
   counter-increment: paso;
   animation: step-in 0.4s ease-out both;
   animation-delay: calc(var(--i) * 0.15s);
@@ -2334,7 +2334,7 @@ input[type="checkbox"]:checked {
   list-style: none;
   font-size: 15px;
   font-weight: 600;
-  color: var(--green-deep);
+  color: var(--title);
 }
 .pac-legend li {
   display: inline-flex;
@@ -2356,11 +2356,11 @@ input[type="checkbox"]:checked {
 .lg-wind {
   height: 4px;
   border-radius: 4px;
-  background: var(--green-deep);
+  background: var(--deep-fill);
 }
 .lg-rain {
   border: 2px solid #8aa9c4;
-  background: #fff;
+  background: var(--surface);
 }
 
 .pac-axis {
@@ -2370,7 +2370,7 @@ input[type="checkbox"]:checked {
   margin-top: 8px;
   font-size: 15px;
   font-weight: 700;
-  color: var(--green-deep);
+  color: var(--title);
 }
 
 /* Lluvia del título "Prepárate": cada gota con valores al azar. */
@@ -2552,7 +2552,7 @@ input[type="checkbox"]:checked {
   animation: lid-open 3.2s ease-in-out infinite;
 }
 .pi-pack .pp-buckle {
-  fill: var(--green-deep);
+  fill: var(--title);
 }
 .pi-pack .pp-item {
   fill: #9fd3ff;
@@ -2587,7 +2587,7 @@ input[type="checkbox"]:checked {
 }
 .fact-card h3,
 .family-card h3 {
-  color: var(--green-deep);
+  color: var(--title);
 }
 
 /* Calendario: la hoja pasa de diciembre a enero. */
@@ -2637,7 +2637,7 @@ input[type="checkbox"]:checked {
   stroke-linecap: round;
 }
 .cal-month {
-  fill: var(--green-deep);
+  fill: var(--title);
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 14px;
@@ -2883,7 +2883,7 @@ input[type="checkbox"]:checked {
 .brand-hero img {
   width: 72px;
   height: auto;
-  background: #fff;
+  background: var(--surface);
   border-radius: 16px;
   padding: 8px;
 }
@@ -2920,7 +2920,7 @@ input[type="checkbox"]:checked {
   padding: 16px 18px;
   border: 1px solid rgb(0 0 0 / 0.06);
   border-radius: var(--radius-card);
-  color: var(--green-deep);
+  color: var(--title);
   text-align: left;
   cursor: pointer;
   transition: box-shadow 0.15s ease;
@@ -2968,14 +2968,14 @@ input[type="checkbox"]:checked {
 .type-name {
   font-size: 14px;
   font-weight: 700;
-  color: var(--uabc-green);
+  color: var(--link);
 }
 .type-big {
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 48px;
   line-height: 1;
-  color: var(--green-deep);
+  color: var(--title);
   margin: 8px 0 0;
 }
 .type-text {
@@ -3001,7 +3001,7 @@ input[type="checkbox"]:checked {
 .voice-list strong {
   font-family: var(--font-heading);
   font-size: 24px;
-  color: var(--green-deep);
+  color: var(--title);
 }
 .icon-shelf {
   display: grid;
@@ -3016,8 +3016,8 @@ input[type="checkbox"]:checked {
   padding: 14px 6px;
   border: 1px solid var(--line);
   border-radius: 14px;
-  background: #fff;
-  color: var(--green-deep);
+  background: var(--surface);
+  color: var(--title);
   font-size: 13px;
   cursor: pointer;
 }
@@ -3035,7 +3035,7 @@ input[type="checkbox"]:checked {
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 28px;
-  color: var(--green-deep);
+  color: var(--title);
   cursor: pointer;
 }
 .web-styles-body {
@@ -3072,7 +3072,7 @@ input[type="checkbox"]:checked {
   margin-bottom: 6px;
 }
 .token-block {
-  background: var(--green-deep);
+  background: var(--deep-fill);
   color: #e6f4ec;
   padding: 18px 20px;
   border-radius: 14px;
@@ -3113,7 +3113,7 @@ input[type="checkbox"]:checked {
   border: 2px solid var(--uabc-green);
   border-radius: 12px;
   background: var(--surface);
-  color: var(--green-deep);
+  color: var(--title);
   font-weight: 700;
   font-size: 16px;
   cursor: pointer;
@@ -3170,7 +3170,7 @@ input[type="checkbox"]:checked {
 /* Tonos compartidos por tarjetas de juegos y consejos */
 .tone-gold {
   --tone-bg: var(--gold-tint);
-  --tone-ink: var(--green-deep);
+  --tone-ink: var(--title);
   --tone-strong: var(--uabc-gold);
   --tone-edge: var(--gold-text);
 }
@@ -3182,9 +3182,9 @@ input[type="checkbox"]:checked {
 }
 .tone-green {
   --tone-bg: var(--green-tint);
-  --tone-ink: var(--green-deep);
+  --tone-ink: var(--title);
   --tone-strong: var(--uabc-green);
-  --tone-edge: var(--green-deep);
+  --tone-edge: var(--shadow);
 }
 
 /* Tarjetas de juego */
@@ -3205,7 +3205,7 @@ input[type="checkbox"]:checked {
   transition: background 0.12s;
 }
 a.game-card:hover {
-  background: #fff;
+  background: var(--surface);
 }
 .game-card.selected {
   outline: 4px solid var(--uabc-gold);
@@ -3233,7 +3233,7 @@ a.game-card:hover {
   width: 48px;
   height: 54px;
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-  background: var(--green-deep);
+  background: var(--deep-fill);
   color: var(--uabc-gold);
   font-family: var(--font-heading);
   font-weight: 800;
@@ -3268,7 +3268,7 @@ article.game-card .game-card-body {
   font-weight: 700;
 }
 .tone-gold .game-tag {
-  color: var(--green-deep);
+  color: var(--title);
 }
 .game-card-body .button {
   margin-top: auto;
@@ -3304,7 +3304,7 @@ article.game-card .game-card-body {
   min-height: 52px;
   padding: 10px 14px 10px 60px;
   border-radius: 14px;
-  background: #fff;
+  background: var(--surface);
   font-weight: 600;
   counter-increment: paso;
 }
@@ -3320,7 +3320,7 @@ article.game-card .game-card-body {
   height: 36px;
   border-radius: 10px;
   background: var(--uabc-gold);
-  color: var(--green-deep);
+  color: var(--title);
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 22px;
@@ -3355,7 +3355,7 @@ article.game-card .game-card-body {
   transition: background 0.12s, border-color 0.12s;
 }
 .advice-card:hover {
-  background: #fff;
+  background: var(--surface);
   border-color: var(--tone-strong);
 }
 .advice-card strong {
@@ -3375,7 +3375,7 @@ article.game-card .game-card-body {
   color: #fff;
 }
 .tone-gold .advice-icon {
-  color: var(--green-deep);
+  color: var(--title);
 }
 .advice-icon svg {
   width: 38px;
@@ -3468,7 +3468,7 @@ article.game-card .game-card-body {
   height: 44px;
   border-radius: 12px;
   background: var(--green-tint);
-  color: var(--green-deep);
+  color: var(--title);
   transition: background 0.12s, color 0.12s;
 }
 .social-links a:hover {
@@ -3493,7 +3493,7 @@ article.game-card .game-card-body {
 /* Botón flotante "Aprende jugando": amarillo UABC, mando y un brinco cartoon cada 5 s */
 .play-fab {
   --fab: var(--uabc-gold);
-  --fab-edge: var(--green-deep);
+  --fab-edge: var(--edge);
   position: fixed;
   z-index: 40;
   right: max(16px, env(safe-area-inset-right));
@@ -3506,7 +3506,7 @@ article.game-card .game-card-body {
   border: 3px solid var(--fab-edge);
   border-radius: 999px;
   background: var(--fab);
-  color: var(--green-deep);
+  color: var(--title);
   transform-origin: 50% 100%;
   animation: fab-hop 5s ease-in-out 1.5s infinite;
   transition:
@@ -3519,7 +3519,7 @@ article.game-card .game-card-body {
   width: 46px;
   height: 46px;
   border-radius: 999px;
-  background: var(--green-deep);
+  background: var(--deep-fill);
   color: #fff;
   transition: transform 0.2s;
 }
@@ -3546,7 +3546,7 @@ article.game-card .game-card-body {
   transform: rotate(-14deg) scale(1.08);
 }
 .play-fab:focus-visible {
-  outline: 3px solid var(--green-deep);
+  outline: 3px solid var(--edge);
   outline-offset: 4px;
 }
 .play-fab:active {
@@ -3629,7 +3629,7 @@ article.game-card .game-card-body {
 .field-label {
   font-weight: 700;
   font-size: 16px;
-  color: var(--green-deep);
+  color: var(--title);
 }
 .select-wrap {
   position: relative;
@@ -3640,14 +3640,14 @@ article.game-card .game-card-body {
   padding: 12px 48px 12px 16px;
   border: 2px solid var(--uabc-green);
   border-radius: var(--radius-button);
-  background: #fff;
-  color: var(--green-deep);
+  background: var(--surface);
+  color: var(--title);
   font: inherit;
   font-weight: 700;
   font-size: 17px;
   appearance: none;
   cursor: pointer;
-  box-shadow: 0 4px 0 var(--green-deep);
+  box-shadow: 0 4px 0 var(--shadow);
   transition:
     background 0.15s,
     box-shadow 0.15s;
@@ -3658,7 +3658,7 @@ article.game-card .game-card-body {
   top: 50%;
   translate: 0 -50%;
   rotate: 90deg;
-  color: var(--uabc-green);
+  color: var(--link);
   pointer-events: none;
 }
 .select:focus-visible {
@@ -3688,7 +3688,7 @@ article.game-card .game-card-body {
   gap: 2px;
 }
 .shelter-info strong {
-  color: var(--green-deep);
+  color: var(--title);
 }
 .shelter-info span {
   color: var(--muted);
@@ -3696,7 +3696,7 @@ article.game-card .game-card-body {
 }
 .shelter-card .pill {
   gap: 6px;
-  background: #fff;
+  background: var(--surface);
 }
 /* Sin esto, el fondo blanco de arriba le gana al verde del hover y el texto blanco desaparece */
 .shelter-card .pill:hover,
@@ -3752,7 +3752,7 @@ article.game-card .game-card-body {
   justify-content: center;
   gap: 10px;
   margin: 0;
-  color: var(--green-deep);
+  color: var(--title);
   font-weight: 700;
 }
 @media (max-width: 760px) {
@@ -3795,7 +3795,7 @@ article.game-card .game-card-body {
   .call-main:hover {
     transform: scale(1.04);
     box-shadow:
-      0 6px 0 var(--green-deep),
+      0 6px 0 var(--shadow),
       0 0 0 6px #ffffff66,
       0 0 0 12px #ffffff26;
   }
@@ -3829,7 +3829,7 @@ article.game-card .game-card-body {
 @media (hover: hover) {
   .primary:hover {
     box-shadow:
-      0 4px 0 var(--green-deep),
+      0 4px 0 var(--shadow),
       inset 0 0 0 3px #ffffff55;
   }
   .primary:hover svg,
@@ -3838,8 +3838,8 @@ article.game-card .game-card-body {
     transform: translateX(3px);
   }
   .secondary:hover {
-    border-color: var(--green-deep);
-    box-shadow: 0 4px 0 var(--green-deep);
+    border-color: var(--edge);
+    box-shadow: 0 4px 0 var(--shadow);
   }
   .dark:hover {
     box-shadow: inset 0 0 0 3px var(--uabc-gold);
@@ -3851,14 +3851,14 @@ article.game-card .game-card-body {
     text-decoration-color: var(--uabc-gold);
   }
   .text-link.on-gold:hover {
-    text-decoration-color: var(--green-deep);
+    text-decoration-color: var(--title);
   }
   .nav-link:not(.active):hover {
     box-shadow: inset 0 -3px 0 var(--uabc-gold);
   }
   .menu-toggle:hover {
     background: var(--green-tint);
-    box-shadow: 0 3px 0 var(--green-deep);
+    box-shadow: 0 3px 0 var(--shadow);
   }
   .select:hover {
     background: var(--green-tint);
@@ -3881,7 +3881,7 @@ article.game-card .game-card-body {
   .footer-link:hover,
   .visits-tag:hover {
     background: var(--green-tint);
-    box-shadow: 0 3px 0 var(--green-deep);
+    box-shadow: 0 3px 0 var(--shadow);
   }
   .social-links a:hover {
     box-shadow: 0 0 0 4px var(--green-tint);
@@ -3982,7 +3982,7 @@ a.game-card:active,
   padding: 6px 14px 6px 10px;
   border-radius: 999px;
   background: var(--uabc-gold);
-  color: var(--green-deep);
+  color: var(--title);
   font-family: var(--font-play);
   font-weight: 800;
   font-size: 18px;
@@ -4027,16 +4027,16 @@ a.game-card:active,
   display: block;
   width: 100%;
   height: auto;
-  border: 4px solid var(--green-deep);
+  border: 4px solid var(--edge);
   border-radius: var(--radius-block);
   background: #12894f;
-  box-shadow: 0 6px 0 var(--green-deep);
+  box-shadow: 0 6px 0 var(--shadow);
 }
 .gm-hill-back {
   fill: #005f34;
 }
 .gm-hill-front {
-  fill: var(--green-deep);
+  fill: var(--title);
 }
 .gm-cloud path {
   fill: #ffffff;
@@ -4089,17 +4089,17 @@ a.game-card:active,
 }
 .gm-pin path {
   fill: var(--uabc-gold);
-  stroke: var(--green-deep);
+  stroke: var(--title);
   stroke-width: 3;
 }
 .gm-pin circle {
-  fill: var(--green-deep);
+  fill: var(--title);
 }
 .gm-pin {
   animation: gm-pin 7s ease-in-out infinite;
 }
 .gm-token > path {
-  stroke: var(--green-deep);
+  stroke: var(--title);
   stroke-width: 3;
 }
 .gm-token-1 > path {
@@ -4132,7 +4132,7 @@ a.game-card:active,
 }
 .gm-token-icon {
   fill: none;
-  stroke: var(--green-deep);
+  stroke: var(--title);
   stroke-width: 2.2;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -4290,7 +4290,7 @@ a.game-card:active,
   width: 50px;
   height: 56px;
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-  background: var(--green-deep);
+  background: var(--deep-fill);
   color: var(--uabc-gold);
   font-family: var(--font-heading);
   font-weight: 800;
@@ -4307,7 +4307,7 @@ a.game-card:active,
   height: 52px;
   border: 3px solid var(--tone-edge);
   border-radius: 16px;
-  background: #fff;
+  background: var(--surface);
   color: var(--tone-ink);
 }
 .gm-badge-cinco-segundos svg {
@@ -4393,7 +4393,7 @@ a.game-card:active,
   min-height: 34px;
   padding: 0 12px;
   border-radius: 999px;
-  background: #fff;
+  background: var(--surface);
   font-size: 15px;
   font-weight: 700;
 }
@@ -4438,7 +4438,7 @@ a.game-card:active,
   height: 70px;
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
   background: var(--uabc-gold);
-  color: var(--green-deep);
+  color: var(--title);
   animation: gm-wiggle 4s ease-in-out 0.6s infinite;
 }
 .gm-detail h2 {
@@ -4467,7 +4467,7 @@ a.game-card:active,
   align-content: start;
   padding: 18px;
   border-radius: 18px;
-  background: #fff;
+  background: var(--surface);
   font-weight: 600;
   animation: gm-in 0.45s cubic-bezier(0.34, 1.4, 0.64, 1) both;
   animation-delay: calc(0.15s + var(--n) * 120ms);
@@ -4492,7 +4492,7 @@ a.game-card:active,
   color: #fff;
 }
 .tone-gold .gm-step-icon {
-  color: var(--green-deep);
+  color: var(--title);
 }
 .gm-back {
   justify-self: start;
@@ -4625,7 +4625,7 @@ a.game-card:active,
 }
 .hw-front {
   fill: none;
-  stroke: var(--uabc-green);
+  stroke: var(--link);
   stroke-width: 2.5;
   vector-effect: non-scaling-stroke;
 }
@@ -4681,7 +4681,7 @@ a.game-card:active,
   height: 32px;
   border-radius: 999px;
   background: var(--green-tint);
-  color: var(--uabc-green);
+  color: var(--link);
   transition:
     background 0.15s,
     color 0.15s,
@@ -4689,7 +4689,7 @@ a.game-card:active,
 }
 .nav-link.active .nav-icon {
   background: var(--uabc-gold);
-  color: var(--green-deep);
+  color: var(--title);
   animation: nav-hello 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
 }
 @keyframes nav-hello {
@@ -4798,7 +4798,7 @@ a.game-card:active,
 }
 .brand .wordmark {
   font-size: 26px;
-  color: var(--green-deep);
+  color: var(--title);
 }
 @media (max-width: 760px) {
   .brand .wordmark {
@@ -4833,7 +4833,7 @@ a.game-card:active,
 }
 .footer-brand .wordmark {
   font-size: 22px;
-  color: var(--green-deep);
+  color: var(--title);
 }
 .footer-uabc {
   width: 36px;
@@ -4880,11 +4880,11 @@ a.game-card:active,
   /* Encima del personaje, sin invadir el texto que tiene a la derecha */
   left: 6%;
   padding: 4px 14px;
-  border: 3px solid var(--green-deep);
+  border: 3px solid var(--edge);
   border-radius: 16px;
-  background: #fff;
-  color: var(--green-deep);
-  box-shadow: 0 3px 0 var(--green-deep);
+  background: var(--surface);
+  color: var(--title);
+  box-shadow: 0 3px 0 var(--shadow);
   font-family: var(--font-play);
   font-weight: 800;
   font-size: 17px;
@@ -4904,7 +4904,7 @@ a.game-card:active,
   top: 100%;
   width: 14px;
   height: 10px;
-  background: var(--green-deep);
+  background: var(--deep-fill);
   clip-path: polygon(0 0, 100% 0, 0 100%);
 }
 .mascot.visible .mascot-bubble {
@@ -4965,7 +4965,7 @@ a.game-card:active,
   z-index: -1;
   width: 220px;
   aspect-ratio: 1223 / 1195;
-  background: #fff;
+  background: var(--surface);
   opacity: 0.1;
   -webkit-mask: url("/brand/cuenca/silueta.png") center / contain no-repeat;
   mask: url("/brand/cuenca/silueta.png") center / contain no-repeat;
@@ -5028,7 +5028,7 @@ a.game-card:active,
   position: absolute;
   z-index: -1;
   width: 280px;
-  color: var(--uabc-green);
+  color: var(--link);
   opacity: 0.05;
 }
 .gm-bg-sil-1 {
@@ -5128,7 +5128,7 @@ a.game-card:active,
   font-weight: 700;
 }
 .silhouette-swatch.on-light small {
-  color: var(--green-deep);
+  color: var(--title);
 }
 .silhouette-swatch.on-green small {
   color: #fff;
@@ -5198,7 +5198,7 @@ a.game-card:active,
 .type-big.brand-sample {
   font-family: var(--font-brand);
   font-weight: 400;
-  color: var(--green-deep);
+  color: var(--title);
 }
 
 /* ===== Propósito (arriba del inicio) ===== */
@@ -5212,15 +5212,15 @@ a.game-card:active,
 }
 .purpose-hero {
   background: var(--gold-tint);
-  border-bottom: 4px solid var(--green-deep);
-  color: var(--green-deep);
+  border-bottom: 4px solid var(--edge);
+  color: var(--title);
 }
 .purpose-hero.cc-watermark::after {
   width: 300px;
   right: auto;
   left: max(-60px, calc(50vw - 780px));
   bottom: -60px;
-  color: var(--green-deep);
+  color: var(--title);
 }
 .purpose-row {
   display: grid;
@@ -5254,19 +5254,19 @@ a.game-card:active,
   gap: 8px;
   min-height: 46px;
   padding: 8px 14px;
-  border: 3px solid var(--green-deep);
+  border: 3px solid var(--edge);
   border-radius: var(--radius-button);
-  background: #fff;
-  color: var(--green-deep);
+  background: var(--surface);
+  color: var(--title);
   font-weight: 700;
   text-decoration: none;
-  box-shadow: 0 4px 0 var(--green-deep);
+  box-shadow: 0 4px 0 var(--shadow);
   transition:
     background 0.2s,
     box-shadow 0.2s;
 }
 .purpose-ways :is(a, button):active {
-  box-shadow: 0 1px 0 var(--green-deep);
+  box-shadow: 0 1px 0 var(--shadow);
   translate: 0 3px;
 }
 @media (hover: hover) {
@@ -5280,10 +5280,10 @@ a.game-card:active,
   justify-items: center;
   gap: 6px;
   padding: 28px 24px 26px;
-  border: 4px solid var(--green-deep);
+  border: 4px solid var(--edge);
   border-radius: var(--radius-block);
   background: var(--uabc-green);
-  box-shadow: 0 8px 0 var(--green-deep);
+  box-shadow: 0 8px 0 var(--shadow);
   color: #fff;
   text-align: center;
 }
@@ -5296,7 +5296,7 @@ a.game-card:active,
   line-height: 0.9;
   font-variant-numeric: tabular-nums;
   color: #fff;
-  text-shadow: 0 5px 0 var(--green-deep);
+  text-shadow: 0 5px 0 var(--shadow);
 }
 .counter-number.is-loading {
   width: 3ch;
@@ -5324,17 +5324,17 @@ a.game-card:active,
 .counter-share {
   margin-top: 12px;
   background: var(--uabc-gold);
-  color: var(--green-deep);
-  border: 3px solid var(--green-deep);
-  box-shadow: 0 4px 0 var(--green-deep);
+  color: var(--title);
+  border: 3px solid var(--edge);
+  box-shadow: 0 4px 0 var(--shadow);
 }
 @media (hover: hover) {
   .counter-share:hover {
-    background: #fff;
+    background: var(--surface);
   }
 }
 .counter-share:active {
-  box-shadow: 0 1px 0 var(--green-deep);
+  box-shadow: 0 1px 0 var(--shadow);
   translate: 0 3px;
 }
 
@@ -5349,9 +5349,9 @@ a.game-card:active,
   margin: 0;
   overflow: hidden;
   aspect-ratio: 3 / 2;
-  border: 4px solid var(--green-deep);
+  border: 4px solid var(--edge);
   border-radius: var(--radius-block);
-  box-shadow: 0 8px 0 var(--green-deep);
+  box-shadow: 0 8px 0 var(--shadow);
   background: var(--green-tint);
 }
 .team-photo img {
@@ -5370,7 +5370,7 @@ a.game-card:active,
   border-radius: calc(var(--radius-block) - 8px);
   margin: 10px;
   height: calc(100% - 20px);
-  color: var(--uabc-green);
+  color: var(--link);
   font-weight: 700;
 }
 .team-text p {
@@ -5404,8 +5404,8 @@ a.game-card:active,
   height: 44px;
   border-radius: 50%;
   background: var(--gold-tint);
-  border: 3px solid var(--green-deep);
-  color: var(--green-deep);
+  border: 3px solid var(--edge);
+  color: var(--title);
 }
 
 @media (max-width: 860px) {
@@ -5468,13 +5468,13 @@ a.game-card:active,
     font-size: 14px;
     line-height: 1.15;
     text-align: center;
-    box-shadow: 0 3px 0 var(--green-deep);
+    box-shadow: 0 3px 0 var(--shadow);
   }
   .purpose-counter {
     column-gap: 14px;
     row-gap: 2px;
     padding: 16px;
-    box-shadow: 0 6px 0 var(--green-deep);
+    box-shadow: 0 6px 0 var(--shadow);
   }
   .counter-number {
     font-size: 64px;
@@ -5503,9 +5503,9 @@ a.game-card:active,
   width: 100%;
   aspect-ratio: 16 / 10;
   object-fit: cover;
-  border: 4px solid var(--green-deep);
+  border: 4px solid var(--edge);
   border-radius: var(--radius-block);
-  box-shadow: 0 6px 0 var(--green-deep);
+  box-shadow: 0 6px 0 var(--shadow);
 }
 .info-hero-mascot {
   position: absolute;
@@ -5547,7 +5547,7 @@ a.game-card:active,
   border: 3px solid var(--uabc-green);
   border-radius: var(--radius-block);
   background: var(--green-tint);
-  box-shadow: 0 6px 0 var(--green-deep);
+  box-shadow: 0 6px 0 var(--shadow);
 }
 .info-play .section-title {
   margin-bottom: 4px;
@@ -5579,7 +5579,7 @@ a.game-card:active,
   padding: 3px 10px 3px 8px;
   border: 2px solid var(--tone-strong);
   border-radius: 999px;
-  background: #fff;
+  background: var(--surface);
   color: var(--tone-ink);
   font-size: 14px;
   font-weight: 800;
@@ -5651,9 +5651,9 @@ a.game-card:active,
 }
 .theme-911 {
   background: var(--green-tint);
-  --card-ink: var(--uabc-green);
-  --card-ink-strong: var(--green-deep);
-  --card-edge: var(--green-deep);
+  --card-ink: var(--link);
+  --card-ink-strong: var(--title);
+  --card-edge: var(--edge);
 }
 
 /* Consejos: una tarjeta por momento */
@@ -5805,14 +5805,14 @@ a.game-card:active,
   padding: 18px;
   border: 3px solid var(--line);
   border-radius: var(--radius-card);
-  background: #fff;
+  background: var(--surface);
 }
 .lesson-card-mini strong {
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 24px;
   line-height: 1;
-  color: var(--green-deep);
+  color: var(--title);
 }
 .lesson-num {
   display: grid;
@@ -5820,7 +5820,7 @@ a.game-card:active,
   width: 44px;
   height: 48px;
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-  background: var(--green-deep);
+  background: var(--deep-fill);
   color: var(--uabc-gold);
   font-family: var(--font-heading);
   font-weight: 800;
@@ -5834,7 +5834,7 @@ a.game-card:active,
   font-size: 16px;
 }
 .lesson-note a {
-  color: var(--green-deep);
+  color: var(--title);
   font-weight: 700;
   text-decoration: underline;
 }
@@ -5855,7 +5855,7 @@ a.game-card:active,
   font-weight: 800;
   font-size: 34px;
   line-height: 1;
-  color: var(--green-deep);
+  color: var(--title);
 }
 .lesson-progress span {
   color: var(--muted);
@@ -5869,7 +5869,7 @@ a.game-card:active,
 }
 .lesson-progress.complete strong,
 .lesson-progress.complete span {
-  color: var(--uabc-green);
+  color: var(--link);
 }
 .lesson-reset {
   margin-top: 8px;
@@ -5898,7 +5898,7 @@ a.game-card:active,
   font-weight: 800;
   font-size: 26px;
   line-height: 1;
-  color: var(--green-deep);
+  color: var(--title);
 }
 .plan-step-text {
   color: var(--muted);
@@ -5918,7 +5918,7 @@ a.game-card:active,
   min-height: 44px;
   padding: 8px 10px;
   border-radius: 12px;
-  background: #fff;
+  background: var(--surface);
   font-size: 16px;
   cursor: pointer;
 }
@@ -5968,11 +5968,11 @@ a.game-card:active,
   font-weight: 800;
   font-size: 22px;
   line-height: 1.05;
-  color: var(--green-deep);
+  color: var(--title);
 }
 .kit-group h4 span {
   font-size: 18px;
-  color: var(--uabc-green);
+  color: var(--link);
 }
 .kit-row {
   display: grid;
@@ -5982,7 +5982,7 @@ a.game-card:active,
   padding: 10px;
   border: 2px solid transparent;
   border-radius: 14px;
-  background: #fff;
+  background: var(--surface);
   cursor: pointer;
   transition:
     border-color 0.15s,
@@ -6002,7 +6002,7 @@ a.game-card:active,
 }
 .kit-row.done .kit-icon {
   background: var(--uabc-gold);
-  color: var(--green-deep);
+  color: var(--title);
 }
 .kit-copy {
   display: grid;
@@ -6010,7 +6010,7 @@ a.game-card:active,
   line-height: 1.2;
 }
 .kit-copy strong {
-  color: var(--green-deep);
+  color: var(--title);
 }
 .kit-copy small {
   color: var(--muted);
@@ -6075,14 +6075,14 @@ button.prep-card {
     padding: 10px 10px 10px 16px;
     border-width: 3px;
     border-radius: var(--radius-card);
-    box-shadow: 0 4px 0 var(--green-deep);
+    box-shadow: 0 4px 0 var(--shadow);
     text-align: left;
   }
   .counter-number {
     flex: none;
     min-width: 0;
     font-size: 40px;
-    text-shadow: 0 3px 0 var(--green-deep);
+    text-shadow: 0 3px 0 var(--shadow);
   }
   .counter-number.is-loading {
     width: 2ch;
@@ -6105,7 +6105,7 @@ button.prep-card {
     margin: 0;
     padding: 0;
     justify-content: center;
-    box-shadow: 0 3px 0 var(--green-deep);
+    box-shadow: 0 3px 0 var(--shadow);
   }
   .counter-share-text {
     position: absolute;
@@ -6133,7 +6133,7 @@ button.prep-card {
 .footer-title {
   margin-bottom: 10px;
   font-size: 20px;
-  color: var(--green-deep);
+  color: var(--title);
 }
 .footer-list {
   display: grid;
@@ -6149,7 +6149,7 @@ button.prep-card {
   align-items: center;
   gap: 8px;
   min-height: 44px;
-  color: var(--green-deep);
+  color: var(--title);
   font-weight: 600;
   overflow-wrap: anywhere;
   text-decoration: underline;
@@ -6162,7 +6162,7 @@ button.prep-card {
 }
 @media (hover: hover) {
   .footer-mail:hover {
-    color: var(--uabc-green);
+    color: var(--link);
     text-decoration-color: currentColor;
   }
 }
@@ -6223,7 +6223,7 @@ button.prep-card {
   width: 44px;
   height: 44px;
   border-radius: 999px;
-  color: var(--green-deep);
+  color: var(--title);
   transition:
     background 0.15s,
     color 0.15s;
@@ -6256,7 +6256,7 @@ button.prep-card {
   .header-social-label {
     display: block;
     margin-right: 6px;
-    color: var(--green-deep);
+    color: var(--title);
     font-weight: 700;
     font-size: 17px;
   }
@@ -6272,10 +6272,10 @@ button.prep-card {
   align-items: end;
   gap: 8px 28px;
   padding: 28px 32px;
-  border: 4px solid var(--green-deep);
+  border: 4px solid var(--edge);
   border-radius: var(--radius-block);
   background: var(--green-tint);
-  box-shadow: 0 8px 0 var(--green-deep);
+  box-shadow: 0 8px 0 var(--shadow);
 }
 .follow-buttons {
   display: flex;
@@ -6289,11 +6289,11 @@ button.prep-card {
   gap: 12px;
   min-height: 56px;
   padding: 8px 20px 8px 14px;
-  border: 3px solid var(--green-deep);
+  border: 3px solid var(--edge);
   border-radius: var(--radius-button);
-  background: #fff;
-  color: var(--green-deep);
-  box-shadow: 0 4px 0 var(--green-deep);
+  background: var(--surface);
+  color: var(--title);
+  box-shadow: 0 4px 0 var(--shadow);
   transition: background 0.15s, color 0.15s;
 }
 .follow-button svg {
@@ -6328,7 +6328,7 @@ button.prep-card {
   }
 }
 .follow-button:active {
-  box-shadow: 0 1px 0 var(--green-deep);
+  box-shadow: 0 1px 0 var(--shadow);
   translate: 0 3px;
 }
 .video-grid {
@@ -6343,9 +6343,9 @@ button.prep-card {
   position: relative;
   overflow: hidden;
   aspect-ratio: 16 / 9;
-  border: 3px solid var(--green-deep);
+  border: 3px solid var(--edge);
   border-radius: var(--radius-card);
-  background: var(--green-deep);
+  background: var(--deep-fill);
 }
 .video-frame.is-tiktok {
   aspect-ratio: 9 / 16;
@@ -6381,11 +6381,11 @@ button.prep-card {
   place-items: center;
   width: 64px;
   height: 64px;
-  border: 3px solid var(--green-deep);
+  border: 3px solid var(--edge);
   border-radius: 50%;
   background: var(--uabc-gold);
-  color: var(--green-deep);
-  box-shadow: 0 4px 0 var(--green-deep);
+  color: var(--title);
+  box-shadow: 0 4px 0 var(--shadow);
 }
 .video-play svg,
 .video-soon-icon svg {
@@ -6396,12 +6396,12 @@ button.prep-card {
 }
 @media (hover: hover) {
   .video-cover:hover .video-play {
-    background: #fff;
+    background: var(--surface);
   }
 }
 .video-title {
   margin-top: 8px;
-  color: var(--green-deep);
+  color: var(--title);
   font-weight: 700;
 }
 .video-soon {
@@ -6412,7 +6412,7 @@ button.prep-card {
   padding: 14px 18px;
   border: 3px dashed var(--uabc-green);
   border-radius: var(--radius-card);
-  color: var(--green-deep);
+  color: var(--title);
   font-weight: 700;
   font-size: 17px;
 }
@@ -6464,10 +6464,10 @@ button.prep-card {
   top: 10px;
   left: 10px;
   padding: 2px 10px;
-  border: 2px solid var(--green-deep);
+  border: 2px solid var(--edge);
   border-radius: 999px;
-  background: #fff;
-  color: var(--green-deep);
+  background: var(--surface);
+  color: var(--title);
   font-weight: 700;
   font-size: 13px;
 }
@@ -6477,7 +6477,7 @@ button.prep-card {
 
 /* Tableta angosta: con cuatro redes no cabe el nombre; queda el icono del cimarrón
    (el enlace conserva "Cuenca Cimarrona, inicio" para lectores de pantalla) */
-@media (min-width: 761px) and (max-width: 910px) {
+@media (min-width: 761px) and (max-width: 960px) {
   .site-header .brand .wordmark {
     display: none;
   }
@@ -6503,7 +6503,7 @@ button.prep-card {
   height: 72px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: #fff;
+  background: var(--surface);
   color: #e2470f;
   border: 3px solid #7a2400;
   box-shadow: 0 4px 0 #7a2400;
@@ -6557,8 +6557,8 @@ button.prep-card {
   padding: 10px 16px;
   border: 2px solid var(--uabc-green);
   border-radius: var(--radius-button);
-  background: #fff;
-  color: var(--green-deep);
+  background: var(--surface);
+  color: var(--title);
   font: inherit;
   font-size: 17px;
 }
@@ -6585,7 +6585,7 @@ button.prep-card {
   padding: 14px 16px;
   border: 2px solid #f6c7a8;
   border-radius: 16px;
-  background: #fff;
+  background: var(--surface);
 }
 .station-card.is-central {
   background: #fff1e6;
@@ -6613,7 +6613,7 @@ button.prep-card {
   font-weight: 700;
 }
 .is-central .station-icon {
-  background: #fff;
+  background: var(--surface);
 }
 .station-info {
   display: flex;
@@ -6692,7 +6692,7 @@ button.prep-card {
   margin: 0;
   padding: 16px;
   text-align: center;
-  color: var(--green-deep);
+  color: var(--title);
   font-weight: 700;
   pointer-events: none;
 }
@@ -6715,7 +6715,7 @@ button.prep-card {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--surface);
   border: 3px solid #7a2400;
   box-shadow: 0 3px 0 #7a2400;
 }
@@ -6735,11 +6735,11 @@ button.prep-card {
 }
 .map-pin.is-central {
   background: var(--uabc-green);
-  border-color: var(--green-deep);
-  box-shadow: 0 3px 0 var(--green-deep);
+  border-color: var(--edge);
+  box-shadow: 0 3px 0 var(--shadow);
 }
 .map-pin.is-central::after {
-  border-top-color: var(--green-deep);
+  border-top-color: var(--edge);
 }
 .map-pop {
   display: flex;
@@ -6771,7 +6771,7 @@ button.prep-card {
   color: #a83200;
 }
 .map-pop .map-pop-route {
-  color: var(--uabc-green);
+  color: var(--link);
 }
 .stations-map .leaflet-popup-content-wrapper {
   border-radius: 16px;
@@ -6795,7 +6795,7 @@ html.splash-open {
   gap: 28px;
   padding: 24px 20px max(24px, env(safe-area-inset-bottom));
   overflow-y: auto;
-  background: #fff;
+  background: var(--surface);
 }
 .splash-card {
   width: min(1040px, 100%);
@@ -6810,7 +6810,7 @@ html.splash-open {
   animation: splash-seal 0.6s cubic-bezier(0.34, 1.6, 0.64, 1) 0.1s both;
 }
 .splash-name {
-  color: var(--green-deep);
+  color: var(--title);
   font-size: clamp(44px, 7vw, 76px);
   animation: splash-name 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s both;
 }
@@ -6861,12 +6861,12 @@ html.splash-open {
   gap: 8px;
   min-height: 44px;
   padding: 0 18px;
-  border: 3px solid var(--green-deep);
+  border: 3px solid var(--edge);
   border-radius: 999px;
-  background: #fff;
-  color: var(--green-deep);
+  background: var(--surface);
+  color: var(--title);
   font-weight: 700;
-  box-shadow: 0 4px 0 var(--green-deep);
+  box-shadow: 0 4px 0 var(--shadow);
   animation: splash-rise 0.4s ease 0.3s both;
 }
 @keyframes splash-seal {
@@ -6944,4 +6944,186 @@ html.splash-open {
 .motion-off .splash,
 .motion-off .splash * {
   animation: none !important;
+}
+
+/* ===== Modo oscuro: ajustes de componentes =====
+   Los colores base cambian en brand/tokens.css. Aquí van los iconos (se quedan como en
+   modo claro), las tarjetas con color propio y la pantalla de bienvenida. */
+
+/* Iconos, ilustraciones y la tarjeta del 911: idénticos al modo claro */
+:root[data-theme="dark"] .nav-icon, :root[data-theme="dark"] .advice-icon, :root[data-theme="dark"] .phone-icon, :root[data-theme="dark"] .supply-icon, :root[data-theme="dark"] .play-fab-icon, :root[data-theme="dark"] .video-soon-icon, :root[data-theme="dark"] .prep-icon, :root[data-theme="dark"] .step-icon, :root[data-theme="dark"] .gm-token-icon, :root[data-theme="dark"] .station-icon, :root[data-theme="dark"] .kit-icon, :root[data-theme="dark"] .gm-step-icon, :root[data-theme="dark"] .team-way-icon, :root[data-theme="dark"] .gm-detail-icon, :root[data-theme="dark"] .fact-icon, :root[data-theme="dark"] .icon-shelf, :root[data-theme="dark"] .shelter-pin, :root[data-theme="dark"] .fire-badge, :root[data-theme="dark"] .flames, :root[data-theme="dark"] .call-main, :root[data-theme="dark"] .gm-badge, :root[data-theme="dark"] .gm-scene-wrap, :root[data-theme="dark"] .ocean-lab, :root[data-theme="dark"] .pacific-lab, :root[data-theme="dark"] .wx-stage, :root[data-theme="dark"] .wx-cycle {
+  --uabc-green: #00723f;
+  --uabc-gold: #dd971a;
+  --green-deep: #003d24;
+  --gold-text: #8a5a00;
+  --paper: #ffffff;
+  --surface: #ffffff;
+  --ink: #1c2621;
+  --muted: #4a5650;
+  --line: #dce3de;
+  --control-line: #7c8a82;
+  --green-tint: #e6f4ec;
+  --gold-tint: #fff1d6;
+  --title: #003d24;
+  --edge: #003d24;
+  --shadow: #003d24;
+  --deep-fill: #003d24;
+  --link: #00723f;
+  color-scheme: light;
+}
+:root[data-theme="dark"] .call-main {
+  background: #fff8ea;
+}
+/* Franja ocre de El Niño: el texto sigue oscuro sobre el ocre */
+:root[data-theme="dark"] .band-gold {
+  --surface: #ffffff;
+  --title: #25292b;
+  --ink: #25292b;
+  --link: #25292b;
+  color: #25292b;
+}
+:root[data-theme="dark"] .band-gold .button.dark {
+  --deep-fill: #25292b;
+  color: #fff1d6;
+}
+:root[data-theme="dark"] .counter-note {
+  color: #fff1d6;
+}
+:root[data-theme="dark"] :is(.risk-card p, .plan-summary p, .backpack-summary > p, .backpack-summary .micro) {
+  color: var(--muted);
+}
+:root[data-theme="dark"] .storage-warning {
+  color: var(--title);
+}
+:root[data-theme="dark"] .call-main:hover {
+  background: #fff1d6;
+}
+:root[data-theme="dark"] .shelter-list li {
+  background: var(--green-tint);
+}
+:root[data-theme="dark"] :is(.sources-section > a:hover, .icon-button:hover) {
+  background: var(--line);
+}
+:root[data-theme="dark"] .step-card.done {
+  background: #2f4a3e;
+}
+/* Tarjetas de servicios y tonos: versiones oscuras con texto claro */
+:root[data-theme="dark"] .theme-civil { background: #26314a; --card-ink: #afc3f2; --card-ink-strong: #d3defa; --card-edge: #7d92c4; }
+:root[data-theme="dark"] .theme-fire { background: #3d2e27; --card-ink: #f2b79a; --card-ink-strong: #fad6c4; --card-edge: #c08a70; }
+:root[data-theme="dark"] .theme-secret { background: #332e45; --card-ink: #cdbff0; --card-ink-strong: #e4dcfa; --card-edge: #9c8ec4; }
+:root[data-theme="dark"] .theme-cfe { --card-ink: #e2c07a; --card-ink-strong: #f2d9a6; --card-edge: #b8954e; }
+:root[data-theme="dark"] .theme-water { background: #243a3f; --card-ink: #97d0db; --card-ink-strong: #c4e8ef; --card-edge: #6fa3ad; }
+:root[data-theme="dark"] .tone-blue { --tone-bg: #26314a; --tone-ink: #d3defa; --tone-strong: #7d92c4; --tone-edge: #16191b; }
+:root[data-theme="dark"] .fact-time { background: #3a332e; }
+:root[data-theme="dark"] .fact-rain { background: #26314a; }
+:root[data-theme="dark"] .fact-slide { background: #3d2e27; }
+:root[data-theme="dark"] .fact-change { background: #332e45; }
+:root[data-theme="dark"] .fc-blue { background: #26314a; color: #afc3f2; }
+:root[data-theme="dark"] .fc-red { background: #46262a; color: #f2a3aa; }
+/* Bomberos: franja y estaciones en café oscuro; el fueguito no cambia */
+:root[data-theme="dark"] .band-fire { background: #3d2e27; color: #f2b79a; }
+:root[data-theme="dark"] :is(.fire-text h2, .fire-text p, .station-info strong, .station-central-call small, .map-pop strong, .map-pop small) { color: #f2b79a; }
+:root[data-theme="dark"] :is(.station-call, .station-empty a, .map-pop .map-pop-call) { color: #f8c6ad; }
+:root[data-theme="dark"] .station-911 { color: #f2a3aa; }
+:root[data-theme="dark"] .station-card.is-central { background: #3d2e27; }
+/* Los tonos de cada tarjeta se calculan en la tarjeta; dentro de sus iconos se reponen los del modo claro */
+:root[data-theme="dark"] .tone-gold :is(.advice-icon, .prep-icon, .gm-token-icon, .gm-badge, .step-icon, .gm-step-icon, .gm-detail-icon, .kit-icon, .supply-icon) { --tone-bg: #fff1d6; --tone-ink: #003d24; --tone-strong: #dd971a; --tone-edge: #8a5a00; }
+:root[data-theme="dark"] .tone-blue :is(.advice-icon, .prep-icon, .gm-token-icon, .gm-badge, .step-icon, .gm-step-icon, .gm-detail-icon, .kit-icon, .supply-icon) { --tone-bg: #eaf2ff; --tone-ink: #0b4fa8; --tone-strong: #0b4fa8; --tone-edge: #083a7c; }
+:root[data-theme="dark"] .tone-green :is(.advice-icon, .prep-icon, .gm-token-icon, .gm-badge, .step-icon, .gm-step-icon, .gm-detail-icon, .kit-icon, .supply-icon) { --tone-bg: #e6f4ec; --tone-ink: #003d24; --tone-strong: #00723f; --tone-edge: #003d24; }
+/* Pantalla de bienvenida: fondo gris y los logos juntos en una franja blanca */
+:root[data-theme="dark"] .splash {
+  background: var(--paper);
+}
+:root[data-theme="dark"] .splash-partners {
+  width: auto;
+  max-width: 100%;
+  padding: 22px 32px;
+  border-radius: 24px;
+  background: #ffffff;
+}
+@media (max-width: 700px) {
+  :root[data-theme="dark"] .splash-partners {
+    padding: 18px 16px;
+  }
+}
+
+/* Botón de modo oscuro en el encabezado: media luna; rellena cuando está activo */
+.site-nav {
+  margin-left: auto;
+}
+.theme-toggle {
+  order: 2;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--title);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+.theme-toggle svg {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.theme-toggle.is-dark {
+  border-color: var(--uabc-gold);
+  color: var(--uabc-gold);
+}
+.theme-toggle.is-dark svg {
+  fill: currentColor;
+  transform: rotate(-20deg);
+}
+@media (hover: hover) {
+  .theme-toggle:hover {
+    border-color: var(--edge);
+    background: var(--green-tint);
+  }
+}
+.theme-toggle:active {
+  background: var(--green-tint);
+}
+.site-nav {
+  order: 1;
+}
+@media (min-width: 761px) {
+  .site-header .header-row {
+    column-gap: 14px;
+  }
+}
+@media (max-width: 760px) {
+  .theme-toggle {
+    order: 1;
+    margin-left: auto;
+  }
+  .menu-toggle {
+    order: 2;
+  }
+  .site-nav {
+    order: 3;
+    margin-left: 0;
+  }
+}
+
+/* Celular angosto: el botón de menú queda solo con su icono para que quepa la media luna */
+@media (max-width: 420px) {
+  .menu-toggle {
+    min-width: 44px;
+    width: 44px;
+    padding: 0;
+  }
+  .menu-toggle-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 }

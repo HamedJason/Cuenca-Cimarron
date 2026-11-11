@@ -7,6 +7,8 @@ import SplashScreen from "./components/SplashScreen.vue";
 import LessonModal from "./components/LessonModal.vue";
 import { storageAvailable } from "./composables/useProgress";
 import { useVisits } from "./composables/useVisits";
+import { useTheme } from "./composables/useTheme";
+const { theme, toggleTheme } = useTheme();
 import { socials } from "./data";
 const liveSocials = socials.filter((social) => social.href);
 const route = useRoute();
@@ -78,6 +80,16 @@ onMounted(() => {
         /><span class="wordmark">Cuenca Cimarrona</span></RouterLink
       >
       <button
+        :class="['theme-toggle', { 'is-dark': theme === 'dark' }]"
+        type="button"
+        :aria-pressed="theme === 'dark'"
+        :aria-label="theme === 'dark' ? 'Desactivar modo oscuro' : 'Activar modo oscuro'"
+        :title="theme === 'dark' ? 'Desactivar modo oscuro' : 'Activar modo oscuro'"
+        @click="toggleTheme"
+      >
+        <Icon name="moon" :size="22" />
+      </button>
+      <button
         class="menu-toggle"
         type="button"
         :aria-expanded="menuOpen"
@@ -85,7 +97,7 @@ onMounted(() => {
         @click="menuOpen = !menuOpen"
       >
         <Icon :name="menuOpen ? 'close' : 'menu'" :size="22" class="menu-toggle-icon" />
-        {{ menuOpen ? "Cerrar" : "Menú" }}
+        <span class="menu-toggle-text">{{ menuOpen ? "Cerrar" : "Menú" }}</span>
       </button>
       <nav
         id="menu-principal"
