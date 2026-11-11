@@ -89,6 +89,18 @@ Tarjetas de servicios (fondo / texto): Protección Civil `#EAF2FF` / `#0B4FA8`, 
 - Sin punto final en títulos, botones y textos de una sola oración
 - Sin eslóganes
 
+## Pantalla de bienvenida
+
+`SplashScreen.vue`, montada en `App.vue`. Presenta a Cuenca Cimarrona como colaboración entre UABC, FCQI, Ayuntamiento de Tijuana, Protección Civil Tijuana, Bomberos Tijuana y Cruz Roja Mexicana (Delegación Tijuana).
+
+- Es una entrada corta, como la de Netflix o Disney: dura **5 s** (4.2 s en pantalla y 0.8 s desvaneciéndose) y **no se puede saltar**. Los logos quedan a la vista unos 3 s antes de desvanecerse
+- Sale **una vez por visita** (se guarda en `sessionStorage`)
+- Orden de la animación: sello, nombre, línea ocre, "es una colaboración entre" y los seis logos uno tras otro. Al irse, los colaboradores se quedan a la vista mientras todo baja de opacidad
+- Pantalla completa en blanco, sin tarjetas ni recuadros: sello, nombre y logos sueltos y grandes. En computadora los seis logos van en una fila; en celular, en dos filas de tres
+- Siempre lleva "¿Emergencia? Llama al 911" debajo de los logos, como única pastilla con borde: la bienvenida nunca estorba en una emergencia
+- Los logos van tal cual, sin recolorear y sin marco. Están en `frontend/public/assets/images/aliados/` (WebP, 78 KB en total). Protección Civil es la municipal de Tijuana, no la estatal
+- Con menos movimiento o con animaciones apagadas, aparece completa sin brincos y solo se desvanece al irse
+
 ## Inicio
 
 Orden de arriba hacia abajo: propósito, 911, aviso de El Niño, números, refugios y mapa, juegos, preparación, consejos y quiénes somos.

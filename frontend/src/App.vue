@@ -3,6 +3,7 @@ import { ref, computed, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import Icon from "./components/Icon.vue";
 import Modal from "./components/Modal.vue";
+import SplashScreen from "./components/SplashScreen.vue";
 import LessonModal from "./components/LessonModal.vue";
 import { storageAvailable } from "./composables/useProgress";
 import { useVisits } from "./composables/useVisits";
@@ -62,6 +63,7 @@ onMounted(() => {
 });
 </script>
 <template>
+  <SplashScreen />
   <a class="skip-link" href="#main-content">Saltar al contenido</a>
   <header :class="['site-header', { scrolled, 'menu-open': menuOpen }]">
     <div class="wrap header-row">
