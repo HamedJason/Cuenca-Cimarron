@@ -48,8 +48,31 @@ services:
     restart: unless-stopped
   # HTTPS con certificados automáticos. Sirve el mismo sitio en los puertos 80 y 443.
   # Si esos puertos ya están ocupados en el servidor, el sitio sigue funcionando en WEB_PORT.
+  # Solo pide certificado para el dominio que aprueba la API (DOMINIO en .env o el del panel de administración).
   proxy:
-    image: ghcr.io/hamedjason/cuenca-cimarron-proxy:${VERSION:-latest}
+    image: caddy:2-alpine
+    entrypoint:
+      - sh
+      - -c
+      - |
+        cat > /etc/caddy/Caddyfile <<'FIN'
+        {
+        	on_demand_tls {
+        		ask http://backend:8000/api/tls/permitir
+        	}
+        }
+        https:// {
+        	tls {
+        		on_demand
+        	}
+        	encode zstd gzip
+        	reverse_proxy frontend:80
+        }
+        http:// {
+        	reverse_proxy frontend:80
+        }
+        FIN
+        exec caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
     ports:
       - "${HTTP_PORT:-80}:80"
       - "${HTTPS_PORT:-443}:443"
@@ -59,8 +82,6 @@ services:
       - caddy_config:/config
     depends_on:
       - frontend
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
   database:
     image: postgres:16-alpine

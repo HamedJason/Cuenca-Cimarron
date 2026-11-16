@@ -6,7 +6,6 @@ on:
     paths:
       - "frontend/**"
       - "backend/**"
-      - "proxy/**"
       - ".github/workflows/publicar-imagenes.yml"
   workflow_dispatch:
 
@@ -92,7 +91,7 @@ jobs:
       packages: write
     strategy:
       matrix:
-        servicio: [frontend, backend, proxy]
+        servicio: [frontend, backend]
     steps:
       - uses: actions/checkout@v5
       - uses: docker/setup-buildx-action@v3

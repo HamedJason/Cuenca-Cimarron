@@ -43,7 +43,8 @@ if [ -n "$PUERTO_PEDIDO" ]; then
   echo "El sitio se publicará en el puerto $PUERTO_PEDIDO."
 fi
 
-docker compose -f compose.servidor.yaml pull
+# Si alguna imagen todavía no se puede descargar, se sigue con la que ya está en el servidor.
+docker compose -f compose.servidor.yaml pull --ignore-pull-failures || true
 docker compose -f compose.servidor.yaml up -d --remove-orphans database backend frontend respaldos watchtower
 
 # HTTPS va aparte. Si los puertos 80 o 443 ya los usa otro programa, el sitio sigue en WEB_PORT.
@@ -56,7 +57,9 @@ echo ""
 echo "Listo. El sitio queda en http://${IP:-localhost}:${PUERTO:-8090}"
 echo "Se actualiza solo cada vez que hay cambios en GitHub."
 if [ "$HTTPS_LISTO" = 1 ]; then
-  echo "También responde en los puertos 80 y 443. HTTPS se activa solo al poner el dominio en el panel de administración."
+  HTTP_P=$(grep '^HTTP_PORT=' .env | cut -d= -f2)
+  HTTPS_P=$(grep '^HTTPS_PORT=' .env | cut -d= -f2)
+  echo "También responde en los puertos ${HTTP_P:-80} y ${HTTPS_P:-443}. HTTPS se activa solo al poner el dominio en el panel de administración."
 else
   echo "No se pudo abrir los puertos 80 y 443, así que por ahora no hay HTTPS. El resto del sitio funciona igual."
 fi
