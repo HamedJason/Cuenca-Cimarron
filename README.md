@@ -4,17 +4,49 @@ Proyecto académico de prevención y preparación ante lluvias y El Niño en Tij
 
 ## Servidor con actualización automática
 
-Para el servidor no se usan los comandos de "Ejecutar el proyecto completo". Cada cambio en `main` publica imágenes nuevas en GitHub y el servidor las toma solo con Watchtower, sin `git pull` ni compilar nada. Solo se instala una vez, con un comando:
+Para el servidor no se usan los comandos de "Ejecutar el proyecto completo". Cada cambio en `main` publica imágenes nuevas en GitHub y el servidor las toma solo con Watchtower, sin `git pull` ni compilar nada.
+
+### Primera instalación
 
 ```bash
-(git clone https://github.com/HamedJason/Cuenca-Cimarron.git || git -C Cuenca-Cimarron pull) && sh Cuenca-Cimarron/instalar.sh
+git clone https://github.com/HamedJason/Cuenca-Cimarron.git && sh Cuenca-Cimarron/instalar.sh
 ```
 
-Es el mismo comando para la primera vez y para cuando cambia la configuración del servidor. Si la carpeta ya existe, git avisa que ya está y solo la actualiza, conservando las claves y los datos.
+El sitio queda en el puerto 8090. Para usar otro, se agrega al final, por ejemplo `sh Cuenca-Cimarron/instalar.sh 8080`.
 
-El sitio queda en el puerto 8090. Para usar otro, se agrega al final, por ejemplo `sh Cuenca-Cimarron/instalar.sh 8080`. También sirve para cambiar el puerto después, volviendo a correr el script dentro de la carpeta.
+### Actualizar un servidor que ya tiene el sitio
 
-El sitio también responde en los puertos 80 y 443. Para HTTPS no hay que hacer nada en el servidor, basta con escribir el dominio en el panel de administración del sitio.
+Solo hace falta cuando cambia la configuración del servidor (servicios, puertos o HTTPS). Se corre desde la misma carpeta donde se instaló la primera vez, la que contiene `Cuenca-Cimarron`. Las claves y los datos se conservan.
+
+```bash
+git -C Cuenca-Cimarron pull
+```
+
+```bash
+sh Cuenca-Cimarron/instalar.sh
+```
+
+Para revisar que quedó, este comando debe responder con `"database":true`:
+
+```bash
+curl http://localhost:8090/api/version
+```
+
+Si algún comando dice que no tiene permiso para usar Docker, se repite con `sudo` al principio.
+
+### HTTPS
+
+El sitio también responde en los puertos 80 y 443. Si el servidor usa el firewall `ufw`, hay que abrirlos una vez:
+
+```bash
+sudo ufw allow 80/tcp
+```
+
+```bash
+sudo ufw allow 443/tcp
+```
+
+Lo demás se hace desde el panel de administración del sitio: se escribe el dominio y el certificado se pide solo. El dominio debe apuntar a la IP pública del servidor.
 
 El detalle, los ajustes opcionales y cómo regresar a una versión anterior están en `docs/servidor.md`.
 

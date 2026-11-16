@@ -18,10 +18,10 @@ No hace falta git, Node ni PHP en el servidor.
 La forma corta es un solo comando, que descarga el repositorio, crea el `.env` con claves nuevas y levanta todo:
 
 ```bash
-(git clone https://github.com/HamedJason/Cuenca-Cimarron.git || git -C Cuenca-Cimarron pull) && sh Cuenca-Cimarron/instalar.sh
+git clone https://github.com/HamedJason/Cuenca-Cimarron.git && sh Cuenca-Cimarron/instalar.sh
 ```
 
-Si la carpeta ya existe, el mismo comando la actualiza y vuelve a levantar todo con la configuración nueva. El `.env` y la base de datos se conservan.
+Si el sitio ya estaba instalado, se actualiza con `git -C Cuenca-Cimarron pull` y luego `sh Cuenca-Cimarron/instalar.sh`, desde la misma carpeta. El `.env` y la base de datos se conservan.
 
 Por defecto usa el puerto 8090. Para otro puerto se pone como argumento, por ejemplo `sh Cuenca-Cimarron/instalar.sh 8080`.
 
