@@ -1,14 +1,16 @@
 <script setup>
-import { ref, reactive, watch, computed } from "vue";
+import { ref, reactive, watch, computed, defineAsyncComponent } from "vue";
 import Icon from "../components/Icon.vue";
 import FormField from "../components/FormField.vue";
 import { api } from "../composables/api";
 import { account, accountState, loadAccount, logout, labelOf, levels, shifts, sectors, cctPattern } from "../composables/useAccount";
 
+const AdminStats = defineAsyncComponent(() => import("../components/AdminStats.vue"));
 loadAccount();
 const isAdmin = computed(() => account.value?.role === "admin");
 const tabs = [
   { id: "escuelas", label: "Escuelas" },
+  { id: "estadisticas", label: "Estadísticas" },
   { id: "ajustes", label: "Ajustes" },
   { id: "respaldos", label: "Respaldos" },
 ];
@@ -195,6 +197,8 @@ watch(
           </li>
         </ul>
       </section>
+
+      <AdminStats v-else-if="tab === 'estadisticas'" />
 
       <form v-else-if="tab === 'ajustes'" class="form-card" role="tabpanel" novalidate @submit.prevent="saveSettings">
         <p v-if="!settings" role="status">Cargando…</p>

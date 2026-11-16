@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GameSessionController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SchoolTeachersController;
+use App\Http\Controllers\StatsController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SystemController;
@@ -51,6 +52,7 @@ Route::middleware(['web', 'throttle:120,1'])->group(function (): void {
 
     Route::middleware('rol:admin')->prefix('admin')->group(function (): void {
         Route::get('/escuelas', [AdminController::class, 'schools']);
+        Route::get('/estadisticas', [StatsController::class, 'index']);
         Route::post('/escuelas/{school}/aprobar', [AdminController::class, 'approve']);
         Route::post('/escuelas/{school}/rechazar', [AdminController::class, 'reject']);
         Route::get('/ajustes', [AdminController::class, 'settings']);
