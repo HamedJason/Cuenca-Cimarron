@@ -2,7 +2,7 @@
 
 Esta guía es para dejar el sitio corriendo en un servidor que se actualiza solo. Cada vez que se sube un cambio a `main`, GitHub corre las pruebas, construye las imágenes y las publica en GitHub Container Registry. En el servidor, Watchtower revisa cada 5 minutos si hay imágenes nuevas y, si las hay, las descarga y reinicia el frontend y la API. La base de datos no se toca y sus datos se conservan.
 
-Watchtower solo cambia imágenes. Si cambia `compose.servidor.yaml` (un servicio nuevo, un puerto, una variable), hay que volver a correr el comando de instalación una vez.
+Watchtower solo cambia imágenes. Si cambia `compose.servidor.yaml` (un servicio nuevo, un puerto, una variable), hay que volver a correr el comando de instalación una vez para tenerlo. Las escuelas, los puntos y las sesiones en la base llegan con las imágenes, así que funcionan aunque el servidor siga con el compose de la primera instalación.
 
 ## Requisitos
 

@@ -108,10 +108,12 @@ async function testMail() {
 
 // Respaldos
 const backups = ref([]);
+const folderReady = ref(true);
 const backupKey = ref("");
 async function loadBackups() {
   const data = await api("/admin/respaldos");
   backups.value = data.backups;
+  folderReady.value = data.folder_ready;
 }
 async function newBackupKey() {
   if (settings.value?.backup_key_set && !confirm("Ya hay una clave. Si generas otra, la anterior deja de funcionar. ¿Seguir?")) return;
@@ -267,7 +269,8 @@ watch(
         <a class="button primary" href="/api/admin/respaldo" download><Icon name="download" :size="20" />Descargar respaldo</a>
 
         <h2 class="form-title">Copias diarias del servidor</h2>
-        <p v-if="!backups.length" class="muted-text">Todavía no hay copias. El servidor hace una al día y guarda las de las últimas dos semanas</p>
+        <p v-if="!folderReady" class="muted-text">Este servidor no guarda copias diarias por su cuenta. Usa el botón de arriba o el respaldo automático en GitHub</p>
+        <p v-else-if="!backups.length" class="muted-text">Todavía no hay copias. El servidor hace una al día y guarda las de las últimas dos semanas</p>
         <ul class="plain-list">
           <li v-for="file in backups" :key="file.name">
             <a class="text-link" :href="`/api/admin/respaldos/${file.name}`" download>{{ file.name }}</a>

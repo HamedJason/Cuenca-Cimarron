@@ -15,7 +15,8 @@ return [
     |
     */
 
-    'default' => env('CACHE_STORE', 'database'),
+    // En producción siempre en la base, para que los límites de intentos sobrevivan a las actualizaciones.
+    'default' => env('APP_ENV') === 'production' ? 'database' : env('CACHE_STORE', 'database'),
 
     /*
     |--------------------------------------------------------------------------

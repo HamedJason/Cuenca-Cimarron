@@ -16,7 +16,7 @@ El sitio queda en el puerto 8090. Para usar otro, se agrega al final, por ejempl
 
 ### Actualizar un servidor que ya tiene el sitio
 
-Solo hace falta cuando cambia la configuración del servidor (servicios, puertos o HTTPS). Se corre desde la misma carpeta donde se instaló la primera vez, la que contiene `Cuenca-Cimarron`. Las claves y los datos se conservan.
+No hace falta para recibir cambios del sitio, esos llegan solos. Es opcional y solo agrega el respaldo diario guardado en el servidor, que también se puede tener con el respaldo automático en GitHub. Se corre desde la misma carpeta donde se instaló la primera vez, la que contiene `Cuenca-Cimarron`. Las claves y los datos se conservan.
 
 ```bash
 git -C Cuenca-Cimarron pull

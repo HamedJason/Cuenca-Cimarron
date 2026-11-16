@@ -18,7 +18,9 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'database'),
+    // En producción siempre van en la base. El compose viejo del servidor fija SESSION_DRIVER=file
+    // y con eso cada actualización sacaba a escuelas y administradores de su cuenta.
+    'driver' => env('APP_ENV') === 'production' ? 'database' : env('SESSION_DRIVER', 'database'),
 
     /*
     |--------------------------------------------------------------------------
