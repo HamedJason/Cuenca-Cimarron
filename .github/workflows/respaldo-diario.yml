@@ -1,0 +1,49 @@
+name: Respaldo diario
+
+# Descarga un respaldo de la base desde el servidor, lo cifra y lo guarda 90 días como artefacto.
+# Necesita, en Settings, Secrets and variables, Actions:
+# - Variable SITIO_URL, la dirección pública del sitio (por ejemplo https://cuenca.ejemplo.mx)
+# - Secreto RESPALDO_CLAVE, la clave que genera el panel de administración en Respaldos
+# - Secreto RESPALDO_CIFRADO, una frase larga para cifrar el archivo. Sin ella no se puede abrir
+# Si falta alguno, el workflow no hace nada.
+
+on:
+  schedule:
+    - cron: "0 10 * * *"
+  workflow_dispatch:
+
+jobs:
+  respaldo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Revisar configuración
+        id: revisar
+        env:
+          SITIO_URL: ${{ vars.SITIO_URL }}
+          RESPALDO_CLAVE: ${{ secrets.RESPALDO_CLAVE }}
+          RESPALDO_CIFRADO: ${{ secrets.RESPALDO_CIFRADO }}
+        run: |
+          if [ -n "$SITIO_URL" ] && [ -n "$RESPALDO_CLAVE" ] && [ -n "$RESPALDO_CIFRADO" ]; then
+            echo "listo=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "Falta SITIO_URL, RESPALDO_CLAVE o RESPALDO_CIFRADO. No se hace respaldo."
+          fi
+      - name: Descargar y cifrar
+        if: steps.revisar.outputs.listo == '1'
+        env:
+          SITIO_URL: ${{ vars.SITIO_URL }}
+          RESPALDO_CLAVE: ${{ secrets.RESPALDO_CLAVE }}
+          RESPALDO_CIFRADO: ${{ secrets.RESPALDO_CIFRADO }}
+        run: |
+          fecha=$(TZ=America/Tijuana date +%F)
+          curl -fsS --max-time 600 -H "X-Clave-Respaldo: $RESPALDO_CLAVE" "$SITIO_URL/api/respaldo" -o respaldo.sql.gz
+          test -s respaldo.sql.gz
+          gzip -t respaldo.sql.gz
+          openssl enc -aes-256-cbc -pbkdf2 -iter 200000 -salt -in respaldo.sql.gz -out "cuenca-$fecha.sql.gz.enc" -pass env:RESPALDO_CIFRADO
+          echo "ARCHIVO=cuenca-$fecha.sql.gz.enc" >> "$GITHUB_ENV"
+      - uses: actions/upload-artifact@v4
+        if: steps.revisar.outputs.listo == '1'
+        with:
+          name: ${{ env.ARCHIVO }}
+          path: ${{ env.ARCHIVO }}
+          retention-days: 90

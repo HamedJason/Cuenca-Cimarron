@@ -15,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // La API solo se ve detrás de nginx (y de Caddy cuando hay HTTPS), que mandan la IP y el esquema reales.
         $middleware->trustProxies(at: '*');
+        $middleware->alias(['rol' => \App\Http\Middleware\EnsureRole::class]);
+        // Las cookies de alumnos y docentes llevan un token propio, no se cifran con la APP_KEY.
+        $middleware->encryptCookies(except: ['cc_alumno', 'cc_docente']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

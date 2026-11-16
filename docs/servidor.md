@@ -105,12 +105,26 @@ Cada imagen se publica también con el identificador del commit. Si una actualiz
 
 Mientras `VERSION` esté fijada, Watchtower no cambia nada. Para volver a recibir actualizaciones se borra esa línea y se repite el paso 3.
 
+## Primera cuenta de administración
+
+Después de instalar, se entra a `http://direccion-del-servidor:8090/#/configurar` y se llena la clave de instalación, un nombre, un correo y una contraseña. Solo funciona mientras no exista ninguna cuenta de administración. La clave la tiene el equipo y en el repositorio solo está su huella.
+
+Desde el panel de administración (`/#/admin`) se aprueban escuelas, se llena el servidor de correo, se escribe el dominio para HTTPS y se descargan respaldos. Nada de eso necesita entrar al servidor.
+
 ## Respaldo de la base de datos
 
-La API aplica las migraciones sola cada vez que arranca. Conviene sacar un respaldo de vez en cuando:
+El servicio `respaldos` saca una copia de la base cada día y guarda las de las últimas dos semanas en el volumen `respaldos`. Se descargan desde el panel de administración, en la pestaña Respaldos, donde también hay un botón para sacar una copia en ese momento.
+
+Si el servidor se ve desde internet, GitHub puede guardar además una copia cifrada cada día durante 90 días (workflow `respaldo-diario.yml`). Para activarlo, en el repositorio se agregan la variable `SITIO_URL` y los secretos `RESPALDO_CLAVE` (se genera en el panel) y `RESPALDO_CIFRADO` (una frase larga que solo conoce el equipo). Para abrir un respaldo descargado de GitHub:
 
 ```bash
-docker compose -f compose.servidor.yaml exec -T database pg_dump -U cuenca cuenca > respaldo-$(date +%F).sql
+openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -in cuenca-AAAA-MM-DD.sql.gz.enc -out respaldo.sql.gz
+```
+
+Para restaurar un respaldo en una base vacía:
+
+```bash
+gunzip -c respaldo.sql.gz | docker compose -f compose.servidor.yaml exec -T database psql -U cuenca cuenca
 ```
 
 ## Comandos útiles

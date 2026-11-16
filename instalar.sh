@@ -44,7 +44,7 @@ if [ -n "$PUERTO_PEDIDO" ]; then
 fi
 
 docker compose -f compose.servidor.yaml pull
-docker compose -f compose.servidor.yaml up -d --remove-orphans database backend frontend watchtower
+docker compose -f compose.servidor.yaml up -d --remove-orphans database backend frontend respaldos watchtower
 
 # HTTPS va aparte. Si los puertos 80 o 443 ya los usa otro programa, el sitio sigue en WEB_PORT.
 HTTPS_LISTO=1

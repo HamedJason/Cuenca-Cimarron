@@ -214,6 +214,8 @@ onMounted(() => {
         </div>
       </div>
       <div class="footer-tools">
+        <RouterLink to="/escuelas" class="footer-link">Escuelas</RouterLink>
+        <RouterLink to="/privacidad" class="footer-link">Aviso de privacidad</RouterLink>
         <RouterLink to="/estilos" class="footer-link">Estilos</RouterLink>
         <button class="visits-tag" @click="showStats = true">
           <span

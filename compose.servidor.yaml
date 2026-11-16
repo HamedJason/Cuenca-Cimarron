@@ -32,6 +32,8 @@ services:
       CACHE_STORE: database
       SESSION_DRIVER: database
       QUEUE_CONNECTION: sync
+    volumes:
+      - respaldos:/respaldos:ro
     depends_on:
       database:
         condition: service_healthy
@@ -74,6 +76,33 @@ services:
       timeout: 5s
       retries: 10
     restart: unless-stopped
+  # Copia diaria de la base. Guarda las de los últimos 14 días en el volumen respaldos.
+  # Se descargan desde el panel de administración del sitio.
+  respaldos:
+    image: postgres:16-alpine
+    environment:
+      PGHOST: database
+      PGUSER: cuenca
+      PGDATABASE: cuenca
+      PGPASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD en el archivo .env}
+      TZ: America/Tijuana
+    volumes:
+      - respaldos:/respaldos
+    entrypoint:
+      - sh
+      - -c
+      - |
+        sleep 60
+        while true; do
+          archivo=/respaldos/cuenca-$$(date +%F).sql.gz
+          pg_dump --no-owner --no-privileges -Z 6 > /respaldos/en-curso.tmp && mv /respaldos/en-curso.tmp "$$archivo" && chmod 644 "$$archivo"
+          find /respaldos -name 'cuenca-*.sql.gz' -mtime +14 -delete
+          sleep 86400
+        done
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: unless-stopped
   watchtower:
     image: nickfedor/watchtower:latest
     command: --label-enable --cleanup --interval ${REVISAR_CADA:-300}
@@ -86,3 +115,4 @@ volumes:
   postgres_data:
   caddy_data:
   caddy_config:
+  respaldos:

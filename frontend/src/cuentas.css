@@ -1,0 +1,456 @@
+/* Cuentas: escuelas, docentes, alumnos y administración. Mismas reglas de docs/estilos.md */
+
+.account-page .page-heading {
+  margin-bottom: 32px;
+}
+.form-card {
+  position: relative;
+  display: grid;
+  gap: 18px;
+  padding: 28px;
+  margin-bottom: 24px;
+  background: var(--surface);
+  border: 2px solid var(--edge);
+  border-radius: var(--radius-card);
+  box-shadow: 0 4px 0 var(--shadow);
+  align-content: start;
+}
+.form-card.is-tint {
+  background: var(--green-tint);
+}
+.form-card.narrow {
+  max-width: 560px;
+}
+.form-card > form {
+  display: grid;
+  gap: 18px;
+}
+.form-title {
+  font-size: 32px;
+}
+.account-split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+.panel-stack {
+  display: grid;
+  gap: 0;
+}
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Campos */
+.form-group {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.form-group > legend {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 24px;
+  color: var(--title);
+  padding: 0;
+  margin-bottom: 12px;
+}
+.field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.field > label,
+.field-label,
+.field > legend {
+  font-weight: 700;
+  color: var(--ink);
+  padding: 0;
+}
+.field-optional {
+  font-weight: 400;
+  color: var(--muted);
+}
+.field input:not([type="checkbox"]):not([type="radio"]),
+.field select,
+.field textarea,
+.code-input {
+  width: 100%;
+  min-height: 52px;
+  padding: 12px 14px;
+  font: inherit;
+  color: var(--ink);
+  background: var(--surface);
+  border: 2px solid var(--control-line);
+  border-radius: var(--radius-button);
+}
+.field input:focus-visible,
+.field select:focus-visible,
+.field textarea:focus-visible,
+.code-input:focus-visible {
+  outline: 3px solid var(--edge);
+  outline-offset: 2px;
+  border-color: var(--edge);
+}
+.field.has-error input,
+.field.has-error select {
+  border-color: #b3121f;
+}
+.field-hint {
+  font-size: 15px;
+  color: var(--muted);
+}
+.field-error {
+  font-size: 15px;
+  font-weight: 700;
+  color: #b3121f;
+}
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+}
+.choice-row > legend {
+  width: 100%;
+  margin-bottom: 6px;
+}
+.choice,
+.check-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  cursor: pointer;
+}
+.check-row {
+  align-items: flex-start;
+}
+.check-row input {
+  margin-top: 2px;
+}
+.choice input[type="radio"] {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--uabc-green);
+}
+.consent {
+  gap: 8px;
+}
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+.form-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-weight: 700;
+}
+.form-alert.is-error {
+  background: #ffebee;
+  color: #8e0e18;
+}
+.form-alert.is-ok {
+  background: var(--green-tint);
+  color: var(--link);
+}
+.note.is-gold {
+  background: var(--gold-tint);
+  color: var(--gold-text);
+}
+.note > div {
+  display: grid;
+  gap: 6px;
+}
+.steps-mini {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: paso;
+}
+.steps-mini li {
+  counter-increment: paso;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+.steps-mini li::before {
+  content: counter(paso);
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: var(--uabc-gold);
+  color: #003d24;
+  font-family: var(--font-heading);
+  font-weight: 800;
+}
+.plain-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.plain-list li {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+}
+.plain-list .icon {
+  color: var(--uabc-green);
+}
+.prose {
+  gap: 12px;
+}
+.prose h2 {
+  font-size: 30px;
+  margin-top: 12px;
+}
+.prose ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 22px;
+  color: var(--ink);
+}
+
+/* Estado de una escuela o una tarea */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.status-badge.is-pending {
+  background: var(--gold-tint);
+  color: var(--gold-text);
+}
+.status-badge.is-approved {
+  background: var(--green-tint);
+  color: var(--link);
+}
+.status-badge.is-rejected {
+  background: #ffebee;
+  color: #8e0e18;
+}
+
+/* Pestañas del panel */
+.panel-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.panel-tab,
+.filter-chip {
+  min-height: 44px;
+  padding: 8px 18px;
+  border: 2px solid var(--uabc-green);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--title);
+  font-weight: 700;
+}
+.panel-tab.active,
+.filter-chip.active {
+  background: var(--uabc-green);
+  color: #fff;
+}
+.panel-tab.is-quiet {
+  border-color: var(--line);
+  margin-left: auto;
+}
+.chip-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.filter-chip b {
+  margin-left: 4px;
+}
+
+/* Revisión de escuelas */
+.review-list {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.review-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  padding: 18px;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+}
+.review-main {
+  display: grid;
+  gap: 4px;
+}
+.review-main h3 {
+  font-size: 26px;
+}
+.review-main p {
+  font-size: 16px;
+}
+.review-form {
+  display: grid;
+  gap: 10px;
+  min-width: 260px;
+}
+.secret-code {
+  display: block;
+  padding: 10px 12px;
+  font-size: 16px;
+  background: var(--surface);
+  border: 2px dashed var(--edge);
+  border-radius: 10px;
+  word-break: break-all;
+  user-select: all;
+}
+
+/* Tablas de grupos y avance */
+.table-wrap {
+  overflow-x: auto;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+.data-table th,
+.data-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+.data-table thead th {
+  background: var(--green-tint);
+  color: var(--title);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.data-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.data-table .center {
+  text-align: center;
+}
+.icon-done {
+  color: var(--uabc-green);
+}
+.icon-missing {
+  color: var(--line);
+}
+
+/* Mapa para marcar la escuela */
+.location-picker-canvas {
+  height: 280px;
+  border: 2px solid var(--edge);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.school-pin {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--uabc-gold);
+  border: 4px solid #003d24;
+}
+
+/* Botones chicos dentro de tablas y listas */
+.button.small-button {
+  min-height: 44px;
+  padding: 8px 14px;
+  font-size: 15px;
+}
+.link-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.link-box code {
+  flex: 1 1 260px;
+  padding: 10px 12px;
+  background: var(--green-tint);
+  border-radius: 10px;
+  word-break: break-all;
+  font-size: 15px;
+}
+
+@media (max-width: 760px) {
+  .account-split,
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+  .form-card {
+    padding: 20px 16px;
+  }
+  .review-item {
+    grid-template-columns: 1fr;
+  }
+  .review-form {
+    min-width: 0;
+  }
+  .panel-tab.is-quiet {
+    margin-left: 0;
+  }
+}
+
+:root[data-theme="dark"] .form-alert.is-error,
+:root[data-theme="dark"] .status-badge.is-rejected {
+  background: #4a2a2c;
+  color: #ffd9dc;
+}
+:root[data-theme="dark"] .field-error {
+  color: #ffb4ba;
+}
+:root[data-theme="dark"] .field.has-error input,
+:root[data-theme="dark"] .field.has-error select {
+  border-color: #ffb4ba;
+}
+:root[data-theme="dark"] .steps-mini li::before {
+  color: #25292b;
+}
