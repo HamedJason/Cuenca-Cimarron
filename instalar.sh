@@ -47,9 +47,13 @@ fi
 docker compose -f compose.servidor.yaml pull --ignore-pull-failures || true
 docker compose -f compose.servidor.yaml up -d --remove-orphans database backend frontend respaldos watchtower
 
-# HTTPS va aparte. Si los puertos 80 o 443 ya los usa otro programa, el sitio sigue en WEB_PORT.
-HTTPS_LISTO=1
-docker compose -f compose.servidor.yaml up -d proxy || HTTPS_LISTO=0
+# HTTPS propio con Caddy, solo si se pide con HTTPS_CADDY=1 en .env.
+# Si el servidor ya tiene un proxy con HTTPS delante (como el de la facultad), no hace falta.
+HTTPS_LISTO=0
+if grep -q '^HTTPS_CADDY=1' .env; then
+  HTTPS_LISTO=1
+  docker compose -f compose.servidor.yaml --profile https up -d proxy || HTTPS_LISTO=2
+fi
 
 PUERTO=$(grep '^WEB_PORT=' .env | cut -d= -f2)
 IP=$(hostname -I 2>/dev/null | awk '{print $1}')
@@ -60,6 +64,6 @@ if [ "$HTTPS_LISTO" = 1 ]; then
   HTTP_P=$(grep '^HTTP_PORT=' .env | cut -d= -f2)
   HTTPS_P=$(grep '^HTTPS_PORT=' .env | cut -d= -f2)
   echo "También responde en los puertos ${HTTP_P:-80} y ${HTTPS_P:-443}. HTTPS se activa solo al poner el dominio en el panel de administración."
-else
-  echo "No se pudo abrir los puertos 80 y 443, así que por ahora no hay HTTPS. El resto del sitio funciona igual."
+elif [ "$HTTPS_LISTO" = 2 ]; then
+  echo "No se pudo abrir los puertos 80 y 443, así que Caddy no arrancó. El resto del sitio funciona igual."
 fi

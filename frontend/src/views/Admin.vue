@@ -205,10 +205,10 @@ watch(
         <template v-else>
           <fieldset class="form-group">
             <legend>Dirección del sitio</legend>
-            <FormField v-slot="{ id, describedby }" label="Dominio para HTTPS" optional hint="Por ejemplo cuenca.ejemplo.mx. Debe apuntar al servidor y tener abiertos los puertos 80 y 443" :error="settingsErrors.domain">
+            <FormField v-slot="{ id, describedby }" label="Dominio para el HTTPS de Caddy" optional hint="Solo si el servidor usa el HTTPS propio del sitio (HTTPS_CADDY=1). En el servidor de la facultad no hace falta" :error="settingsErrors.domain">
               <input :id="id" v-model.trim="form.domain" maxlength="200" spellcheck="false" :aria-describedby="describedby" :placeholder="settings.domain_env || ''" />
             </FormField>
-            <FormField v-slot="{ id, describedby }" label="Dirección pública" optional hint="Solo si los enlaces de los correos deben usar otra dirección" :error="settingsErrors.public_url">
+            <FormField v-slot="{ id, describedby }" label="Dirección pública" optional hint="Con ella se arman los enlaces de los correos y de los grupos. Se guardó sola al configurar el sitio" :error="settingsErrors.public_url">
               <input :id="id" v-model.trim="form.public_url" type="url" maxlength="200" :aria-describedby="describedby" />
             </FormField>
             <p class="small muted-text">Los enlaces de los correos usan: <b>{{ settings.effective_url }}</b></p>

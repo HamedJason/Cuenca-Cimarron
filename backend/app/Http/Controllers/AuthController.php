@@ -71,6 +71,12 @@ class AuthController extends Controller
         ]);
         $user->forceFill(['email_verified_at' => now()])->save();
         Audit::log('admin', $user->id, 'configurar');
+        // La dirección con la que se configuró el sitio queda como dirección pública para los enlaces
+        // de correos y grupos. Así sirve aunque haya un proxy con HTTPS delante. Se cambia en el panel.
+        if (! Settings::get('public_url')) {
+            $origin = (string) $request->headers->get('Origin');
+            Settings::set('public_url', preg_match('#^https?://[a-z0-9.-]+(:\d+)?$#i', $origin) ? strtolower($origin) : $request->getSchemeAndHttpHost());
+        }
         Auth::login($user);
         $request->session()->regenerate();
 

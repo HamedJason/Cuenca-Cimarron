@@ -49,8 +49,10 @@ services:
   # HTTPS con certificados automáticos. Sirve el mismo sitio en los puertos 80 y 443.
   # Si esos puertos ya están ocupados en el servidor, el sitio sigue funcionando en WEB_PORT.
   # Solo pide certificado para el dominio que aprueba la API (DOMINIO en .env o el del panel de administración).
+  # Es opcional: solo arranca con HTTPS_CADDY=1 en .env (perfil https). No hace falta si ya hay un proxy con HTTPS delante.
   proxy:
     image: caddy:2-alpine
+    profiles: ["https"]
     entrypoint:
       - sh
       - -c

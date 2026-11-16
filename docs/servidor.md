@@ -9,7 +9,6 @@ Watchtower solo cambia imágenes. Si cambia `compose.servidor.yaml` (un servicio
 - Linux con Docker Engine y el plugin `docker compose`
 - Acceso a internet hacia `ghcr.io` y `docker.io`
 - El puerto del sitio abierto (8090 por defecto, se puede cambiar)
-- Para HTTPS, los puertos 80 y 443 libres y abiertos hacia internet, y un dominio que apunte al servidor
 
 No hace falta git, Node ni PHP en el servidor.
 
@@ -59,15 +58,17 @@ Después de esto no hay que hacer nada más. Los contenedores tienen `restart: u
 
 ## HTTPS
 
-El servicio `proxy` es Caddy. Escucha en los puertos 80 y 443 y pide el certificado a Let's Encrypt por su cuenta la primera vez que alguien entra con el dominio. Solo lo pide para el dominio aprobado, que se escribe en el panel de administración del sitio (Ajustes, Dominio) o en `DOMINIO` dentro de `.env`.
+En el servidor de la facultad el HTTPS lo pone un proxy que ya existe delante del puerto 8090 (https://cuencacimarrona.software-fcqi.com). El sitio no necesita nada más.
 
-Para que funcione:
+Para un servidor sin HTTPS, el compose trae el servicio `proxy` (Caddy), apagado por defecto. Para encenderlo:
 
-1. El dominio debe apuntar a la IP pública del servidor.
-2. Los puertos 80 y 443 deben estar abiertos desde internet.
-3. Se escribe el dominio en el panel de administración.
+1. Agregar `HTTPS_CADDY=1` al `.env`.
+2. Volver a correr `sh Cuenca-Cimarron/instalar.sh`.
+3. Escribir el dominio en el panel de administración (Ajustes, Dominio) o en `DOMINIO` dentro de `.env`.
 
-Si los puertos 80 o 443 ya los usa otro programa, `instalar.sh` lo avisa y el sitio sigue funcionando por HTTP en `WEB_PORT`.
+Caddy escucha en los puertos 80 y 443 y pide el certificado a Let's Encrypt la primera vez que alguien entra con ese dominio. Solo lo pide para el dominio aprobado. El dominio debe apuntar al servidor y los puertos deben estar abiertos desde internet.
+
+La dirección que usan los enlaces de los correos y de los grupos se guarda sola al crear la cuenta de administración, con la dirección desde la que se configuró. Se puede cambiar en el panel (Ajustes, Dirección pública).
 
 ## Si al descargar sale "denied" o "unauthorized"
 
@@ -89,7 +90,8 @@ Significa que las imágenes en GitHub son privadas. Hay dos caminos:
 | `WEB_PORT` | Puerto donde se publica el sitio | `8090` |
 | `WEB_BIND` | Interfaz donde escucha. `127.0.0.1` si hay un proxy como Nginx o Caddy delante | `0.0.0.0` |
 | `APP_URL` | Dirección pública del sitio | `http://localhost:8090` |
-| `DOMINIO` | Dominio para HTTPS. Se puede poner aquí o desde el panel | vacío |
+| `HTTPS_CADDY` | `1` para encender Caddy con HTTPS propio | vacío |
+| `DOMINIO` | Dominio para el HTTPS de Caddy. Se puede poner aquí o desde el panel | vacío |
 | `HTTP_PORT` | Puerto HTTP de Caddy | `80` |
 | `HTTPS_PORT` | Puerto HTTPS de Caddy | `443` |
 | `REVISAR_CADA` | Segundos entre cada revisión de Watchtower | `300` |

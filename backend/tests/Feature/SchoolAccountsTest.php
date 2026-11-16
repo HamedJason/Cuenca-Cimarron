@@ -46,7 +46,8 @@ class SchoolAccountsTest extends TestCase
         $this->postJson('/api/configurar', $data)->assertUnprocessable()->assertJsonValidationErrors('clave');
         config(['instalacion.clave_hash' => hash('sha256', 'CLAVE-BUENA')]);
         $data['clave'] = 'clave-buena';
-        $this->postJson('/api/configurar', $data)->assertCreated()->assertJsonPath('user.role', 'admin');
+        $this->withHeaders(['Origin' => 'https://cuencacimarrona.example.mx'])->postJson('/api/configurar', $data)->assertCreated()->assertJsonPath('user.role', 'admin');
+        $this->assertSame('https://cuencacimarrona.example.mx', Settings::publicUrl());
         $this->getJson('/api/sesion')->assertJsonPath('setup_needed', false)->assertJsonPath('user.email', 'admin@cuenca.mx');
         $data['email'] = 'otro@cuenca.mx';
         $this->postJson('/api/configurar', $data)->assertStatus(409);

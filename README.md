@@ -36,17 +36,9 @@ Si algún comando dice que no tiene permiso para usar Docker, se repite con `sud
 
 ### HTTPS
 
-El sitio también responde en los puertos 80 y 443. Si el servidor usa el firewall `ufw`, hay que abrirlos una vez:
+El servidor de la facultad ya tiene HTTPS con un proxy propio delante del puerto 8090, así que no hay que hacer nada más.
 
-```bash
-sudo ufw allow 80/tcp
-```
-
-```bash
-sudo ufw allow 443/tcp
-```
-
-Lo demás se hace desde el panel de administración del sitio: se escribe el dominio y el certificado se pide solo. El dominio debe apuntar a la IP pública del servidor.
+Si algún día se instala en un servidor sin HTTPS, el sitio trae Caddy, que saca el certificado solo. Se activa agregando `HTTPS_CADDY=1` al `.env` y volviendo a correr `sh Cuenca-Cimarron/instalar.sh`. Después se escribe el dominio en el panel de administración.
 
 El detalle, los ajustes opcionales y cómo regresar a una versión anterior están en `docs/servidor.md`.
 
