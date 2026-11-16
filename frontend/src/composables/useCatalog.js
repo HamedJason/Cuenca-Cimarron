@@ -92,4 +92,4 @@ export async function uploadCatalog(schools, onProgress = () => {}) {
   return total;
 }
 
-export const searchCatalog = (q) => api(`/catalogo-escuelas?q=${encodeURIComponent(q)}`).then((d) => d.schools);
+export const searchCatalog = (q, signal) => api(`/catalogo-escuelas?q=${encodeURIComponent(q)}`, { signal }).then((d) => d.schools);

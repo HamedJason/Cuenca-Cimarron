@@ -45,11 +45,23 @@ class SchoolCatalogTest extends TestCase
     public function test_buscar_por_nombre_sin_acentos_colonia_o_cct(): void
     {
         $this->actingAs($this->admin())->postJson('/api/admin/catalogo-escuelas', ['schools' => [$this->row()]])->assertOk();
-        $this->getJson('/api/catalogo-escuelas?q=pi')->assertUnprocessable();
+        $this->getJson('/api/catalogo-escuelas?q=p')->assertUnprocessable();
+        $this->getJson('/api/catalogo-escuelas?q=ju')->assertOk()->assertJsonPath('schools.0.cct', '02DPB0007N');
         $this->getJson('/api/catalogo-escuelas?q=pipila')->assertOk()->assertJsonPath('schools.0.cct', '02DPB0007N')->assertJsonPath('schools.0.registered', false);
         $this->getJson('/api/catalogo-escuelas?q=reyes obrera')->assertOk()->assertJsonCount(1, 'schools');
         $this->getJson('/api/catalogo-escuelas?q=02dpb0007n')->assertOk()->assertJsonPath('schools.0.name', 'Juan José de los Reyes Martínez el Pípila');
         $this->getJson('/api/catalogo-escuelas?q=secundaria')->assertOk()->assertJsonCount(0, 'schools');
+    }
+
+    public function test_primero_las_que_empiezan_con_lo_escrito(): void
+    {
+        $this->actingAs($this->admin())->postJson('/api/admin/catalogo-escuelas', ['schools' => [
+            $this->row(['cct' => '02DPR0001A', 'name' => 'Agustín Melgar', 'colonia' => 'Benito Juárez']),
+            $this->row(['cct' => '02DPR0002B', 'name' => 'Benito Juárez', 'colonia' => 'Centro']),
+        ]])->assertOk();
+        $this->getJson('/api/catalogo-escuelas?q=benito')->assertOk()
+            ->assertJsonPath('schools.0.name', 'Benito Juárez')
+            ->assertJsonPath('schools.1.name', 'Agustín Melgar');
     }
 
     public function test_marca_las_escuelas_ya_registradas(): void

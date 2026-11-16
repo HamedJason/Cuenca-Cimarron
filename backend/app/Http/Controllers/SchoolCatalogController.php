@@ -21,17 +21,22 @@ class SchoolCatalogController extends Controller
 
     public function search(Request $request): JsonResponse
     {
-        $data = $request->validate(['q' => ['required', 'string', 'min:3', 'max:80']]);
+        $data = $request->validate(['q' => ['required', 'string', 'min:2', 'max:80']]);
         $query = DB::table('school_catalog');
         $q = trim($data['q']);
         if (preg_match('/^\d{2}[A-Za-z]{3}\d{4}[A-Za-z]$/', $q)) {
             $query->where('cct', strtoupper($q));
         } else {
-            foreach (array_slice(explode(' ', self::searchKey($q)), 0, 5) as $word) {
-                $query->where('name_search', 'like', '%'.str_replace(['%', '_'], '', $word).'%');
+            $words = array_slice(array_filter(explode(' ', str_replace(['%', '_'], '', self::searchKey($q)))), 0, 5);
+            foreach ($words as $word) {
+                $query->where('name_search', 'like', '%'.$word.'%');
+            }
+            // Para el autocompletado: primero las que empiezan con lo que se escribió.
+            if ($words) {
+                $query->orderByRaw('case when name_search like ? then 0 else 1 end', [$words[0].'%']);
             }
         }
-        $rows = $query->orderBy('name')->limit(20)->get();
+        $rows = $query->orderBy('name')->limit(12)->get();
         $taken = School::whereIn('cct', $rows->pluck('cct'))->pluck('cct')->all();
 
         return response()->json(['schools' => $rows->map(fn ($s) => [

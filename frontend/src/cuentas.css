@@ -1124,39 +1124,90 @@
   }
 }
 
-/* Buscar la escuela en el catálogo de la SEP */
+/* Buscar la escuela en el catálogo de la SEP: autocompletado */
 .school-picker {
   gap: 10px;
 }
-.picker-list {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  max-height: 420px;
-  overflow-y: auto;
+.combo {
+  position: relative;
 }
-.picker-item {
+.field .combo input {
+  padding-left: 44px;
+  padding-right: 44px;
+  font-size: 18px;
+}
+.combo-icon {
+  position: absolute;
+  left: 14px;
+  top: 16px;
+  color: var(--muted);
+  pointer-events: none;
+}
+.combo-spinner {
+  position: absolute;
+  right: 16px;
+  top: 17px;
+  width: 18px;
+  height: 18px;
+  border: 3px solid var(--line);
+  border-top-color: var(--uabc-green);
+  border-radius: 50%;
+  animation: combo-spin 0.7s linear infinite;
+}
+@keyframes combo-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.combo-list {
+  position: absolute;
+  z-index: 30;
+  left: 0;
+  right: 0;
+  top: calc(100% + 6px);
   display: grid;
   gap: 2px;
-  width: 100%;
-  padding: 10px 14px;
-  border: 2px solid var(--line);
-  border-radius: 14px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  max-height: 360px;
+  overflow-y: auto;
   background: var(--surface);
-  text-align: left;
-  color: var(--ink);
+  border: 2px solid var(--edge);
+  border-radius: 16px;
+  box-shadow: 0 4px 0 var(--shadow);
 }
-.picker-item:hover:not(:disabled) {
-  border-color: var(--uabc-green);
+.combo-option {
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: var(--ink);
+  cursor: pointer;
+}
+.combo-option.active {
   background: var(--green-tint);
 }
-.picker-item span {
+.combo-option span {
   font-size: 15px;
   color: var(--muted);
 }
-.picker-item small {
+.combo-option mark {
+  background: color-mix(in srgb, var(--uabc-gold) 40%, transparent);
+  color: inherit;
+  border-radius: 3px;
+  padding: 0 1px;
+}
+.combo-option.taken {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.combo-option small {
   font-weight: 700;
   color: var(--gold-text);
+}
+@media (prefers-reduced-motion: reduce) {
+  .combo-spinner {
+    animation-duration: 2s;
+  }
 }

@@ -59,3 +59,41 @@ describe("Catálogo de escuelas de la SEP", () => {
     expect(mapSepRecord({ cv_cct: "12345" })).toBe(null);
   });
 });
+
+import { mount, flushPromises } from "@vue/test-utils";
+import { vi, afterEach } from "vitest";
+import SchoolPicker from "../src/components/SchoolPicker.vue";
+
+const found = [
+  { cct: "02DPR0002B", name: "Benito Juárez", level: "primaria", shift: "matutino", colonia: "Centro", municipality: "Tijuana", registered: false },
+  { cct: "02DPR0003C", name: "Benito Juárez", level: "primaria", shift: "vespertino", colonia: "Centro", municipality: "Tijuana", registered: true },
+];
+
+describe("Autocompletado de escuelas", () => {
+  afterEach(() => vi.unstubAllGlobals());
+  it("muestra sugerencias al escribir y elige con flechas y Enter", async () => {
+    vi.useFakeTimers();
+    const fetch = vi.fn(() => Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({ schools: found }) }));
+    vi.stubGlobal("fetch", fetch);
+    const wrapper = mount(SchoolPicker, { attachTo: document.body });
+    const input = wrapper.find("input[role=combobox]");
+    await input.setValue("b");
+    vi.advanceTimersByTime(300);
+    expect(fetch).not.toHaveBeenCalled();
+    await input.setValue("beni");
+    vi.advanceTimersByTime(200);
+    vi.useRealTimers();
+    await flushPromises();
+    expect(fetch.mock.calls[0][0]).toBe("/api/catalogo-escuelas?q=beni");
+    const options = wrapper.findAll("[role=option]");
+    expect(options).toHaveLength(2);
+    expect(options[0].find("mark").text()).toBe("Beni");
+    expect(options[0].text()).toContain("Matutino");
+    expect(options[1].text()).toContain("Ya está registrada");
+    await input.trigger("keydown", { key: "ArrowDown" });
+    expect(input.attributes("aria-activedescendant")).toMatch(/op-0$/);
+    await input.trigger("keydown", { key: "Enter" });
+    expect(wrapper.emitted("pick")[0][0].cct).toBe("02DPR0002B");
+    wrapper.unmount();
+  });
+});
