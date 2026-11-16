@@ -117,7 +117,7 @@ Desde el panel de administración (`/admin`) se aprueban escuelas, se llena el s
 
 El servicio `respaldos` saca una copia de la base cada día y guarda las de las últimas dos semanas en el volumen `respaldos`. Se descargan desde el panel de administración, en la pestaña Respaldos, donde también hay un botón para sacar una copia en ese momento.
 
-Si el servidor se ve desde internet, GitHub puede guardar además una copia cifrada cada día durante 90 días (workflow `respaldo-diario.yml`). Para activarlo, en el repositorio se agregan la variable `SITIO_URL` y los secretos `RESPALDO_CLAVE` (se genera en el panel) y `RESPALDO_CIFRADO` (una frase larga que solo conoce el equipo). Para abrir un respaldo descargado de GitHub:
+Si el servidor se ve desde internet, GitHub puede guardar además una copia cifrada cada día durante 14 días (workflow `respaldo-diario.yml`). Para activarlo, en el repositorio se agregan la variable `SITIO_URL` y los secretos `RESPALDO_CLAVE` (se genera en el panel) y `RESPALDO_CIFRADO` (una frase larga que solo conoce el equipo). Para abrir un respaldo descargado de GitHub:
 
 ```bash
 openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -in cuenca-AAAA-MM-DD.sql.gz.enc -out respaldo.sql.gz

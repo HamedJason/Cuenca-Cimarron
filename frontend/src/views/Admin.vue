@@ -279,7 +279,7 @@ watch(
         </ul>
 
         <h2 class="form-title">Respaldo automático en GitHub</h2>
-        <p class="muted-text">GitHub puede descargar un respaldo cada día y guardarlo cifrado 90 días. Genera la clave y pégala en el repositorio como secreto <b>RESPALDO_CLAVE</b></p>
+        <p class="muted-text">GitHub puede descargar un respaldo cada día y guardarlo cifrado 14 días. Genera la clave y pégala en el repositorio como secreto <b>RESPALDO_CLAVE</b></p>
         <p v-if="settings?.backup_key_set && !backupKey" class="small">Ya hay una clave guardada</p>
         <button class="button secondary" type="button" @click="newBackupKey">Generar clave</button>
         <div v-if="backupKey" class="note is-gold">

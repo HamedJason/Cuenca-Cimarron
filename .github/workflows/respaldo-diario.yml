@@ -1,6 +1,6 @@
 name: Respaldo diario
 
-# Descarga un respaldo de la base desde el servidor, lo cifra y lo guarda 90 días como artefacto.
+# Descarga un respaldo de la base desde el servidor, lo cifra y lo guarda 14 días como artefacto.
 # Necesita, en Settings, Secrets and variables, Actions:
 # - Variable SITIO_URL, la dirección pública del sitio (por ejemplo https://cuenca.ejemplo.mx)
 # - Secreto RESPALDO_CLAVE, la clave que genera el panel de administración en Respaldos
@@ -46,4 +46,4 @@ jobs:
         with:
           name: ${{ env.ARCHIVO }}
           path: ${{ env.ARCHIVO }}
-          retention-days: 90
+          retention-days: 14
