@@ -7,7 +7,8 @@ import SplashScreen from "./components/SplashScreen.vue";
 import LessonModal from "./components/LessonModal.vue";
 import StudentCheck from "./components/StudentCheck.vue";
 import ExternalReturn from "./components/ExternalReturn.vue";
-import { loadStudent } from "./composables/useStudent";
+import TasksFab from "./components/TasksFab.vue";
+import { loadStudent, student } from "./composables/useStudent";
 import { loadActivities, retryPending } from "./composables/useActivities";
 import { storageAvailable } from "./composables/useProgress";
 import { useVisits } from "./composables/useVisits";
@@ -42,7 +43,8 @@ watch(
 );
 // El botón flotante no se muestra donde ya están los juegos.
 // Siempre visible, salvo en la página de juegos.
-const showPlayButton = computed(() => route.path !== "/juegos");
+// Con un alumno con sesión, su lista de tareas toma ese lugar.
+const showPlayButton = computed(() => route.path !== "/juegos" && !student.value);
 const team = [
   "Jason Alejandro Hamed Valdez",
   "Fernando Onit Sibaja Gomez",
@@ -285,4 +287,5 @@ onMounted(() => {
   <LessonModal />
   <StudentCheck />
   <ExternalReturn />
+  <TasksFab />
 </template>

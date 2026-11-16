@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GameSessionController;
 use App\Http\Controllers\SchoolController;
@@ -91,6 +92,11 @@ Route::middleware('throttle:300,1')->group(function (): void {
         Route::post('/grupos/{classroom}/codigo', [TeacherController::class, 'newCode']);
         Route::post('/grupos/{classroom}/archivar', [TeacherController::class, 'archive']);
         Route::get('/grupos/{classroom}/alumnos', [TeacherController::class, 'students']);
+        Route::get('/grupos/{classroom}/tareas', [AssignmentController::class, 'index']);
+        Route::post('/grupos/{classroom}/tareas', [AssignmentController::class, 'store']);
+        Route::delete('/grupos/{classroom}/tareas/{key}', [AssignmentController::class, 'destroy']);
+        Route::get('/grupos/{classroom}/avance', [AssignmentController::class, 'progress']);
+        Route::get('/grupos/{classroom}/avance.csv', [AssignmentController::class, 'csv']);
         Route::put('/alumnos/{student}', [TeacherController::class, 'renameStudent']);
         Route::delete('/alumnos/{student}', [TeacherController::class, 'deleteStudent']);
         Route::post('/alumnos/{student}/acceso', [TeacherController::class, 'resetStudentAccess']);

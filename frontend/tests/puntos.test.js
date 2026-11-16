@@ -99,3 +99,36 @@ describe("cuenca-puntos.js", () => {
     expect(fetch).not.toHaveBeenCalled();
   });
 });
+
+import TasksFab from "../src/components/TasksFab.vue";
+import { createRouter, createMemoryHistory } from "vue-router";
+
+describe("Lista flotante de tareas", () => {
+  async function mountFab() {
+    const router = createRouter({ history: createMemoryHistory(), routes: [{ path: "/:p(.*)*", component: { template: "<div />" } }] });
+    await router.push("/");
+    return mount(TasksFab, { global: { plugins: [router] }, attachTo: document.body });
+  }
+  it("no aparece sin alumno", async () => {
+    const wrapper = await mountFab();
+    expect(wrapper.find(".tasks-fab").exists()).toBe(false);
+    wrapper.unmount();
+  });
+  it("cuenta las tareas y enlaza a cada actividad", async () => {
+    student.value = { name: "Ana", classroom: "4° B", teacher: "Laura" };
+    progress.value = { points: 10, completed: ["lectura-conozca"] };
+    tasks.value = [
+      { key: "lectura-conozca", title: "Qué es El Niño", points: 10, route: "/informacion?tema=conozca", due_date: null, done: true },
+      { key: "mochila", title: "Arma tu mochila", points: 20, route: "/juegos?juego=mochila", due_date: "2026-12-01", done: false },
+    ];
+    const wrapper = await mountFab();
+    expect(wrapper.find(".tasks-fab").text()).toBe("Tareas 1 de 2");
+    await wrapper.find(".tasks-fab").trigger("click");
+    await flushPromises();
+    const links = wrapper.findAll(".tasks-link").map((a) => a.attributes("href"));
+    expect(links).toContain("/informacion?tema=conozca");
+    expect(links).toContain("/juegos?juego=mochila");
+    expect(wrapper.text()).toContain("Salir");
+    wrapper.unmount();
+  });
+});

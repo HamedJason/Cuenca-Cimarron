@@ -1,6 +1,7 @@
 // Alumno con sesión en este equipo. El sitio pregunta una sola vez al abrir (/api/yo).
 import { ref, computed } from "vue";
 import { api } from "./api";
+import { tasks } from "./useTasks";
 
 export const student = ref(null);
 // Puntos y actividades completadas. Siempre vienen del servidor.
@@ -15,6 +16,7 @@ export function loadStudent(force = false) {
     .then((data) => {
       student.value = data.student;
       progress.value = data.progress ?? { points: 0, completed: [] };
+      tasks.value = data.tasks ?? [];
       studentState.value = "ready";
       return data;
     })
@@ -38,6 +40,7 @@ export async function studentLogout() {
   await api("/yo/salir", { method: "POST" }).catch(() => {});
   student.value = null;
   progress.value = { points: 0, completed: [] };
+  tasks.value = [];
   try {
     sessionStorage.removeItem("cuenca.soy-yo");
   } catch {

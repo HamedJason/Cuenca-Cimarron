@@ -377,7 +377,11 @@
   text-align: center;
 }
 .icon-done {
-  color: var(--uabc-green);
+  color: var(--link);
+}
+.form-card > .button,
+.form-card > a.button {
+  justify-self: start;
 }
 .icon-missing {
   color: var(--line);
@@ -791,4 +795,144 @@
 :root[data-theme="dark"] .points-tag.is-consult {
   background: #393f42;
   color: #d5d9d6;
+}
+
+/* Lista flotante del alumno */
+.tasks-fab {
+  position: fixed;
+  z-index: 40;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 62px;
+  padding: 6px 22px 6px 6px;
+  border: 3px solid var(--edge);
+  border-radius: 999px;
+  background: var(--uabc-gold);
+  color: #003d24;
+  font-family: var(--font-play);
+  font-weight: 800;
+  font-size: 19px;
+  box-shadow: 0 4px 0 var(--shadow);
+}
+.tasks-fab img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--edge);
+}
+.tasks-fab:hover {
+  background: #e9a83a;
+}
+.tasks-fab:active {
+  transform: translateY(4px);
+  box-shadow: none;
+}
+.tasks-points {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 8px 0 12px;
+  color: var(--gold-text);
+}
+.tasks-points svg {
+  align-self: center;
+}
+.tasks-points strong {
+  font-family: var(--font-heading);
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--title);
+}
+.tasks-points span {
+  font-weight: 700;
+  color: var(--ink);
+}
+.tasks-title {
+  font-size: 26px;
+  margin: 14px 0 8px;
+}
+.tasks-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tasks-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tasks-check {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border: 2px solid var(--edge);
+  border-radius: 9px;
+  background: var(--surface);
+  color: #fff;
+}
+.tasks-list li.done .tasks-check {
+  background: var(--uabc-green);
+  border-color: var(--uabc-green);
+}
+.tasks-link {
+  display: grid;
+  flex: 1;
+  min-height: 48px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: var(--green-tint);
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+.tasks-link small {
+  font-weight: 600;
+  color: var(--muted);
+}
+.tasks-link:hover {
+  background: var(--gold-tint);
+}
+.tasks-list li.done .tasks-link span {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  color: var(--muted);
+}
+.tasks-actions {
+  margin-top: 20px;
+}
+.task-list li {
+  align-items: center;
+}
+.progress-table th[scope="row"] {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* En celular la lista sube desde abajo y ocupa la pantalla */
+@media (max-width: 600px) {
+  .tasks-fab {
+    min-height: 52px;
+    font-size: 17px;
+    padding: 4px 16px 4px 4px;
+  }
+  .tasks-fab img {
+    width: 40px;
+    height: 40px;
+  }
+  dialog.modal.tasks-sheet {
+    margin: auto 0 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: 24px 24px 0 0;
+  }
 }

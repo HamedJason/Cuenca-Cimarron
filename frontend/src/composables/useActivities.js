@@ -3,6 +3,7 @@
 import { ref, computed } from "vue";
 import { api, ApiError } from "./api";
 import { student, progress } from "./useStudent";
+import { tasks } from "./useTasks";
 
 export const activities = ref([]);
 let loading = null;
@@ -27,6 +28,7 @@ function applyResult(key, data) {
     points: data.total ?? progress.value.points,
     completed: progress.value.completed.includes(key) ? progress.value.completed : [...progress.value.completed, key],
   };
+  tasks.value = tasks.value.map((task) => (task.key === key ? { ...task, done: true } : task));
 }
 
 export async function startActivity(key) {

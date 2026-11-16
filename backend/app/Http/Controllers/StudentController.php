@@ -134,6 +134,7 @@ class StudentController extends Controller
         return response()->json([
             'student' => $student ? self::summary($student) : null,
             'progress' => $student ? ActivityController::progress($student->id) : null,
+            'tasks' => $student ? AssignmentController::forStudent($student->id, $student->classroom_id) : [],
         ])->header('Cache-Control', 'no-store');
     }
 

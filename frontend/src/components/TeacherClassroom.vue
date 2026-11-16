@@ -1,11 +1,13 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, defineAsyncComponent } from "vue";
 import Icon from "./Icon.vue";
 import Modal from "./Modal.vue";
 import QrCode from "./QrCode.vue";
 import CopyLink from "./CopyLink.vue";
 import { api } from "../composables/api";
 
+const ClassroomTasks = defineAsyncComponent(() => import("./ClassroomTasks.vue"));
+const tab = ref("alumnos");
 const props = defineProps({ classroomId: { type: Number, required: true } });
 const emit = defineEmits(["updated"]);
 const classroom = ref(null);
@@ -97,7 +99,13 @@ const joinedText = computed(() => `${students.value.length} ${students.value.len
       </div>
     </section>
 
-    <section class="form-card">
+    <div class="panel-tabs no-print" role="tablist" aria-label="Secciones del grupo">
+      <button v-for="item in [['alumnos', 'Alumnos'], ['tareas', 'Tareas y avance']]" :key="item[0]" role="tab" type="button" :aria-selected="tab === item[0]" :class="['panel-tab', { active: tab === item[0] }]" @click="tab = item[0]">{{ item[1] }}</button>
+    </div>
+
+    <ClassroomTasks v-if="tab === 'tareas'" :classroom="classroom" />
+
+    <section v-else class="form-card">
       <div class="panel-head no-print">
         <h2 class="form-title">Alumnos</h2>
         <button v-if="students.length" class="button secondary small-button" type="button" @click="printCards"><Icon name="print" :size="18" />Imprimir tarjetas</button>
