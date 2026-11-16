@@ -109,9 +109,9 @@ Mientras `VERSION` esté fijada, Watchtower no cambia nada. Para volver a recibi
 
 ## Primera cuenta de administración
 
-Después de instalar, se entra a `http://direccion-del-servidor:8090/#/configurar` y se llena la clave de instalación, un nombre, un correo y una contraseña. Solo funciona mientras no exista ninguna cuenta de administración. La clave la tiene el equipo y en el repositorio solo está su huella.
+Después de instalar, se entra a `http://direccion-del-servidor:8090/configurar` y se llena la clave de instalación, un nombre, un correo y una contraseña. Solo funciona mientras no exista ninguna cuenta de administración. La clave la tiene el equipo y en el repositorio solo está su huella.
 
-Desde el panel de administración (`/#/admin`) se aprueban escuelas, se llena el servidor de correo, se escribe el dominio para HTTPS y se descargan respaldos. Nada de eso necesita entrar al servidor.
+Desde el panel de administración (`/admin`) se aprueban escuelas, se llena el servidor de correo, se escribe el dominio para HTTPS y se descargan respaldos. Nada de eso necesita entrar al servidor.
 
 ## Respaldo de la base de datos
 

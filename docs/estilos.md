@@ -1,6 +1,6 @@
 # Estilos de Cuenca Cimarrona
 
-La versión visual está en el sitio, en `#/estilos` (enlace "Estilos" en el pie de página). Este archivo es la referencia rápida para quien edite el código.
+La versión visual está en el sitio, en `/estilos` (enlace "Estilos" en el pie de página). Este archivo es la referencia rápida para quien edite el código.
 
 ## Marca
 

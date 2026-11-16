@@ -62,7 +62,7 @@ class SchoolAccountsTest extends TestCase
             ->assertJsonPath('user.school.cct', '02DST0045K')
             ->assertJsonPath('user.email', 'directora@escuela.mx')
             ->assertJsonPath('user.email_verified', false);
-        Mail::assertSent(Notice::class, fn (Notice $mail) => $mail->hasTo('directora@escuela.mx') && str_contains($mail->actionUrl, '/#/escuelas/confirmar?token='));
+        Mail::assertSent(Notice::class, fn (Notice $mail) => $mail->hasTo('directora@escuela.mx') && str_contains($mail->actionUrl, '/escuelas/confirmar?token='));
         $this->assertDatabaseHas('audit_logs', ['action' => 'registro']);
     }
 

@@ -53,7 +53,7 @@ class AdminController extends Controller
             'Tu escuela ya está aprobada',
             ["{$school->name} ya puede usar Cuenca Cimarrona.", 'Entra a tu cuenta para dar de alta a tus docentes.'],
             'Entrar',
-            Settings::publicUrl().'/#/escuelas',
+            Settings::publicUrl().'/escuelas',
         ));
 
         return response()->json(['school' => $school->toPublic()]);
@@ -72,7 +72,7 @@ class AdminController extends Controller
             'Revisamos el registro de tu escuela',
             ["No pudimos aprobar el registro de {$school->name} por este motivo: {$data['reason']}", 'Puedes entrar a tu cuenta, corregir los datos y se vuelve a revisar.'],
             'Entrar',
-            Settings::publicUrl().'/#/escuelas',
+            Settings::publicUrl().'/escuelas',
         ));
 
         return response()->json(['school' => $school->toPublic()]);

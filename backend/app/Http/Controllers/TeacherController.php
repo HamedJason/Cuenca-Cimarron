@@ -48,7 +48,7 @@ class TeacherController extends Controller
             'name' => $classroom->name,
             'grade' => $classroom->grade,
             'code' => $classroom->code,
-            'link' => $classroom->code ? Settings::publicUrl().'/#/unirse/'.$classroom->code : null,
+            'link' => $classroom->code ? Settings::publicUrl().'/unirse/'.$classroom->code : null,
             'open' => $classroom->open,
             'school_year' => $classroom->school_year,
             'archived' => $classroom->archived_at !== null,

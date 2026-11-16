@@ -1,5 +1,5 @@
 import { createApp } from "vue";
-import { createRouter, createWebHashHistory, START_LOCATION } from "vue-router";
+import { createRouter, createWebHistory, START_LOCATION } from "vue-router";
 import "@fontsource/dm-sans/400.css";
 import "@fontsource/dm-sans/500.css";
 import "@fontsource/dm-sans/600.css";
@@ -26,8 +26,12 @@ const Join = () => import("./views/Join.vue");
 const MyCimarron = () => import("./views/MyCimarron.vue");
 import "./style.css";
 import "./cuentas.css";
+// Las direcciones viejas con # (enlaces compartidos, QR impresos) se pasan a la forma nueva sin #.
+if (window.location.hash.startsWith("#/")) {
+  history.replaceState(history.state, "", window.location.hash.slice(1));
+}
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes: [
     { path: "/", component: Home, meta: { title: "Emergencias" } },
     { path: "/informacion", component: Info, meta: { title: "Información" } },
@@ -59,6 +63,7 @@ const router = createRouter({
   // se queda donde está, para que el botón pueda llevar a las instrucciones.
   // Con atrás y adelante del navegador se vuelve a donde estabas.
   scrollBehavior: (to, from, saved) => {
+    if (to.hash) return { el: to.hash, top: 80 };
     if (from === START_LOCATION) return { top: 0 };
     if (saved) return saved;
     if (to.path === from.path) return false;
@@ -76,8 +81,7 @@ router.onError((error, to) => {
     } catch {
       // Sin almacenamiento se intenta una vez de todos modos.
     }
-    window.location.hash = to.fullPath;
-    window.location.reload();
+    window.location.assign(to.fullPath);
   }
 });
 router.afterEach((to) => {

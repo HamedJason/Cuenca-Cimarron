@@ -219,10 +219,10 @@ function downloadIcon(name) {
       <div class="web-styles-body">
         <h3 class="styles-sub">Botones</h3>
         <div class="sample-row">
-          <span><a class="button primary" href="#/estilos">Abrir el mapa</a><code>.button.primary</code></span>
-          <span><a class="button secondary" href="#/estilos">Imprimir guía</a><code>.button.secondary</code></span>
-          <span><a class="pill" href="#/estilos">Cómo llegar</a><code>.pill</code></span>
-          <span><a class="text-link" href="#/estilos">Atlas en PDF</a><code>.text-link</code></span>
+          <span><a class="button primary" href="/estilos">Abrir el mapa</a><code>.button.primary</code></span>
+          <span><a class="button secondary" href="/estilos">Imprimir guía</a><code>.button.secondary</code></span>
+          <span><a class="pill" href="/estilos">Cómo llegar</a><code>.pill</code></span>
+          <span><a class="text-link" href="/estilos">Atlas en PDF</a><code>.text-link</code></span>
         </div>
         <p class="styles-note">
           Una acción principal por bloque. Al pasar el puntero, los botones

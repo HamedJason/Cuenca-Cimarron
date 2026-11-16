@@ -122,7 +122,7 @@ class AuthController extends Controller
             'Confirma tu correo',
             ['Recibimos el registro de tu escuela en Cuenca Cimarrona.', 'Toca el botón para confirmar que este correo es tuyo. El enlace sirve 48 horas.'],
             'Confirmar correo',
-            Settings::publicUrl().'/#/escuelas/confirmar?token='.$token,
+            Settings::publicUrl().'/escuelas/confirmar?token='.$token,
         ));
     }
 
@@ -168,7 +168,7 @@ class AuthController extends Controller
                 'Nueva contraseña',
                 ['Alguien pidió cambiar la contraseña de esta cuenta de Cuenca Cimarrona.', 'Si fuiste tú, toca el botón. El enlace sirve una hora. Si no fuiste tú, puedes ignorar este correo.'],
                 'Poner contraseña nueva',
-                Settings::publicUrl().'/#/escuelas/contrasena?token='.$token,
+                Settings::publicUrl().'/escuelas/contrasena?token='.$token,
             ));
         }
 

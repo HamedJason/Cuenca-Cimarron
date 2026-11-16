@@ -105,7 +105,7 @@ class ClassroomsTest extends TestCase
         $second = $this->classroom($token, '4° C');
         $this->assertMatchesRegularExpression('/^\d{6}$/', $first['code']);
         $this->assertNotSame($first['code'], $second['code']);
-        $this->assertStringEndsWith('/#/unirse/'.$first['code'], $first['link']);
+        $this->assertStringEndsWith('/unirse/'.$first['code'], $first['link']);
         $this->asTeacher($token)->getJson('/api/docente/grupos')->assertOk()->assertJsonCount(2, 'classrooms');
     }
 

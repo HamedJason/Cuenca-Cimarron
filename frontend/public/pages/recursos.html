@@ -7,11 +7,11 @@
   <!-- Consejos ahora vive en la app: #antes, #durante y #despues llevan a su tarjeta -->
   <script>
     var momento = location.hash.slice(1);
-    location.replace('/#/consejos' + (momento ? '?momento=' + encodeURIComponent(momento) : ''));
+    location.replace('/consejos' + (momento ? '?momento=' + encodeURIComponent(momento) : ''));
   </script>
-  <meta http-equiv="refresh" content="0; url=/#/consejos">
+  <meta http-equiv="refresh" content="0; url=/consejos">
 </head>
 <body>
-  <p><a href="/#/consejos">Ir a Consejos</a></p>
+  <p><a href="/consejos">Ir a Consejos</a></p>
 </body>
 </html>

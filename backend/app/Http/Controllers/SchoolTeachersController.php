@@ -33,7 +33,7 @@ class SchoolTeachersController extends Controller
             'created_at' => now(),
         ]);
 
-        return ['link' => Settings::publicUrl().'/#/docente/acceso/'.$token, 'expires_at' => now()->addDays(self::INVITE_DAYS)->toIso8601String()];
+        return ['link' => Settings::publicUrl().'/docente/acceso/'.$token, 'expires_at' => now()->addDays(self::INVITE_DAYS)->toIso8601String()];
     }
 
     public function index(Request $request): JsonResponse

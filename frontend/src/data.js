@@ -377,7 +377,7 @@ export const advice = [
     tone: "gold",
     title: "Antes de la lluvia",
     text: "Revisa coladeras, techos y cosas importantes antes de que empiece",
-    href: "/#/consejos?momento=antes",
+    href: "/consejos?momento=antes",
   },
   {
     id: "durante",
@@ -385,7 +385,7 @@ export const advice = [
     tone: "blue",
     title: "Durante una tormenta",
     text: "No cruces arroyos y sigue la información oficial",
-    href: "/#/consejos?momento=durante",
+    href: "/consejos?momento=durante",
   },
   {
     id: "despues",
@@ -393,7 +393,7 @@ export const advice = [
     tone: "green",
     title: "Después de la lluvia",
     text: "Revisa tu entorno y reporta riesgos",
-    href: "/#/consejos?momento=despues",
+    href: "/consejos?momento=despues",
   },
 ];
 

@@ -65,7 +65,7 @@ async function resetAccess(student) {
   student.return_code = data.return_code;
   shownCode.value = student.id;
 }
-const returnLink = (code) => `${location.origin}/#/regresar?codigo=${encodeURIComponent(code)}`;
+const returnLink = (code) => `${location.origin}/regresar?codigo=${encodeURIComponent(code)}`;
 const printCards = () => window.print();
 const host = location.host;
 const joinedText = computed(() => `${students.value.length} ${students.value.length === 1 ? "alumno" : "alumnos"}`);
@@ -147,7 +147,7 @@ const joinedText = computed(() => `${students.value.length} ${students.value.len
             <strong>{{ item.name }}</strong>
             <span>{{ classroom.name }}</span>
             <span class="print-code">{{ item.return_code }}</span>
-            <small>Escanea el QR o entra a {{ host }}/#/regresar</small>
+            <small>Escanea el QR o entra a {{ host }}/regresar</small>
           </div>
         </div>
       </div>
@@ -158,7 +158,7 @@ const joinedText = computed(() => `${students.value.length} ${students.value.len
         <QrCode :text="classroom.link" :size="300" :label="`Código QR para entrar a ${classroom.name}`" />
         <div>
           <p>Escanea el código o entra a</p>
-          <p class="project-url">{{ classroom.link.replace(/^https?:\/\//, "").replace(/\/#\/unirse\/\d+$/, "") }}</p>
+          <p class="project-url">{{ classroom.link.replace(/^https?:\/\//, "").replace(/\/unirse\/\d+$/, "") }}</p>
           <p>y escribe el código</p>
           <p class="classroom-code huge">{{ classroom.code }}</p>
         </div>

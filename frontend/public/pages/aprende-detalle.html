@@ -8,11 +8,11 @@
   <script>
     var temas = { conoce: 'conozca', conozca: 'conozca', planfamiliar: 'planfamiliar', mochila: 'mochila' };
     var tema = temas[new URLSearchParams(location.search).get('tema')] || 'conozca';
-    location.replace('/#/informacion?tema=' + tema);
+    location.replace('/informacion?tema=' + tema);
   </script>
-  <meta http-equiv="refresh" content="0; url=/#/informacion">
+  <meta http-equiv="refresh" content="0; url=/informacion">
 </head>
 <body>
-  <p><a href="/#/informacion">Ir a Información</a></p>
+  <p><a href="/informacion">Ir a Información</a></p>
 </body>
 </html>
