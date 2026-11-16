@@ -3,6 +3,8 @@ import { computed, ref } from "vue";
 import Icon from "./Icon.vue";
 import Modal from "./Modal.vue";
 import PacificLab from "./PacificLab.vue";
+import PointsTag from "./PointsTag.vue";
+import ActivityQuestion from "./ActivityQuestion.vue";
 import { activeLesson, closeLesson, openLesson } from "../composables/useLesson";
 import { savedList } from "../composables/storage";
 import { familyPlan, kitGroups, ninoOutlook, sources } from "../data";
@@ -63,6 +65,7 @@ function goTo(id) {
           height="270"
         />
         <div class="lesson-top-text">
+          <PointsTag :activity-key="`lectura-${lesson.id}`" />
           <p class="lesson-intro">{{ lesson.intro }}</p>
           <p>{{ lesson.body }}</p>
           <ul class="lesson-points">
@@ -255,6 +258,7 @@ function goTo(id) {
           </button>
         </div>
       </template>
+      <ActivityQuestion :key="lesson.id" :activity-key="`lectura-${lesson.id}`" />
     </template>
   </Modal>
 </template>

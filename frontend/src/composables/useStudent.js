@@ -3,6 +3,8 @@ import { ref, computed } from "vue";
 import { api } from "./api";
 
 export const student = ref(null);
+// Puntos y actividades completadas. Siempre vienen del servidor.
+export const progress = ref({ points: 0, completed: [] });
 export const studentState = ref("idle");
 let loading = null;
 
@@ -12,6 +14,7 @@ export function loadStudent(force = false) {
   loading = api("/yo")
     .then((data) => {
       student.value = data.student;
+      progress.value = data.progress ?? { points: 0, completed: [] };
       studentState.value = "ready";
       return data;
     })
@@ -28,11 +31,13 @@ export function setStudent(data) {
   loading = null;
   // Al entrar se vuelve a pedir todo (puntos, tareas) con la sesión nueva.
   loadStudent(true);
+  import("./useActivities").then((module) => module.loadActivities());
 }
 
 export async function studentLogout() {
   await api("/yo/salir", { method: "POST" }).catch(() => {});
   student.value = null;
+  progress.value = { points: 0, completed: [] };
   try {
     sessionStorage.removeItem("cuenca.soy-yo");
   } catch {

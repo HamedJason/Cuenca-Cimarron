@@ -65,24 +65,6 @@ const Game = {
       UI.showScreen("start");
       UI.setRoundTheme(0);
     });
-    document.getElementById("btn-telemetry").addEventListener("click", async () => {
-      const status = document.getElementById("telemetry-status");
-      const forgotten = getEssentials()
-        .map((item) => item.id)
-        .filter((id) => !(this.round1?.packedIds || []).includes(id));
-      try {
-        await sendGameMetrics({
-          forgottenEssentialIds: forgotten,
-          packedRound1: this.round1?.packedIds || [],
-          packedRound2: this.round2?.packedIds || []
-        });
-        status.textContent = "Resultado anónimo enviado. Gracias por apoyar los datos de prevención.";
-      } catch (_err) {
-        status.textContent =
-          "No hay servidor de telemetría activo. Tus datos no salieron del navegador.";
-      }
-    });
-
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") UI.closeDrawer();
     });
@@ -136,6 +118,7 @@ const Game = {
       UI.setRoundTheme(0);
       UI.renderResults(snap, snap);
       UI.showScreen("results");
+      this.notifyFinished();
       return;
     }
     if (this.mode === "search") {
@@ -149,6 +132,12 @@ const Game = {
     UI.setRoundTheme(0);
     UI.renderResults(this.round1, this.round2);
     UI.showScreen("results");
+    this.notifyFinished();
+  },
+
+  // Avisa a Cuenca Cimarrona que el alumno terminó, para sumar sus puntos (cuenca-puntos.js).
+  notifyFinished() {
+    if (window.CuencaPuntos) window.CuencaPuntos.terminar("mochila");
   },
 
   startTimer() {

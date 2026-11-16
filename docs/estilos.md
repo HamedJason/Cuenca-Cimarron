@@ -265,3 +265,18 @@ Se prueba en 320, 375, 414, 768, 1024 y 1440 px, sin scroll horizontal ni texto 
 - **Celular (hasta 760 px):** menú con botón y mosaicos; tarjetas en una columna; botones de al menos 44 px de alto
 - **Tableta (761 a 1040 px):** el menú va en una fila sin iconos; las tarjetas de tres van en una sola fila desde 700 px
 - **Computadora:** menú con iconos
+
+## Puntos para alumnos
+
+Cuando un alumno entra con el código de su grupo, el sitio marca lo que da puntos. Los visitantes sin cuenta no ven ninguna de estas etiquetas (`PointsTag.vue`).
+
+| Etiqueta | Clase | Cuándo |
+| --- | --- | --- |
+| +10 puntos, con estrella | `.points-tag.is-points` | Ocre UABC con texto verde profundo. La actividad da puntos y no se ha completado |
+| Completada, con palomita | `.points-tag.is-done` | Verde UABC con texto blanco |
+| Tarea | `.points-tag.is-task` | Borde verde profundo. El docente la asignó |
+| Para consultar | `.points-tag.is-consult` | Gris. Secciones que no dan puntos (emergencias, riesgos) |
+
+- La pregunta al final de una lectura o un consejo va en un recuadro ocre claro con borde punteado (`ActivityQuestion.vue`). Tres opciones grandes, fáciles de tocar
+- El botón flotante "Tareas" del alumno va abajo a la derecha, en lugar de "Aprende jugando" (`TasksFab.vue`)
+

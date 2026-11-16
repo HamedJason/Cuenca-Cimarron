@@ -1,5 +1,6 @@
 <script setup>
 import Icon from "../components/Icon.vue";
+import PointsTag from "../components/PointsTag.vue";
 import { ref, computed, watch } from "vue";
 import { RouterLink } from "vue-router";
 import Modal from "../components/Modal.vue";
@@ -254,6 +255,7 @@ const stationMapHref = (item) =>
     <div class="wrap home-body">
       <section aria-labelledby="titulo-numeros">
         <h2 id="titulo-numeros" class="section-title">Números de dependencias</h2>
+        <PointsTag />
         <p class="tap-hint">Toca para llamar</p>
         <div class="phone-grid">
           <div
@@ -395,7 +397,7 @@ const stationMapHref = (item) =>
                   ></span
                 ></span
               ><strong>{{ game.title }}</strong
-              ><span>{{ game.short }}</span></span
+              ><PointsTag :activity-key="game.id" /><span>{{ game.short }}</span></span
             ></component
           >
         </div>
@@ -435,7 +437,7 @@ const stationMapHref = (item) =>
                 <path d="M4 25h36" />
                 <path d="M4 34h22c5 0 6 8 1 8" /></svg></span
             ><strong>Qué es El Niño</strong
-            ><span>Y qué se espera en Tijuana</span></button
+            ><PointsTag activity-key="lectura-conozca" /><span>Y qué se espera en Tijuana</span></button
           >
           <button type="button" class="prep-card cc-watermark" @click="openLesson('planfamiliar')"
             ><span class="prep-icon" aria-hidden="true"
@@ -448,7 +450,7 @@ const stationMapHref = (item) =>
                   d="M10 30c6-8 10 4 17-6s10-2 13-8"
                 /></svg></span
             ><strong>Plan familiar</strong
-            ><span>4 pasos para decidir qué hacer</span></button
+            ><PointsTag activity-key="lectura-planfamiliar" /><span>4 pasos para decidir qué hacer</span></button
           >
           <button type="button" class="prep-card cc-watermark" @click="openLesson('mochila')"
             ><span class="prep-icon" aria-hidden="true"
@@ -510,7 +512,7 @@ const stationMapHref = (item) =>
                   />
                 </g></svg></span
             ><strong>Mochila de emergencia</strong
-            ><span>12 cosas para tener listas</span></button
+            ><PointsTag activity-key="lectura-mochila" /><span>12 cosas para tener listas</span></button
           >
         </div>
       </section>

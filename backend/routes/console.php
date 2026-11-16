@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
+use App\Support\Catalog;
 use Illuminate\Support\Facades\Artisan;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+Artisan::command('actividades:sincronizar', function () {
+    $total = Catalog::sync();
+    $this->info("Actividades sincronizadas: {$total}");
+})->purpose('Copia config/activities.php a la base de datos');

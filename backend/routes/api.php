@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GameSessionController;
@@ -68,9 +69,17 @@ Route::middleware('throttle:300,1')->group(function (): void {
     Route::post('/unirse', [StudentController::class, 'join']);
     Route::post('/regresar', [StudentController::class, 'comeBack']);
 
+    Route::get('/actividades', [ActivityController::class, 'index']);
+
     Route::middleware('equipo:student,opcional')->group(function (): void {
         Route::get('/yo', [StudentController::class, 'me']);
         Route::post('/yo/salir', [StudentController::class, 'logout']);
+    });
+
+    Route::middleware('equipo:student')->prefix('actividades/{key}')->where(['key' => '[a-z0-9-]{2,60}'])->group(function (): void {
+        Route::post('/inicio', [ActivityController::class, 'start']);
+        Route::post('/terminar', [ActivityController::class, 'finish']);
+        Route::post('/respuesta', [ActivityController::class, 'answer']);
     });
 
     Route::middleware('equipo:teacher')->prefix('docente')->group(function (): void {

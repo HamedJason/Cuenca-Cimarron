@@ -219,29 +219,3 @@ const UI = {
       .join("");
   }
 };
-
-/**
- * Envía IDs olvidados en Ronda 1 para estadísticas de prevención.
- * Falla en silencio si no hay backend disponible.
- */
-async function sendGameMetrics(data) {
-  const payload = {
-    game: "reto-mochila-60s",
-    city: "Tijuana",
-    timestamp: new Date().toISOString(),
-    forgottenEssentialIds: data.forgottenEssentialIds || [],
-    packedRound1: data.packedRound1 || [],
-    packedRound2: data.packedRound2 || []
-  };
-
-  const response = await fetch("/api/prevention-metrics", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
-
-  if (!response.ok) {
-    throw new Error("No se pudo enviar la telemetría");
-  }
-  return response;
-}

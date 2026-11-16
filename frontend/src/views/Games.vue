@@ -1,6 +1,7 @@
 <script setup>
 import Icon from "../components/Icon.vue";
 import MascotGuide from "../components/MascotGuide.vue";
+import PointsTag from "../components/PointsTag.vue";
 import { games } from "../data";
 import { useGamePlays } from "../composables/useGamePlays";
 const { plays, loadPlays, registerPlay } = useGamePlays();
@@ -148,6 +149,7 @@ const playsLabel = (n) => `${n.toLocaleString("es-MX")} ${n === 1 ? "entrada" : 
               >
             </div>
             <h3>{{ game.title }}</h3>
+            <PointsTag :activity-key="game.id" />
             <p>{{ game.text }}</p>
             <ul class="gm-meta">
               <li v-for="m in game.meta" :key="m.text">

@@ -229,6 +229,18 @@ function downloadIcon(name) {
           cambian de color o sombra, nunca de tamaño ni de lugar
         </p>
 
+        <h3 class="styles-sub">Puntos</h3>
+        <div class="sample-row">
+          <span><span class="points-tag is-points"><Icon name="star" :size="16" />+10 puntos</span><code>.points-tag.is-points</code></span>
+          <span><span class="points-tag is-done"><Icon name="check" :size="16" />Completada</span><code>.is-done</code></span>
+          <span><span class="points-tag is-task"><Icon name="task" :size="16" />Tarea</span><code>.is-task</code></span>
+          <span><span class="points-tag is-consult">Para consultar</span><code>.is-consult</code></span>
+        </div>
+        <p class="styles-note">
+          Solo las ve un alumno con sesión. Las secciones que dan puntos llevan
+          la estrella dorada y las de consulta la etiqueta gris
+        </p>
+
         <h3 class="styles-sub">Esquinas</h3>
         <div class="sample-row">
           <span><i class="corner" style="border-radius: 14px"></i><code>14 px botones</code></span>

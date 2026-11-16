@@ -2,6 +2,7 @@
 import { onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Icon from "../components/Icon.vue";
+import PointsTag from "../components/PointsTag.vue";
 import MascotGuide from "../components/MascotGuide.vue";
 import { openLesson } from "../composables/useLesson";
 import { emergency, lessons, risks } from "../data";
@@ -80,6 +81,7 @@ const officialLinks = [
             /></span>
           </div>
           <div class="gm-body">
+            <PointsTag :activity-key="`lectura-${lesson.id}`" />
             <h3>{{ lesson.title }}</h3>
             <p>{{ lesson.short }}</p>
             <button
@@ -100,6 +102,7 @@ const officialLinks = [
           <h2 id="titulo-riesgos" class="section-title">
             Qué puede pasar en Tijuana
           </h2>
+          <PointsTag />
           <p class="section-lead">Los tres riesgos que más se presentan con lluvia fuerte</p>
         </div>
         <a

@@ -78,12 +78,12 @@ async function submit() {
         </FormField>
       </fieldset>
       <div class="form-group consent">
-        <label class="check-row">
+        <label class="consent-row">
           <input v-model="login.privacy" type="checkbox" />
           <span>Leí el <RouterLink to="/privacidad" target="_blank" class="text-link">aviso de privacidad</RouterLink></span>
         </label>
         <p v-if="errors.privacy" class="field-error" role="alert">{{ errors.privacy }}</p>
-        <label class="check-row">
+        <label class="consent-row">
           <input v-model="login.families_informed" type="checkbox" />
           <span>La escuela informó a madres, padres o tutores que sus hijos usarán el sitio con su nombre y su grupo</span>
         </label>

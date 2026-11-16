@@ -131,8 +131,10 @@ class StudentController extends Controller
     {
         $student = $request->attributes->get('student');
 
-        return response()->json(['student' => $student ? self::summary($student) : null])
-            ->header('Cache-Control', 'no-store');
+        return response()->json([
+            'student' => $student ? self::summary($student) : null,
+            'progress' => $student ? ActivityController::progress($student->id) : null,
+        ])->header('Cache-Control', 'no-store');
     }
 
     public function logout(Request $request): JsonResponse

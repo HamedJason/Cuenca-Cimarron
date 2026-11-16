@@ -6,7 +6,9 @@ import Modal from "./components/Modal.vue";
 import SplashScreen from "./components/SplashScreen.vue";
 import LessonModal from "./components/LessonModal.vue";
 import StudentCheck from "./components/StudentCheck.vue";
+import ExternalReturn from "./components/ExternalReturn.vue";
 import { loadStudent } from "./composables/useStudent";
+import { loadActivities, retryPending } from "./composables/useActivities";
 import { storageAvailable } from "./composables/useProgress";
 import { useVisits } from "./composables/useVisits";
 import { useTheme } from "./composables/useTheme";
@@ -62,7 +64,12 @@ const onScroll = () => {
 };
 onMounted(() => {
   loadStats();
-  loadStudent();
+  // Solo con un alumno con sesión se piden el catálogo de puntos y los avisos pendientes de los juegos.
+  loadStudent()?.then((data) => {
+    if (!data?.student) return;
+    loadActivities();
+    retryPending();
+  });
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
 });
@@ -277,4 +284,5 @@ onMounted(() => {
   ></Modal>
   <LessonModal />
   <StudentCheck />
+  <ExternalReturn />
 </template>

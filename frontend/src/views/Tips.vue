@@ -3,6 +3,8 @@ import { nextTick, watch } from "vue";
 import { useRoute } from "vue-router";
 import Icon from "../components/Icon.vue";
 import MascotGuide from "../components/MascotGuide.vue";
+import PointsTag from "../components/PointsTag.vue";
+import ActivityQuestion from "../components/ActivityQuestion.vue";
 import { openLesson } from "../composables/useLesson";
 import { tips } from "../data";
 
@@ -72,6 +74,8 @@ watch(
             <span class="game-tag">{{ tip.moment }}</span>
             <h3>{{ tip.title }}</h3>
             <p>{{ tip.text }}</p>
+            <PointsTag :activity-key="`consejo-${tip.id}`" />
+            <ActivityQuestion :activity-key="`consejo-${tip.id}`" compact />
           </div>
         </li>
       </ol>

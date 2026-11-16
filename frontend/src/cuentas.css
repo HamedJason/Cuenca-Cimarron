@@ -72,7 +72,7 @@
   border: 0;
 }
 .field > label,
-.field-label,
+.field > .field-label,
 .field > legend {
   font-weight: 700;
   color: var(--ink);
@@ -131,17 +131,17 @@
   margin-bottom: 6px;
 }
 .choice,
-.check-row {
+.consent-row {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   min-height: 44px;
   cursor: pointer;
 }
-.check-row {
+.consent-row {
   align-items: flex-start;
 }
-.check-row input {
+.consent-row input {
   margin-top: 2px;
 }
 .choice input[type="radio"] {
@@ -676,4 +676,119 @@
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+/* Etiquetas de puntos: solo las ve un alumno con sesión */
+.points-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.points-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.points-tag.is-points {
+  background: var(--uabc-gold);
+  color: #003d24;
+}
+.points-tag.is-done {
+  background: var(--uabc-green);
+  color: #fff;
+}
+.points-tag.is-task {
+  background: var(--surface);
+  color: var(--title);
+  border: 2px solid var(--edge);
+  padding: 1px 8px;
+}
+.points-tag.is-consult {
+  background: #e7eae8;
+  color: #4a5650;
+}
+
+/* Pregunta para sumar puntos */
+.activity-question {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+  padding: 20px;
+  border: 2px dashed var(--uabc-gold);
+  border-radius: var(--radius-card);
+  background: var(--gold-tint);
+  color: var(--ink);
+}
+.activity-question.compact {
+  margin-top: 14px;
+  padding: 14px;
+}
+.aq-kicker,
+.aq-done {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: var(--gold-text);
+}
+.aq-done {
+  color: var(--link);
+}
+.aq-fieldset {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.aq-text {
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 6px;
+  padding: 0;
+  color: var(--ink);
+}
+.aq-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 8px 14px;
+  border: 2px solid var(--control-line);
+  border-radius: 14px;
+  background: var(--surface);
+  cursor: pointer;
+}
+.aq-option.selected {
+  border-color: var(--uabc-green);
+  background: var(--green-tint);
+}
+.aq-option input {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  accent-color: var(--uabc-green);
+}
+.activity-question .button {
+  justify-self: start;
+}
+.game-card-body .points-tags,
+.prep-card .points-tags {
+  margin: 4px 0;
+}
+
+:root[data-theme="dark"] .points-tag.is-points {
+  color: #25292b;
+}
+:root[data-theme="dark"] .points-tag.is-consult {
+  background: #393f42;
+  color: #d5d9d6;
 }

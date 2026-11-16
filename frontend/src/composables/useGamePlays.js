@@ -2,6 +2,11 @@
 // "Jugar ahora" por navegador y sesión; el servidor guarda la cifra para todos.
 import { ref } from "vue";
 import { browserIds } from "./useVisits";
+import { student } from "./useStudent";
+import { activityByKey, isDone, startActivity } from "./useActivities";
+
+// Juego externo abierto por un alumno: al regresar a la pestaña se le pregunta si ya terminó.
+export const PENDING_EXTERNAL = "cuenca.juego-externo";
 
 const plays = ref({});
 let loading = null;
@@ -23,6 +28,17 @@ export function loadPlays() {
 }
 
 export async function registerPlay(game) {
+  const activity = activityByKey.value[game];
+  if (student.value && activity && activity.mode !== "pregunta" && !isDone(game)) {
+    startActivity(game);
+    if (activity.mode === "externo") {
+      try {
+        localStorage.setItem(PENDING_EXTERNAL, JSON.stringify({ key: game, at: Date.now() }));
+      } catch {
+        // Sin almacenamiento la pregunta no aparece sola, pero el juego se abre igual.
+      }
+    }
+  }
   try {
     const { visitor, session } = browserIds();
     const response = await fetch("/api/game-sessions", {
