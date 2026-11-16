@@ -39,3 +39,48 @@ describe("api", () => {
     expect(error.message).toMatch(/conexión/);
   });
 });
+
+import { mount, flushPromises } from "@vue/test-utils";
+import { createRouter, createMemoryHistory } from "vue-router";
+import StudentCheck from "../src/components/StudentCheck.vue";
+import { student } from "../src/composables/useStudent";
+
+describe("Equipo compartido", () => {
+  async function mountCheck() {
+    const router = createRouter({ history: createMemoryHistory(), routes: [{ path: "/:p(.*)*", component: { template: "<div />" } }] });
+    await router.push("/");
+    return { wrapper: mount(StudentCheck, { global: { plugins: [router] }, attachTo: document.body }), router };
+  }
+
+  it("pregunta si es el alumno guardado y no vuelve a preguntar al decir que sí", async () => {
+    sessionStorage.clear();
+    student.value = { name: "Ana", classroom: "4° B", teacher: "Laura" };
+    const { wrapper } = await mountCheck();
+    await flushPromises();
+    expect(wrapper.find("dialog").element.open).toBe(true);
+    expect(wrapper.text()).toContain("¿Eres Ana?");
+    await wrapper.findAll("button").find((b) => b.text() === "Sí, soy yo").trigger("click");
+    expect(sessionStorage.getItem("cuenca.soy-yo")).toBe("1");
+    wrapper.unmount();
+    const again = await mountCheck();
+    await flushPromises();
+    expect(again.wrapper.find("dialog").element.open).toBe(false);
+    again.wrapper.unmount();
+  });
+
+  it("No soy yo cierra la sesión en este equipo y lleva a entrar", async () => {
+    sessionStorage.clear();
+    document.cookie = "XSRF-TOKEN=x";
+    const fetch = vi.fn(() => respond(200, { ok: true }));
+    vi.stubGlobal("fetch", fetch);
+    student.value = { name: "Ana", classroom: "4° B", teacher: "Laura" };
+    const { wrapper, router } = await mountCheck();
+    await flushPromises();
+    await wrapper.findAll("button").find((b) => b.text() === "No soy yo").trigger("click");
+    await flushPromises();
+    expect(fetch.mock.calls.some(([url]) => url === "/api/yo/salir")).toBe(true);
+    expect(student.value).toBe(null);
+    expect(router.currentRoute.value.path).toBe("/unirse");
+    wrapper.unmount();
+  });
+});

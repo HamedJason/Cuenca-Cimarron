@@ -104,12 +104,14 @@ describe("Contador de la comunidad", () => {
       json: async () => ({ unique_visitors: 12, total_visits: 20 }),
     });
     vi.stubGlobal("fetch", fetchMock);
+    // Solo cuentan las llamadas del contador: el sitio también pregunta si hay alumno con sesión.
+    const visitCalls = () => fetchMock.mock.calls.filter(([url]) => url === "/api/visits");
     const first = await mountApp();
     expect(first.find(".visits-tag").text()).toContain("12 visitas únicas");
-    const firstPayload = JSON.parse(fetchMock.mock.calls[0][1].body);
+    const firstPayload = JSON.parse(visitCalls()[0][1].body);
     first.unmount();
     const second = await mountApp();
-    expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toEqual(firstPayload);
+    expect(JSON.parse(visitCalls()[1][1].body)).toEqual(firstPayload);
     await second.find(".visits-tag").trigger("click");
     await flushPromises();
     expect(second.find(".metrics").text()).toContain("20");

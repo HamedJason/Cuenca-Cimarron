@@ -58,7 +58,12 @@ class Settings
             return rtrim($url, '/');
         }
         $domain = self::domain();
+        if ($domain) {
+            return 'https://'.$domain;
+        }
+        // Sin dominio configurado se usa la dirección con la que entró quien hizo la petición.
+        $host = app()->bound('request') ? request()->getSchemeAndHttpHost() : '';
 
-        return $domain ? 'https://'.$domain : rtrim((string) config('app.url'), '/');
+        return $host !== '' && $host !== 'http://:' ? $host : rtrim((string) config('app.url'), '/');
     }
 }

@@ -20,6 +20,9 @@ const AccountLinks = () => import("./views/AccountLinks.vue");
 const Setup = () => import("./views/Setup.vue");
 const Admin = () => import("./views/Admin.vue");
 const Privacy = () => import("./views/Privacy.vue");
+const TeacherAccess = () => import("./views/TeacherAccess.vue");
+const Teacher = () => import("./views/Teacher.vue");
+const Join = () => import("./views/Join.vue");
 import "./style.css";
 import "./cuentas.css";
 const router = createRouter({
@@ -43,6 +46,10 @@ const router = createRouter({
     { path: "/configurar", component: Setup, meta: { title: "Configurar" } },
     { path: "/admin", component: Admin, meta: { title: "Administración" } },
     { path: "/privacidad", component: Privacy, meta: { title: "Aviso de privacidad" } },
+    { path: "/docente/acceso/:token", component: TeacherAccess, meta: { title: "Acceso de docentes" } },
+    { path: "/docente", component: Teacher, meta: { title: "Docentes" } },
+    { path: "/unirse/:code?", component: Join, meta: { title: "Entra a tu grupo", mode: "unirse" } },
+    { path: "/regresar", component: Join, meta: { title: "Regresa a tu grupo", mode: "regresar" } },
     { path: "/:pathMatch(.*)*", redirect: "/" },
   ],
   // Al cargar o recargar, la página empieza hasta arriba (en el propósito).
@@ -55,6 +62,21 @@ const router = createRouter({
     if (to.path === from.path) return false;
     return { top: 0 };
   },
+});
+// Después de una actualización del sitio, una pestaña abierta puede pedir archivos que ya no existen.
+// En ese caso se recarga la página en la dirección a la que iba.
+router.onError((error, to) => {
+  if (/dynamically imported module|module script failed|Failed to fetch/i.test(String(error?.message))) {
+    const key = "cuenca.recarga";
+    try {
+      if (sessionStorage.getItem(key) === to.fullPath) return;
+      sessionStorage.setItem(key, to.fullPath);
+    } catch {
+      // Sin almacenamiento se intenta una vez de todos modos.
+    }
+    window.location.hash = to.fullPath;
+    window.location.reload();
+  }
 });
 router.afterEach((to) => {
   document.title = `${to.meta.title} · Cuenca Cimarrona`;

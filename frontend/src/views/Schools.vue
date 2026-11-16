@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 import Icon from "../components/Icon.vue";
 import FormField from "../components/FormField.vue";
 import SchoolPanel from "../components/SchoolPanel.vue";
+import SchoolTeachers from "../components/SchoolTeachers.vue";
 import { api } from "../composables/api";
 import { account, accountState, loadAccount, setAccount, logout } from "../composables/useAccount";
 
@@ -45,7 +46,9 @@ async function submit() {
     </div>
 
     <template v-else-if="account?.role === 'school'">
-      <SchoolPanel :is-new="isNew" />
+      <SchoolPanel :is-new="isNew">
+        <SchoolTeachers v-if="account.school.status === 'approved'" />
+      </SchoolPanel>
     </template>
 
     <div v-else-if="account?.role === 'admin'" class="form-card">
@@ -81,6 +84,7 @@ async function submit() {
         </ul>
         <RouterLink to="/escuelas/registro" class="button primary">Registrar mi escuela</RouterLink>
         <p class="small muted-text">¿Eres docente? Pide a tu escuela tu enlace de acceso</p>
+        <p class="small muted-text">¿Eres alumno? <RouterLink to="/unirse" class="text-link">Entra con el código de tu grupo</RouterLink></p>
       </section>
     </div>
   </div>

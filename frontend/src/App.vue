@@ -5,6 +5,8 @@ import Icon from "./components/Icon.vue";
 import Modal from "./components/Modal.vue";
 import SplashScreen from "./components/SplashScreen.vue";
 import LessonModal from "./components/LessonModal.vue";
+import StudentCheck from "./components/StudentCheck.vue";
+import { loadStudent } from "./composables/useStudent";
 import { storageAvailable } from "./composables/useProgress";
 import { useVisits } from "./composables/useVisits";
 import { useTheme } from "./composables/useTheme";
@@ -60,6 +62,7 @@ const onScroll = () => {
 };
 onMounted(() => {
   loadStats();
+  loadStudent();
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
 });
@@ -273,4 +276,5 @@ onMounted(() => {
       Volver a intentar <Icon name="reset" :size="18" /></button
   ></Modal>
   <LessonModal />
+  <StudentCheck />
 </template>
