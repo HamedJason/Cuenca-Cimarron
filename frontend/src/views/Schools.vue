@@ -51,11 +51,11 @@ async function submit() {
       </SchoolPanel>
     </template>
 
-    <div v-else-if="account?.role === 'admin'" class="form-card">
+    <div v-else-if="account?.role === 'admin' || account?.role === 'viewer'" class="form-card">
       <h2 class="form-title">Hola, {{ account.name }}</h2>
-      <p>Tienes una cuenta de administración</p>
+      <p>{{ account.role === "admin" ? "Tienes una cuenta de administración" : "Tienes una cuenta para consultar los datos" }}</p>
       <div class="form-actions">
-        <RouterLink to="/admin" class="button primary">Ir a administración</RouterLink>
+        <RouterLink to="/admin" class="button primary">{{ account.role === "admin" ? "Ir a administración" : "Ver el panel de datos" }}</RouterLink>
         <button class="button secondary" type="button" @click="logout">Salir</button>
       </div>
     </div>

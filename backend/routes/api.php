@@ -8,6 +8,7 @@ use App\Http\Controllers\GameSessionController;
 use App\Http\Controllers\SchoolCatalogController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SchoolTeachersController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
@@ -15,7 +16,8 @@ use App\Http\Controllers\SystemController;
 use App\Http\Controllers\VisitController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('throttle:60,1')->group(function (): void {
+// Límites por IP altos (AppServiceProvider): un salón entero sale a internet con la misma IP de la escuela.
+Route::middleware('throttle:publico')->group(function (): void {
     Route::get('/stats', [VisitController::class, 'stats']);
     Route::post('/visits', [VisitController::class, 'store']);
     Route::get('/game-sessions', [GameSessionController::class, 'stats']);
@@ -28,7 +30,7 @@ Route::middleware('throttle:60,1')->group(function (): void {
 Route::get('/tls/permitir', [SystemController::class, 'allowCertificate']);
 
 // Escuelas y administradores: sesión con cookie y protección CSRF.
-Route::middleware(['web', 'throttle:120,1'])->group(function (): void {
+Route::middleware(['web', 'throttle:cuentas'])->group(function (): void {
     Route::get('/sesion', [AuthController::class, 'session']);
     Route::post('/configurar', [AuthController::class, 'setup']);
     Route::post('/entrar', [AuthController::class, 'login']);
@@ -37,6 +39,7 @@ Route::middleware(['web', 'throttle:120,1'])->group(function (): void {
     Route::post('/correo/confirmar', [AuthController::class, 'verify']);
     Route::post('/contrasena/olvide', [AuthController::class, 'forgot']);
     Route::post('/contrasena/nueva', [AuthController::class, 'reset']);
+    Route::post('/invitacion', [StaffController::class, 'accept']);
 
     Route::middleware('rol:school')->group(function (): void {
         Route::post('/correo/reenviar', [AuthController::class, 'resendVerification']);
@@ -52,10 +55,19 @@ Route::middleware(['web', 'throttle:120,1'])->group(function (): void {
         Route::get('/grupos', [SchoolTeachersController::class, 'classrooms']);
     });
 
-    Route::middleware('rol:admin')->prefix('admin')->group(function (): void {
+    // Consulta de datos: administración completa y cuentas de solo lectura.
+    Route::middleware('rol:admin|viewer')->prefix('admin')->group(function (): void {
         Route::get('/escuelas', [AdminController::class, 'schools']);
         Route::get('/estadisticas', [StatsController::class, 'index']);
         Route::get('/catalogo-escuelas', [SchoolCatalogController::class, 'status']);
+    });
+
+    Route::middleware('rol:admin')->prefix('admin')->group(function (): void {
+        Route::get('/usuarios', [StaffController::class, 'index']);
+        Route::post('/usuarios', [StaffController::class, 'invite']);
+        Route::put('/usuarios/{user}', [StaffController::class, 'update']);
+        Route::post('/usuarios/{user}/enlace', [StaffController::class, 'newLink']);
+        Route::delete('/usuarios/{user}', [StaffController::class, 'remove']);
         Route::post('/catalogo-escuelas', [SchoolCatalogController::class, 'import']);
         Route::post('/escuelas/{school}/aprobar', [AdminController::class, 'approve']);
         Route::post('/escuelas/{school}/rechazar', [AdminController::class, 'reject']);
@@ -70,9 +82,9 @@ Route::middleware(['web', 'throttle:120,1'])->group(function (): void {
 });
 
 // Docentes y alumnos: cookie propia de larga duración, sin sesión de Laravel.
-Route::middleware('throttle:300,1')->group(function (): void {
+Route::middleware('throttle:aula')->group(function (): void {
     Route::post('/docente/acceso', [SchoolTeachersController::class, 'redeem']);
-    Route::get('/unirse/{code}', [StudentController::class, 'preview'])->middleware('throttle:60,1');
+    Route::get('/unirse/{code}', [StudentController::class, 'preview'])->middleware('throttle:codigos');
     Route::post('/unirse', [StudentController::class, 'join']);
     Route::post('/regresar', [StudentController::class, 'comeBack']);
 

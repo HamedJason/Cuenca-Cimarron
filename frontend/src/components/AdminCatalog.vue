@@ -5,6 +5,7 @@ import Icon from "./Icon.vue";
 import { api } from "../composables/api";
 import { SEP_CATALOG, fetchSepCatalog, uploadCatalog } from "../composables/useCatalog";
 
+defineProps({ canEdit: Boolean });
 const status = ref(null);
 const busy = ref(false);
 const progress = ref("");
@@ -41,7 +42,7 @@ const date = (iso) => new Date(iso).toLocaleDateString("es-MX", { dateStyle: "lo
       <span v-for="(total, mun) in status.by_municipality" :key="mun" class="muted-text"> · {{ mun }} {{ total.toLocaleString("es-MX") }}</span>
       <span v-if="status.updated_at" class="muted-text"> · actualizado el {{ date(status.updated_at) }}</span>
     </p>
-    <button class="button secondary" type="button" :disabled="busy" @click="update"><Icon name="download" :size="20" />{{ status?.total ? "Actualizar desde datos.gob.mx" : "Cargar desde datos.gob.mx" }}</button>
+    <button v-if="canEdit" class="button secondary" type="button" :disabled="busy" @click="update"><Icon name="download" :size="20" />{{ status?.total ? "Actualizar desde datos.gob.mx" : "Cargar desde datos.gob.mx" }}</button>
     <p v-if="progress" class="small" role="status">{{ progress }}</p>
     <p v-if="error" class="form-alert is-error" role="alert">{{ error }}</p>
   </section>

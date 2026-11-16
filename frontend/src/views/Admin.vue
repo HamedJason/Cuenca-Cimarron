@@ -7,15 +7,29 @@ import { account, accountState, loadAccount, logout, labelOf, levels, shifts, se
 
 const AdminStats = defineAsyncComponent(() => import("../components/AdminStats.vue"));
 const AdminCatalog = defineAsyncComponent(() => import("../components/AdminCatalog.vue"));
+const AdminStaff = defineAsyncComponent(() => import("../components/AdminStaff.vue"));
 loadAccount();
+// admin: todo. viewer: cuenta de solo lectura, ve el panel de datos y la lista de escuelas.
 const isAdmin = computed(() => account.value?.role === "admin");
-const tabs = [
-  { id: "escuelas", label: "Escuelas" },
-  { id: "estadisticas", label: "Estadísticas" },
-  { id: "ajustes", label: "Ajustes" },
-  { id: "respaldos", label: "Respaldos" },
-];
+const isStaff = computed(() => ["admin", "viewer"].includes(account.value?.role));
+const tabs = computed(() =>
+  isAdmin.value
+    ? [
+        { id: "escuelas", label: "Escuelas" },
+        { id: "estadisticas", label: "Panel de datos" },
+        { id: "cuentas", label: "Cuentas" },
+        { id: "ajustes", label: "Ajustes" },
+        { id: "respaldos", label: "Respaldos" },
+      ]
+    : [
+        { id: "estadisticas", label: "Panel de datos" },
+        { id: "escuelas", label: "Escuelas" },
+      ],
+);
 const tab = ref("escuelas");
+watch(isStaff, () => {
+  if (isStaff.value && !isAdmin.value) tab.value = "estadisticas";
+}, { immediate: true });
 
 // Escuelas
 const filter = ref("pending");
@@ -36,7 +50,7 @@ async function loadSchools() {
     loadingSchools.value = false;
   }
 }
-watch([filter, isAdmin], () => isAdmin.value && loadSchools(), { immediate: true });
+watch([filter, isStaff], () => isStaff.value && loadSchools(), { immediate: true });
 
 const reviewing = reactive({ id: null, cct: "", reason: "", error: "", busy: false });
 function openReview(school) {
@@ -138,12 +152,12 @@ watch(
 <template>
   <div class="page account-page">
     <header class="page-heading">
-      <h1>Administración</h1>
-      <p v-if="isAdmin">{{ account.email }}</p>
+      <h1>{{ isAdmin || !isStaff ? "Administración" : "Panel de datos" }}</h1>
+      <p v-if="isStaff">{{ account.email }}</p>
     </header>
 
     <p v-if="accountState === 'loading' && !account" class="form-card" role="status">Cargando…</p>
-    <div v-else-if="!isAdmin" class="form-card narrow">
+    <div v-else-if="!isStaff" class="form-card narrow">
       <p>Esta página es solo para la administración del sitio</p>
       <RouterLink to="/escuelas" class="button primary">Entrar</RouterLink>
     </div>
@@ -196,16 +210,18 @@ watch(
               <button class="button secondary" type="button" :disabled="reviewing.busy || reviewing.reason.length < 5" @click="review(school, 'rechazar')">Rechazar</button>
               <p v-if="reviewing.error" class="field-error" role="alert">{{ reviewing.error }}</p>
             </div>
-            <button v-else-if="school.status !== 'approved'" class="button secondary" type="button" @click="openReview(school)">Revisar</button>
+            <button v-else-if="isAdmin && school.status !== 'approved'" class="button secondary" type="button" @click="openReview(school)">Revisar</button>
           </li>
         </ul>
       </section>
 
-      <AdminCatalog v-if="tab === 'escuelas'" />
+      <AdminCatalog v-if="tab === 'escuelas'" :can-edit="isAdmin" />
 
       <AdminStats v-else-if="tab === 'estadisticas'" />
 
-      <form v-else-if="tab === 'ajustes'" class="form-card" role="tabpanel" novalidate @submit.prevent="saveSettings">
+      <AdminStaff v-else-if="tab === 'cuentas' && isAdmin" />
+
+      <form v-else-if="tab === 'ajustes' && isAdmin" class="form-card" role="tabpanel" novalidate @submit.prevent="saveSettings">
         <p v-if="!settings" role="status">Cargando…</p>
         <template v-else>
           <fieldset class="form-group">
@@ -266,7 +282,7 @@ watch(
         </template>
       </form>
 
-      <section v-else-if="tab === 'respaldos'" class="form-card" role="tabpanel">
+      <section v-else-if="tab === 'respaldos' && isAdmin" class="form-card" role="tabpanel">
         <h2 class="form-title">Respaldo en este momento</h2>
         <p class="muted-text">Descarga toda la base de datos en un archivo comprimido</p>
         <a class="button primary" href="/api/admin/respaldo" download><Icon name="download" :size="20" />Descargar respaldo</a>

@@ -113,6 +113,15 @@ Después de instalar, se entra a `http://direccion-del-servidor:8090/configurar`
 
 Desde el panel de administración (`/admin`) se aprueban escuelas, se llena el servidor de correo, se escribe el dominio para HTTPS y se descargan respaldos. Nada de eso necesita entrar al servidor.
 
+## Cuentas del equipo
+
+En el panel, pestaña Cuentas, se invita a más personas. Hay dos tipos:
+
+- **Solo ver datos:** ve el panel de datos y la lista de escuelas. No puede aprobar escuelas, cambiar ajustes, descargar respaldos ni invitar a nadie.
+- **Administración completa:** puede hacer todo.
+
+A la persona le llega un correo para poner su contraseña. Si el correo todavía no está configurado, el panel muestra el enlace para mandárselo por otro medio. Siempre queda al menos una cuenta de administración.
+
 ## Catálogo de escuelas
 
 Para que cada escuela se busque y se elija al registrarse, en el panel de administración (pestaña Escuelas) está el botón "Cargar desde datos.gob.mx". Trae las escuelas de Tijuana y Playas de Rosarito del Catálogo de Centros de Trabajo de la SEP y las guarda en la base. Conviene actualizarlo una vez al año. Para usar el catálogo de otro año se cambia `SEP_CATALOG` en `frontend/src/composables/useCatalog.js`.

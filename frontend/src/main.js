@@ -49,6 +49,7 @@ const router = createRouter({
     { path: "/escuelas/olvide", component: AccountLinks, meta: { title: "Olvidé mi contraseña", mode: "olvide" } },
     { path: "/escuelas/contrasena", component: AccountLinks, meta: { title: "Contraseña nueva", mode: "contrasena" } },
     { path: "/configurar", component: Setup, meta: { title: "Configurar" } },
+    { path: "/invitacion", component: AccountLinks, meta: { title: "Invitación", mode: "invitacion" } },
     { path: "/admin", component: Admin, meta: { title: "Administración" } },
     { path: "/privacidad", component: Privacy, meta: { title: "Aviso de privacidad" } },
     { path: "/docente/acceso/:token", component: TeacherAccess, meta: { title: "Acceso de docentes" } },

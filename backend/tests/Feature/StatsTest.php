@@ -46,10 +46,16 @@ class StatsTest extends TestCase
             ->assertJsonPath('totals.points', 20)
             ->assertJsonPath('schools.0.students', 2)
             ->assertJsonPath('schools.0.completions', 1)
-            ->assertJsonPath('colonias.0.colonia', 'Sánchez Taboada')
+            ->assertJsonPath('colonias.0.name', 'Sánchez Taboada')
+            ->assertJsonPath('colonias.0.students', 2)
+            ->assertJsonPath('municipalities.0.name', 'Sin dato')
+            ->assertJsonPath('levels.0.name', 'primaria')
+            ->assertJsonPath('schools.0.teachers', 1)
             ->assertJsonPath('activities.0.key', 'mochila')
             ->assertJsonCount(8, 'weeks');
         $this->assertSame(1, collect($response->json('weeks'))->sum('completions'));
+        $this->assertSame(2, collect($response->json('weeks'))->sum('students'));
+        $this->assertSame(2, collect($response->json('weeks'))->sum('schools'));
         $this->assertStringNotContainsString('Beto', $response->getContent());
         $this->assertStringNotContainsString('Ana', $response->getContent());
     }

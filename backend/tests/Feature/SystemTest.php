@@ -41,4 +41,13 @@ class SystemTest extends TestCase
         Settings::forget();
         $this->assertSame('secreta', Settings::get('mail_password'));
     }
+
+    public function test_un_salon_entero_con_la_misma_ip_no_se_bloquea(): void
+    {
+        for ($i = 0; $i < 150; $i++) {
+            $this->getJson('/api/stats')->assertOk();
+        }
+        // Las rutas de cuentas cuentan aparte de las públicas.
+        $this->getJson('/api/sesion')->assertOk();
+    }
 }

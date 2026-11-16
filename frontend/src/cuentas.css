@@ -1211,3 +1211,62 @@
     animation-duration: 2s;
   }
 }
+
+/* Cuentas del equipo */
+.staff-actions select {
+  width: auto;
+  min-height: 44px;
+  padding: 6px 10px;
+}
+.choice-list {
+  display: grid;
+  gap: 8px;
+}
+.role-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  cursor: pointer;
+}
+.role-choice:has(input:checked) {
+  border-color: var(--uabc-green);
+  background: var(--green-tint);
+}
+.role-choice input {
+  width: 22px;
+  height: 22px;
+  margin-top: 2px;
+  accent-color: var(--uabc-green);
+}
+.role-choice span {
+  display: grid;
+  gap: 2px;
+}
+.role-choice small {
+  color: var(--muted);
+  font-size: 15px;
+}
+.stat-tile small {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gold-text);
+}
+.stats-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 24px;
+}
+.bar-list.compact li {
+  grid-template-columns: minmax(90px, 160px) minmax(0, 1fr) 40px;
+}
+@media (max-width: 760px) {
+  .stats-pair {
+    grid-template-columns: 1fr;
+  }
+}
+.review-main .status-badge {
+  justify-self: start;
+}

@@ -1,13 +1,14 @@
 <script setup>
 // Páginas a las que llegan los enlaces de los correos: confirmar correo, olvidé mi contraseña y contraseña nueva.
 import { ref, computed, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import Icon from "../components/Icon.vue";
 import FormField from "../components/FormField.vue";
 import { api } from "../composables/api";
-import { loadAccount } from "../composables/useAccount";
+import { loadAccount, setAccount } from "../composables/useAccount";
 
 const route = useRoute();
+const router = useRouter();
 const mode = computed(() => route.meta.mode);
 const token = computed(() => String(route.query.token || ""));
 const state = ref("idle");
@@ -20,6 +21,7 @@ const titles = {
   confirmar: "Confirmar correo",
   olvide: "Olvidé mi contraseña",
   contrasena: "Contraseña nueva",
+  invitacion: "Acceso al panel",
 };
 
 onMounted(async () => {
@@ -42,6 +44,11 @@ async function submit() {
   try {
     if (mode.value === "olvide") {
       await api("/contrasena/olvide", { method: "POST", body: { email: email.value } });
+    } else if (mode.value === "invitacion") {
+      const data = await api("/invitacion", { method: "POST", body: { token: token.value, password: password.value } });
+      setAccount(data.user);
+      router.push("/admin");
+      return;
     } else {
       await api("/contrasena/nueva", { method: "POST", body: { token: token.value, password: password.value } });
     }
@@ -84,7 +91,7 @@ async function submit() {
         <FormField
           v-else
           v-slot="{ id, describedby }"
-          label="Contraseña nueva"
+          :label="mode === 'invitacion' ? 'Elige tu contraseña' : 'Contraseña nueva'"
           hint="Al menos 10 caracteres. Puede ser una frase"
           :error="errors.password"
         >
