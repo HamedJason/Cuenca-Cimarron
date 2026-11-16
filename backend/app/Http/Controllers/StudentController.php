@@ -123,6 +123,7 @@ class StudentController extends Controller
             'grade' => $classroom->grade,
             'teacher' => $classroom->teacher->name,
             'school' => $classroom->teacher->school->name,
+            'avatar' => $student->avatar ?? ['background' => 'verde', 'pieces' => []],
         ];
     }
 
@@ -136,6 +137,28 @@ class StudentController extends Controller
             'progress' => $student ? ActivityController::progress($student->id) : null,
             'tasks' => $student ? AssignmentController::forStudent($student->id, $student->classroom_id) : [],
         ])->header('Cache-Control', 'no-store');
+    }
+
+    // El alumno elige fondo y piezas para su cimarrón. El servidor revisa que ya las haya desbloqueado.
+    public function saveAvatar(Request $request): JsonResponse
+    {
+        $student = $request->attributes->get('student');
+        $pieces = config('avatar.pieces');
+        $data = $request->validate([
+            'background' => ['required', \Illuminate\Validation\Rule::in(config('avatar.backgrounds'))],
+            'pieces' => ['present', 'array', 'max:'.count($pieces)],
+            'pieces.*' => ['string', 'distinct', \Illuminate\Validation\Rule::in(array_keys($pieces))],
+        ]);
+        $points = ActivityController::total($student->id);
+        foreach ($data['pieces'] as $piece) {
+            if ($points < $pieces[$piece]) {
+                throw ValidationException::withMessages(['pieces' => "Esa pieza se desbloquea con {$pieces[$piece]} puntos."]);
+            }
+        }
+        $student->avatar = ['background' => $data['background'], 'pieces' => array_values($data['pieces'])];
+        $student->save();
+
+        return response()->json(['avatar' => $student->avatar]);
     }
 
     public function logout(Request $request): JsonResponse

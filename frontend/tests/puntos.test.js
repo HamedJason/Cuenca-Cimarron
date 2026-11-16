@@ -132,3 +132,16 @@ describe("Lista flotante de tareas", () => {
     wrapper.unmount();
   });
 });
+
+import CimarronAvatar from "../src/components/CimarronAvatar.vue";
+
+describe("Cimarrón del alumno", () => {
+  it("dibuja solo las piezas elegidas y el fondo", () => {
+    const plain = mount(CimarronAvatar, { props: { avatar: { background: "cielo", pieces: [] } } });
+    const dressed = mount(CimarronAvatar, { props: { avatar: { background: "cielo", pieces: ["casco", "insignia"] } } });
+    expect(plain.findAll("circle").map((c) => c.attributes("fill"))).toContain("#cfe6f7");
+    expect(dressed.findAll("path").length).toBeGreaterThan(plain.findAll("path").length);
+    expect(dressed.html()).toContain("#dd971a");
+    expect(plain.html()).not.toContain("#dd971a");
+  });
+});

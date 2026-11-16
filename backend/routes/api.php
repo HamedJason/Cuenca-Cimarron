@@ -77,6 +77,8 @@ Route::middleware('throttle:300,1')->group(function (): void {
         Route::post('/yo/salir', [StudentController::class, 'logout']);
     });
 
+    Route::put('/yo/cimarron', [StudentController::class, 'saveAvatar'])->middleware('equipo:student');
+
     Route::middleware('equipo:student')->prefix('actividades/{key}')->where(['key' => '[a-z0-9-]{2,60}'])->group(function (): void {
         Route::post('/inicio', [ActivityController::class, 'start']);
         Route::post('/terminar', [ActivityController::class, 'finish']);

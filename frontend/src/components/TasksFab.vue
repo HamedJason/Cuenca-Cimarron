@@ -4,6 +4,7 @@ import { ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Icon from "./Icon.vue";
 import Modal from "./Modal.vue";
+import CimarronAvatar from "./CimarronAvatar.vue";
 import { student, progress, studentLogout } from "../composables/useStudent";
 import { tasks } from "../composables/useTasks";
 import { activities, isDone } from "../composables/useActivities";
@@ -28,7 +29,7 @@ async function leave() {
 <template>
   <template v-if="student">
     <button class="tasks-fab" type="button" :aria-label="`${label}. Abrir mi lista`" @click="open = true">
-      <img src="/brand/cuenca/icono-96.webp" alt="" width="40" height="40" />
+      <CimarronAvatar :avatar="student.avatar" :size="48" label="" aria-hidden="true" />
       <span>{{ label }}</span>
     </button>
     <Modal :open="open" :title="student.name" class="tasks-sheet" @close="open = false">

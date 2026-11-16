@@ -130,4 +130,19 @@ class ActivitiesTest extends TestCase
         $this->assertSame(0, DB::table('completions')->where('student_id', '!=', $this->student->id)->count());
         $this->withCredentials()->withUnencryptedCookie('cc_alumno', str_repeat('a', 64))->getJson('/api/yo')->assertJsonPath('progress', null);
     }
+
+    public function test_cimarron_solo_con_piezas_desbloqueadas(): void
+    {
+        $this->asStudent()->getJson('/api/yo')->assertJsonPath('student.avatar', ['background' => 'verde', 'pieces' => []]);
+        $this->asStudent()->putJson('/api/yo/cimarron', ['background' => 'ocre', 'pieces' => ['casco']])
+            ->assertUnprocessable()->assertJsonValidationErrors('pieces');
+        $this->asStudent()->putJson('/api/yo/cimarron', ['background' => 'morado', 'pieces' => []])->assertUnprocessable();
+        // 3 lecturas = 30 puntos: ya se puede el casco, todavía no el impermeable.
+        $this->asStudent()->postJson('/api/actividades/lectura-conozca/respuesta', ['answer' => 0])->assertOk();
+        $this->asStudent()->postJson('/api/actividades/lectura-planfamiliar/respuesta', ['answer' => 1])->assertOk();
+        $this->asStudent()->postJson('/api/actividades/lectura-mochila/respuesta', ['answer' => 2])->assertOk();
+        $this->asStudent()->putJson('/api/yo/cimarron', ['background' => 'ocre', 'pieces' => ['casco', 'impermeable']])->assertUnprocessable();
+        $this->asStudent()->putJson('/api/yo/cimarron', ['background' => 'ocre', 'pieces' => ['casco']])->assertOk();
+        $this->asStudent()->getJson('/api/yo')->assertJsonPath('student.avatar', ['background' => 'ocre', 'pieces' => ['casco']]);
+    }
 }

@@ -23,6 +23,7 @@ const Privacy = () => import("./views/Privacy.vue");
 const TeacherAccess = () => import("./views/TeacherAccess.vue");
 const Teacher = () => import("./views/Teacher.vue");
 const Join = () => import("./views/Join.vue");
+const MyCimarron = () => import("./views/MyCimarron.vue");
 import "./style.css";
 import "./cuentas.css";
 const router = createRouter({
@@ -50,6 +51,7 @@ const router = createRouter({
     { path: "/docente", component: Teacher, meta: { title: "Docentes" } },
     { path: "/unirse/:code?", component: Join, meta: { title: "Entra a tu grupo", mode: "unirse" } },
     { path: "/regresar", component: Join, meta: { title: "Regresa a tu grupo", mode: "regresar" } },
+    { path: "/mi-cimarron", component: MyCimarron, meta: { title: "Mi cimarrón" } },
     { path: "/:pathMatch(.*)*", redirect: "/" },
   ],
   // Al cargar o recargar, la página empieza hasta arriba (en el propósito).

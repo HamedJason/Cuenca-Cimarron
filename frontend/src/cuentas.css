@@ -936,3 +936,83 @@
     border-radius: 24px 24px 0 0;
   }
 }
+
+/* Mi cimarrón */
+.avatar-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.avatar-preview {
+  justify-items: center;
+  text-align: center;
+}
+.tasks-fab .cimarron-avatar {
+  flex-shrink: 0;
+}
+.swatch-choice {
+  gap: 8px;
+}
+.swatch {
+  display: inline-block;
+  flex: 0 0 28px;
+  align-self: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--edge);
+}
+.swatch-verde {
+  background: #cfe9d9;
+}
+.swatch-ocre {
+  background: #ffe1a3;
+}
+.swatch-cielo {
+  background: #cfe6f7;
+}
+.piece-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.piece {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  text-align: left;
+}
+.piece span {
+  display: grid;
+}
+.piece small {
+  color: var(--muted);
+}
+.piece.on {
+  border-color: var(--uabc-green);
+  background: var(--green-tint);
+}
+.piece.locked {
+  opacity: 0.6;
+}
+.piece.locked .cimarron-avatar {
+  filter: grayscale(1);
+}
+@media (max-width: 760px) {
+  .avatar-layout {
+    grid-template-columns: 1fr;
+  }
+  .tasks-fab .cimarron-avatar {
+    width: 40px;
+    height: 40px;
+  }
+}
