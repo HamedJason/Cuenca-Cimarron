@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 import Icon from "../components/Icon.vue";
 import FormField from "../components/FormField.vue";
 import SchoolForm from "../components/SchoolForm.vue";
+import SchoolPicker from "../components/SchoolPicker.vue";
 import { api } from "../composables/api";
 import { setAccount } from "../composables/useAccount";
 
@@ -24,6 +25,30 @@ const login = reactive({ email: "", password: "", privacy: false, families_infor
 const errors = ref({});
 const message = ref("");
 const sending = ref(false);
+// Primero se busca la escuela en el catálogo. Si no aparece, se llena a mano.
+const mode = ref("buscar");
+const picked = ref(null);
+const formKey = ref(0);
+function pick(found) {
+  picked.value = found;
+  Object.assign(school.value, {
+    name: found.name,
+    cct: found.cct,
+    level: found.level ?? "",
+    shift: found.shift ?? "",
+    sector: found.sector ?? "",
+    colonia: found.colonia ?? "",
+    address: found.address ?? "",
+    lat: found.lat,
+    lng: found.lng,
+  });
+  formKey.value++;
+  mode.value = "elegida";
+}
+function manual() {
+  picked.value = null;
+  mode.value = "manual";
+}
 
 async function submit() {
   sending.value = true;
@@ -53,7 +78,19 @@ async function submit() {
         <li>Confirmas tu correo</li>
         <li>Revisamos los datos y te avisamos</li>
       </ol>
-      <SchoolForm v-model="school" :errors="errors" />
+      <SchoolPicker v-if="mode === 'buscar'" @pick="pick" @manual="manual" />
+      <template v-else>
+        <div v-if="picked" class="note">
+          <Icon name="check" />
+          <div>
+            <p>Elegiste <b>{{ picked.name }}</b> (CCT {{ picked.cct }}). Revisa los datos y completa lo que falte</p>
+            <button class="text-link" type="button" @click="mode = 'buscar'">Buscar otra escuela</button>
+          </div>
+        </div>
+        <button v-else class="text-link" type="button" @click="mode = 'buscar'">Buscar mi escuela en el catálogo</button>
+        <SchoolForm :key="formKey" v-model="school" :errors="errors" />
+      </template>
+      <template v-if="mode !== 'buscar'">
       <fieldset class="form-group">
         <legend>Cuenta</legend>
         <FormField v-slot="{ id }" label="Correo" :error="errors.email">
@@ -96,6 +133,7 @@ async function submit() {
         </button>
         <RouterLink to="/escuelas" class="text-link">Ya tengo cuenta</RouterLink>
       </div>
+      </template>
     </form>
   </div>
 </template>

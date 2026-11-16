@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GameSessionController;
+use App\Http\Controllers\SchoolCatalogController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SchoolTeachersController;
 use App\Http\Controllers\StatsController;
@@ -20,6 +21,7 @@ Route::middleware('throttle:60,1')->group(function (): void {
     Route::get('/game-sessions', [GameSessionController::class, 'stats']);
     Route::post('/game-sessions', [GameSessionController::class, 'store']);
     Route::get('/version', [SystemController::class, 'version']);
+    Route::get('/catalogo-escuelas', [SchoolCatalogController::class, 'search']);
     Route::get('/respaldo', [AdminController::class, 'backupWithKey']);
 });
 
@@ -53,6 +55,8 @@ Route::middleware(['web', 'throttle:120,1'])->group(function (): void {
     Route::middleware('rol:admin')->prefix('admin')->group(function (): void {
         Route::get('/escuelas', [AdminController::class, 'schools']);
         Route::get('/estadisticas', [StatsController::class, 'index']);
+        Route::get('/catalogo-escuelas', [SchoolCatalogController::class, 'status']);
+        Route::post('/catalogo-escuelas', [SchoolCatalogController::class, 'import']);
         Route::post('/escuelas/{school}/aprobar', [AdminController::class, 'approve']);
         Route::post('/escuelas/{school}/rechazar', [AdminController::class, 'reject']);
         Route::get('/ajustes', [AdminController::class, 'settings']);

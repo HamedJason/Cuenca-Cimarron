@@ -113,6 +113,10 @@ Después de instalar, se entra a `http://direccion-del-servidor:8090/configurar`
 
 Desde el panel de administración (`/admin`) se aprueban escuelas, se llena el servidor de correo, se escribe el dominio para HTTPS y se descargan respaldos. Nada de eso necesita entrar al servidor.
 
+## Catálogo de escuelas
+
+Para que cada escuela se busque y se elija al registrarse, en el panel de administración (pestaña Escuelas) está el botón "Cargar desde datos.gob.mx". Trae las escuelas de Tijuana y Playas de Rosarito del Catálogo de Centros de Trabajo de la SEP y las guarda en la base. Conviene actualizarlo una vez al año. Para usar el catálogo de otro año se cambia `SEP_CATALOG` en `frontend/src/composables/useCatalog.js`.
+
 ## Respaldo de la base de datos
 
 El servicio `respaldos` saca una copia de la base cada día y guarda las de las últimas dos semanas en el volumen `respaldos`. Se descargan desde el panel de administración, en la pestaña Respaldos, donde también hay un botón para sacar una copia en ese momento.

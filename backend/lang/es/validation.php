@@ -40,9 +40,14 @@ return [
         'string' => ':attribute debe tener :size caracteres.',
     ],
     'string' => ':attribute debe ser texto.',
-    'unique' => 'Ya hay un registro con ese :attribute.',
+    'unique' => 'Ya hay un registro con :attribute.',
     'url' => ':attribute debe ser una dirección web válida.',
     'uuid' => ':attribute no es válido.',
+
+    'custom' => [
+        'cct' => ['unique' => 'Esa escuela ya está registrada. Si eres de esa escuela, pide acceso a quien la registró o escríbenos.'],
+        'email' => ['unique' => 'Ya hay una cuenta con ese correo. Entra con él o usa "Olvidé mi contraseña".'],
+    ],
 
     'attributes' => [
         'name' => 'el nombre',

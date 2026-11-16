@@ -6,6 +6,7 @@ import { api } from "../composables/api";
 import { account, accountState, loadAccount, logout, labelOf, levels, shifts, sectors, cctPattern } from "../composables/useAccount";
 
 const AdminStats = defineAsyncComponent(() => import("../components/AdminStats.vue"));
+const AdminCatalog = defineAsyncComponent(() => import("../components/AdminCatalog.vue"));
 loadAccount();
 const isAdmin = computed(() => account.value?.role === "admin");
 const tabs = [
@@ -199,6 +200,8 @@ watch(
           </li>
         </ul>
       </section>
+
+      <AdminCatalog v-if="tab === 'escuelas'" />
 
       <AdminStats v-else-if="tab === 'estadisticas'" />
 
