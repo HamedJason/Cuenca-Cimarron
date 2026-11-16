@@ -16,6 +16,7 @@ const partners = [
   { name: "Protección Civil Tijuana", src: "/assets/images/aliados/proteccion-civil-tijuana.webp", w: 352, h: 360 },
   { name: "Bomberos Tijuana", src: "/assets/images/aliados/bomberos-tijuana.webp", w: 360, h: 360 },
   { name: "Cruz Roja Mexicana, Delegación Tijuana", src: "/assets/images/aliados/cruz-roja-tijuana.webp", w: 238, h: 360 },
+  { name: "Cruz Roja Mexicana, Delegación Rosarito", src: "/assets/images/aliados/cruz-roja-rosarito.webp", w: 205, h: 78, wide: true },
 ];
 
 function alreadySeen() {
@@ -71,7 +72,12 @@ onBeforeUnmount(() => {
         <span class="splash-line" aria-hidden="true"></span>
         <p class="splash-lead">es una colaboración entre</p>
         <ul class="splash-partners">
-          <li v-for="(partner, i) in partners" :key="partner.name" :style="{ '--i': i }">
+          <li
+            v-for="(partner, i) in partners"
+            :key="partner.name"
+            :class="{ 'is-wide': partner.wide }"
+            :style="{ '--i': i }"
+          >
             <img
               :src="partner.src"
               :alt="partner.name"

@@ -5,16 +5,31 @@ import Modal from "./Modal.vue";
 import PacificLab from "./PacificLab.vue";
 import { activeLesson, closeLesson, openLesson } from "../composables/useLesson";
 import { savedList } from "../composables/storage";
-import { familyPlan, kitGroups, ninoOutlook, sources } from "../data";
+import {
+  familyPlan,
+  firstAidGroups,
+  firstAidRules,
+  healthAlarms,
+  kitGroups,
+  ninoOutlook,
+  rainHealth,
+  sources,
+} from "../data";
 
-// Ventana de los tres temas de Información. Se monta una vez en App.vue.
+// Ventana de los temas de Información. Se monta una vez en App.vue.
 // Las marcas usan las mismas llaves que la página anterior para no perder el avance.
 const planIds = familyPlan.flatMap((step, s) =>
   step.tasks.map((_, t) => `${s}-${t}`),
 );
 const kitIds = kitGroups.flatMap((group) => group.items.map((item) => item.id));
+const aidIds = firstAidGroups.flatMap((group) => group.items.map((item) => item.id));
 const planDone = savedList("cuenca.planfamiliar.checks", planIds);
 const kitDone = savedList("cuenca.mochila.checks", kitIds);
+const aidDone = savedList("cuenca.botiquin.checks", aidIds);
+const toggleAid = (id) => (aidDone.value = toggled(aidDone.value, id));
+const aidCount = (group) =>
+  group.items.filter((item) => aidDone.value.includes(item.id)).length;
+const aidComplete = computed(() => aidDone.value.length === aidIds.length);
 
 // En la plantilla los refs llegan ya desenvueltos, por eso cada lista tiene su función.
 const toggled = (list, id) =>
@@ -250,8 +265,121 @@ function goTo(id) {
           <a class="button secondary" :href="sources.backpack" target="_blank" rel="noopener"
             ><Icon name="external" :size="18" /> Recomendaciones de CENAPRED</a
           >
-          <button class="button primary cta" type="button" @click="goTo('planfamiliar', $event)">
-            <Icon name="map" :size="20" /> Haz tu plan familiar
+          <button class="button primary cta" type="button" @click="goTo('salud', $event)">
+            <Icon name="medical" :size="20" /> Arma tu botiquín
+          </button>
+        </div>
+      </template>
+
+      <!-- Botiquín y salud -->
+      <template v-else-if="lesson.id === 'salud'">
+        <section class="lesson-part" aria-labelledby="leccion-botiquin">
+          <div class="lesson-part-head">
+            <div>
+              <h3 id="leccion-botiquin">Tu botiquín de casa</h3>
+              <p class="lesson-lead">
+                El material básico que recomienda la Secretaría de Salud. Marca lo
+                que ya tienes; se guarda en este navegador
+              </p>
+            </div>
+            <div :class="['lesson-progress', { complete: aidComplete }]">
+              <strong>{{ aidDone.length }} / {{ aidIds.length }}</strong>
+              <span>{{ aidComplete ? "¡Botiquín completo!" : "cosas listas" }}</span>
+              <progress
+                :max="aidIds.length"
+                :value="aidDone.length"
+                :aria-label="`${aidDone.length} de ${aidIds.length} cosas del botiquín listas`"
+              ></progress>
+            </div>
+          </div>
+          <div class="kit-groups">
+            <section
+              v-for="group in firstAidGroups"
+              :key="group.title"
+              class="kit-group"
+            >
+              <h4>
+                {{ group.title }}
+                <span>{{ aidCount(group) }} / {{ group.items.length }}</span>
+              </h4>
+              <label
+                v-for="item in group.items"
+                :key="item.id"
+                :class="['kit-row', { done: aidDone.includes(item.id) }]"
+              >
+                <span class="kit-icon" aria-hidden="true"
+                  ><Icon name="medical" :size="22"
+                /></span>
+                <span class="kit-copy"
+                  ><strong>{{ item.name }}</strong
+                  ><small>{{ item.detail }}</small></span
+                >
+                <input
+                  type="checkbox"
+                  :checked="aidDone.includes(item.id)"
+                  :aria-label="`Marcar ${item.name} como listo`"
+                  @change="toggleAid(item.id)"
+                />
+              </label>
+            </section>
+          </div>
+          <button
+            v-if="aidDone.length"
+            class="text-link lesson-reset"
+            type="button"
+            @click="aidDone = []"
+          >
+            <Icon name="reset" :size="18" /> Borrar marcas
+          </button>
+        </section>
+
+        <section class="lesson-part" aria-labelledby="leccion-guardar">
+          <h3 id="leccion-guardar">Cómo guardarlo</h3>
+          <div class="health-rules">
+            <article v-for="rule in firstAidRules" :key="rule.title" class="health-rule">
+              <span class="health-icon" aria-hidden="true"><Icon :name="rule.icon" :size="24" /></span>
+              <strong>{{ rule.title }}</strong>
+              <span>{{ rule.text }}</span>
+            </article>
+          </div>
+        </section>
+
+        <section class="lesson-part" aria-labelledby="leccion-lluvia-salud">
+          <h3 id="leccion-lluvia-salud">Tu salud durante y después de la lluvia</h3>
+          <div class="health-tips">
+            <article v-for="tip in rainHealth" :key="tip.title" class="health-tip">
+              <span class="health-icon" aria-hidden="true"><Icon :name="tip.icon" :size="24" /></span>
+              <strong>{{ tip.title }}</strong>
+              <span>{{ tip.text }}</span>
+            </article>
+          </div>
+        </section>
+
+        <section class="lesson-part health-alarm" aria-labelledby="leccion-alarma">
+          <h3 id="leccion-alarma">No esperes: llama al 911 si…</h3>
+          <ul>
+            <li v-for="alarm in healthAlarms" :key="alarm">
+              <Icon name="phone" :size="18" /> {{ alarm }}
+            </li>
+          </ul>
+          <a class="button primary cta health-call" href="tel:911"
+            ><Icon name="phone" :size="20" /> Llamar al 911</a
+          >
+          <p class="lesson-note">
+            Esta información no reemplaza la consulta médica. Para aprender
+            primeros auxilios, la Cruz Roja da cursos para la comunidad
+          </p>
+        </section>
+
+        <div class="lesson-links">
+          <a class="button secondary" :href="sources.firstAid" target="_blank" rel="noopener"
+            ><Icon name="external" :size="18" /> Guía de botiquín de la Secretaría de Salud</a
+          >
+          <a class="button secondary" :href="sources.safeWater" target="_blank" rel="noopener"
+            ><Icon name="external" :size="18" /> Cómo desinfectar el agua</a
+          >
+          <button class="button primary cta" type="button" @click="goTo('mochila', $event)">
+            <Icon name="backpack" :size="20" /> Vuelve a tu mochila
           </button>
         </div>
       </template>

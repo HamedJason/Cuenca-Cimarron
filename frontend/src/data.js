@@ -156,6 +156,8 @@ export const sources = {
     "https://www.gob.mx/cenapred/articulos/la-seguridad-empieza-en-casa-prepara-tu-mochila-de-emergencia-228213",
   climate: "https://www.noaa.gov/understanding-el-nino",
   forecast: "https://smn.conagua.gob.mx/",
+  firstAid: "https://www.gob.mx/cms/uploads/attachment/file/732470/Botiquin_compressed.pdf",
+  safeWater: "https://cevece.edomex.gob.mx/sites/cevece.edomex.gob.mx/files/files/docs/tripticos/2023/Semana22.pdf",
 };
 
 // Verificado el 7 de noviembre de 2026 en los sitios oficiales enlazados.
@@ -211,6 +213,48 @@ export const emergency = {
     { id: "estacion-18", name: "Estación 18", area: "Fracc. Hacienda las Delicias", address: "Calle Arroyo del Campo s/n", lat: 32.407212, lng: -116.937039 },
     { id: "forestal", name: "Estación Forestal", lat: 32.461893, lng: -116.880513 },
     { id: "campo-de-entrenamiento", name: "Campo de Entrenamiento", lat: 32.458231, lng: -116.820471 },
+    // Rosarito: ubicación de OpenStreetMap (revisada el 16 de noviembre de 2026).
+    // Bomberos de Rosarito no publica teléfonos por estación: se pide por el 911.
+    // También tiene una estación en la colonia Morelos, sin ubicación publicada.
+    { id: "rosarito-bomberos-centro", city: "Rosarito", name: "Bomberos Rosarito, Estación Centro", area: "Zona Centro, Rosarito", address: "Calle Mar del Norte, junto a la Cruz Roja", lat: 32.342011, lng: -117.056078 },
+  ],
+  // Policía municipal: domicilios, teléfonos y ubicaciones de la página
+  // "Ubica tu Delegación" de la SSPCM (revisada el 15 de noviembre de 2026).
+  // Las casetas y módulos de vigilancia no vienen ahí: muchas no tienen personal fijo.
+  policeStationsUrl: "https://policia.tijuana.gob.mx/UbicaDelegacion.aspx",
+  policeStations: [
+    { id: "policia-direccion", name: "Dirección General de Policía y Tránsito", area: "Ciudad Industrial Nueva Tijuana", address: "Calle Uno Norte y Uno Poniente s/n", phones: ["664 979 1885"], lat: 32.5416372, lng: -116.912698 },
+    { id: "policia-sur", name: "Comandancia Regional Sur", area: "Col. Cañada Verde", address: "Libramiento Salvador Rosas Magallón s/n", phones: ["664 622 8705"], lat: 32.4808397, lng: -116.9897379 },
+    { id: "policia-centro", name: "Delegación Zona Centro", area: "Zona Centro", address: "Av. G e Internacional s/n", phones: ["664 688 3848", "664 973 7000"], lat: 32.5404839, lng: -117.0477849 },
+    { id: "policia-los-pinos", name: "Delegación Los Pinos", area: "Poblado La Presa", address: "Carretera vieja Tijuana–Tecate km 14.5", phones: ["664 902 3743"], lat: 32.447662, lng: -116.9096345 },
+    { id: "policia-playas", name: "Delegación Playas", area: "Playas de Tijuana", address: "Paseo del Pedregal y Av. del Agua s/n, Secc. Jardines", phones: ["664 631 6845"], lat: 32.5228538, lng: -117.1123489 },
+    { id: "policia-cerro-colorado", name: "Delegación Cerro Colorado", area: "Col. Azteca", address: "Calle Dinamarca s/n", phones: ["664 625 9378"], lat: 32.4668043, lng: -116.9101423 },
+    { id: "policia-la-presa", name: "Delegación La Presa", area: "Fracc. Villa Fontana", address: "Calle Aranjuez s/n", phones: ["664 627 8745"], lat: 32.5044639, lng: -116.8663463 },
+    { id: "policia-sab", name: "Delegación San Antonio de los Buenos", area: "Col. Terrazas del Rubí", address: "Calle Arco, entre Santa Esther y San Quintín", phones: ["664 635 6125"], lat: 32.4802863, lng: -117.0320621 },
+    { id: "policia-mesa-de-otay", name: "Delegación Mesa de Otay", area: "Col. Mesa de Otay", address: "Calzada Tecnológico s/n y Av. Circunvalación", phones: ["664 647 4204"], lat: 32.5296061, lng: -116.9786248 },
+    { id: "policia-centenario", name: "Delegación Centenario", area: "Col. Ciudad Industrial", address: "Blvd. Alberto Limón Padilla s/n", phones: ["664 647 2647"], lat: 32.5376724, lng: -116.9225556 },
+    { id: "policia-presa-rural", name: "Delegación Presa Rural", area: "Fracc. El Refugio", address: "Av. de los Cerezos s/n", phones: ["664 971 6642"], lat: 32.4581611, lng: -116.8210652 },
+    { id: "policia-natura", name: "Delegación Natura", area: "Natura, Sección Bosques", address: "Natura Sección Bosques", phones: ["664 524 7060", "664 526 3825"], lat: 32.3750323, lng: -116.9341834 },
+    // Rosarito: ubicaciones de OpenStreetMap (revisadas el 16 de noviembre de 2026).
+    // Desde 2025 la policía de Rosarito la coordina el Estado; no hay teléfonos
+    // por delegación publicados, así que se pide por el 911.
+    { id: "rosarito-seguridad", city: "Rosarito", name: "Seguridad Pública de Rosarito", area: "Rosarito", address: "Calle Distrito Federal", lat: 32.362762, lng: -117.051791 },
+    { id: "rosarito-policia-centro", city: "Rosarito", name: "Delegación Centro Rosarito", area: "Zona Centro, Rosarito", address: "Blvd. Benito Juárez", lat: 32.341399, lng: -117.056338 },
+  ],
+  // Cruz Roja: sede y bases con ubicación en OpenStreetMap (revisadas el 16 de noviembre de 2026).
+  // La ambulancia se pide al 911 (es gratis). La Cruz Roja Tijuana también tiene bases en
+  // Fundadores, entrada a Playas, Santa Fe, Pacífico, Baja Maq-El Águila, El Dorado,
+  // Ojo de Agua y Natura (Zeta, abril de 2026), sin ubicación publicada.
+  redCrossUrl: "https://zetatijuana.com/2026/04/cruz-roja-tijuana-inaugura-base-de-ambulancias-en-baja-maq/",
+  redCrossBases: "Fundadores, la entrada a Playas, Santa Fe, Pacífico, Baja Maq-El Águila, El Dorado, Ojo de Agua y Natura",
+  redCrossStations: [
+    // Línea adicional de emergencias publicada por la Cruz Roja Tijuana (N+, enero de 2024)
+    { id: "cruz-roja-tijuana", name: "Cruz Roja Tijuana, hospital y urgencias", area: "La Mesa, 2a. Etapa del Río", address: "Calle Laguna Salada y Blvd. Insurgentes", phones: ["911", "664 607 6728"], lat: 32.506721, lng: -116.96399 },
+    { id: "cruz-roja-centro", name: "Cruz Roja, Base Centro", area: "Col. Marrón, Zona Centro", address: "Calle Plutarco Elías Calles" , lat: 32.525078, lng: -117.028253 },
+    { id: "cruz-roja-otay", name: "Cruz Roja, Base Otay", area: "Otay Constituyentes", address: "Calle Las Fuentes y Privada Florencia", lat: 32.529267, lng: -116.953084 },
+    { id: "cruz-roja-florido", name: "Cruz Roja, Base El Florido", area: "Hacienda Casa Grande, El Florido", address: "Junto a la Estación 3 de Bomberos", lat: 32.448104, lng: -116.884895 },
+    // Rosarito: urgencias 24 horas desde marzo de 2026 (El Imparcial)
+    { id: "cruz-roja-rosarito", city: "Rosarito", name: "Cruz Roja Rosarito, urgencias 24 horas", area: "Zona Centro, Rosarito", address: "Calle René Ortiz Campoy 100", lat: 32.341813, lng: -117.056189 },
   ],
   notices: [
     {
@@ -262,6 +306,249 @@ export const emergency = {
     "https://gemelodigital.implantijuana.gob.mx/atlas-de-riesgo-tijuana-2024",
   riskAtlasPdf: "https://proteccioncivil.tijuana.gob.mx/pdf/amrt/AMRT2024.pdf",
 };
+
+// Quién te ayuda y en qué (/informacion): qué hace cada dependencia, cuándo
+// llamarle en temporada de lluvias y a quién le toca lo que ella no atiende.
+// Teléfonos: los mismos de emergency.phones; CFE y CESPT, de sus líneas de reporte.
+// Funciones: sitios oficiales de cada dependencia (revisados el 15 de noviembre de 2026)
+// y notas de El Imparcial y Zeta sobre su trabajo en deslizamientos y fugas.
+export const agencies = [
+  {
+    id: "911",
+    name: "Emergencias 911",
+    icon: "phone",
+    theme: "911",
+    phones: ["911"],
+    what: "Una sola llamada para policía, ambulancia y bomberos. Quien contesta te pregunta qué pasa y manda a la unidad que se necesita",
+    callWhen: [
+      "Alguien está herido, atrapado o en peligro",
+      "El agua se lleva un carro o a una persona",
+      "Hay fuego, olor fuerte a gas o un cable con chispas",
+      "Ves un delito en este momento",
+    ],
+    notFor: "No es para preguntar por el clima ni para reportar baches o fugas que no ponen a nadie en peligro",
+  },
+  {
+    id: "proteccion-civil",
+    name: "Protección Civil Tijuana",
+    icon: "shield",
+    theme: "civil",
+    phones: ["664 683 9112", "664 683 9131"],
+    what: "Revisa zonas y casas en riesgo, vigila los deslizamientos de tierra, abre los refugios temporales y avisa cuando viene una tormenta",
+    callWhen: [
+      "Aparecen grietas en paredes, piso o en el cerro junto a tu casa",
+      "La tierra o un talud se está moviendo o se cae de a poco",
+      "Quieres saber si tu casa está en zona de riesgo",
+      "Necesitas saber qué refugio está abierto",
+    ],
+    notFor: "Si el cerro ya se vino abajo o hay personas atrapadas, llama al 911",
+    detail: "Después de revisar, marca las casas con un engomado rojo (riesgo alto, hay que salir) o amarillo (riesgo moderado)",
+    source: "https://proteccioncivil.tijuana.gob.mx/",
+  },
+  {
+    id: "bomberos",
+    name: "Bomberos Tijuana",
+    icon: "flame",
+    theme: "fire",
+    phones: ["664 688 5705"],
+    what: "Apagan incendios y rescatan personas: de un arroyo, de un carro atrapado en el agua, de una casa derrumbada. También atienden fugas de gas y materiales peligrosos",
+    callWhen: [
+      "Hay fuego o humo, aunque sea poco",
+      "Huele a gas en tu casa o en la calle",
+      "Alguien quedó atrapado por el agua o por un derrumbe",
+      "Se cayó un árbol sobre una casa o un carro",
+    ],
+    notFor: "En una emergencia marca al 911: llega igual a bomberos y te atienden más rápido. Su número directo es para dudas y trámites",
+    detail: "Tienen 18 estaciones en la ciudad. También hacen inspecciones de seguridad y la investigación de incendios es gratuita",
+    source: "https://bomberos.tijuana.gob.mx/",
+  },
+  {
+    id: "policia",
+    name: "Policía municipal",
+    icon: "shield",
+    theme: "police",
+    phones: ["664 688 5541"],
+    what: "Cuida la seguridad en las colonias, atiende choques y accidentes de tránsito, y cierra calles cuando un paso se vuelve peligroso",
+    callWhen: [
+      "Un choque o un carro varado bloquea la calle",
+      "Una calle o un vado se inundó y hay que cerrarlo",
+      "Hay saqueos o robos durante una emergencia",
+    ],
+    notFor: "El número es de la oficina central. Si pasa algo ahora mismo, llama al 911. Las casetas pueden estar sin personal",
+    detail: "Tiene 12 sedes en la ciudad. Puedes ver la más cercana en «Ayuda cerca de ti», en el inicio",
+    source: "https://policia.tijuana.gob.mx/contacto.aspx",
+  },
+  {
+    id: "cruz-roja",
+    name: "Cruz Roja Tijuana",
+    icon: "medical",
+    theme: "redcross",
+    phones: ["911"],
+    what: "Lleva ambulancias y da los primeros auxilios camino al hospital. También da cursos de primeros auxilios para la comunidad",
+    callWhen: [
+      "Alguien se desmayó, no respira bien o sangra mucho",
+      "Hay heridos por un choque, una caída o un derrumbe",
+      "Alguien estuvo mucho tiempo en agua fría y tiembla sin parar",
+    ],
+    notFor: "Para pedir una ambulancia marca al 911. Ahí mandan a Cruz Roja o a la unidad más cercana",
+  },
+  {
+    id: "denuncia",
+    name: "Denuncia anónima 089",
+    icon: "eyeOff",
+    theme: "secret",
+    phones: ["089"],
+    what: "Recibe denuncias de delitos sin pedirte tu nombre. Lo que reportas se pasa a la autoridad que corresponde",
+    callWhen: [
+      "Sabes de un delito pero no quieres dar tu nombre",
+      "Ves que roban cables, tapas de alcantarilla o rejillas",
+    ],
+    notFor: "Si el delito está pasando ahora y alguien corre peligro, llama al 911",
+  },
+  {
+    id: "cfe",
+    name: "CFE, luz",
+    icon: "flashlight",
+    theme: "cfe",
+    phones: ["071"],
+    what: "Repara fallas de electricidad: postes caídos, cables sueltos y colonias sin luz",
+    callWhen: [
+      "Se cayó un poste o un cable a la calle",
+      "Se fue la luz en tu calle o colonia",
+      "Un transformador echa chispas o humo",
+    ],
+    notFor: "Nunca toques un cable caído ni el agua que lo rodea. Si echa chispas cerca de personas, llama también al 911",
+  },
+  {
+    id: "cespt",
+    name: "CESPT, agua y drenaje",
+    icon: "drop",
+    theme: "water",
+    phones: ["073"],
+    what: "Repara fugas de agua y destapa el drenaje. Al reportar te dan un número de folio para dar seguimiento",
+    callWhen: [
+      "Hay una fuga de agua en la calle o en tu toma",
+      "El drenaje se desborda o sale agua negra por la coladera",
+      "Una alcantarilla de drenaje quedó sin tapa",
+    ],
+    notFor: "Guarda el folio que te den. También reciben reportes por WhatsApp al 664 370 1531",
+  },
+];
+
+// Buen uso del 911 (/informacion). Cifras del C5 de Baja California en Tijuana
+// (Zeta, 12 de abril de 2025) y del C5 estatal (El Imparcial, 21 de noviembre de 2024).
+// Gratuidad sin saldo: Carta de derechos de usuarios de telecomunicaciones (IFT/gob.mx).
+// No hay un artículo del Código Penal de BC sobre llamadas falsas; por eso no se cita
+// una pena exacta, solo que se investigan.
+export const call911 = {
+  stats: [
+    { value: "5,700", label: "llamadas al día recibe el 911 en Tijuana" },
+    { value: "3 de 10", label: "son emergencias de verdad" },
+    { value: "57 %", label: "son llamadas mudas: marcan y no dicen nada" },
+  ],
+  statsSource: "https://zetatijuana.com/2025/04/911-recibe-mas-de-5-mil-llamadas-al-dia-solo-el-30-corresponde-a-una-emergencia-real/",
+  facts: [
+    { icon: "wallet", title: "Es gratis", text: "Funciona sin saldo, desde cualquier celular, teléfono de casa o teléfono público" },
+    { icon: "clock", title: "Las 24 horas", text: "Contestan todos los días del año, también en días festivos y de noche" },
+    { icon: "people", title: "Una sola llamada", text: "Desde ahí mandan policía, ambulancia, bomberos o Protección Civil, según lo que pase" },
+    { icon: "pin", title: "Queda registrada", text: "Se guarda tu número y la ubicación aproximada de tu teléfono" },
+  ],
+  steps: [
+    { title: "Ponte a salvo primero", text: "Si hay agua, fuego o un cable caído, aléjate antes de marcar. Llama desde un lugar seguro" },
+    { title: "Di qué pasa", text: "En una frase: «Un carro quedó atrapado en el arroyo y hay dos personas adentro»" },
+    { title: "Di dónde estás", text: "Colonia, calle y número, entre qué calles y algo que se vea: una tienda, una escuela, una iglesia" },
+    { title: "Contesta lo que te pregunten", text: "Cuántas personas son, si hay heridos, si respiran, si hay fuego o armas. Habla despacio" },
+    { title: "No cuelgues", text: "Espera a que la operadora termine. Te puede decir qué hacer mientras llega la ayuda" },
+    { title: "Deja el teléfono libre", text: "Después de colgar no lo uses para otras cosas: te pueden regresar la llamada" },
+  ],
+  dont: [
+    "Hacer bromas o reportes falsos: se investigan y le quitan la línea a alguien que sí la necesita",
+    "Marcar y quedarte callado. Si marcaste por error, no cuelgues: di que fue un error",
+    "Preguntar por el clima, si hay clases o cuánto va a llover",
+    "Reportar baches, fugas o basura que no ponen a nadie en peligro: tienen su propio número",
+    "Grabar para subir a redes antes de pedir ayuda: primero llama",
+  ],
+  kids: [
+    "Que se aprendan su dirección y la digan completa: colonia, calle y número",
+    "Que sepan que el 911 es gratis y se puede marcar aunque el teléfono no tenga saldo",
+    "Practiquen en casa con un teléfono apagado lo que dirían",
+    "Escribe la dirección y los teléfonos de la familia en un papel junto al teléfono y en la mochila",
+  ],
+  silent: {
+    title: "Si no puedes hablar",
+    text: "La app 911 Móvil BC, de la Secretaría de Seguridad Ciudadana del estado, tiene un chat con la operadora que manda tu ubicación. Sirve si no puedes hablar o no oyes bien. Descárgala antes de necesitarla",
+    url: "https://apps.apple.com/mx/app/911movilbc/id742612886",
+  },
+};
+
+// Otros números de ayuda, además del 911 y de las dependencias de arriba.
+// 088 y 089: Uno TV con datos del SESNSP. Línea de la Vida: CONASAMA, Secretaría de Salud.
+// Línea de las Mujeres 079 opción 1: opera desde el 1 de mayo de 2025.
+export const helpLines = [
+  {
+    id: "089",
+    name: "Denuncia anónima",
+    number: "089",
+    icon: "eyeOff",
+    theme: "secret",
+    what: "Para denunciar sin dar tu nombre, aunque no esté pasando en ese momento. También es la línea nacional contra la extorsión",
+  },
+  {
+    id: "088",
+    name: "Guardia Nacional",
+    number: "088",
+    icon: "car",
+    theme: "police",
+    what: "Reportes y denuncias de delitos, y emergencias en carreteras y casetas de cobro. Útil si te quedas varado en la carretera a Tecate o a Ensenada",
+  },
+  {
+    id: "vida",
+    name: "Línea de la Vida",
+    number: "800 911 2000",
+    icon: "heart",
+    theme: "redcross",
+    what: "Apoyo emocional gratis, las 24 horas: crisis, ansiedad, tristeza que no se va, ideas de hacerte daño o problemas con alcohol y drogas",
+  },
+  {
+    id: "mujeres",
+    name: "Línea de las Mujeres",
+    number: "079",
+    note: "y luego la opción 1",
+    icon: "people",
+    theme: "911",
+    what: "Orientación legal y apoyo para mujeres que viven violencia. Si estás en peligro ahora, te pasan al 911",
+  },
+  {
+    id: "cfe",
+    name: "CFE, luz",
+    number: "071",
+    icon: "flashlight",
+    theme: "cfe",
+    what: "Postes o cables caídos, transformadores con chispas y colonias sin luz",
+  },
+  {
+    id: "cespt",
+    name: "CESPT, agua y drenaje",
+    number: "073",
+    icon: "drop",
+    theme: "water",
+    what: "Fugas de agua, drenaje desbordado y alcantarillas sin tapa. Te dan un folio",
+  },
+];
+
+// ¿A quién le llamo? Situaciones de temporada de lluvias y el número que toca.
+export const whoToCall = [
+  { situation: "El agua se lleva un carro o a una persona", number: "911", who: "Emergencias" },
+  { situation: "Alguien está herido, no respira o se desmayó", number: "911", who: "Emergencias" },
+  { situation: "Huele a gas o hay fuego", number: "911", who: "Emergencias" },
+  { situation: "Se cayó un cable y echa chispas cerca de gente", number: "911", who: "Emergencias" },
+  { situation: "Se fue la luz o hay un poste caído sin chispas", number: "071", who: "CFE" },
+  { situation: "Aparecen grietas en tu casa o en el cerro", number: "664 683 9112", who: "Protección Civil" },
+  { situation: "La coladera se desborda o hay una fuga", number: "073", who: "CESPT" },
+  { situation: "Te quieren extorsionar por teléfono", number: "089", who: "Denuncia anónima" },
+  { situation: "Te quedaste varado en la carretera", number: "088", who: "Guardia Nacional" },
+  { situation: "Sientes que ya no puedes más", number: "800 911 2000", who: "Línea de la Vida" },
+];
 
 // Juegos: cada tarjeta abre el juego, hecho por el equipo o por otros equipos
 export const games = [
@@ -369,6 +656,58 @@ export const games = [
   },
 ];
 
+// Equipo (/equipo): quién hizo la página y cada juego.
+// El equipo de desarrollo hace toda la página y Misión Tijuana.
+export const developers = [
+  "Jason Alejandro Hamed Valdez",
+  "Fernando Onit Sibaja Gomez",
+  "Kevin Osmar Valdez Meza",
+];
+export const designSupport = [
+  "Brandon Jahir Hernandez Vazquez",
+  "Ulises Joel Machado Meraz",
+  "Diego Sebastian Peralta Martinez",
+  "Luz Angelica Perez Olvera",
+];
+// Creadores de cada juego, con el mismo id que en games
+export const gameCredits = {
+  "mision-tijuana": developers,
+  "alerta-911": [
+    "Carlos Daniel Quiñonez Méndez",
+    "Rafael Borraz Contreras",
+    "Yessica Elena Guerrero Ramirez",
+    "Lizzette Ramírez Fernández",
+    "Rebeca Rios Zuñiga",
+    "Melissa Díaz López",
+    "Eduardo Isaías Mérida Rodríguez",
+    "Mozart Reyes Manzano",
+  ],
+  "novela-visual": [
+    "Jennyfer Adanelli Bello Martínez",
+    "Antonella Hazz Vargas",
+  ],
+  "cinco-segundos": [
+    "Sarai Salazar Zarate",
+    "Yuliana Medina Roman",
+    "Michel Rosas Gomez",
+    "Jose Sebastian Galvan Perez",
+    "Victor Manuel Flores Ordaz",
+  ],
+  "cien-estudiantes": [
+    "Adolfo Manuel Ordóñez Sosa",
+    "Derek Isamu Guillén Bacho",
+    "Bryan René Rodríguez Mendiola",
+    "Jonathan Daniel Cerón Cornejo",
+    "José Gustavo Cristerna Gomez",
+  ],
+  mochila: [
+    "Gael Alejandro González Martin del Campo",
+    "Christian David Delapena Jim",
+    "Erick André Castillo Pastén",
+    "Hugo Giovanni Chaparro Herrera",
+  ],
+};
+
 // Consejos para antes, durante y después de la lluvia
 export const advice = [
   {
@@ -397,7 +736,7 @@ export const advice = [
   },
 ];
 
-// Información: los tres temas se abren en una ventana (LessonModal.vue),
+// Información: los temas se abren en una ventana (LessonModal.vue),
 // desde Información y desde "Prepárate antes de que llueva" en el inicio.
 export const lessons = [
   {
@@ -450,6 +789,105 @@ export const lessons = [
     image: "/assets/images/game-backpack.webp",
     alt: "Mochila ilustrada con artículos para una emergencia",
   },
+  {
+    id: "salud",
+    icon: "medical",
+    tone: "blue",
+    title: "Botiquín y salud",
+    short: "Qué lleva un botiquín y cómo cuidarte en la lluvia",
+    intro: "Con lo básico a la mano puedes atender una herida mientras llega la ayuda",
+    body: "Debe haber un botiquín en cada casa y en cada lugar donde se junta gente. Arma el tuyo con material de curación, no con medicinas: esas van aparte, con su receta. Y después de una inundación, cuida el agua que toman y no se metan al agua de la calle",
+    points: [
+      "Material para curar, limpiar y protegerte",
+      "Medicinas aparte, con receta y nombre",
+      "Agua segura y alerta a fiebre después de la lluvia",
+    ],
+    image: "/assets/images/botiquin.svg",
+    alt: "Ilustración de un botiquín abierto con gasas, vendas, tijeras y un termómetro",
+  },
+];
+
+// Botiquín para casa: material básico del Botiquín de Primera Respuesta del
+// STCONAPRA (Secretaría de Salud), adaptado al hogar. Fuente en sources.firstAid.
+export const firstAidGroups = [
+  {
+    title: "Para curar",
+    items: [
+      { id: "fa-gasas", name: "Gasas de 5 × 5 cm y compresas de 10 × 10 cm", detail: "Para cubrir heridas y hacer presión si sangran" },
+      { id: "fa-vendas", name: "Vendas elásticas de 5 y 10 cm", detail: "Y una venda triangular para hacer un cabestrillo" },
+      { id: "fa-tela", name: "Tela adhesiva y curitas", detail: "Para fijar las gasas y cubrir cortadas chicas" },
+      { id: "fa-algodon", name: "Torundas de algodón", detail: "Para limpiar alrededor de la herida, no dentro" },
+    ],
+  },
+  {
+    title: "Para limpiar",
+    items: [
+      { id: "fa-jabon", name: "Jabón neutro líquido", detail: "Lo primero para lavar una herida, con agua limpia" },
+      { id: "fa-agua", name: "Agua hervida o estéril", detail: "En una botella cerrada y con etiqueta" },
+      { id: "fa-antiseptico", name: "Antiséptico (benzal o yodo)", detail: "En frascos de plástico, cada uno con su nombre" },
+      { id: "fa-vaselina", name: "Vaselina", detail: "Para rozaduras y piel reseca" },
+    ],
+  },
+  {
+    title: "Herramientas y protección",
+    items: [
+      { id: "fa-tijeras", name: "Tijeras de punta redonda y pinzas", detail: "Limpias y sin óxido" },
+      { id: "fa-termometro", name: "Termómetro", detail: "Que funcione: revisa la pila si es digital" },
+      { id: "fa-guantes", name: "Guantes desechables y cubrebocas", detail: "Para protegerte tú y a quien ayudas" },
+      { id: "fa-extra", name: "Linterna, lápiz y papel", detail: "Para ver de noche y anotar qué pasó y a qué hora" },
+    ],
+  },
+];
+
+// Cómo guardar el botiquín y las medicinas (STCONAPRA)
+export const firstAidRules = [
+  { icon: "medical", title: "Las medicinas van aparte", text: "En un pastillero con la receta y el nombre de quien la toma. Si alguien en casa usa inhalador o insulina, que haya uno en la casa y otro en la mochila" },
+  { icon: "drop", title: "Fresco, seco y cerrado", text: "Sin humedad y sin sol. En temporada de lluvias, mételo en una bolsa que cierre bien" },
+  { icon: "eye", title: "A la vista, sin candado", text: "Con una cruz roja en la tapa, fuera del alcance de los niños y con la lista de lo que tiene adentro" },
+  { icon: "clock", title: "Revísalo cada seis meses", text: "Repón lo que usaste. Las medicinas caducadas no van a la basura ni al drenaje: llévalas al contenedor de una farmacia o clínica" },
+];
+
+// Salud durante y después de la lluvia. Agua: material del Estado de México
+// (CEVECE); otras dependencias recomiendan hervir hasta 5 minutos.
+export const rainHealth = [
+  {
+    icon: "drop",
+    title: "Agua segura para tomar",
+    text: "Si el agua de la llave sale turbia o hubo inundación, hiérvela al menos 3 minutos desde que suelta el hervor. Si no puedes hervirla, ponle 2 gotas de cloro por litro y espera 30 minutos antes de tomarla",
+  },
+  {
+    icon: "wave",
+    title: "No te metas al agua de la calle",
+    text: "Puede traer aguas negras y orina de ratas. Si tuviste que cruzarla, lávate con agua y jabón en cuanto puedas y cúbrete las heridas",
+  },
+  {
+    icon: "medical",
+    title: "Fiebre después de la inundación",
+    text: "Si días después de estar en agua de inundación te da fiebre, dolor de cabeza o de músculos, ve al médico y dile que estuviste en esa agua. Puede ser leptospirosis y se trata",
+  },
+  {
+    icon: "heart",
+    title: "Diarrea: que no se seque el cuerpo",
+    text: "Toma Vida Suero Oral: un sobre en un litro de agua hervida o clorada. Si se ve turbio o con grumos, tíralo y prepara otro",
+  },
+  {
+    icon: "blanket",
+    title: "Mojado y con frío",
+    text: "Quita la ropa mojada, seca el cuerpo y cúbrelo con una cobija. Si la persona está despierta, dale algo tibio de tomar",
+  },
+  {
+    icon: "hygiene",
+    title: "Una cortada o un raspón",
+    text: "Lava con agua limpia y jabón, cubre con gasa y fíjala con tela adhesiva. Si sangra, presiona encima con una gasa sin soltar",
+  },
+];
+// Cuándo no esperar: llamar al 911
+export const healthAlarms = [
+  "Le cuesta respirar o tiene los labios morados",
+  "Sangra mucho y no para aunque presiones",
+  "Se desmayó, convulsiona o está confundido",
+  "Un bebé con diarrea que casi no orina o está muy decaído",
+  "Alguien tragó agua de un arroyo o estuvo a punto de ahogarse",
 ];
 
 // Qué significa El Niño para Tijuana (comunicado municipal del 2 nov 2026)

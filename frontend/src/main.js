@@ -14,6 +14,8 @@ const Info = () => import("./views/Info.vue");
 const Tips = () => import("./views/Tips.vue");
 const Styles = () => import("./views/Styles.vue");
 const Games = () => import("./views/Games.vue");
+const Team = () => import("./views/Team.vue");
+const Migrants = () => import("./views/Migrants.vue");
 import "./style.css";
 const router = createRouter({
   history: createWebHashHistory(),
@@ -28,6 +30,10 @@ const router = createRouter({
     { path: "/estilos", component: Styles, meta: { title: "Estilos" } },
     { path: "/identidad", redirect: "/estilos" },
     { path: "/juegos", component: Games, meta: { title: "Juegos" } },
+    { path: "/equipo", component: Team, meta: { title: "Equipo" } },
+    { path: "/nosotros", redirect: "/equipo" },
+    { path: "/migrantes", component: Migrants, meta: { title: "Para todas las familias" } },
+    { path: "/kreyol", redirect: "/migrantes?lang=ht" },
     { path: "/:pathMatch(.*)*", redirect: "/" },
   ],
   // Al cargar o recargar, la página empieza hasta arriba (en el propósito).

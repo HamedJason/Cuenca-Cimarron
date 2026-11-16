@@ -4,15 +4,17 @@ import Icon from "../components/Icon.vue";
 import MascotGuide from "../components/MascotGuide.vue";
 import { icons, iconSvg } from "../icons";
 
+// Paleta guinda y dorado, de la Guía de Identidad Gráfica del Gobierno de México 2024-2030
 const brandColors = [
-  { name: "Verde UABC", hex: "#00723F", use: "Botones, menú y bloques de énfasis", dark: true },
-  { name: "Ocre UABC", hex: "#DD971A", use: "Avisos, números de paso y detalles", dark: false },
+  { name: "Guinda", hex: "#9B2247", use: "Botones, menú y bloques de énfasis (Pantone 7420 C)", dark: true },
+  { name: "Guinda oscuro", hex: "#611232", use: "Portadas, títulos y cantos de tarjeta (Pantone 7421 C)", dark: true },
+  { name: "Dorado", hex: "#C49A3C", use: "Avisos, números de paso y detalles (tono claro del 1255 C)", dark: false },
 ];
 const supportColors = [
-  { name: "Verde profundo", hex: "#003D24", use: "Títulos y texto sobre ocre", dark: true },
-  { name: "Ocre texto", hex: "#8A5A00", use: "Texto chico en tono ocre", dark: true },
-  { name: "Verde claro", hex: "#E6F4EC", use: "Fondos de tarjetas", dark: false },
-  { name: "Ocre claro", hex: "#FFF1D6", use: "Fondos de avisos", dark: false },
+  { name: "Dorado texto", hex: "#7D5E1D", use: "Texto chico en tono dorado", dark: true },
+  { name: "Crema", hex: "#FBF6EA", use: "Fondo de página", dark: false },
+  { name: "Guinda claro", hex: "#F3E4E9", use: "Fondos de tarjetas", dark: false },
+  { name: "Dorado claro", hex: "#F3E8C8", use: "Fondos de avisos", dark: false },
 ];
 const cardColors = [
   { name: "Protección Civil", bg: "#EAF2FF", ink: "#0B4FA8" },
@@ -26,12 +28,14 @@ const writing = [
   ["Sin punto final", "En títulos, botones y textos de una oración"],
   ["Sin eslóganes", "Nada de frases que suenan bonito y no dicen nada"],
 ];
-const tokens = `--uabc-green: #00723f;
---uabc-gold: #dd971a;
---green-deep: #003d24;
---gold-text: #8a5a00;
---green-tint: #e6f4ec;
---gold-tint: #fff1d6;
+const tokens = `--uabc-green: #9b2247;
+--band: #611232;
+--uabc-gold: #c49a3c;
+--green-deep: #611232;
+--gold-text: #7d5e1d;
+--paper: #fbf6ea;
+--green-tint: #f3e4e9;
+--gold-tint: #f3e8c8;
 --radius-card: 20px;
 --radius-block: 24px;
 --radius-button: 14px;`;

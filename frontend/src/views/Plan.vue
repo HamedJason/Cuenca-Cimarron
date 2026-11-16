@@ -33,15 +33,15 @@ const print = () => window.print();
       >
         <ellipse class="fam-ground" cx="160" cy="150" rx="152" ry="9" />
         <g class="fam-adult">
-          <rect x="48" y="112" width="10" height="36" rx="4" fill="#003d24" />
-          <rect x="62" y="112" width="10" height="36" rx="4" fill="#003d24" />
+          <rect x="48" y="112" width="10" height="36" rx="4" fill="#611232" />
+          <rect x="62" y="112" width="10" height="36" rx="4" fill="#611232" />
           <rect x="44" y="56" width="32" height="62" rx="14" fill="#0b4fa8" />
           <circle cx="60" cy="40" r="15" fill="#8d5524" />
           <path d="M45 38a15 15 0 0 1 30 0c-6-6-24-6-30 0Z" fill="#2b1d14" />
         </g>
         <g class="fam-adult">
-          <rect x="98" y="110" width="10" height="38" rx="4" fill="#003d24" />
-          <rect x="112" y="110" width="10" height="38" rx="4" fill="#003d24" />
+          <rect x="98" y="110" width="10" height="38" rx="4" fill="#611232" />
+          <rect x="112" y="110" width="10" height="38" rx="4" fill="#611232" />
           <rect x="94" y="52" width="32" height="64" rx="14" fill="#d62828" />
           <rect
             class="fam-wave"
@@ -56,15 +56,15 @@ const print = () => window.print();
           <path d="M95 36c0-12 30-16 30 2-4-8-22-10-30-2Z" fill="#4a2c17" />
         </g>
         <g class="fam-kid kid-a">
-          <rect x="152" y="122" width="8" height="26" rx="4" fill="#003d24" />
-          <rect x="163" y="122" width="8" height="26" rx="4" fill="#003d24" />
-          <rect x="148" y="86" width="27" height="40" rx="11" fill="#dd971a" />
+          <rect x="152" y="122" width="8" height="26" rx="4" fill="#611232" />
+          <rect x="163" y="122" width="8" height="26" rx="4" fill="#611232" />
+          <rect x="148" y="86" width="27" height="40" rx="11" fill="#c49a3c" />
           <circle cx="161" cy="74" r="12" fill="#c68642" />
         </g>
         <g class="fam-kid kid-b">
-          <rect x="193" y="124" width="7" height="24" rx="3.5" fill="#003d24" />
-          <rect x="203" y="124" width="7" height="24" rx="3.5" fill="#003d24" />
-          <rect x="189" y="92" width="25" height="36" rx="10" fill="#00723f" />
+          <rect x="193" y="124" width="7" height="24" rx="3.5" fill="#611232" />
+          <rect x="203" y="124" width="7" height="24" rx="3.5" fill="#611232" />
+          <rect x="189" y="92" width="25" height="36" rx="10" fill="#9b2247" />
           <circle cx="201" cy="80" r="11" fill="#f1c27d" />
           <path d="M190 78c2-10 20-10 22 0-6-4-16-4-22 0Z" fill="#2b1d14" />
         </g>
@@ -82,8 +82,8 @@ const print = () => window.print();
           <ellipse cx="254" cy="124" rx="26" ry="13" fill="#a0663a" />
           <circle cx="282" cy="108" r="12" fill="#a0663a" />
           <ellipse cx="276" cy="104" rx="5" ry="9" fill="#7a4a24" />
-          <circle cx="287" cy="106" r="2" fill="#1c2621" />
-          <circle cx="294" cy="110" r="2.5" fill="#1c2621" />
+          <circle cx="287" cy="106" r="2" fill="#2a1d20" />
+          <circle cx="294" cy="110" r="2.5" fill="#2a1d20" />
         </g>
       </svg>
     </div>

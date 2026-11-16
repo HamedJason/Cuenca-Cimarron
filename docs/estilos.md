@@ -62,45 +62,49 @@ No lleva silueta: la banda del 911, el aviso de El Niño, los números de emerge
 
 ## Colores
 
+Paleta guinda y dorado, tomada de la Guía de Identidad Gráfica del Gobierno de México 2024-2030 (V1.24, p. 17). Los nombres de las variables se quedaron como estaban (`--uabc-green`, `--uabc-gold`…) para no tocar todo el CSS; lo que cambió es su valor.
+
 | Nombre | Código | Variable | Para qué |
 | --- | --- | --- | --- |
-| Verde UABC | `#00723F` | `--uabc-green` | Botones, menú, bloques de énfasis |
-| Ocre UABC | `#DD971A` | `--uabc-gold` | Avisos, números de paso, detalles |
-| Verde profundo | `#003D24` | `--green-deep` | Títulos y texto sobre ocre |
-| Ocre texto | `#8A5A00` | `--gold-text` | Texto chico en tono ocre |
-| Verde claro | `#E6F4EC` | `--green-tint` | Fondos de tarjetas |
-| Ocre claro | `#FFF1D6` | `--gold-tint` | Fondos de avisos |
+| Guinda (Pantone 7420 C) | `#9B2247` | `--uabc-green` | Botones, menú, bloques de énfasis |
+| Guinda oscuro (Pantone 7421 C) | `#611232` | `--band`, `--title` | Portadas, títulos, contornos |
+| Dorado (tono claro del 1255 C) | `#C49A3C` | `--uabc-gold` | Avisos, números de paso, detalles |
+| Dorado texto | `#7D5E1D` | `--gold-text` | Texto chico en tono dorado |
+| Crema | `#FBF6EA` | `--paper` | Fondo de página |
+| Guinda claro | `#F3E4E9` | `--green-tint` | Fondos de tarjetas |
+| Dorado claro | `#F3E8C8` | `--gold-tint` | Fondos de avisos |
 
-El ocre UABC no sirve para texto sobre blanco: no tiene contraste suficiente. Para eso está el ocre texto.
+El dorado de la guía (`#A57F2C`) se aclaró a `#C49A3C` para que el guinda oscuro se lea encima (4.9 : 1). El dorado no sirve para texto sobre blanco; para eso está el dorado texto (5.6 : 1 sobre crema).
 
 Tarjetas de servicios (fondo / texto): Protección Civil `#EAF2FF` / `#0B4FA8`, Bomberos `#FFF1E6` / `#A83200`, Denuncia anónima `#F2EDFF` / `#5B2CA8`, Ambulancia `#FFEBEE` / `#B3121F`.
 
 ## Modo oscuro
 
-Sin negro: grises carbón de base, y el verde y el ocre desaturados. Sigue el tema del teléfono o la computadora, y cambia si el sistema cambia. El botón de **media luna** del encabezado lo activa y desactiva a mano (la luna se rellena de ocre cuando está activo); esa elección se recuerda en ese navegador, y si coincide con la del sistema se borra para volver a seguirlo (`composables/useTheme.js`). `index.html` pone el tema antes de pintar para que no parpadee. Los juegos propios (Misión Tijuana y los demás) conservan su diseño.
+Sin negro: grises cálidos con un poco de guinda de base, y el guinda y el dorado desaturados. Sigue el tema del teléfono o la computadora, y cambia si el sistema cambia. El botón de **media luna** del encabezado lo activa y desactiva a mano (la luna se rellena de dorado cuando está activo); esa elección se recuerda en ese navegador, y si coincide con la del sistema se borra para volver a seguirlo (`composables/useTheme.js`). `index.html` pone el tema antes de pintar para que no parpadee. Los juegos propios (Misión Tijuana y los demás) conservan su diseño.
 
 | Uso | Claro | Oscuro | Contraste en oscuro |
 | --- | --- | --- | --- |
-| Fondo de página `--paper` | `#FFFFFF` | `#25292B` gris carbón | |
-| Superficie `--surface` | `#FFFFFF` | `#2F3437` | |
-| Tarjeta tenue `--green-tint` | `#E6F4EC` | `#393F42` | |
-| Bloque cálido `--gold-tint` | `#FFF1D6` | `#3A332E` gris cálido | |
-| Títulos `--title` | `#003D24` | `#FFF1D6` crema | 13.1 : 1 |
-| Texto `--ink` | `#1C2621` | `#EDEEEB` | 12.6 : 1 |
-| Texto secundario `--muted` | `#4A5650` | `#B5BBB7` | 7.5 : 1 |
-| Contorno cartoon `--edge` | `#003D24` | `#8E9893` gris medio | 4.9 : 1 |
-| Sombra sólida `--shadow` | `#003D24` | `#16191B` gris muy oscuro | |
-| Relleno profundo `--deep-fill` | `#003D24` | `#2F4A3E` salvia oscuro | |
-| Enlaces `--link` | `#00723F` | `#A4C3B2` salvia claro | 7.7 : 1 |
-| Verde UABC `--uabc-green` | `#00723F` | `#3A6F5A` desaturado | blanco encima 5.8 : 1 |
-| Ocre UABC `--uabc-gold` | `#DD971A` | `#C9A45E` desaturado | como texto 6.3 : 1 |
+| Fondo de página `--paper` | `#FBF6EA` | `#1E1A1B` crema / guinda casi negro |  |
+| Superficie `--surface` | `#FFFFFF` | `#2A2224` |  |
+| Tarjeta tenue `--green-tint` | `#F3E4E9` | `#3A2A30` |  |
+| Bloque cálido `--gold-tint` | `#F3E8C8` | `#3A3226` |  |
+| Títulos `--title` | `#611232` | `#E6D194` arena | 11.4 : 1 |
+| Texto `--ink` | `#2A1D20` | `#F1E9E4` | 14.4 : 1 |
+| Texto secundario `--muted` | `#5F5155` | `#C2B4B0` | 8.6 : 1 |
+| Contorno cartoon `--edge` | `#611232` | `#9C8C8F` | 5.4 : 1 |
+| Sombra sólida `--shadow` | `#611232` | `#0F0B0C` |  |
+| Relleno profundo `--deep-fill` | `#611232` | `#4A2232` |  |
+| Enlaces `--link` | `#9B2247` | `#E8B3C3` rosa claro | 9.6 : 1 |
+| Banda de portada `--band` | `#611232` | `#3F1424` | blanco encima 15.7 : 1 |
+| Guinda `--uabc-green` | `#9B2247` | `#8A3553` | blanco encima 7.7 : 1 |
+| Dorado `--uabc-gold` | `#C49A3C` | `#D4B46A` | texto oscuro encima 8.6 : 1 |
 
 Reglas:
 
-- El verde profundo tenía dos papeles; ahora son variables separadas: `--title` (texto), `--edge` (contornos), `--shadow` (sombras) y `--deep-fill` (fondos). En modo claro las cuatro valen `#003D24`. Un estilo nuevo usa la que corresponde a su papel, nunca `--green-deep` directo
+- El guinda oscuro tiene varios papeles en variables separadas: `--title` (texto), `--edge` (contornos), `--shadow` (sombras) y `--deep-fill` (fondos). En modo claro las cuatro valen `#611232`. Un estilo nuevo usa la que corresponde a su papel, nunca `--green-deep` directo
 - **Los iconos no cambian**: chips del menú, de consejos, de dependencias, de juegos, el fueguito de bomberos, el teléfono del 911 y las ilustraciones conservan los colores del modo claro. La lista está al final de `style.css` ("Modo oscuro: ajustes de componentes"); un icono nuevo se agrega ahí
 - El botón del 911 sigue claro (crema) para que sea lo que más destaca
-- La franja ocre de El Niño conserva el texto oscuro sobre el ocre
+- La franja dorada de El Niño conserva el texto oscuro sobre el dorado. En modo oscuro todo lo que va sobre dorado lleva texto oscuro
 - Las tarjetas de servicios conservan su color (azul, naranja, morado) en versión oscura con texto claro
 - Bienvenida: fondo gris y los seis logos juntos en una franja blanca, porque sus archivos traen fondo blanco y varios necesitan fondo claro para leerse
 - Los colores base del modo oscuro están en `brand/tokens.css` (`:root[data-theme="dark"]`)
@@ -146,7 +150,7 @@ Orden de arriba hacia abajo: propósito, 911, aviso de El Niño, números, refug
 Tres columnas en computadora; en celular, una debajo de otra.
 
 - **Marca y redes:** icono, nombre, escudo UABC y "Síguenos". Instagram, Facebook, TikTok y YouTube. Una red nueva sin enlace todavía se vería con borde punteado y "próximamente"; las redes están en `socials`, dentro de `frontend/src/data.js`
-- **Equipo de diseño:** Jason Alejandro Hamed Valdez, Fernando Onit Sibaja Gomez y Kevin Osmar Valdez Meza
+- **Equipo de desarrollo:** Jason Alejandro Hamed Valdez, Fernando Onit Sibaja Gomez y Kevin Osmar Valdez Meza
 - **Contacto:** los correos del equipo, como enlaces que abren el correo
 
 ## Redes sociales
