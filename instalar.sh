@@ -44,10 +44,19 @@ if [ -n "$PUERTO_PEDIDO" ]; then
 fi
 
 docker compose -f compose.servidor.yaml pull
-docker compose -f compose.servidor.yaml up -d
+docker compose -f compose.servidor.yaml up -d --remove-orphans database backend frontend watchtower
+
+# HTTPS va aparte. Si los puertos 80 o 443 ya los usa otro programa, el sitio sigue en WEB_PORT.
+HTTPS_LISTO=1
+docker compose -f compose.servidor.yaml up -d proxy || HTTPS_LISTO=0
 
 PUERTO=$(grep '^WEB_PORT=' .env | cut -d= -f2)
 IP=$(hostname -I 2>/dev/null | awk '{print $1}')
 echo ""
 echo "Listo. El sitio queda en http://${IP:-localhost}:${PUERTO:-8090}"
 echo "Se actualiza solo cada vez que hay cambios en GitHub."
+if [ "$HTTPS_LISTO" = 1 ]; then
+  echo "También responde en los puertos 80 y 443. HTTPS se activa solo al poner el dominio en el panel de administración."
+else
+  echo "No se pudo abrir los puertos 80 y 443, así que por ahora no hay HTTPS. El resto del sitio funciona igual."
+fi

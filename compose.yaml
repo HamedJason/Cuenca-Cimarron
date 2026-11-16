@@ -23,8 +23,8 @@ services:
       DB_DATABASE: cuenca
       DB_USERNAME: cuenca
       DB_PASSWORD: ${DB_PASSWORD:?Ejecuta primero el script de inicialización}
-      CACHE_STORE: file
-      SESSION_DRIVER: file
+      CACHE_STORE: database
+      SESSION_DRIVER: database
       QUEUE_CONNECTION: sync
     ports:
       - "127.0.0.1:${API_PORT:-8091}:8000"

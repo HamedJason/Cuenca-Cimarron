@@ -1,6 +1,6 @@
 # Configuración para el servidor. Usa las imágenes que GitHub publica en cada cambio a main
 # y Watchtower las descarga y reinicia el sitio sin intervención manual.
-# Uso: docker compose -f compose.servidor.yaml up -d
+# Uso: sh instalar.sh (o docker compose -f compose.servidor.yaml up -d --remove-orphans)
 name: cuenca-cimarron
 services:
   frontend:
@@ -28,8 +28,9 @@ services:
       DB_DATABASE: cuenca
       DB_USERNAME: cuenca
       DB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD en el archivo .env}
-      CACHE_STORE: file
-      SESSION_DRIVER: file
+      DOMINIO: ${DOMINIO:-}
+      CACHE_STORE: database
+      SESSION_DRIVER: database
       QUEUE_CONNECTION: sync
     depends_on:
       database:
@@ -40,6 +41,22 @@ services:
       timeout: 5s
       retries: 12
       start_period: 20s
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    restart: unless-stopped
+  # HTTPS con certificados automáticos. Sirve el mismo sitio en los puertos 80 y 443.
+  # Si esos puertos ya están ocupados en el servidor, el sitio sigue funcionando en WEB_PORT.
+  proxy:
+    image: ghcr.io/hamedjason/cuenca-cimarron-proxy:${VERSION:-latest}
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+      - "${HTTPS_PORT:-443}:443/udp"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
     labels:
       com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
@@ -67,3 +84,5 @@ services:
     restart: unless-stopped
 volumes:
   postgres_data:
+  caddy_data:
+  caddy_config:

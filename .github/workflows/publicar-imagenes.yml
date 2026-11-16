@@ -6,6 +6,7 @@ on:
     paths:
       - "frontend/**"
       - "backend/**"
+      - "proxy/**"
       - ".github/workflows/publicar-imagenes.yml"
   workflow_dispatch:
 
@@ -44,15 +45,54 @@ jobs:
           php artisan key:generate
           php artisan test
 
+  pruebas-postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: cuenca
+          POSTGRES_USER: cuenca
+          POSTGRES_PASSWORD: prueba
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U cuenca -d cuenca"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.5"
+          extensions: pdo_pgsql, intl, zip
+          coverage: none
+      - name: Pruebas del backend con PostgreSQL 16
+        working-directory: backend
+        env:
+          DB_CONNECTION: pgsql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 5432
+          DB_DATABASE: cuenca
+          DB_USERNAME: cuenca
+          DB_PASSWORD: prueba
+        run: |
+          composer install --no-interaction --prefer-dist
+          cp .env.example .env
+          php artisan key:generate
+          php artisan migrate --force
+          php artisan test
+
   imagenes:
-    needs: pruebas
+    needs: [pruebas, pruebas-postgres]
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     strategy:
       matrix:
-        servicio: [frontend, backend]
+        servicio: [frontend, backend, proxy]
     steps:
       - uses: actions/checkout@v5
       - uses: docker/setup-buildx-action@v3
@@ -65,6 +105,8 @@ jobs:
         with:
           context: ./${{ matrix.servicio }}
           push: true
+          build-args: |
+            GIT_SHA=${{ github.sha }}
           tags: |
             ghcr.io/hamedjason/cuenca-cimarron-${{ matrix.servicio }}:latest
             ghcr.io/hamedjason/cuenca-cimarron-${{ matrix.servicio }}:${{ github.sha }}
@@ -72,3 +114,26 @@ jobs:
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
           cache-from: type=gha,scope=${{ matrix.servicio }}
           cache-to: type=gha,mode=max,scope=${{ matrix.servicio }}
+
+  # Revisa que el servidor tomó la versión nueva. Solo corre si existe la variable SITIO_URL
+  # en Settings, Secrets and variables, Actions, Variables (por ejemplo https://cuenca.ejemplo.mx).
+  revisar-servidor:
+    needs: imagenes
+    if: ${{ vars.SITIO_URL != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Esperar a que el servidor tenga el commit nuevo
+        env:
+          SITIO_URL: ${{ vars.SITIO_URL }}
+        run: |
+          for intento in $(seq 1 30); do
+            commit=$(curl -fsS --max-time 10 "$SITIO_URL/api/version" | jq -r .commit || true)
+            if [ "$commit" = "$GITHUB_SHA" ]; then
+              echo "El servidor ya corre $commit"
+              exit 0
+            fi
+            echo "Todavía corre ${commit:-nada}. Intento $intento de 30"
+            sleep 60
+          done
+          echo "El servidor no tomó la versión nueva en 30 minutos"
+          exit 1

@@ -7,10 +7,14 @@ Proyecto académico de prevención y preparación ante lluvias y El Niño en Tij
 Para el servidor no se usan los comandos de "Ejecutar el proyecto completo". Cada cambio en `main` publica imágenes nuevas en GitHub y el servidor las toma solo con Watchtower, sin `git pull` ni compilar nada. Solo se instala una vez, con un comando:
 
 ```bash
-git clone https://github.com/HamedJason/Cuenca-Cimarron.git && sh Cuenca-Cimarron/instalar.sh
+(git clone https://github.com/HamedJason/Cuenca-Cimarron.git || git -C Cuenca-Cimarron pull) && sh Cuenca-Cimarron/instalar.sh
 ```
 
+Es el mismo comando para la primera vez y para cuando cambia la configuración del servidor. Si la carpeta ya existe, git avisa que ya está y solo la actualiza, conservando las claves y los datos.
+
 El sitio queda en el puerto 8090. Para usar otro, se agrega al final, por ejemplo `sh Cuenca-Cimarron/instalar.sh 8080`. También sirve para cambiar el puerto después, volviendo a correr el script dentro de la carpeta.
+
+El sitio también responde en los puertos 80 y 443. Para HTTPS no hay que hacer nada en el servidor, basta con escribir el dominio en el panel de administración del sitio.
 
 El detalle, los ajustes opcionales y cómo regresar a una versión anterior están en `docs/servidor.md`.
 
@@ -59,7 +63,7 @@ node infra/init.mjs
 docker compose up -d --build
 ```
 
-El sitio queda en `http://localhost:8090`; la API utiliza el puerto `8091`. El archivo `.env` se genera localmente y no se debe subir al repositorio.
+El sitio queda en `http://localhost:8090` y la API utiliza el puerto `8091`. El archivo `.env` se genera localmente y no se debe subir al repositorio.
 ## Tecnologías
 
 - **Frontend:** Vue 3, Vue Router y Vite.

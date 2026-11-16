@@ -1,12 +1,15 @@
 # Instalación en el servidor
 
-Esta guía es para dejar el sitio corriendo en un servidor que se actualiza solo. Cada vez que se sube un cambio a `main`, GitHub corre las pruebas, construye las imágenes y las publica en GitHub Container Registry. En el servidor, Watchtower revisa cada 5 minutos si hay imágenes nuevas y, si las hay, las descarga y reinicia el frontend y la API. La base de datos no se toca y sus datos se conservan.
+Esta guía es para dejar el sitio corriendo en un servidor que se actualiza solo. Cada vez que se sube un cambio a `main`, GitHub corre las pruebas, construye las imágenes y las publica en GitHub Container Registry. En el servidor, Watchtower revisa cada 5 minutos si hay imágenes nuevas y, si las hay, las descarga y reinicia el frontend, la API y el proxy de HTTPS. La base de datos no se toca y sus datos se conservan.
+
+Watchtower solo cambia imágenes. Si cambia `compose.servidor.yaml` (un servicio nuevo, un puerto, una variable), hay que volver a correr el comando de instalación una vez.
 
 ## Requisitos
 
 - Linux con Docker Engine y el plugin `docker compose`
 - Acceso a internet hacia `ghcr.io` y `docker.io`
 - El puerto del sitio abierto (8090 por defecto, se puede cambiar)
+- Para HTTPS, los puertos 80 y 443 libres y abiertos hacia internet, y un dominio que apunte al servidor
 
 No hace falta git, Node ni PHP en el servidor.
 
@@ -15,8 +18,10 @@ No hace falta git, Node ni PHP en el servidor.
 La forma corta es un solo comando, que descarga el repositorio, crea el `.env` con claves nuevas y levanta todo:
 
 ```bash
-git clone https://github.com/HamedJason/Cuenca-Cimarron.git && sh Cuenca-Cimarron/instalar.sh
+(git clone https://github.com/HamedJason/Cuenca-Cimarron.git || git -C Cuenca-Cimarron pull) && sh Cuenca-Cimarron/instalar.sh
 ```
+
+Si la carpeta ya existe, el mismo comando la actualiza y vuelve a levantar todo con la configuración nueva. El `.env` y la base de datos se conservan.
 
 Por defecto usa el puerto 8090. Para otro puerto se pone como argumento, por ejemplo `sh Cuenca-Cimarron/instalar.sh 8080`.
 
@@ -39,7 +44,7 @@ Si se prefiere hacerlo a mano, estos son los mismos pasos que hace `instalar.sh`
 3. Levantar todo:
 
    ```bash
-   docker compose -f compose.servidor.yaml up -d
+   docker compose -f compose.servidor.yaml up -d --remove-orphans
    ```
 
 4. Revisar que esté arriba:
@@ -51,6 +56,18 @@ Si se prefiere hacerlo a mano, estos son los mismos pasos que hace `instalar.sh`
    El sitio queda en `http://direccion-del-servidor:8090`.
 
 Después de esto no hay que hacer nada más. Los contenedores tienen `restart: unless-stopped`, así que también vuelven a levantar si el servidor se reinicia.
+
+## HTTPS
+
+El servicio `proxy` es Caddy. Escucha en los puertos 80 y 443 y pide el certificado a Let's Encrypt por su cuenta la primera vez que alguien entra con el dominio. Solo lo pide para el dominio aprobado, que se escribe en el panel de administración del sitio (Ajustes, Dominio) o en `DOMINIO` dentro de `.env`.
+
+Para que funcione:
+
+1. El dominio debe apuntar a la IP pública del servidor.
+2. Los puertos 80 y 443 deben estar abiertos desde internet.
+3. Se escribe el dominio en el panel de administración.
+
+Si los puertos 80 o 443 ya los usa otro programa, `instalar.sh` lo avisa y el sitio sigue funcionando por HTTP en `WEB_PORT`.
 
 ## Si al descargar sale "denied" o "unauthorized"
 
@@ -72,6 +89,9 @@ Significa que las imágenes en GitHub son privadas. Hay dos caminos:
 | `WEB_PORT` | Puerto donde se publica el sitio | `8090` |
 | `WEB_BIND` | Interfaz donde escucha. `127.0.0.1` si hay un proxy como Nginx o Caddy delante | `0.0.0.0` |
 | `APP_URL` | Dirección pública del sitio | `http://localhost:8090` |
+| `DOMINIO` | Dominio para HTTPS. Se puede poner aquí o desde el panel | vacío |
+| `HTTP_PORT` | Puerto HTTP de Caddy | `80` |
+| `HTTPS_PORT` | Puerto HTTPS de Caddy | `443` |
 | `REVISAR_CADA` | Segundos entre cada revisión de Watchtower | `300` |
 | `VERSION` | Fija una versión específica en lugar de la más reciente | `latest` |
 
@@ -104,5 +124,8 @@ docker compose -f compose.servidor.yaml logs watchtower
 
 # Forzar la actualización sin esperar
 docker compose -f compose.servidor.yaml pull
-docker compose -f compose.servidor.yaml up -d
+docker compose -f compose.servidor.yaml up -d --remove-orphans
+
+# Ver qué versión corre
+curl http://localhost:8090/api/version
 ```

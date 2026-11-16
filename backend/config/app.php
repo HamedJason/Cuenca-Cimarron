@@ -54,6 +54,12 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    // Commit de la imagen que está corriendo. Lo pone el Dockerfile al construir.
+    'commit' => env('APP_COMMIT', 'local'),
+
+    // Dominio público opcional para HTTPS. También se puede poner desde el panel de administración.
+    'dominio' => env('DOMINIO'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
