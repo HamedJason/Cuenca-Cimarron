@@ -120,4 +120,14 @@ class SchoolAdminController extends Controller
 
         return response()->json(SchoolTeachersController::invite($teacher));
     }
+
+    // Si la escuela perdió su contraseña y sus códigos, la administración le genera códigos nuevos
+    // y se los da por otro medio. Los anteriores dejan de servir.
+    public function recoveryCodes(Request $request, School $school): JsonResponse
+    {
+        $codes = \App\Support\RecoveryCodes::generate($school->user);
+        Audit::log('admin', $request->user()->id, 'codigos-escuela', 'school', $school->id);
+
+        return response()->json(['recovery_codes' => $codes]);
+    }
 }

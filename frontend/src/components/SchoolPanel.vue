@@ -2,6 +2,7 @@
 import { ref, computed } from "vue";
 import Icon from "./Icon.vue";
 import SchoolForm from "./SchoolForm.vue";
+import MyRecoveryCodes from "./MyRecoveryCodes.vue";
 import { api } from "../composables/api";
 import { account, setAccount, logout, labelOf, levels, shifts, sectors } from "../composables/useAccount";
 
@@ -13,17 +14,6 @@ const statusText = {
   rejected: "Con cambios pendientes",
   suspended: "Suspendida",
 };
-const resend = ref("");
-async function resendMail() {
-  resend.value = "sending";
-  try {
-    const data = await api("/correo/reenviar", { method: "POST" });
-    resend.value = data.sent ? "sent" : "not-configured";
-  } catch (error) {
-    resend.value = error.message;
-  }
-}
-
 const editing = ref(false);
 const draft = ref(null);
 const errors = ref({});
@@ -66,20 +56,11 @@ async function save() {
         <Icon name="check" :size="20" />Listo, recibimos tu registro
       </p>
 
-      <div v-if="!account.email_verified" class="note">
-        <Icon name="mail" />
-        <div>
-          <p>Te mandamos un correo a <b>{{ account.email }}</b> para confirmar que es tuyo. Revisa también la carpeta de no deseados</p>
-          <button class="text-link" type="button" :disabled="resend === 'sending'" @click="resendMail">Mandar otro correo</button>
-          <p v-if="resend === 'sent'" class="small">Te mandamos otro correo</p>
-          <p v-else-if="resend === 'not-configured'" class="small">El correo del sitio todavía no está configurado. Igual vamos a revisar tu registro</p>
-          <p v-else-if="resend && resend !== 'sending'" class="small">{{ resend }}</p>
-        </div>
-      </div>
+      <MyRecoveryCodes />
 
       <div v-if="school.status === 'pending'" class="note is-gold">
         <Icon name="clock" />
-        <p>Estamos revisando los datos de tu escuela. Te avisamos por correo cuando esté aprobada. Mientras tanto no puedes dar de alta docentes</p>
+        <p>Estamos revisando los datos de tu escuela. Entra de vez en cuando para ver si ya está aprobada. Mientras tanto no puedes dar de alta docentes</p>
       </div>
       <div v-else-if="school.status === 'suspended'" class="note is-gold">
         <Icon name="info" />

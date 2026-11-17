@@ -111,7 +111,13 @@ Mientras `VERSION` esté fijada, Watchtower no cambia nada. Para volver a recibi
 
 Después de instalar, se entra a `http://direccion-del-servidor:8090/configurar` y se llena la clave de instalación, un nombre, un correo y una contraseña. Solo funciona mientras no exista ninguna cuenta de administración. La clave la tiene el equipo y en el repositorio solo está su huella.
 
-Desde el panel de administración (`/admin`) se aprueban escuelas, se llena el servidor de correo, se escribe el dominio para HTTPS y se descargan respaldos. Nada de eso necesita entrar al servidor.
+Desde el panel de administración (`/admin`) se aprueban escuelas, se escribe la dirección pública y se descargan respaldos. Nada de eso necesita entrar al servidor.
+
+## Contraseñas sin correo
+
+El sitio no manda correos. Cada cuenta (escuela o administración) recibe 10 códigos de recuperación al crearse, con un aviso que no deja seguir hasta descargarlos, imprimirlos o copiarlos. Si alguien olvida su contraseña, entra a "Olvidé mi contraseña" y pone su correo, un código y la contraseña nueva. Cada código sirve una vez y desde su cuenta puede generar códigos nuevos.
+
+Si una escuela pierde la contraseña y también los códigos, en el panel de administración, en el detalle de la escuela, hay un enlace para que ponga contraseña nueva y un botón para generarle códigos nuevos. Se los entregan por otro medio, por ejemplo WhatsApp. Si un docente pierde su enlace, su escuela le genera otro desde su cuenta, y a los alumnos los atiende su docente.
 
 ## Cuentas del equipo
 
@@ -120,15 +126,15 @@ En el panel, pestaña Cuentas, se invita a más personas. Hay dos tipos:
 - **Solo ver datos:** ve el panel de datos y la lista de escuelas. No puede aprobar escuelas, cambiar ajustes, descargar respaldos ni invitar a nadie.
 - **Administración completa:** puede hacer todo.
 
-A la persona le llega un correo para poner su contraseña. Si el correo todavía no está configurado, el panel muestra el enlace para mandárselo por otro medio. Siempre queda al menos una cuenta de administración.
+El panel da un enlace para mandárselo por WhatsApp. Con él pone su contraseña y recibe sus códigos de recuperación. Siempre queda al menos una cuenta de administración.
 
 ## Panel de sistema
 
 La cuenta de administración tiene, además de lo de las escuelas y el panel de datos:
 
-- **Sistema:** revisa que la base, el correo, los respaldos, la dirección pública y el catálogo estén bien, y muestra cuánto hay en la base. Tiene botones para hacer limpieza y para cerrar un ciclo escolar (archiva todos los grupos de ese ciclo).
+- **Sistema:** revisa que la base, los respaldos, la dirección pública y el catálogo estén bien, y muestra cuánto hay en la base. Tiene botones para hacer limpieza y para cerrar un ciclo escolar (archiva todos los grupos de ese ciclo).
 - **Bitácora:** quién hizo qué y cuándo (aprobar, suspender, dar de alta docentes, cambiar ajustes, descargar respaldos).
-- **Detalle de cada escuela:** sus docentes y grupos, un enlace nuevo para un docente que perdió el suyo, un enlace para que la escuela ponga contraseña nueva, cambiar su correo y suspenderla. Mientras una escuela está suspendida, sus docentes y alumnos no pueden entrar. No se borra nada y se puede reactivar.
+- **Detalle de cada escuela:** sus docentes y grupos, un enlace nuevo para un docente que perdió el suyo, un enlace para que la escuela ponga contraseña nueva, códigos de recuperación nuevos, cambiar su correo y suspenderla. Mientras una escuela está suspendida, sus docentes y alumnos no pueden entrar. No se borra nada y se puede reactivar.
 
 ## Catálogo de escuelas
 

@@ -50,7 +50,7 @@ class SystemAdminTest extends TestCase
         $this->actingAs($viewer)->postJson('/api/admin/sistema/limpieza')->assertForbidden();
         $this->actingAs($this->admin())->getJson('/api/admin/sistema')->assertOk()
             ->assertJsonPath('checks.0.key', 'database')->assertJsonPath('checks.0.ok', true)
-            ->assertJsonPath('checks.1.ok', false)
+            ->assertJsonPath('checks.1.key', 'backup')->assertJsonPath('checks.1.ok', false)
             ->assertJsonStructure(['commit', 'counts' => ['escuelas', 'alumnos'], 'school_years', 'current_school_year']);
     }
 
@@ -70,6 +70,17 @@ class SystemAdminTest extends TestCase
         Mail::assertSent(Notice::class);
         $this->actingAs($admin)->putJson("/api/admin/escuelas/{$school->school->id}/correo", ['email' => $admin->email])->assertUnprocessable();
         $this->actingAs($admin)->putJson("/api/admin/escuelas/{$school->school->id}/correo", ['email' => 'Nuevo@Escuela.mx'])->assertOk()->assertJsonPath('email', 'nuevo@escuela.mx');
+    }
+
+    public function test_admin_genera_codigos_nuevos_para_una_escuela(): void
+    {
+        [$school] = $this->setUpSchool();
+        $codes = $this->actingAs($this->admin())->postJson("/api/admin/escuelas/{$school->school->id}/codigos")->assertOk()->json('recovery_codes');
+        $this->assertCount(10, $codes);
+        $this->actingAs(User::factory()->create(['role' => 'viewer']))->postJson("/api/admin/escuelas/{$school->school->id}/codigos")->assertForbidden();
+        $this->app['auth']->forgetGuards();
+        $this->postJson('/api/salir');
+        $this->postJson('/api/contrasena/codigo', ['email' => $school->email, 'code' => $codes[0], 'password' => 'clave nueva y larga'])->assertOk();
     }
 
     public function test_suspender_corta_el_acceso_de_docentes_y_alumnos(): void

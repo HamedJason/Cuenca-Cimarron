@@ -47,6 +47,7 @@ class User extends Authenticatable
             'email' => $this->email,
             'role' => $this->role,
             'email_verified' => $this->email_verified_at !== null,
+            'recovery_codes_left' => \App\Support\RecoveryCodes::left($this),
             'school' => $this->isSchool() ? $this->school?->toPublic() : null,
         ];
     }

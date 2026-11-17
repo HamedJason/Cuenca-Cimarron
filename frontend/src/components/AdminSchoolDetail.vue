@@ -4,6 +4,7 @@ import { ref, onMounted } from "vue";
 import Icon from "./Icon.vue";
 import FormField from "./FormField.vue";
 import CopyLink from "./CopyLink.vue";
+import RecoveryCodes from "./RecoveryCodes.vue";
 import { api } from "../composables/api";
 
 const props = defineProps({ schoolId: { type: Number, required: true } });
@@ -12,6 +13,11 @@ const data = ref(null);
 const error = ref("");
 const links = ref({});
 const resetLink = ref(null);
+const newCodes = ref(null);
+async function generateCodes() {
+  if (!confirm("¿Generar códigos nuevos para esta escuela? Los anteriores dejan de servir")) return;
+  newCodes.value = (await api(`/admin/escuelas/${props.schoolId}/codigos`, { method: "POST" })).recovery_codes;
+}
 const email = ref("");
 const reason = ref("");
 const message = ref("");
@@ -98,9 +104,14 @@ async function setStatus(action) {
           </FormField>
           <button class="button secondary small-button" type="submit" :disabled="email === data.school.email">Cambiar correo</button>
         </form>
-        <button class="button secondary small-button" type="button" @click="passwordLink"><Icon name="mail" :size="18" />Enlace para nueva contraseña</button>
+        <p class="small muted-text">Si la escuela perdió su contraseña y sus códigos de recuperación:</p>
+        <div class="form-actions">
+          <button class="button secondary small-button" type="button" @click="passwordLink"><Icon name="copy" :size="18" />Enlace para nueva contraseña</button>
+          <button class="button secondary small-button" type="button" @click="generateCodes"><Icon name="shield" :size="18" />Códigos de recuperación nuevos</button>
+        </div>
+        <RecoveryCodes v-if="newCodes" :codes="newCodes" :email="data.school.email" for-other continue-label="Listo" @done="newCodes = null" />
         <div v-if="resetLink" class="link-share">
-          <p class="small">{{ resetLink.mail_sent ? "Le mandamos el correo. También puedes copiar el enlace (sirve 24 horas)" : "El correo no está configurado. Copia el enlace y mándaselo (sirve 24 horas)" }}</p>
+          <p class="small">Copia el enlace y mándaselo a la escuela. Sirve una vez y dura 24 horas</p>
           <CopyLink :link="resetLink.link" share-text="Este es el enlace para poner tu contraseña nueva de Cuenca Cimarrona:" />
         </div>
       </div>

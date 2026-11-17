@@ -42,6 +42,8 @@ Route::middleware(['web', 'throttle:cuentas'])->group(function (): void {
     Route::post('/contrasena/olvide', [AuthController::class, 'forgot']);
     Route::post('/contrasena/nueva', [AuthController::class, 'reset']);
     Route::post('/invitacion', [StaffController::class, 'accept']);
+    Route::post('/contrasena/codigo', [AuthController::class, 'resetWithCode']);
+    Route::post('/codigos-recuperacion', [AuthController::class, 'regenerateCodes'])->middleware('rol:admin|viewer|school');
 
     Route::middleware('rol:school')->group(function (): void {
         Route::post('/correo/reenviar', [AuthController::class, 'resendVerification']);
@@ -69,6 +71,7 @@ Route::middleware(['web', 'throttle:cuentas'])->group(function (): void {
         Route::post('/escuelas/{school}/suspender', [SchoolAdminController::class, 'suspend']);
         Route::post('/escuelas/{school}/reactivar', [SchoolAdminController::class, 'reactivate']);
         Route::post('/escuelas/{school}/contrasena', [SchoolAdminController::class, 'passwordLink']);
+        Route::post('/escuelas/{school}/codigos', [SchoolAdminController::class, 'recoveryCodes']);
         Route::put('/escuelas/{school}/correo', [SchoolAdminController::class, 'changeEmail']);
         Route::post('/docentes/{teacher}/enlace', [SchoolAdminController::class, 'teacherLink']);
         Route::get('/sistema', [SystemAdminController::class, 'status']);

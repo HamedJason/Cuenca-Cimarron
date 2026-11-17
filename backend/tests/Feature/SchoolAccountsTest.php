@@ -51,18 +51,22 @@ class SchoolAccountsTest extends TestCase
         $this->getJson('/api/sesion')->assertJsonPath('setup_needed', false)->assertJsonPath('user.email', 'admin@cuenca.mx');
         $data['email'] = 'otro@cuenca.mx';
         $this->postJson('/api/configurar', $data)->assertStatus(409);
+        $this->assertSame(10, \App\Support\RecoveryCodes::left(User::where('role', 'admin')->first()));
         $this->assertSame(1, User::where('role', 'admin')->count());
     }
 
-    public function test_registro_de_escuela_queda_pendiente_y_manda_confirmacion(): void
+    public function test_registro_de_escuela_queda_pendiente_y_recibe_codigos(): void
     {
         Mail::fake();
-        $this->postJson('/api/escuelas', $this->registration())->assertCreated()
+        $response = $this->postJson('/api/escuelas', $this->registration())->assertCreated()
             ->assertJsonPath('user.school.status', 'pending')
             ->assertJsonPath('user.school.cct', '02DST0045K')
             ->assertJsonPath('user.email', 'directora@escuela.mx')
-            ->assertJsonPath('user.email_verified', false);
-        Mail::assertSent(Notice::class, fn (Notice $mail) => $mail->hasTo('directora@escuela.mx') && str_contains($mail->actionUrl, '/escuelas/confirmar?token='));
+            ->assertJsonPath('user.recovery_codes_left', 10)
+            ->assertJsonCount(10, 'recovery_codes');
+        $this->assertMatchesRegularExpression('/^[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/', $response->json('recovery_codes.0'));
+        // El sitio ya no manda correos.
+        Mail::assertNothingSent();
         $this->assertDatabaseHas('audit_logs', ['action' => 'registro']);
     }
 
@@ -83,19 +87,42 @@ class SchoolAccountsTest extends TestCase
         $this->postJson('/api/escuelas', $this->registration(['cct' => '', 'email' => 'otra@escuela.mx']))->assertCreated()->assertJsonPath('user.school.cct', null);
     }
 
-    public function test_confirmar_correo_con_token_de_un_solo_uso(): void
+    public function test_contrasena_nueva_con_codigo_de_un_solo_uso(): void
     {
-        Mail::fake();
-        $this->postJson('/api/escuelas', $this->registration())->assertCreated();
-        $token = null;
-        Mail::assertSent(Notice::class, function (Notice $mail) use (&$token) {
-            $token = $this->tokenFrom($mail);
+        $codes = $this->postJson('/api/escuelas', $this->registration())->assertCreated()->json('recovery_codes');
+        $this->postJson('/api/salir')->assertOk();
+        $this->app['auth']->forgetGuards();
+        $data = ['email' => 'directora@escuela.mx', 'code' => 'AAAA-BBBB', 'password' => 'clave nueva y larga'];
+        $this->postJson('/api/contrasena/codigo', $data)->assertUnprocessable()->assertJsonValidationErrors('code');
+        $data['code'] = strtolower(str_replace('-', ' ', $codes[3]));
+        $this->postJson('/api/contrasena/codigo', $data)->assertOk()->assertJsonPath('codes_left', 9)->assertJsonPath('user.recovery_codes_left', 9);
+        $this->postJson('/api/contrasena/codigo', $data)->assertUnprocessable();
+        $this->postJson('/api/salir')->assertOk();
+        $this->postJson('/api/entrar', ['email' => 'directora@escuela.mx', 'password' => 'clave nueva y larga'])->assertOk();
+    }
 
-            return true;
-        });
-        $this->postJson('/api/correo/confirmar', ['token' => $token])->assertOk();
-        $this->postJson('/api/correo/confirmar', ['token' => $token])->assertUnprocessable();
-        $this->getJson('/api/sesion')->assertJsonPath('user.email_verified', true);
+    public function test_codigo_de_otra_cuenta_no_sirve_y_se_bloquea(): void
+    {
+        $codes = $this->postJson('/api/escuelas', $this->registration())->assertCreated()->json('recovery_codes');
+        $other = $this->school();
+        $this->postJson('/api/salir')->assertOk();
+        $this->postJson('/api/contrasena/codigo', ['email' => $other->email, 'code' => $codes[0], 'password' => 'clave nueva y larga'])->assertUnprocessable();
+        for ($i = 0; $i < 6; $i++) {
+            $this->postJson('/api/contrasena/codigo', ['email' => 'directora@escuela.mx', 'code' => 'ZZZZ-ZZZZ', 'password' => 'clave nueva y larga'])->assertUnprocessable();
+        }
+        $this->postJson('/api/contrasena/codigo', ['email' => 'directora@escuela.mx', 'code' => $codes[0], 'password' => 'clave nueva y larga'])
+            ->assertUnprocessable()->assertJsonValidationErrors('code');
+    }
+
+    public function test_generar_codigos_nuevos_pide_la_contrasena(): void
+    {
+        $user = $this->school();
+        $this->actingAs($user)->postJson('/api/codigos-recuperacion', ['password' => 'mala'])->assertUnprocessable();
+        $codes = $this->actingAs($user)->postJson('/api/codigos-recuperacion', ['password' => 'password'])->assertOk()->json('recovery_codes');
+        $this->assertCount(10, $codes);
+        $this->app['auth']->forgetGuards();
+        $this->postJson('/api/salir');
+        $this->postJson('/api/codigos-recuperacion', ['password' => 'password'])->assertUnauthorized();
     }
 
     public function test_entrar_y_salir(): void

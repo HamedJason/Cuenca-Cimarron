@@ -4,6 +4,7 @@ import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import Icon from "../components/Icon.vue";
 import FormField from "../components/FormField.vue";
+import RecoveryCodes from "../components/RecoveryCodes.vue";
 import { api } from "../composables/api";
 import { setupNeeded, accountState, loadAccount, setAccount } from "../composables/useAccount";
 
@@ -13,6 +14,11 @@ const form = reactive({ clave: "", name: "", email: "", password: "" });
 const errors = ref({});
 const message = ref("");
 const sending = ref(false);
+const codes = ref(null);
+function finish() {
+  setupNeeded.value = false;
+  router.push("/admin");
+}
 
 async function submit() {
   sending.value = true;
@@ -21,8 +27,7 @@ async function submit() {
   try {
     const data = await api("/configurar", { method: "POST", body: form });
     setAccount(data.user);
-    setupNeeded.value = false;
-    router.push("/admin");
+    codes.value = data.recovery_codes;
   } catch (error) {
     errors.value = error.errors;
     message.value = Object.keys(error.errors).length ? "" : error.message;
@@ -37,8 +42,9 @@ async function submit() {
       <h1>Configurar el sitio</h1>
       <p>Primera cuenta de administración</p>
     </header>
-    <div class="form-card narrow">
-      <p v-if="accountState !== 'ready'" role="status">Cargando…</p>
+    <div :class="['form-card', { narrow: !codes }]">
+      <RecoveryCodes v-if="codes" :codes="codes" :email="form.email" @done="finish" />
+      <p v-else-if="accountState !== 'ready'" role="status">Cargando…</p>
       <template v-else-if="!setupNeeded">
         <p class="form-alert is-ok" role="status"><Icon name="check" :size="20" />El sitio ya tiene administración</p>
         <RouterLink to="/escuelas" class="button primary">Entrar</RouterLink>

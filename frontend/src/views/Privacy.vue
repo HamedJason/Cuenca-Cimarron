@@ -21,7 +21,7 @@
       <ul>
         <li>De la escuela guardamos su nombre, CCT, nivel, turno, domicilio, ubicación en el mapa, el nombre de la persona responsable y su correo</li>
         <li>De cada docente guardamos solo el nombre que escribe la escuela</li>
-        <li>Usamos el correo únicamente para confirmar la cuenta, avisar de la revisión y recuperar la contraseña</li>
+        <li>El correo solo sirve para entrar a la cuenta. El sitio no manda correos. Para recuperar la contraseña se usan los códigos de recuperación que se entregan al registrarse</li>
         <li>La escuela es responsable de informar a madres, padres o tutores que sus hijos usan el sitio con su nombre y su grupo</li>
         <li>Los datos de la escuela se guardan mientras tenga cuenta. Puede pedir que se borren escribiendo a cualquiera de los correos del pie de página</li>
       </ul>

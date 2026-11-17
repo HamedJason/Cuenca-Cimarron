@@ -28,7 +28,7 @@ class StaffTest extends TestCase
         $token = substr($data['link'], -64);
         $this->app['auth']->forgetGuards();
         $this->postJson('/api/invitacion', ['token' => $token, 'password' => 'corta'])->assertUnprocessable();
-        $this->postJson('/api/invitacion', ['token' => $token, 'password' => 'una frase muy larga'])->assertOk()->assertJsonPath('user.role', 'viewer');
+        $this->postJson('/api/invitacion', ['token' => $token, 'password' => 'una frase muy larga'])->assertOk()->assertJsonPath('user.role', 'viewer')->assertJsonCount(10, 'recovery_codes');
         $this->postJson('/api/invitacion', ['token' => $token, 'password' => 'una frase muy larga'])->assertUnprocessable();
         $this->postJson('/api/salir')->assertOk();
         $this->postJson('/api/entrar', ['email' => 'datos@uabc.edu.mx', 'password' => 'una frase muy larga'])->assertOk();

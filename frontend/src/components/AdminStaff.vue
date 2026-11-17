@@ -4,6 +4,7 @@ import { ref, reactive, onMounted } from "vue";
 import Icon from "./Icon.vue";
 import FormField from "./FormField.vue";
 import CopyLink from "./CopyLink.vue";
+import MyRecoveryCodes from "./MyRecoveryCodes.vue";
 import { api } from "../composables/api";
 
 const roles = [
@@ -71,7 +72,7 @@ async function remove(user) {
 <template>
   <section class="form-card" role="tabpanel">
     <h2 class="form-title">Cuentas del equipo</h2>
-    <p class="muted-text">Invita a quien necesite ver los datos o ayudar a administrar. Le llega un correo para poner su contraseña. Si el correo no está configurado, copia el enlace y mándaselo por otro medio</p>
+    <p class="muted-text">Invita a quien necesite ver los datos o ayudar a administrar. Copia su enlace y mándaselo por WhatsApp. Con él pone su contraseña y recibe sus códigos de recuperación</p>
     <p v-if="state === 'loading'" role="status">Cargando…</p>
     <p v-else-if="state !== 'ready'" class="form-alert is-error" role="alert">{{ state }}</p>
     <ul v-else class="review-list">
@@ -80,8 +81,9 @@ async function remove(user) {
           <h3>{{ user.name }} <span v-if="user.me" class="small muted-text">(tú)</span></h3>
           <p>{{ user.email }}</p>
           <span :class="['status-badge', user.active ? 'is-approved' : 'is-pending']">{{ user.active ? "Activa" : "Invitación pendiente" }}</span>
+          <MyRecoveryCodes v-if="user.me" />
           <div v-if="links[user.id]" class="link-share">
-            <p class="small">{{ links[user.id].sent ? "Le mandamos el correo. También puedes copiar el enlace" : "El correo no está configurado. Copia el enlace y mándaselo" }}</p>
+            <p class="small">Copia el enlace y mándaselo. Sirve una vez y dura 7 días</p>
             <CopyLink :link="links[user.id].link" :share-text="`Hola ${user.name}, este es tu acceso al panel de Cuenca Cimarrona:`" />
           </div>
         </div>
@@ -90,7 +92,7 @@ async function remove(user) {
           <select :id="`rol-${user.id}`" class="code-input" :value="user.role" :disabled="user.me" @change="changeRole(user, $event.target.value)">
             <option v-for="role in roles" :key="role.value" :value="role.value">{{ role.label }}</option>
           </select>
-          <button v-if="!user.active" class="button secondary small-button" type="button" @click="newLink(user)">Enlace nuevo</button>
+          <button v-if="!user.me" class="button secondary small-button" type="button" @click="newLink(user)">{{ user.active ? "Enlace para nueva contraseña" : "Enlace nuevo" }}</button>
           <button v-if="!user.me" class="button secondary small-button" type="button" @click="remove(user)">Quitar acceso</button>
         </div>
       </li>

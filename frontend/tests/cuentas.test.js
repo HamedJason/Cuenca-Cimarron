@@ -84,3 +84,24 @@ describe("Equipo compartido", () => {
     wrapper.unmount();
   });
 });
+
+import RecoveryCodes from "../src/components/RecoveryCodes.vue";
+
+describe("Códigos de recuperación", () => {
+  it("no deja continuar hasta guardarlos y marcar que se guardaron", async () => {
+    URL.createObjectURL = vi.fn(() => "blob:codigos");
+    URL.revokeObjectURL = vi.fn();
+    const codes = ["ABCD-EFGH", "JKLM-NPQR"];
+    const wrapper = mount(RecoveryCodes, { props: { codes, email: "escuela@prueba.mx" } });
+    expect(wrapper.text()).toContain("ABCD-EFGH");
+    expect(wrapper.text()).toContain("El sitio no manda correos");
+    const next = () => wrapper.findAll("button").find((b) => b.text().includes("continuar"));
+    expect(next().attributes("disabled")).toBeDefined();
+    await wrapper.find("input[type=checkbox]").setValue(true);
+    expect(next().attributes("disabled")).toBeDefined();
+    await wrapper.findAll("button").find((b) => b.text().includes("Descargar")).trigger("click");
+    expect(next().attributes("disabled")).toBeUndefined();
+    await next().trigger("click");
+    expect(wrapper.emitted("done")).toHaveLength(1);
+  });
+});

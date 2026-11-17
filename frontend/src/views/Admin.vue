@@ -86,44 +86,25 @@ const settings = ref(null);
 const form = reactive({});
 const settingsErrors = ref({});
 const settingsMessage = ref("");
-const testTo = ref("");
-const testMessage = ref("");
 async function loadSettings() {
   const data = await api("/admin/ajustes");
   settings.value = data.settings;
   Object.assign(form, {
     domain: data.settings.domain ?? "",
     public_url: data.settings.public_url ?? "",
-    mail_host: data.settings.mail_host ?? "",
-    mail_port: data.settings.mail_port ?? "",
-    mail_username: data.settings.mail_username ?? "",
-    mail_password: "",
-    mail_encryption: data.settings.mail_encryption ?? "tls",
-    mail_from_address: data.settings.mail_from_address ?? "",
-    mail_from_name: data.settings.mail_from_name ?? "",
   });
 }
 async function saveSettings() {
   settingsErrors.value = {};
   settingsMessage.value = "";
   try {
-    const body = { ...form, mail_port: form.mail_port ? Number(form.mail_port) : null };
+    const body = { ...form };
     const data = await api("/admin/ajustes", { method: "PUT", body });
     settings.value = data.settings;
-    form.mail_password = "";
     settingsMessage.value = "Guardado";
   } catch (error) {
     settingsErrors.value = error.errors;
     settingsMessage.value = Object.keys(error.errors).length ? "Revisa los campos marcados" : error.message;
-  }
-}
-async function testMail() {
-  testMessage.value = "Mandando…";
-  try {
-    await api("/admin/ajustes/correo-prueba", { method: "POST", body: { to: testTo.value || null } });
-    testMessage.value = "Correo mandado. Revisa la bandeja de entrada";
-  } catch (error) {
-    testMessage.value = error.message;
   }
 }
 
@@ -200,7 +181,6 @@ watch(
               <p>{{ labelOf(levels, school.level) }} · {{ labelOf(shifts, school.shift) }} · {{ labelOf(sectors, school.sector) }}</p>
               <p>{{ school.address }}, {{ school.colonia }}</p>
               <p>CCT: <b>{{ school.cct || "sin CCT" }}</b> · {{ school.contact_name }} · {{ school.email }}
-                <span :class="['status-badge', school.email_verified ? 'is-approved' : 'is-pending']">{{ school.email_verified ? "Correo confirmado" : "Correo sin confirmar" }}</span>
               </p>
               <p v-if="school.lat"><a class="text-link" :href="`https://www.openstreetmap.org/?mlat=${school.lat}&mlon=${school.lng}#map=17/${school.lat}/${school.lng}`" target="_blank" rel="noopener">Ver en el mapa</a></p>
               <p v-if="school.rejection_reason" class="small">Motivo: {{ school.rejection_reason }}</p>
@@ -246,51 +226,10 @@ watch(
             </FormField>
             <p class="small muted-text">Los enlaces de los correos usan: <b>{{ settings.effective_url }}</b></p>
           </fieldset>
-          <fieldset class="form-group">
-            <legend>Servidor de correo (SMTP)</legend>
-            <p class="small muted-text">Sirve una cuenta de correo del proyecto o un servicio como Brevo o Resend. Cada uno indica su servidor, puerto, usuario y contraseña</p>
-            <div class="field-row">
-              <FormField v-slot="{ id }" label="Servidor" :error="settingsErrors.mail_host">
-                <input :id="id" v-model.trim="form.mail_host" maxlength="200" placeholder="smtp-relay.brevo.com" spellcheck="false" />
-              </FormField>
-              <FormField v-slot="{ id }" label="Puerto" :error="settingsErrors.mail_port">
-                <input :id="id" v-model="form.mail_port" inputmode="numeric" maxlength="5" placeholder="587" />
-              </FormField>
-            </div>
-            <FormField v-slot="{ id }" label="Cifrado" :error="settingsErrors.mail_encryption">
-              <select :id="id" v-model="form.mail_encryption">
-                <option value="tls">STARTTLS (puerto 587)</option>
-                <option value="ssl">SSL (puerto 465)</option>
-                <option value="none">Sin cifrado</option>
-              </select>
-            </FormField>
-            <FormField v-slot="{ id }" label="Usuario" :error="settingsErrors.mail_username">
-              <input :id="id" v-model.trim="form.mail_username" maxlength="200" autocomplete="off" spellcheck="false" />
-            </FormField>
-            <FormField v-slot="{ id, describedby }" label="Contraseña" :hint="settings.mail_password_set ? 'Ya hay una guardada. Déjalo vacío para conservarla' : ''" :error="settingsErrors.mail_password">
-              <input :id="id" v-model="form.mail_password" type="password" maxlength="300" autocomplete="new-password" :aria-describedby="describedby" />
-            </FormField>
-            <div class="field-row">
-              <FormField v-slot="{ id }" label="Correo que envía" optional :error="settingsErrors.mail_from_address">
-                <input :id="id" v-model.trim="form.mail_from_address" type="email" maxlength="200" />
-              </FormField>
-              <FormField v-slot="{ id }" label="Nombre que envía" optional :error="settingsErrors.mail_from_name">
-                <input :id="id" v-model.trim="form.mail_from_name" maxlength="100" placeholder="Cuenca Cimarrona" />
-              </FormField>
-            </div>
-          </fieldset>
           <p v-if="settingsMessage" :class="['form-alert', settingsMessage === 'Guardado' ? 'is-ok' : 'is-error']" role="status">{{ settingsMessage }}</p>
           <div class="form-actions">
             <button class="button primary" type="submit">Guardar ajustes</button>
           </div>
-          <fieldset class="form-group">
-            <legend>Probar el correo</legend>
-            <FormField v-slot="{ id }" label="Mandar a" optional>
-              <input :id="id" v-model.trim="testTo" type="email" :placeholder="account.email" />
-            </FormField>
-            <button class="button secondary" type="button" @click="testMail">Mandar correo de prueba</button>
-            <p v-if="testMessage" class="small" role="status">{{ testMessage }}</p>
-          </fieldset>
         </template>
       </form>
 

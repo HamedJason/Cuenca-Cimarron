@@ -5,6 +5,7 @@ import Icon from "../components/Icon.vue";
 import FormField from "../components/FormField.vue";
 import SchoolForm from "../components/SchoolForm.vue";
 import SchoolPicker from "../components/SchoolPicker.vue";
+import RecoveryCodes from "../components/RecoveryCodes.vue";
 import { api } from "../composables/api";
 import { setAccount } from "../composables/useAccount";
 
@@ -25,6 +26,8 @@ const login = reactive({ email: "", password: "", privacy: false, families_infor
 const errors = ref({});
 const message = ref("");
 const sending = ref(false);
+const codes = ref(null);
+const finish = () => router.push({ path: "/escuelas", query: { nueva: "1" } });
 // Primero se busca la escuela en el catálogo. Si no aparece, se llena a mano.
 const mode = ref("buscar");
 const picked = ref(null);
@@ -57,7 +60,9 @@ async function submit() {
   try {
     const data = await api("/escuelas", { method: "POST", body: { ...school.value, ...login } });
     setAccount(data.user);
-    router.push({ path: "/escuelas", query: { nueva: "1" } });
+    // Antes de seguir, la escuela guarda sus códigos de recuperación.
+    codes.value = data.recovery_codes;
+    window.scrollTo({ top: 0 });
   } catch (error) {
     errors.value = error.errors;
     message.value = Object.keys(error.errors).length ? "Revisa los campos marcados" : error.message;
@@ -72,11 +77,14 @@ async function submit() {
       <h1>Registra tu escuela</h1>
       <p>Para que tus docentes armen grupos y sus alumnos sumen puntos</p>
     </header>
-    <form class="form-card" novalidate @submit.prevent="submit">
+    <div v-if="codes" class="form-card">
+      <RecoveryCodes :codes="codes" :email="login.email" @done="finish" />
+    </div>
+    <form v-else class="form-card" novalidate @submit.prevent="submit">
       <ol class="steps-mini" aria-label="Cómo funciona">
         <li>Llenas este registro</li>
-        <li>Confirmas tu correo</li>
-        <li>Revisamos los datos y te avisamos</li>
+        <li>Guardas tus códigos de recuperación</li>
+        <li>Revisamos los datos y aprobamos tu escuela</li>
       </ol>
       <SchoolPicker v-if="mode === 'buscar'" @pick="pick" @manual="manual" />
       <template v-else>
@@ -93,8 +101,8 @@ async function submit() {
       <template v-if="mode !== 'buscar'">
       <fieldset class="form-group">
         <legend>Cuenta</legend>
-        <FormField v-slot="{ id }" label="Correo" :error="errors.email">
-          <input :id="id" v-model.trim="login.email" type="email" maxlength="160" autocomplete="email" required />
+        <FormField v-slot="{ id, describedby }" label="Correo" hint="Con él entras a tu cuenta. El sitio no manda correos" :error="errors.email">
+          <input :id="id" v-model.trim="login.email" type="email" maxlength="160" autocomplete="email" :aria-describedby="describedby" required />
         </FormField>
         <FormField
           v-slot="{ id, describedby }"

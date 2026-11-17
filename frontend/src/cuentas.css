@@ -1364,3 +1364,71 @@
 .review-item > .button {
   align-self: start;
 }
+
+/* Códigos de recuperación: aviso grande */
+.recovery {
+  display: grid;
+  gap: 18px;
+}
+.recovery-alert {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 20px;
+  border: 3px solid var(--uabc-gold);
+  border-radius: var(--radius-card);
+  background: var(--gold-tint);
+  color: var(--gold-text);
+}
+.recovery-alert h2 {
+  font-size: 32px;
+  margin-bottom: 6px;
+}
+.recovery-alert p {
+  color: var(--ink);
+  font-size: 18px;
+}
+.recovery-codes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: codigo;
+}
+.recovery-codes li {
+  counter-increment: codigo;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 2px dashed var(--edge);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.recovery-codes li::before {
+  content: counter(codigo) ".";
+  font-size: 14px;
+  color: var(--muted);
+  min-width: 22px;
+}
+.recovery-codes code {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+}
+.recovery-check {
+  font-weight: 700;
+}
+@media print {
+  .recovery-alert {
+    border: 2px solid #8a5a00;
+    background: #fff;
+    color: #1c2621;
+  }
+  .recovery-codes li {
+    background: #fff;
+  }
+}

@@ -52,7 +52,6 @@ class SystemAdminController extends Controller
 
         $checks = [
             ['key' => 'database', 'ok' => $database, 'label' => 'Base de datos', 'detail' => $database ? 'Responde bien' : 'No responde'],
-            ['key' => 'mail', 'ok' => Mailer::configured(), 'label' => 'Correo', 'detail' => Mailer::configured() ? 'Configurado: '.Settings::get('mail_host') : 'Sin configurar. No salen los correos de confirmación ni de contraseña'],
             ['key' => 'backup', 'ok' => $newestBackup && now()->subDays(2)->lessThan($newestBackup), 'label' => 'Respaldos', 'detail' => $newestBackup ? 'Último respaldo: '.\Illuminate\Support\Carbon::parse($newestBackup)->toIso8601String() : 'Todavía no hay ningún respaldo', 'date' => $newestBackup],
             ['key' => 'https', 'ok' => str_starts_with($publicUrl, 'https://'), 'label' => 'Dirección pública', 'detail' => $publicUrl],
             ['key' => 'catalog', 'ok' => $catalogTotal > 0, 'label' => 'Catálogo de escuelas', 'detail' => $catalogTotal ? "{$catalogTotal} escuelas" : 'Vacío. Cárgalo en la pestaña Escuelas', 'date' => $catalogAt ? \Illuminate\Support\Carbon::parse($catalogAt)->toIso8601String() : null],

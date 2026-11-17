@@ -134,9 +134,11 @@ class StaffController extends Controller
             return response()->json(['message' => 'La invitación ya no sirve. Pide otra a quien te invitó.'], 422);
         }
         $user->forceFill(['password' => Hash::make($data['password']), 'email_verified_at' => now()])->save();
+        $codes = \App\Support\RecoveryCodes::generate($user);
+        DB::table('sessions')->where('user_id', $user->id)->delete();
         Auth::login($user);
         $request->session()->regenerate();
 
-        return response()->json(['user' => $user->toSession()]);
+        return response()->json(['user' => $user->toSession(), 'recovery_codes' => $codes]);
     }
 }

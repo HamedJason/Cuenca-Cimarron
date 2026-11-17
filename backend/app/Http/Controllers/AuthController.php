@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Support\AccountTokens;
 use App\Support\Audit;
 use App\Support\Mailer;
+use App\Support\RecoveryCodes;
 use App\Support\Settings;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -77,10 +78,11 @@ class AuthController extends Controller
             $origin = (string) $request->headers->get('Origin');
             Settings::set('public_url', preg_match('#^https?://[a-z0-9.-]+(:\d+)?$#i', $origin) ? strtolower($origin) : $request->getSchemeAndHttpHost());
         }
+        $codes = RecoveryCodes::generate($user);
         Auth::login($user);
         $request->session()->regenerate();
 
-        return response()->json(['user' => $user->toSession()], 201);
+        return response()->json(['user' => $user->toSession(), 'recovery_codes' => $codes], 201);
     }
 
     public function login(Request $request): JsonResponse
@@ -193,5 +195,48 @@ class AuthController extends Controller
         DB::table('sessions')->where('user_id', $user->id)->delete();
 
         return response()->json(['ok' => true]);
+    }
+
+    // Contraseña nueva con un código de recuperación. No necesita correo.
+    public function resetWithCode(Request $request): JsonResponse
+    {
+        self::normalizeEmail($request);
+        $data = $request->validate([
+            'email' => ['required', 'email', 'max:160'],
+            'code' => ['required', 'string', 'max:20'],
+            'password' => ['required', 'string', 'max:200', self::passwordRule()],
+        ]);
+        $key = 'codigo:'.$data['email'].'|'.$request->ip();
+        if (RateLimiter::tooManyAttempts($key, 6)) {
+            $minutes = (int) ceil(RateLimiter::availableIn($key) / 60);
+            throw ValidationException::withMessages(['code' => "Demasiados intentos. Vuelve a intentar en {$minutes} min."]);
+        }
+        $user = User::where('email', $data['email'])->first();
+        if (! $user || ! RecoveryCodes::consume($user, $data['code'])) {
+            RateLimiter::hit($key, 900);
+            throw ValidationException::withMessages(['code' => 'El correo o el código no coinciden, o ese código ya se usó.']);
+        }
+        RateLimiter::clear($key);
+        $user->forceFill(['password' => Hash::make($data['password'])])->save();
+        DB::table('sessions')->where('user_id', $user->id)->delete();
+        Audit::log($user->role === 'school' ? 'school' : 'admin', $user->id, 'contrasena-con-codigo', 'user', $user->id);
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return response()->json(['user' => $user->toSession(), 'codes_left' => RecoveryCodes::left($user)]);
+    }
+
+    // La cuenta genera códigos nuevos; pide la contraseña actual.
+    public function regenerateCodes(Request $request): JsonResponse
+    {
+        $data = $request->validate(['password' => ['required', 'string', 'max:200']]);
+        $user = $request->user();
+        if (! $user || ! Hash::check($data['password'], $user->password)) {
+            throw ValidationException::withMessages(['password' => 'La contraseña no es correcta.']);
+        }
+        $codes = RecoveryCodes::generate($user);
+        Audit::log($user->role === 'school' ? 'school' : 'admin', $user->id, 'codigos-nuevos', 'user', $user->id);
+
+        return response()->json(['recovery_codes' => $codes]);
     }
 }

@@ -67,11 +67,12 @@ class SchoolController extends Controller
 
             return $user;
         });
-        $sent = AuthController::sendVerification($user);
+        // El sitio no manda correos: la escuela guarda sus códigos de recuperación.
+        $codes = \App\Support\RecoveryCodes::generate($user);
         Auth::login($user);
         $request->session()->regenerate();
 
-        return response()->json(['user' => $user->fresh()->toSession(), 'mail_sent' => $sent], 201);
+        return response()->json(['user' => $user->fresh()->toSession(), 'recovery_codes' => $codes], 201);
     }
 
     public function update(Request $request): JsonResponse
