@@ -11,6 +11,7 @@ const statusText = {
   pending: "En revisión",
   approved: "Aprobada",
   rejected: "Con cambios pendientes",
+  suspended: "Suspendida",
 };
 const resend = ref("");
 async function resendMail() {
@@ -79,6 +80,10 @@ async function save() {
       <div v-if="school.status === 'pending'" class="note is-gold">
         <Icon name="clock" />
         <p>Estamos revisando los datos de tu escuela. Te avisamos por correo cuando esté aprobada. Mientras tanto no puedes dar de alta docentes</p>
+      </div>
+      <div v-else-if="school.status === 'suspended'" class="note is-gold">
+        <Icon name="info" />
+        <p>El acceso de tu escuela está suspendido por este motivo: <b>{{ school.rejection_reason }}</b>. Tus docentes y alumnos no pueden entrar por ahora. Escríbenos a cualquiera de los correos del pie de página</p>
       </div>
       <div v-else-if="school.status === 'rejected'" class="note is-gold">
         <Icon name="info" />

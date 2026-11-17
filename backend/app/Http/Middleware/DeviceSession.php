@@ -28,6 +28,14 @@ class DeviceSession
         if (! $owner && $optional !== 'opcional') {
             return response()->json(['message' => $kind === 'student' ? 'Entra con el código de tu grupo.' : 'Abre de nuevo el enlace que te dio tu escuela.'], 401);
         }
+        // Si la escuela está suspendida, sus docentes y alumnos no pueden entrar.
+        $school = $owner ? ($kind === 'student' ? $owner->classroom?->teacher?->school : $owner->school) : null;
+        if ($owner && (! $school || ! $school->isApproved())) {
+            $owner = null;
+            if ($optional !== 'opcional') {
+                return response()->json(['message' => 'Tu escuela no tiene acceso por ahora.'], 403);
+            }
+        }
         $request->attributes->set('device_session', $owner ? $session : null);
         $request->attributes->set($kind, $owner);
         $response = $next($request);

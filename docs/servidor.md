@@ -122,6 +122,14 @@ En el panel, pestaña Cuentas, se invita a más personas. Hay dos tipos:
 
 A la persona le llega un correo para poner su contraseña. Si el correo todavía no está configurado, el panel muestra el enlace para mandárselo por otro medio. Siempre queda al menos una cuenta de administración.
 
+## Panel de sistema
+
+La cuenta de administración tiene, además de lo de las escuelas y el panel de datos:
+
+- **Sistema:** revisa que la base, el correo, los respaldos, la dirección pública y el catálogo estén bien, y muestra cuánto hay en la base. Tiene botones para hacer limpieza y para cerrar un ciclo escolar (archiva todos los grupos de ese ciclo).
+- **Bitácora:** quién hizo qué y cuándo (aprobar, suspender, dar de alta docentes, cambiar ajustes, descargar respaldos).
+- **Detalle de cada escuela:** sus docentes y grupos, un enlace nuevo para un docente que perdió el suyo, un enlace para que la escuela ponga contraseña nueva, cambiar su correo y suspenderla. Mientras una escuela está suspendida, sus docentes y alumnos no pueden entrar. No se borra nada y se puede reactivar.
+
 ## Catálogo de escuelas
 
 Para que cada escuela se busque y se elija al registrarse, en el panel de administración (pestaña Escuelas) está el botón "Cargar desde datos.gob.mx". Trae las escuelas de Tijuana y Playas de Rosarito del Catálogo de Centros de Trabajo de la SEP y las guarda en la base. Conviene actualizarlo una vez al año. Para usar el catálogo de otro año se cambia `SEP_CATALOG` en `frontend/src/composables/useCatalog.js`.

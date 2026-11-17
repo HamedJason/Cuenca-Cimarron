@@ -1270,3 +1270,97 @@
 .review-main .status-badge {
   justify-self: start;
 }
+
+/* Sistema y bitácora */
+.health-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.health-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--green-tint);
+}
+.health-item.is-warn {
+  background: var(--gold-tint);
+}
+.health-dot {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--uabc-green);
+  color: #fff;
+}
+.health-item.is-warn .health-dot {
+  background: var(--uabc-gold);
+  color: #003d24;
+}
+.health-text {
+  display: grid;
+  gap: 2px;
+  color: var(--ink);
+}
+.health-text span {
+  font-size: 15px;
+  color: var(--muted);
+  word-break: break-word;
+}
+.maint-item {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px 24px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.maint-item > div {
+  display: grid;
+  gap: 8px;
+  flex: 1 1 360px;
+}
+.maint-item h3 {
+  font-size: 24px;
+}
+.nowrap {
+  white-space: nowrap;
+}
+.audit-filter select {
+  min-height: 44px;
+  width: auto;
+}
+.review-detail {
+  grid-column: 1 / -1;
+}
+.school-detail {
+  display: grid;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+}
+.school-detail h4 {
+  margin: 8px 0 0;
+  font-family: var(--font-heading);
+  font-size: 22px;
+  color: var(--title);
+}
+.detail-row {
+  justify-content: space-between;
+}
+.detail-actions {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+.review-item > .button {
+  align-self: start;
+}

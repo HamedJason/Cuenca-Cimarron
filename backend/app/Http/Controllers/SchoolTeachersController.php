@@ -22,7 +22,7 @@ class SchoolTeachersController extends Controller
         return $teacher;
     }
 
-    private static function invite(Teacher $teacher): array
+    public static function invite(Teacher $teacher): array
     {
         $token = bin2hex(random_bytes(24));
         DB::table('teacher_invites')->where('teacher_id', $teacher->id)->whereNull('used_at')->delete();

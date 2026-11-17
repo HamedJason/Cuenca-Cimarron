@@ -8,6 +8,10 @@ import { account, accountState, loadAccount, logout, labelOf, levels, shifts, se
 const AdminStats = defineAsyncComponent(() => import("../components/AdminStats.vue"));
 const AdminCatalog = defineAsyncComponent(() => import("../components/AdminCatalog.vue"));
 const AdminStaff = defineAsyncComponent(() => import("../components/AdminStaff.vue"));
+const AdminSystem = defineAsyncComponent(() => import("../components/AdminSystem.vue"));
+const AdminAudit = defineAsyncComponent(() => import("../components/AdminAudit.vue"));
+const AdminSchoolDetail = defineAsyncComponent(() => import("../components/AdminSchoolDetail.vue"));
+const openDetail = ref(null);
 loadAccount();
 // admin: todo. viewer: cuenta de solo lectura, ve el panel de datos y la lista de escuelas.
 const isAdmin = computed(() => account.value?.role === "admin");
@@ -17,7 +21,9 @@ const tabs = computed(() =>
     ? [
         { id: "escuelas", label: "Escuelas" },
         { id: "estadisticas", label: "Panel de datos" },
+        { id: "sistema", label: "Sistema" },
         { id: "cuentas", label: "Cuentas" },
+        { id: "bitacora", label: "Bitácora" },
         { id: "ajustes", label: "Ajustes" },
         { id: "respaldos", label: "Respaldos" },
       ]
@@ -180,7 +186,7 @@ watch(
 
       <section v-if="tab === 'escuelas'" class="form-card" role="tabpanel">
         <div class="chip-filter" role="group" aria-label="Mostrar">
-          <button v-for="item in [['pending', 'En revisión'], ['approved', 'Aprobadas'], ['rejected', 'Rechazadas']]" :key="item[0]" type="button" :class="['filter-chip', { active: filter === item[0] }]" :aria-pressed="filter === item[0]" @click="filter = item[0]">
+          <button v-for="item in [['pending', 'En revisión'], ['approved', 'Aprobadas'], ['rejected', 'Rechazadas'], ['suspended', 'Suspendidas']]" :key="item[0]" type="button" :class="['filter-chip', { active: filter === item[0] }]" :aria-pressed="filter === item[0]" @click="filter = item[0]">
             {{ item[1] }} <b>{{ counts[item[0]] ?? 0 }}</b>
           </button>
         </div>
@@ -210,7 +216,9 @@ watch(
               <button class="button secondary" type="button" :disabled="reviewing.busy || reviewing.reason.length < 5" @click="review(school, 'rechazar')">Rechazar</button>
               <p v-if="reviewing.error" class="field-error" role="alert">{{ reviewing.error }}</p>
             </div>
-            <button v-else-if="isAdmin && school.status !== 'approved'" class="button secondary" type="button" @click="openReview(school)">Revisar</button>
+            <button v-else-if="isAdmin && ['pending', 'rejected'].includes(school.status)" class="button secondary" type="button" @click="openReview(school)">Revisar</button>
+            <button v-else-if="isAdmin" class="button secondary" type="button" :aria-expanded="openDetail === school.id" @click="openDetail = openDetail === school.id ? null : school.id">{{ openDetail === school.id ? "Cerrar" : "Ver detalle" }}</button>
+            <AdminSchoolDetail v-if="isAdmin && openDetail === school.id" :school-id="school.id" class="review-detail" @changed="loadSchools" />
           </li>
         </ul>
       </section>
@@ -220,6 +228,10 @@ watch(
       <AdminStats v-else-if="tab === 'estadisticas'" />
 
       <AdminStaff v-else-if="tab === 'cuentas' && isAdmin" />
+
+      <AdminSystem v-else-if="tab === 'sistema' && isAdmin" />
+
+      <AdminAudit v-else-if="tab === 'bitacora' && isAdmin" />
 
       <form v-else-if="tab === 'ajustes' && isAdmin" class="form-card" role="tabpanel" novalidate @submit.prevent="saveSettings">
         <p v-if="!settings" role="status">Cargando…</p>

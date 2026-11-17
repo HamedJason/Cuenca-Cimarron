@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GameSessionController;
+use App\Http\Controllers\SchoolAdminController;
 use App\Http\Controllers\SchoolCatalogController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SchoolTeachersController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\SystemAdminController;
 use App\Http\Controllers\SystemController;
 use App\Http\Controllers\VisitController;
 use Illuminate\Support\Facades\Route;
@@ -63,6 +65,16 @@ Route::middleware(['web', 'throttle:cuentas'])->group(function (): void {
     });
 
     Route::middleware('rol:admin')->prefix('admin')->group(function (): void {
+        Route::get('/escuelas/{school}', [SchoolAdminController::class, 'show']);
+        Route::post('/escuelas/{school}/suspender', [SchoolAdminController::class, 'suspend']);
+        Route::post('/escuelas/{school}/reactivar', [SchoolAdminController::class, 'reactivate']);
+        Route::post('/escuelas/{school}/contrasena', [SchoolAdminController::class, 'passwordLink']);
+        Route::put('/escuelas/{school}/correo', [SchoolAdminController::class, 'changeEmail']);
+        Route::post('/docentes/{teacher}/enlace', [SchoolAdminController::class, 'teacherLink']);
+        Route::get('/sistema', [SystemAdminController::class, 'status']);
+        Route::post('/sistema/limpieza', [SystemAdminController::class, 'cleanup']);
+        Route::post('/sistema/cerrar-ciclo', [SystemAdminController::class, 'closeSchoolYear']);
+        Route::get('/bitacora', [SystemAdminController::class, 'audit']);
         Route::get('/usuarios', [StaffController::class, 'index']);
         Route::post('/usuarios', [StaffController::class, 'invite']);
         Route::put('/usuarios/{user}', [StaffController::class, 'update']);

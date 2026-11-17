@@ -19,7 +19,7 @@ class AdminController extends Controller
 {
     public function schools(Request $request): JsonResponse
     {
-        $data = $request->validate(['estado' => ['nullable', Rule::in(['pending', 'approved', 'rejected'])]]);
+        $data = $request->validate(['estado' => ['nullable', Rule::in(['pending', 'approved', 'rejected', 'suspended'])]]);
         $schools = School::with('user:id,email,email_verified_at')
             ->when($data['estado'] ?? null, fn ($q, $status) => $q->where('status', $status))
             ->orderBy('created_at')
