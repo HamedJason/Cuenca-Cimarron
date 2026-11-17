@@ -183,10 +183,8 @@ const stationMapHref = (item) =>
         <div class="purpose-text">
           <h1 id="titulo-proposito">Tijuana se prepara para El Niño</h1>
           <p class="purpose-lead">
-            En la comunidad cimarrona nos unimos para que tu familia y tu colonia
-            sepan qué hacer antes, durante y después de las lluvias. Aquí
-            encuentras información clara, juegos para practicar y un plan para
-            armar en casa, todo gratis y pensado para toda Tijuana
+            Información clara, juegos y un plan para que tu familia sepa qué hacer
+            antes, durante y después de las lluvias
           </p>
           <ul class="purpose-ways" aria-label="Formas de aprender en el sitio">
             <li>
@@ -324,13 +322,7 @@ const stationMapHref = (item) =>
           <RouterLink
             class="text-link inline-link"
             :to="{ path: '/informacion', query: { ver: 'dependencias' } }"
-            >¿Qué hace cada una y cuándo llamarle?</RouterLink
-          >
-          ·
-          <RouterLink
-            class="text-link inline-link"
-            :to="{ path: '/informacion', query: { ver: '911' } }"
-            >Cómo llamar bien al 911</RouterLink
+            >Ver todo el directorio</RouterLink
           >
         </p>
         <div class="phone-grid">
@@ -356,16 +348,10 @@ const stationMapHref = (item) =>
             >
           </div>
         </div>
-        <aside class="kreyol-band home-kreyol" aria-label="Para familias que llegan de otros países">
-          <p>
-            <strong lang="ht">Enfòmasyon an kreyòl ayisyen</strong>
-            ¿Llegaste de Haití o de otro país? Tus derechos, frases para pedir ayuda y una
-            tarjeta para la escuela
-          </p>
-          <RouterLink class="button primary" to="/migrantes?lang=ht"
-            ><Icon name="people" :size="20" /> Kreyòl · Español</RouterLink
-          >
-        </aside>
+        <RouterLink class="kreyol-link" to="/migrantes?lang=ht" lang="ht"
+          ><Icon name="people" :size="20" /> Enfòmasyon an kreyòl ayisyen
+          <Icon name="arrow" :size="18"
+        /></RouterLink>
       </section>
 
       <div class="split">
@@ -443,9 +429,7 @@ const stationMapHref = (item) =>
           <div class="section-head-text">
             <span class="label">Aprende jugando</span>
             <h2 id="titulo-juegos" class="section-title">Juegos y dinámicas</h2>
-            <p class="section-lead">
-              Pon a prueba lo que sabes de El Niño, tu colonia y tu mochila de emergencia
-            </p>
+            <p class="section-lead">Pon a prueba lo que sabes</p>
           </div>
           <RouterLink to="/juegos" class="button secondary games-more-top"
             >Ver todos los juegos</RouterLink
@@ -512,9 +496,6 @@ const stationMapHref = (item) =>
             ></span
           ></span>
         </div>
-        <p class="section-lead">
-          Lo esencial sobre El Niño, tu familia y lo que conviene tener listo
-        </p>
         <div class="prep-grid">
           <button type="button" class="prep-card cc-watermark" @click="openLesson('conozca')"
             ><span class="prep-icon" aria-hidden="true"
@@ -609,9 +590,6 @@ const stationMapHref = (item) =>
             <h2 id="titulo-consejos" class="section-title">
               Consejos para actuar mejor
             </h2>
-            <p class="section-lead">
-              Qué hacer antes, durante y después de la lluvia
-            </p>
           </div>
           <RouterLink to="/consejos" class="button secondary"
             >Ver todos los consejos</RouterLink

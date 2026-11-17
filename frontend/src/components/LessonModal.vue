@@ -278,8 +278,7 @@ function goTo(id) {
             <div>
               <h3 id="leccion-botiquin">Tu botiquín de casa</h3>
               <p class="lesson-lead">
-                El material básico que recomienda la Secretaría de Salud. Marca lo
-                que ya tienes; se guarda en este navegador
+                Lo básico según la Secretaría de Salud. Marca lo que ya tienes
               </p>
             </div>
             <div :class="['lesson-progress', { complete: aidComplete }]">
@@ -345,7 +344,7 @@ function goTo(id) {
         </section>
 
         <section class="lesson-part" aria-labelledby="leccion-lluvia-salud">
-          <h3 id="leccion-lluvia-salud">Tu salud durante y después de la lluvia</h3>
+          <h3 id="leccion-lluvia-salud">Tu salud con la lluvia</h3>
           <div class="health-tips">
             <article v-for="tip in rainHealth" :key="tip.title" class="health-tip">
               <span class="health-icon" aria-hidden="true"><Icon :name="tip.icon" :size="24" /></span>
@@ -366,8 +365,7 @@ function goTo(id) {
             ><Icon name="phone" :size="20" /> Llamar al 911</a
           >
           <p class="lesson-note">
-            Esta información no reemplaza la consulta médica. Para aprender
-            primeros auxilios, la Cruz Roja da cursos para la comunidad
+            No reemplaza la consulta médica. La Cruz Roja da cursos de primeros auxilios
           </p>
         </section>
 

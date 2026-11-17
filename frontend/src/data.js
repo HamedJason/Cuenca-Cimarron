@@ -813,38 +813,38 @@ export const firstAidGroups = [
   {
     title: "Para curar",
     items: [
-      { id: "fa-gasas", name: "Gasas de 5 × 5 cm y compresas de 10 × 10 cm", detail: "Para cubrir heridas y hacer presión si sangran" },
-      { id: "fa-vendas", name: "Vendas elásticas de 5 y 10 cm", detail: "Y una venda triangular para hacer un cabestrillo" },
-      { id: "fa-tela", name: "Tela adhesiva y curitas", detail: "Para fijar las gasas y cubrir cortadas chicas" },
-      { id: "fa-algodon", name: "Torundas de algodón", detail: "Para limpiar alrededor de la herida, no dentro" },
+      { id: "fa-gasas", name: "Gasas de 5 × 5 cm y compresas de 10 × 10 cm", detail: "Para cubrir y presionar heridas" },
+      { id: "fa-vendas", name: "Vendas elásticas de 5 y 10 cm", detail: "Y una triangular para cabestrillo" },
+      { id: "fa-tela", name: "Tela adhesiva y curitas", detail: "Para fijar gasas y cortadas chicas" },
+      { id: "fa-algodon", name: "Torundas de algodón", detail: "Alrededor de la herida, no dentro" },
     ],
   },
   {
     title: "Para limpiar",
     items: [
-      { id: "fa-jabon", name: "Jabón neutro líquido", detail: "Lo primero para lavar una herida, con agua limpia" },
-      { id: "fa-agua", name: "Agua hervida o estéril", detail: "En una botella cerrada y con etiqueta" },
-      { id: "fa-antiseptico", name: "Antiséptico (benzal o yodo)", detail: "En frascos de plástico, cada uno con su nombre" },
-      { id: "fa-vaselina", name: "Vaselina", detail: "Para rozaduras y piel reseca" },
+      { id: "fa-jabon", name: "Jabón neutro líquido", detail: "Lo primero para lavar una herida" },
+      { id: "fa-agua", name: "Agua hervida o estéril", detail: "En botella cerrada y etiquetada" },
+      { id: "fa-antiseptico", name: "Antiséptico (benzal o yodo)", detail: "En frascos de plástico con nombre" },
+      { id: "fa-vaselina", name: "Vaselina", detail: "Para rozaduras" },
     ],
   },
   {
     title: "Herramientas y protección",
     items: [
       { id: "fa-tijeras", name: "Tijeras de punta redonda y pinzas", detail: "Limpias y sin óxido" },
-      { id: "fa-termometro", name: "Termómetro", detail: "Que funcione: revisa la pila si es digital" },
-      { id: "fa-guantes", name: "Guantes desechables y cubrebocas", detail: "Para protegerte tú y a quien ayudas" },
-      { id: "fa-extra", name: "Linterna, lápiz y papel", detail: "Para ver de noche y anotar qué pasó y a qué hora" },
+      { id: "fa-termometro", name: "Termómetro", detail: "Revisa que tenga pila" },
+      { id: "fa-guantes", name: "Guantes desechables y cubrebocas", detail: "Para ti y para quien ayudas" },
+      { id: "fa-extra", name: "Linterna, lápiz y papel", detail: "Para ver de noche y anotar qué pasó" },
     ],
   },
 ];
 
 // Cómo guardar el botiquín y las medicinas (STCONAPRA)
 export const firstAidRules = [
-  { icon: "medical", title: "Las medicinas van aparte", text: "En un pastillero con la receta y el nombre de quien la toma. Si alguien en casa usa inhalador o insulina, que haya uno en la casa y otro en la mochila" },
-  { icon: "drop", title: "Fresco, seco y cerrado", text: "Sin humedad y sin sol. En temporada de lluvias, mételo en una bolsa que cierre bien" },
-  { icon: "eye", title: "A la vista, sin candado", text: "Con una cruz roja en la tapa, fuera del alcance de los niños y con la lista de lo que tiene adentro" },
-  { icon: "clock", title: "Revísalo cada seis meses", text: "Repón lo que usaste. Las medicinas caducadas no van a la basura ni al drenaje: llévalas al contenedor de una farmacia o clínica" },
+  { icon: "medical", title: "Las medicinas van aparte", text: "Con su receta y el nombre de quien la toma. Inhalador o insulina: uno en casa y otro en la mochila" },
+  { icon: "drop", title: "Fresco, seco y cerrado", text: "Sin sol ni humedad, dentro de una bolsa que cierre" },
+  { icon: "eye", title: "A la mano, lejos de los niños", text: "Sin candado y con la lista de lo que tiene" },
+  { icon: "clock", title: "Revísalo cada seis meses", text: "Repón lo usado. Lo caducado va al contenedor de una farmacia, no a la basura" },
 ];
 
 // Salud durante y después de la lluvia. Agua: material del Estado de México
@@ -853,41 +853,41 @@ export const rainHealth = [
   {
     icon: "drop",
     title: "Agua segura para tomar",
-    text: "Si el agua de la llave sale turbia o hubo inundación, hiérvela al menos 3 minutos desde que suelta el hervor. Si no puedes hervirla, ponle 2 gotas de cloro por litro y espera 30 minutos antes de tomarla",
+    text: "Si sale turbia, hiérvela 3 minutos o ponle 2 gotas de cloro por litro y espera 30 minutos",
   },
   {
     icon: "wave",
     title: "No te metas al agua de la calle",
-    text: "Puede traer aguas negras y orina de ratas. Si tuviste que cruzarla, lávate con agua y jabón en cuanto puedas y cúbrete las heridas",
+    text: "Trae aguas negras. Si la cruzaste, lávate con jabón y cubre tus heridas",
   },
   {
     icon: "medical",
-    title: "Fiebre después de la inundación",
-    text: "Si días después de estar en agua de inundación te da fiebre, dolor de cabeza o de músculos, ve al médico y dile que estuviste en esa agua. Puede ser leptospirosis y se trata",
+    title: "Fiebre días después",
+    text: "Si estuviste en agua de inundación, ve al médico y díselo: puede ser leptospirosis",
   },
   {
     icon: "heart",
-    title: "Diarrea: que no se seque el cuerpo",
-    text: "Toma Vida Suero Oral: un sobre en un litro de agua hervida o clorada. Si se ve turbio o con grumos, tíralo y prepara otro",
+    title: "Diarrea",
+    text: "Vida Suero Oral: un sobre en un litro de agua hervida",
   },
   {
     icon: "blanket",
     title: "Mojado y con frío",
-    text: "Quita la ropa mojada, seca el cuerpo y cúbrelo con una cobija. Si la persona está despierta, dale algo tibio de tomar",
+    text: "Quita la ropa mojada, cubre con una cobija y da algo tibio",
   },
   {
     icon: "hygiene",
     title: "Una cortada o un raspón",
-    text: "Lava con agua limpia y jabón, cubre con gasa y fíjala con tela adhesiva. Si sangra, presiona encima con una gasa sin soltar",
+    text: "Lava con jabón y cubre con gasa. Si sangra, presiona sin soltar",
   },
 ];
 // Cuándo no esperar: llamar al 911
 export const healthAlarms = [
-  "Le cuesta respirar o tiene los labios morados",
-  "Sangra mucho y no para aunque presiones",
+  "Le cuesta respirar o tiene labios morados",
+  "Sangra y no para aunque presiones",
   "Se desmayó, convulsiona o está confundido",
-  "Un bebé con diarrea que casi no orina o está muy decaído",
-  "Alguien tragó agua de un arroyo o estuvo a punto de ahogarse",
+  "Un bebé con diarrea que casi no orina",
+  "Casi se ahoga o tragó agua de arroyo",
 ];
 
 // Qué significa El Niño para Tijuana (comunicado municipal del 2 nov 2026)
