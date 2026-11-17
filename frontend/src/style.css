@@ -222,8 +222,8 @@ input[type="checkbox"]:checked:hover {
   box-shadow: 0 4px 0 var(--shadow);
 }
 .primary:hover {
-  background: #84193b;
-  border-color: #84193b;
+  background: #005f34;
+  border-color: #005f34;
 }
 .primary:active {
   transform: translateY(4px);
@@ -243,8 +243,8 @@ input[type="checkbox"]:checked:hover {
   color: #fff;
 }
 .dark:hover {
-  background: #741634;
-  border-color: #741634;
+  background: #00532e;
+  border-color: #00532e;
 }
 .text-link {
   display: inline-flex;
@@ -326,7 +326,7 @@ input[type="checkbox"]:checked:hover {
   background: var(--surface);
   color: var(--title);
   border-radius: var(--radius-block);
-  box-shadow: 0 6px 0 var(--shadow);
+  box-shadow: 0 6px 0 var(--gov-deep);
   transition:
     background 0.12s,
     transform 0.08s;
@@ -347,7 +347,7 @@ input[type="checkbox"]:checked:hover {
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 84px;
-  color: var(--link);
+  color: var(--gov);
 }
 .band-gold {
   background: var(--uabc-gold);
@@ -442,7 +442,7 @@ input[type="checkbox"]:checked:hover {
 .shelters {
   flex: 999 1 520px;
   min-width: 0;
-  border: 2px solid #e8cdd6;
+  border: 2px solid #cfe7d8;
   border-radius: var(--radius-block);
   padding: 26px;
 }
@@ -493,7 +493,7 @@ input[type="checkbox"]:checked:hover {
   color: var(--title);
 }
 .risk-card p {
-  color: #3d2a12;
+  color: #3a3220;
   margin-bottom: 8px;
 }
 .prep-grid {
@@ -513,7 +513,7 @@ input[type="checkbox"]:checked:hover {
   transition: background 0.12s;
 }
 .prep-card:hover {
-  background: #741634;
+  background: #00532e;
 }
 .prep-card svg {
   color: var(--uabc-gold);
@@ -618,7 +618,7 @@ input[type="checkbox"]:checked:hover {
   transition: background 0.12s;
 }
 .step-action:hover {
-  background: #84193b;
+  background: #005f34;
 }
 .step-action:focus-visible {
   outline-color: var(--edge);
@@ -658,7 +658,7 @@ input[type="checkbox"]:checked:hover {
   color: var(--title);
 }
 .plan-summary p {
-  color: #3d2a12;
+  color: #3a3220;
   font-size: 16px;
 }
 .plan-summary button {
@@ -670,7 +670,7 @@ input[type="checkbox"]:checked:hover {
   gap: 20px;
 }
 .paper-panel {
-  border: 2px solid #e8cdd6;
+  border: 2px solid #cfe7d8;
   border-radius: var(--radius-card);
   padding: 28px;
 }
@@ -712,7 +712,7 @@ input[type="checkbox"]:checked:hover {
   min-height: 64px;
   padding: 14px 18px;
   margin-bottom: 10px;
-  border: 2px solid #e8cdd6;
+  border: 2px solid #cfe7d8;
   border-radius: 16px;
   background: var(--surface);
   cursor: pointer;
@@ -771,7 +771,7 @@ input[type="checkbox"]:checked:hover {
   font-size: 40px;
 }
 .backpack-summary > p {
-  color: #3d2a12;
+  color: #3a3220;
 }
 .backpack-summary .progress-track {
   margin: 16px 0 8px;
@@ -783,7 +783,7 @@ input[type="checkbox"]:checked:hover {
   margin: 12px 0;
 }
 .backpack-summary .micro {
-  color: #3d2a12;
+  color: #3a3220;
 }
 .full {
   width: 100%;
@@ -894,7 +894,7 @@ input[type="checkbox"]:checked:hover {
   color: var(--ink);
 }
 .modal::backdrop {
-  background: #2a0814cc;
+  background: #002a19cc;
 }
 .modal-body {
   padding: 36px;
@@ -1881,7 +1881,7 @@ input[type="checkbox"]:checked {
   background: var(--surface);
 }
 .fact-time {
-  background: #f3e8c8;
+  background: #fff1d6;
 }
 .fact-rain {
   background: #e6f0ff;
@@ -2086,7 +2086,7 @@ input[type="checkbox"]:checked {
   background: #cfe4ff;
 }
 .wx-heat {
-  background: #f3e8c8;
+  background: #fff1d6;
 }
 .wx-cold {
   background: #eef4ff;
@@ -3026,7 +3026,7 @@ input[type="checkbox"]:checked {
   background: var(--green-tint);
 }
 .web-styles {
-  border: 2px solid #e8cdd6;
+  border: 2px solid #cfe7d8;
   border-radius: var(--radius-block);
   margin-bottom: 48px;
 }
@@ -3073,7 +3073,7 @@ input[type="checkbox"]:checked {
 }
 .token-block {
   background: var(--deep-fill);
-  color: #f3e4e9;
+  color: #e6f4ec;
   padding: 18px 20px;
   border-radius: 14px;
   overflow-x: auto;
@@ -3538,7 +3538,7 @@ article.game-card .game-card-body {
 .play-fab:hover,
 .play-fab:focus-visible {
   background: #f0ad2c;
-  box-shadow: 0 0 0 6px #c49a3c55;
+  box-shadow: 0 0 0 6px #dd971a55;
   animation-play-state: paused;
 }
 .play-fab:hover .play-fab-icon,
@@ -3795,7 +3795,7 @@ article.game-card .game-card-body {
   .call-main:hover {
     transform: scale(1.04);
     box-shadow:
-      0 6px 0 var(--shadow),
+      0 6px 0 var(--gov-deep),
       0 0 0 6px #ffffff66,
       0 0 0 12px #ffffff26;
   }
@@ -4033,7 +4033,7 @@ a.game-card:active,
   box-shadow: 0 6px 0 var(--shadow);
 }
 .gm-hill-back {
-  fill: #84193b;
+  fill: #005f34;
 }
 .gm-hill-front {
   fill: var(--title);
@@ -4595,6 +4595,7 @@ a.game-card:active,
   top: 0;
   z-index: 35;
   border-bottom: 0;
+  border-top: 5px solid var(--gov);
   background: var(--surface);
   transition: box-shadow 0.2s;
 }
@@ -6485,10 +6486,21 @@ button.prep-card {
 }
 
 /* ===== Bomberos en el inicio: franja cálida entre el 911 y la alerta ===== */
+/* Ayuda cercana (dependencias oficiales): banda guinda de gobierno */
 .band-fire {
-  background: #fff1e6;
-  color: #7a2400;
-  border-bottom: 4px solid #f4511e;
+  background: var(--gov-deep);
+  color: #fff;
+  border-bottom: 4px solid var(--uabc-gold);
+}
+.band-fire .button.primary {
+  --shadow: #3a0a1d;
+  background: #fff;
+  border-color: #fff;
+  color: var(--gov-deep);
+}
+.band-fire .button.primary:hover {
+  background: #f6e8ed;
+  border-color: #f6e8ed;
 }
 .fire-row {
   display: flex;
@@ -6504,10 +6516,10 @@ button.prep-card {
   height: 72px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: var(--surface);
+  background: #fff;
   color: #e2470f;
-  border: 3px solid #7a2400;
-  box-shadow: 0 4px 0 #7a2400;
+  border: 3px solid #3a0a1d;
+  box-shadow: 0 4px 0 #3a0a1d;
 }
 .fire-badge svg {
   animation: flame-sway 1.6s ease-in-out infinite;
@@ -6531,13 +6543,13 @@ button.prep-card {
   min-width: 0;
 }
 .fire-text h2 {
-  color: #7a2400;
+  color: #fff;
   font-size: 34px;
   line-height: 1.05;
   margin-bottom: 4px;
 }
 .fire-text p {
-  color: #7a2400;
+  color: #f6e3ea;
   font-size: 18px;
   font-weight: 500;
 }
@@ -6962,6 +6974,14 @@ html.splash-open {
   overflow-y: auto;
   background: var(--surface);
 }
+/* Franja de arriba: mitad verde UABC, mitad guinda de gobierno */
+.splash::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 8px;
+  background: linear-gradient(90deg, var(--uabc-green) 50%, var(--gov) 50%);
+}
 .splash-card {
   width: min(1040px, 100%);
   display: grid;
@@ -6985,7 +7005,7 @@ html.splash-open {
   height: 6px;
   margin-top: 14px;
   border-radius: 999px;
-  background: var(--uabc-gold);
+  background: linear-gradient(90deg, var(--uabc-green) 50%, var(--gov) 50%);
   animation: splash-line 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s both;
 }
 .splash-lead {
@@ -7013,6 +7033,17 @@ html.splash-open {
   animation: splash-tile 0.4s cubic-bezier(0.34, 1.5, 0.64, 1) both;
   animation-delay: calc(0.9s + var(--i) * 0.07s);
 }
+.splash-partners li {
+  padding: 8px 10px;
+  border: 2px solid var(--uabc-green);
+  border-radius: 18px;
+  background: #e6f4ec;
+}
+/* Aliados de gobierno y auxilio: mismo recuadro, en guinda */
+.splash-partners li.is-gov {
+  border-color: var(--gov);
+  background: #f6e8ed;
+}
 .splash-partners li img {
   display: block;
   width: auto;
@@ -7026,12 +7057,12 @@ html.splash-open {
   gap: 8px;
   min-height: 44px;
   padding: 0 18px;
-  border: 3px solid var(--edge);
+  border: 3px solid var(--gov-deep);
   border-radius: 999px;
-  background: var(--surface);
-  color: var(--title);
+  background: var(--gov);
+  color: #fff;
   font-weight: 700;
-  box-shadow: 0 4px 0 var(--shadow);
+  box-shadow: 0 4px 0 var(--gov-deep);
   animation: splash-rise 0.4s ease 0.3s both;
 }
 @keyframes splash-seal {
@@ -7117,23 +7148,23 @@ html.splash-open {
 
 /* Iconos, ilustraciones y la tarjeta del 911: idénticos al modo claro */
 :root[data-theme="dark"] .nav-icon, :root[data-theme="dark"] .advice-icon, :root[data-theme="dark"] .phone-icon, :root[data-theme="dark"] .supply-icon, :root[data-theme="dark"] .play-fab-icon, :root[data-theme="dark"] .video-soon-icon, :root[data-theme="dark"] .prep-icon, :root[data-theme="dark"] .step-icon, :root[data-theme="dark"] .gm-token-icon, :root[data-theme="dark"] .station-icon, :root[data-theme="dark"] .kit-icon, :root[data-theme="dark"] .gm-step-icon, :root[data-theme="dark"] .team-way-icon, :root[data-theme="dark"] .gm-detail-icon, :root[data-theme="dark"] .fact-icon, :root[data-theme="dark"] .icon-shelf, :root[data-theme="dark"] .shelter-pin, :root[data-theme="dark"] .fire-badge, :root[data-theme="dark"] .flames, :root[data-theme="dark"] .call-main, :root[data-theme="dark"] .gm-badge, :root[data-theme="dark"] .gm-scene-wrap, :root[data-theme="dark"] .ocean-lab, :root[data-theme="dark"] .pacific-lab, :root[data-theme="dark"] .wx-stage, :root[data-theme="dark"] .wx-cycle {
-  --uabc-green: #9b2247;
-  --uabc-gold: #c49a3c;
-  --green-deep: #611232;
-  --gold-text: #7d5e1d;
+  --uabc-green: #00723f;
+  --uabc-gold: #dd971a;
+  --green-deep: #003d24;
+  --gold-text: #8a5a00;
   --paper: #ffffff;
   --surface: #ffffff;
-  --ink: #2a1d20;
-  --muted: #5f5155;
-  --line: #e8dcc4;
-  --control-line: #8d7d7f;
-  --green-tint: #f3e4e9;
-  --gold-tint: #f3e8c8;
-  --title: #611232;
-  --edge: #611232;
-  --shadow: #611232;
-  --deep-fill: #611232;
-  --link: #9b2247;
+  --ink: #1c2621;
+  --muted: #4a5650;
+  --line: #dce3de;
+  --control-line: #7c8a82;
+  --green-tint: #e6f4ec;
+  --gold-tint: #fff1d6;
+  --title: #003d24;
+  --edge: #003d24;
+  --shadow: #003d24;
+  --deep-fill: #003d24;
+  --link: #00723f;
   color-scheme: light;
 }
 :root[data-theme="dark"] .call-main {
@@ -7142,17 +7173,17 @@ html.splash-open {
 /* Franja ocre de El Niño: el texto sigue oscuro sobre el ocre */
 :root[data-theme="dark"] .band-gold {
   --surface: #ffffff;
-  --title: #1e1a1b;
-  --ink: #1e1a1b;
-  --link: #1e1a1b;
-  color: #1e1a1b;
+  --title: #25292b;
+  --ink: #25292b;
+  --link: #25292b;
+  color: #25292b;
 }
 :root[data-theme="dark"] .band-gold .button.dark {
-  --deep-fill: #1e1a1b;
-  color: #f3e8c8;
+  --deep-fill: #25292b;
+  color: #fff1d6;
 }
 :root[data-theme="dark"] .counter-note {
-  color: #f3e8c8;
+  color: #fff1d6;
 }
 :root[data-theme="dark"] :is(.risk-card p, .plan-summary p, .backpack-summary > p, .backpack-summary .micro) {
   color: var(--muted);
@@ -7161,7 +7192,7 @@ html.splash-open {
   color: var(--title);
 }
 :root[data-theme="dark"] .call-main:hover {
-  background: #f3e8c8;
+  background: #fff1d6;
 }
 :root[data-theme="dark"] .shelter-list li {
   background: var(--green-tint);
@@ -7170,7 +7201,7 @@ html.splash-open {
   background: var(--line);
 }
 :root[data-theme="dark"] .step-card.done {
-  background: #4a2232;
+  background: #2f4a3e;
 }
 /* Tarjetas de servicios y tonos: versiones oscuras con texto claro */
 :root[data-theme="dark"] .theme-civil { background: #26314a; --card-ink: #afc3f2; --card-ink-strong: #d3defa; --card-edge: #7d92c4; }
@@ -7178,39 +7209,28 @@ html.splash-open {
 :root[data-theme="dark"] .theme-secret { background: #332e45; --card-ink: #cdbff0; --card-ink-strong: #e4dcfa; --card-edge: #9c8ec4; }
 :root[data-theme="dark"] .theme-cfe { --card-ink: #e2c07a; --card-ink-strong: #f2d9a6; --card-edge: #b8954e; }
 :root[data-theme="dark"] .theme-water { background: #243a3f; --card-ink: #97d0db; --card-ink-strong: #c4e8ef; --card-edge: #6fa3ad; }
-:root[data-theme="dark"] .tone-blue { --tone-bg: #26314a; --tone-ink: #d3defa; --tone-strong: #7d92c4; --tone-edge: #0f0b0c; }
-:root[data-theme="dark"] .fact-time { background: #3a3226; }
+:root[data-theme="dark"] .tone-blue { --tone-bg: #26314a; --tone-ink: #d3defa; --tone-strong: #7d92c4; --tone-edge: #16191b; }
+:root[data-theme="dark"] .fact-time { background: #3a332e; }
 :root[data-theme="dark"] .fact-rain { background: #26314a; }
 :root[data-theme="dark"] .fact-slide { background: #3d2e27; }
 :root[data-theme="dark"] .fact-change { background: #332e45; }
 :root[data-theme="dark"] .fc-blue { background: #26314a; color: #afc3f2; }
 :root[data-theme="dark"] .fc-red { background: #46262a; color: #f2a3aa; }
 /* Bomberos: franja y estaciones en café oscuro; el fueguito no cambia */
-:root[data-theme="dark"] .band-fire { background: #3d2e27; color: #f2b79a; }
-:root[data-theme="dark"] :is(.fire-text h2, .fire-text p, .station-info strong, .station-central-call small, .map-pop strong, .map-pop small) { color: #f2b79a; }
+:root[data-theme="dark"] .band-fire { background: #4a1a2c; color: #fff; }
+:root[data-theme="dark"] :is(.station-info strong, .station-central-call small, .map-pop strong, .map-pop small) { color: #f2b79a; }
 :root[data-theme="dark"] :is(.station-call, .station-empty a, .map-pop .map-pop-call) { color: #f8c6ad; }
 :root[data-theme="dark"] .station-911 { color: #f2a3aa; }
 :root[data-theme="dark"] .station-card.is-central { background: #3d2e27; }
 /* Los tonos de cada tarjeta se calculan en la tarjeta; dentro de sus iconos se reponen los del modo claro */
-:root[data-theme="dark"] .tone-gold :is(.advice-icon, .prep-icon, .gm-token-icon, .gm-badge, .step-icon, .gm-step-icon, .gm-detail-icon, .kit-icon, .supply-icon) { --tone-bg: #f3e8c8; --tone-ink: #611232; --tone-strong: #c49a3c; --tone-edge: #7d5e1d; }
+:root[data-theme="dark"] .tone-gold :is(.advice-icon, .prep-icon, .gm-token-icon, .gm-badge, .step-icon, .gm-step-icon, .gm-detail-icon, .kit-icon, .supply-icon) { --tone-bg: #fff1d6; --tone-ink: #003d24; --tone-strong: #dd971a; --tone-edge: #8a5a00; }
 :root[data-theme="dark"] .tone-blue :is(.advice-icon, .prep-icon, .gm-token-icon, .gm-badge, .step-icon, .gm-step-icon, .gm-detail-icon, .kit-icon, .supply-icon) { --tone-bg: #eaf2ff; --tone-ink: #0b4fa8; --tone-strong: #0b4fa8; --tone-edge: #083a7c; }
-:root[data-theme="dark"] .tone-green :is(.advice-icon, .prep-icon, .gm-token-icon, .gm-badge, .step-icon, .gm-step-icon, .gm-detail-icon, .kit-icon, .supply-icon) { --tone-bg: #f3e4e9; --tone-ink: #611232; --tone-strong: #9b2247; --tone-edge: #611232; }
+:root[data-theme="dark"] .tone-green :is(.advice-icon, .prep-icon, .gm-token-icon, .gm-badge, .step-icon, .gm-step-icon, .gm-detail-icon, .kit-icon, .supply-icon) { --tone-bg: #e6f4ec; --tone-ink: #003d24; --tone-strong: #00723f; --tone-edge: #003d24; }
 /* Pantalla de bienvenida: fondo gris y los logos juntos en una franja blanca */
 :root[data-theme="dark"] .splash {
   background: var(--paper);
 }
-:root[data-theme="dark"] .splash-partners {
-  width: auto;
-  max-width: 100%;
-  padding: 22px 32px;
-  border-radius: 24px;
-  background: #ffffff;
-}
-@media (max-width: 700px) {
-  :root[data-theme="dark"] .splash-partners {
-    padding: 18px 16px;
-  }
-}
+/* Los recuadros de los logos ya llevan fondo claro propio */
 
 /* Botón de modo oscuro en el encabezado: media luna; rellena cuando está activo */
 .site-nav {
@@ -7315,7 +7335,7 @@ html.splash-open {
 }
 @media (min-width: 701px) {
   .splash-partners {
-    column-gap: 28px;
+    column-gap: 16px;
   }
   .splash-partners li {
     height: clamp(84px, 9vw, 112px);
@@ -7330,14 +7350,14 @@ html.splash-open {
 
 /* Modo oscuro: sobre el dorado el texto va oscuro (el crema de los títulos no se lee ahí) */
 :root[data-theme="dark"] :is(.gm-kicker, .counter-share, .tone-gold .game-tag, .play-fab, .play-fab-text strong) {
-  color: #1e1a1b;
+  color: #25292b;
 }
 :root[data-theme="dark"] .tone-blue .game-tag {
   color: #10213f;
 }
 /* Guía de estilos: las muestras claras conservan texto oscuro en modo oscuro */
 :root[data-theme="dark"] .swatch:not(.on-dark) {
-  color: #2a1d20;
+  color: #1c2621;
 }
 
 .agencies {
@@ -7477,16 +7497,16 @@ html.splash-open {
 .agency-secret { --a-bg: #f2edff; --a-ink: #43207d; --a-strong: #5b2ca8; }
 .agency-cfe { --a-bg: var(--gold-tint); --a-ink: #5c3d00; --a-strong: #8a5a00; }
 .agency-water { --a-bg: #e6f6f8; --a-ink: #084a57; --a-strong: #0b6577; }
-:root[data-theme="dark"] .agency-card { box-shadow: 0 5px 0 #0f0b0c; }
-:root[data-theme="dark"] .agency-call { color: #1e1a1b; }
+:root[data-theme="dark"] .agency-card { box-shadow: 0 5px 0 #16191b; }
+:root[data-theme="dark"] .agency-call { color: #25292b; }
 :root[data-theme="dark"] .agency-call:hover { color: #fff; }
-:root[data-theme="dark"] .agency-911 { --a-bg: #3a2a30; --a-ink: #f3e8c8; --a-strong: #e8b3c3; }
+:root[data-theme="dark"] .agency-911 { --a-bg: #393f42; --a-ink: #fff1d6; --a-strong: #a4c3b2; }
 :root[data-theme="dark"] .agency-civil { --a-bg: #26314a; --a-ink: #d3defa; --a-strong: #afc3f2; }
 :root[data-theme="dark"] .agency-fire { --a-bg: #3d2e27; --a-ink: #fad6c4; --a-strong: #f2b79a; }
 :root[data-theme="dark"] .agency-police { --a-bg: #232c40; --a-ink: #d3defa; --a-strong: #9fb6e8; }
 :root[data-theme="dark"] .agency-redcross { --a-bg: #46262a; --a-ink: #fad2d6; --a-strong: #f2a3aa; }
 :root[data-theme="dark"] .agency-secret { --a-bg: #332e45; --a-ink: #e4dcfa; --a-strong: #cdbff0; }
-:root[data-theme="dark"] .agency-cfe { --a-bg: #3a3226; --a-ink: #f2d9a6; --a-strong: #e2c07a; }
+:root[data-theme="dark"] .agency-cfe { --a-bg: #3a332e; --a-ink: #f2d9a6; --a-strong: #e2c07a; }
 :root[data-theme="dark"] .agency-water { --a-bg: #243a3f; --a-ink: #c4e8ef; --a-strong: #97d0db; }
 @media (max-width: 760px) {
   .agency-grid { grid-template-columns: 1fr; }
@@ -7751,7 +7771,7 @@ html.splash-open {
   margin: 0;
   flex: 1 1 280px;
 }
-:root[data-theme="dark"] .call-practice { background: #3a3226; }
+:root[data-theme="dark"] .call-practice { background: #3a332e; }
 
 .who-list {
   display: grid;
@@ -7811,7 +7831,7 @@ html.splash-open {
   color: var(--title);
   border: 2px solid var(--uabc-green);
 }
-:root[data-theme="dark"] .who-call { background: #e8b3c3; color: #1e1a1b; }
+:root[data-theme="dark"] .who-call { background: #a4c3b2; color: #25292b; }
 :root[data-theme="dark"] .who-call:hover { background: #fff; }
 
 .help-lines {
@@ -7898,7 +7918,7 @@ html.splash-open {
 }
 .lang-option.active {
   background: var(--uabc-gold);
-  color: #2a1d20;
+  color: #1c2621;
 }
 .lang-option:focus-visible {
   outline: 3px solid #fff;
@@ -8033,9 +8053,9 @@ html.splash-open {
   color: var(--muted);
   font-size: 13px;
 }
-:root[data-theme="dark"] .migrant-kit li { background: #3a2a30; }
+:root[data-theme="dark"] .migrant-kit li { background: #393f42; }
 :root[data-theme="dark"] .migrant-kit svg,
-:root[data-theme="dark"] .migrant-rain-card h3 svg { color: #e8b3c3; }
+:root[data-theme="dark"] .migrant-rain-card h3 svg { color: #a4c3b2; }
 .migrant-numbers {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -8070,7 +8090,7 @@ html.splash-open {
 .migrant-number.is-911 strong {
   color: var(--uabc-gold);
 }
-:root[data-theme="dark"] .migrant-number svg { color: #e8b3c3; }
+:root[data-theme="dark"] .migrant-number svg { color: #a4c3b2; }
 :root[data-theme="dark"] .migrant-number.is-911 svg { color: var(--uabc-gold); }
 .migrant-shelters {
   margin-top: 14px;
@@ -8174,7 +8194,7 @@ html.splash-open {
   border-radius: 20px;
   background: #fff;
   color: #1a1a1a;
-  box-shadow: 0 14px 30px -18px #4a0f2280;
+  box-shadow: 0 14px 30px -18px #002a1980;
   opacity: 0;
   transform: translateY(28px) rotate(-1.5deg) scale(0.97);
   transition: opacity 0.6s ease, transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
@@ -8184,7 +8204,7 @@ html.splash-open {
   transform: none;
 }
 .migrant-card.shown:hover {
-  box-shadow: 0 20px 38px -18px #4a0f22a0;
+  box-shadow: 0 20px 38px -18px #002a19a0;
 }
 .migrant-card.complete {
   border-style: solid;
@@ -8196,7 +8216,7 @@ html.splash-open {
   justify-content: space-between;
   gap: 12px;
   padding-bottom: 10px;
-  border-bottom: 3px solid #9b2247;
+  border-bottom: 3px solid #00723f;
   font-weight: 700;
 }
 .migrant-card-911 {
@@ -8206,7 +8226,7 @@ html.splash-open {
   min-width: 84px;
   padding: 4px 12px;
   border-radius: 14px;
-  background: #9b2247;
+  background: #00723f;
   color: #fff;
   font-family: var(--font-heading);
   font-size: 40px;
@@ -8218,7 +8238,7 @@ html.splash-open {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  border: 3px solid #9b2247;
+  border: 3px solid #00723f;
   animation: card-ring 2.2s ease-out infinite;
 }
 .migrant-card-911:focus-visible {
@@ -8254,7 +8274,7 @@ html.splash-open {
 .migrant-card-icon {
   flex: none;
   margin-top: 2px;
-  color: #9b2247;
+  color: #00723f;
   transition: transform 0.3s ease;
 }
 .migrant-card-ht {
@@ -8273,7 +8293,7 @@ html.splash-open {
   border-bottom: 2px solid #999;
   border-radius: 0;
   background:
-    linear-gradient(#9b2247, #9b2247) left bottom / 0 3px no-repeat,
+    linear-gradient(#00723f, #00723f) left bottom / 0 3px no-repeat,
     transparent;
   color: #1a1a1a;
   font: inherit;
@@ -8383,7 +8403,7 @@ html.splash-open {
   margin-top: 2px;
   color: var(--uabc-green);
 }
-:root[data-theme="dark"] .migrant-tips svg { color: #e8b3c3; }
+:root[data-theme="dark"] .migrant-tips svg { color: #a4c3b2; }
 
 /* Banda que lleva a la página desde Inicio e Información */
 .kreyol-band {
@@ -8407,7 +8427,7 @@ html.splash-open {
   font-size: 22px;
   color: var(--title);
 }
-:root[data-theme="dark"] .kreyol-band { background: #3a2a30; border-color: #e8b3c3; }
+:root[data-theme="dark"] .kreyol-band { background: #393f42; border-color: #a4c3b2; }
 
 @media (max-width: 1000px) {
   .migrant-kit { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -8447,7 +8467,7 @@ html.splash-open {
     opacity: 1;
     transform: none;
     box-shadow: none;
-    border: 3px dashed #9b2247;
+    border: 3px dashed #00723f;
   }
   .printing-card .migrant-card-row { animation: none; opacity: 1; transform: none; }
   .printing-card .migrant-card-911::after,
@@ -8460,4 +8480,38 @@ html.splash-open {
 }
 .info-kreyol {
   margin-bottom: 36px;
+}
+
+/* ===== Pie de página institucional en guinda (nivel B) =====
+   Ocupa todo el ancho con una sombra extendida; los colores se reasignan aquí. */
+.footer {
+  --title: #ffffff;
+  --ink: #f6e6ec;
+  --muted: #f0d3dd;
+  --link: #ffffff;
+  --line: #ffffff33;
+  --control-line: #e2a7ba;
+  --surface: #7a1a3d;
+  --green-tint: #7a1a3d;
+  --shadow: #3a0a1d;
+  --edge: #ffffff;
+  border-top: 0;
+  background: var(--gov-deep);
+  box-shadow: 0 0 0 100vmax var(--gov-deep);
+  clip-path: inset(0 -100vmax);
+  color: #fff;
+}
+.footer .social-links a:hover {
+  background: #fff;
+  color: var(--gov-deep);
+}
+.footer :is(.footer-link, .visits-tag):hover {
+  border-color: #fff;
+  color: #fff;
+}
+:root[data-theme="dark"] .footer {
+  --surface: #5a1f35;
+  --green-tint: #5a1f35;
+  background: #3f1424;
+  box-shadow: 0 0 0 100vmax #3f1424;
 }

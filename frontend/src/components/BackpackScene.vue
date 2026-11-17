@@ -79,7 +79,7 @@ const shapes = {
     ctx.fill();
     ctx.fillStyle = "#fff7c2";
     ctx.fillRect(s * 0.4, -s * 0.16, s * 0.05, s * 0.32);
-    ctx.fillStyle = "#2a1d20";
+    ctx.fillStyle = "#1c2621";
     ctx.fillRect(-s * 0.2, -s * 0.13, s * 0.1, s * 0.05);
   },
   radio(ctx, s, t) {
@@ -145,7 +145,7 @@ const shapes = {
     ctx.arc(-s * 0.08, s * 0.04, s * 0.22, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillRect(-s * 0.08, -s * 0.18, s * 0.46, s * 0.2);
-    ctx.fillStyle = "#2a1d20";
+    ctx.fillStyle = "#1c2621";
     ctx.beginPath();
     ctx.arc(-s * 0.08, s * 0.04, s * 0.07, 0, Math.PI * 2);
     ctx.fill();
@@ -159,7 +159,7 @@ const shapes = {
     for (const dx of [-s * 0.16, s * 0.16]) {
       ctx.fillStyle = "#2b8a3e";
       ctx.fillRect(dx - s * 0.12, -s * 0.3, s * 0.24, s * 0.6);
-      ctx.fillStyle = "#2a1d20";
+      ctx.fillStyle = "#1c2621";
       ctx.fillRect(dx - s * 0.12, s * 0.12, s * 0.24, s * 0.18);
       ctx.fillStyle = "#c9d1d4";
       ctx.fillRect(dx - s * 0.05, -s * 0.37, s * 0.1, s * 0.07);
@@ -334,7 +334,7 @@ function createScene() {
       const left = cx - bw / 2;
       const right = cx + bw / 2;
       const rr = bw * 0.26;
-      ctx.fillStyle = "#c49a3c";
+      ctx.fillStyle = "#dd971a";
       ctx.beginPath();
       ctx.moveTo(left, mouth);
       ctx.ellipse(cx, mouth, bw / 2, 11, 0, Math.PI, 0, true);
@@ -358,7 +358,7 @@ function createScene() {
       ctx.ellipse(cx, mouth, bw / 2 - 2, 10, 0, Math.PI, 0, true);
       ctx.stroke();
       for (const sx of [left + bw * 0.16, right - bw * 0.16 - 9]) {
-        ctx.fillStyle = "#611232";
+        ctx.fillStyle = "#003d24";
         ctx.beginPath();
         ctx.roundRect(sx, mouth + 12, 9, bh * 0.5, 3);
         ctx.fill();
@@ -381,7 +381,7 @@ function createScene() {
       ctx.save();
       ctx.translate(cx + bw * 0.12, py + 8);
       ctx.rotate(Math.sin(t * 2.4) * 0.25 + squashV * 0.08);
-      ctx.fillStyle = "#611232";
+      ctx.fillStyle = "#003d24";
       ctx.beginPath();
       ctx.roundRect(-2.5, 0, 5, 12, 2);
       ctx.fill();

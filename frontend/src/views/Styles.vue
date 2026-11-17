@@ -4,17 +4,18 @@ import Icon from "../components/Icon.vue";
 import MascotGuide from "../components/MascotGuide.vue";
 import { icons, iconSvg } from "../icons";
 
-// Paleta guinda y dorado, de la Guía de Identidad Gráfica del Gobierno de México 2024-2030
+// Paleta "Cimarrón verde": verde y ocre UABC, con el guinda de gobierno solo como acento
 const brandColors = [
-  { name: "Guinda", hex: "#9B2247", use: "Botones, menú y bloques de énfasis (Pantone 7420 C)", dark: true },
-  { name: "Guinda oscuro", hex: "#611232", use: "Portadas, títulos y cantos de tarjeta (Pantone 7421 C)", dark: true },
-  { name: "Dorado", hex: "#C49A3C", use: "Avisos, números de paso y detalles (tono claro del 1255 C)", dark: false },
+  { name: "Verde UABC", hex: "#00723f", use: "Botones, menú, portadas y bloques de énfasis", dark: true },
+  { name: "Verde profundo", hex: "#003d24", use: "Títulos y cantos de tarjeta", dark: true },
+  { name: "Ocre UABC", hex: "#dd971a", use: "Avisos, números de paso y detalles", dark: false },
+  { name: "Guinda gobierno", hex: "#9b2247", use: "Solo la franja del encabezado y el botón del 911 (Pantone 7420 C)", dark: true },
 ];
 const supportColors = [
-  { name: "Dorado texto", hex: "#7D5E1D", use: "Texto chico en tono dorado", dark: true },
+  { name: "Ocre texto", hex: "#8a5a00", use: "Texto chico en tono ocre", dark: true },
   { name: "Crema", hex: "#FBF6EA", use: "Fondo de página", dark: false },
-  { name: "Guinda claro", hex: "#F3E4E9", use: "Fondos de tarjetas", dark: false },
-  { name: "Dorado claro", hex: "#F3E8C8", use: "Fondos de avisos", dark: false },
+  { name: "Verde claro", hex: "#e6f4ec", use: "Fondos de tarjetas", dark: false },
+  { name: "Ocre claro", hex: "#fff1d6", use: "Fondos de avisos", dark: false },
 ];
 const cardColors = [
   { name: "Protección Civil", bg: "#EAF2FF", ink: "#0B4FA8" },
@@ -28,14 +29,14 @@ const writing = [
   ["Sin punto final", "En títulos, botones y textos de una oración"],
   ["Sin eslóganes", "Nada de frases que suenan bonito y no dicen nada"],
 ];
-const tokens = `--uabc-green: #9b2247;
---band: #611232;
---uabc-gold: #c49a3c;
---green-deep: #611232;
---gold-text: #7d5e1d;
+const tokens = `--uabc-green: #00723f;
+--band: #003d24;
+--uabc-gold: #dd971a;
+--green-deep: #003d24;
+--gold-text: #8a5a00;
 --paper: #fbf6ea;
---green-tint: #f3e4e9;
---gold-tint: #f3e8c8;
+--green-tint: #e6f4ec;
+--gold-tint: #fff1d6;
 --radius-card: 20px;
 --radius-block: 24px;
 --radius-button: 14px;`;

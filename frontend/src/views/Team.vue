@@ -213,8 +213,8 @@ const studentCount = new Set(
 }
 .tone-gold .team-game-tag,
 .tone-gold .team-avatar {
-  /* Guinda oscuro fijo: en modo oscuro --title se vuelve claro y no se lee sobre el dorado */
-  color: #611232;
+  /* Verde profundo fijo: en modo oscuro --title se vuelve claro y no se lee sobre el ocre */
+  color: #003d24;
 }
 @media (max-width: 900px) {
   .team-games {

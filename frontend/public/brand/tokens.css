@@ -19,29 +19,32 @@
   src: url("/assets/fonts/baloo-2-latin-800-normal.woff2") format("woff2");
 }
 :root {
-  /* Paleta guinda y dorado (Guía de Identidad Gráfica del Gobierno de México 2024-2030).
-     Los nombres de las variables se quedan como estaban para no tocar todo el CSS:
-     --uabc-green es el guinda 7420 C y --uabc-gold un dorado claro del 1255 C. */
-  --uabc-green: #9b2247;
-  --uabc-gold: #c49a3c;
-  --green-deep: #611232;
-  --gold-text: #7d5e1d;
+  /* Paleta "Cimarrón verde": verde y ocre UABC en todo el sitio, fondo crema,
+     y el guinda del Gobierno de México (7420 C / 7421 C) solo como acento
+     institucional: la franja de arriba del encabezado y el botón del 911. */
+  --uabc-green: #00723f;
+  --uabc-gold: #dd971a;
+  --green-deep: #003d24;
+  --gold-text: #8a5a00;
   --paper: #fbf6ea;
   --surface: #ffffff;
-  --ink: #2a1d20;
-  --muted: #5f5155;
-  --line: #e8dcc4;
-  --control-line: #8d7d7f;
-  --green-tint: #f3e4e9;
-  --gold-tint: #f3e8c8;
+  --ink: #1c2621;
+  --muted: #4a5650;
+  --line: #dce3de;
+  --control-line: #7c8a82;
+  --green-tint: #e6f4ec;
+  --gold-tint: #fff1d6;
   /* Papeles del verde profundo: en modo claro valen lo mismo; en oscuro se separan */
-  --title: #611232;
-  --edge: #611232;
-  --shadow: #611232;
-  --deep-fill: #611232;
-  --link: #9b2247;
-  /* Bandas de portada: guinda oscuro (7421 C) */
-  --band: #611232;
+  --title: #003d24;
+  --edge: #003d24;
+  --shadow: #003d24;
+  --deep-fill: #003d24;
+  --link: #00723f;
+  /* Bandas de portada: verde UABC */
+  --band: #00723f;
+  /* Acento de gobierno (guinda) */
+  --gov: #9b2247;
+  --gov-deep: #611232;
   --font-heading: "Barlow Condensed", sans-serif;
   --font-body: "DM Sans", sans-serif;
   --font-play: "Baloo 2", "Barlow Condensed", sans-serif;
@@ -62,23 +65,23 @@
    Se activa con data-theme="dark" en <html>; index.html lo pone según el sistema
    o la elección guardada (botón del pie). Contrastes en docs/estilos.md */
 :root[data-theme="dark"] {
-  --uabc-green: #8a3553;
-  --uabc-gold: #d4b46a;
-  --green-deep: #e6d194;
-  --gold-text: #d4b46a;
-  --paper: #1e1a1b;
-  --surface: #2a2224;
-  --ink: #f1e9e4;
-  --muted: #c2b4b0;
-  --line: #4a3e41;
-  --control-line: #9c8c8f;
-  --green-tint: #3a2a30;
-  --gold-tint: #3a3226;
-  --title: #e6d194;
-  --edge: #9c8c8f;
-  --shadow: #0f0b0c;
-  --deep-fill: #4a2232;
-  --link: #e8b3c3;
-  --band: #3f1424;
+  --uabc-green: #3a6f5a;
+  --uabc-gold: #c9a45e;
+  --green-deep: #fff1d6;
+  --gold-text: #c9a45e;
+  --paper: #25292b;
+  --surface: #2f3437;
+  --ink: #edeeeb;
+  --muted: #b5bbb7;
+  --line: #454c4f;
+  --control-line: #8e9893;
+  --green-tint: #393f42;
+  --gold-tint: #3a332e;
+  --title: #fff1d6;
+  --edge: #8e9893;
+  --shadow: #16191b;
+  --deep-fill: #2f4a3e;
+  --link: #a4c3b2;
+  --band: #1f3a2e;
   color-scheme: dark;
 }

@@ -21,7 +21,7 @@ const tones = {
   linterna: ["#b07a00", "#fff6d6"],
   radio: ["#6a3fb5", "#f2edff"],
   documentos: ["#0f7c86", "#e3f6f7"],
-  dinero: ["#9b2247", "#f3e4e9"],
+  dinero: ["#00723f", "#e6f4ec"],
   silbato: ["#c2410c", "#fff1e6"],
   abrigo: ["#3b5bdb", "#edf2ff"],
   higiene: ["#c2255c", "#ffeef4"],
@@ -29,8 +29,8 @@ const tones = {
   carga: ["#2b8a3e", "#ebfbee"],
 };
 const toneStyle = (id, i) => ({
-  "--tone": tones[id]?.[0] ?? "#9b2247",
-  "--tone-bg": tones[id]?.[1] ?? "#f3e4e9",
+  "--tone": tones[id]?.[0] ?? "#00723f",
+  "--tone-bg": tones[id]?.[1] ?? "#e6f4ec",
   "--i": i,
 });
 </script>
