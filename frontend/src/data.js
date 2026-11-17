@@ -802,8 +802,8 @@ export const lessons = [
       "Medicinas aparte, con receta y nombre",
       "Agua segura y alerta a fiebre después de la lluvia",
     ],
-    image: "/assets/images/botiquin.svg",
-    alt: "Ilustración de un botiquín abierto con gasas, vendas, tijeras y un termómetro",
+    image: "/assets/images/botiquin.webp",
+    alt: "Ilustración de un botiquín rojo abierto con venda, gasas, medicina y termómetro, junto a curitas, tijeras y guantes",
   },
 ];
 
