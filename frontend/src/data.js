@@ -994,9 +994,9 @@ export const kitGroups = [
 
 // Qué puede pasar en Tijuana
 export const risks = [
-  { icon: "cloud", tone: "blue", title: "Lluvias fuertes", text: "En poco tiempo se pierde visibilidad, el suelo se satura y moverse se vuelve difícil" },
-  { icon: "risk", tone: "gold", title: "Deslaves", text: "Con la tierra mojada, las laderas y cañadas se pueden venir abajo" },
-  { icon: "wave", tone: "green", title: "Inundaciones", text: "Arroyos, calles bajas y pasos a desnivel se llenan rápido. Nunca los cruces" },
+  { icon: "cloud", tone: "blue", title: "Lluvias fuertes", text: "El suelo se satura y moverse se vuelve difícil" },
+  { icon: "risk", tone: "gold", title: "Deslaves", text: "Laderas y cañadas se pueden venir abajo" },
+  { icon: "wave", tone: "green", title: "Inundaciones", text: "Arroyos y pasos a desnivel se llenan rápido. Nunca los cruces" },
 ];
 
 // Consejos: qué hacer en cada momento

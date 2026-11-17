@@ -5459,10 +5459,14 @@ a.game-card:active,
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+  .purpose-ways li {
+    display: flex;
+  }
   .purpose-ways :is(a, button) {
     flex-direction: column;
     justify-content: center;
     gap: 4px;
+    width: 100%;
     height: 100%;
     min-height: 76px;
     padding: 8px 6px;
@@ -8514,4 +8518,148 @@ html.splash-open {
   --green-tint: #5a1f35;
   background: #3f1424;
   box-shadow: 0 0 0 100vmax #3f1424;
+}
+
+/* ===== Información, versión corta =====
+   Kreyòl como enlace secundario en la portada, el 911 en pasos de una línea
+   y un solo directorio con los detalles plegados. */
+.gm-chips li.gm-chip-link {
+  padding: 0;
+  border-color: var(--uabc-gold);
+  background: var(--uabc-gold);
+  color: #25292b;
+}
+.gm-chip-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 14px;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.gm-chip-link a:hover {
+  text-decoration-thickness: 2px;
+}
+.call-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+  padding: 0;
+  list-style: none;
+}
+.call-chips li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--green-tint);
+  color: var(--title);
+  font-weight: 700;
+}
+.call-steps-short li {
+  align-items: center;
+}
+.call-steps-short .call-step-n {
+  grid-row: auto;
+}
+.call-steps-short strong {
+  font-size: 18px;
+}
+details.call-more {
+  margin-top: 16px;
+}
+:is(.call-more, .agency-more) > summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-weight: 700;
+  color: var(--link);
+  list-style: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+:is(.call-more, .agency-more) > summary::-webkit-details-marker {
+  display: none;
+}
+:is(.call-more, .agency-more) > summary::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-right: 2.5px solid currentColor;
+  border-bottom: 2.5px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 0.15s;
+}
+:is(.call-more, .agency-more)[open] > summary::before {
+  transform: rotate(45deg);
+}
+.call-more[open] > .call-columns {
+  margin-top: 8px;
+}
+.directory-title {
+  scroll-margin-top: 96px;
+}
+.directory-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  align-items: start;
+  gap: 16px;
+}
+.directory-grid .agency-card {
+  gap: 4px;
+  padding: 14px 16px;
+}
+.directory-grid .agency-head h4 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 22px;
+  line-height: 1.05;
+  color: var(--a-ink);
+}
+.directory-grid .agency-icon {
+  width: 44px;
+  height: 44px;
+}
+.agency-more > summary {
+  color: var(--a-ink);
+  font-size: 15px;
+}
+.agency-more[open] {
+  display: grid;
+  gap: 10px;
+}
+.agency-more .agency-what {
+  font-size: 16px;
+}
+.directory-grid .help-note {
+  align-self: center;
+  margin: 0;
+}
+
+/* Portada en pantallas medianas y celular: los tres caminos en tres columnas iguales */
+@media (max-width: 700px) {
+  .purpose-ways {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .purpose-ways li {
+    display: flex;
+  }
+  .purpose-ways :is(a, button) {
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 100%;
+    min-height: 76px;
+    padding: 8px 6px;
+    line-height: 1.15;
+    text-align: center;
+  }
 }

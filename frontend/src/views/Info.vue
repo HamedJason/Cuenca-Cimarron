@@ -7,7 +7,6 @@ import { openLesson } from "../composables/useLesson";
 import {
   agencies,
   call911,
-  emergency,
   games,
   helpLines,
   lessons,
@@ -40,8 +39,10 @@ function scrollFromQuery(ver) {
   }, 700);
 }
 const practice = games.find((game) => game.id === "alerta-911");
-// Protección Civil y Bomberos; el 089 ya va en "Más números de ayuda"
-const cityPhones = emergency.phones.filter((item) => item.theme !== "secret");
+// Líneas de ayuda que no son ya una dependencia del directorio (088, Línea de la Vida, 079)
+const extraLines = helpLines.filter(
+  (line) => !agencies.some((agency) => agency.phones.includes(line.number)),
+);
 // Se espera al montaje para que la ventana (en App.vue) ya exista.
 onMounted(() => {
   openFromQuery(route.query.tema);
@@ -67,6 +68,11 @@ const officialLinks = [
         <ul class="gm-chips">
           <li><Icon name="book" :size="18" /> {{ lessons.length }} temas</li>
           <li><Icon name="people" :size="18" /> Para toda la familia</li>
+          <li class="gm-chip-link">
+            <RouterLink to="/migrantes?lang=ht" lang="ht"
+              ><Icon name="book" :size="18" /> Enfòmasyon an kreyòl</RouterLink
+            >
+          </li>
         </ul>
       </div>
       <div class="info-hero-art">
@@ -79,22 +85,10 @@ const officialLinks = [
       </div>
     </header>
 
-    <aside class="kreyol-band section-space info-kreyol"aria-label="Para familias que llegan de otros países">
-      <p>
-        <strong lang="ht">Enfòmasyon an kreyòl ayisyen</strong>
-        Para familias que llegan de Haití y de otros países: sus derechos, frases para
-        pedir ayuda y una tarjeta para la escuela
-      </p>
-      <RouterLink class="button primary" to="/migrantes?lang=ht"
-        ><Icon name="people" :size="20" /> Kreyòl · Español</RouterLink
-      >
-    </aside>
-
     <section aria-labelledby="titulo-temas" class="gm-section">
       <span class="cc-silhouette gm-bg-sil gm-bg-sil-1" aria-hidden="true"></span>
       <div class="gm-section-head">
         <h2 id="titulo-temas" class="section-title">Aprende lo esencial</h2>
-        <p class="section-lead">Toca "Ver información" para abrir cada tema</p>
       </div>
       <div class="gm-grid info-grid">
         <article
@@ -118,7 +112,6 @@ const officialLinks = [
           </div>
           <div class="gm-body">
             <h3>{{ lesson.title }}</h3>
-            <p>{{ lesson.short }}</p>
             <button
               class="button primary cta info-open"
               type="button"
@@ -137,7 +130,6 @@ const officialLinks = [
           <h2 id="titulo-riesgos" class="section-title">
             Qué puede pasar en Tijuana
           </h2>
-          <p class="section-lead">Los tres riesgos que más se presentan con lluvia fuerte</p>
         </div>
         <a
           class="button secondary"
@@ -167,7 +159,7 @@ const officialLinks = [
         <MascotGuide :size="130" bubble="¡Practica conmigo!" />
         <div>
           <h2 id="titulo-jugar" class="section-title">Aprende jugando</h2>
-          <p>Pon a prueba lo que aprendiste con los juegos del sitio</p>
+          <p>Pon a prueba lo que aprendiste</p>
         </div>
         <RouterLink to="/juegos" class="button primary cta"
           ><Icon name="gamepad" :size="22" /> Ver los juegos</RouterLink
@@ -178,10 +170,7 @@ const officialLinks = [
     <section id="buen-uso-911" aria-labelledby="titulo-911" class="section-space agencies call-911">
       <div class="gm-section-head">
         <h2 id="titulo-911" class="section-title">Cómo llamar bien al 911</h2>
-        <p class="section-lead">
-          Una llamada clara hace que la ayuda llegue antes. Una llamada de broma se
-          la quita a alguien que sí la necesita
-        </p>
+        <p class="section-lead">Una llamada clara hace que la ayuda llegue antes</p>
       </div>
 
       <div class="call-stats">
@@ -194,58 +183,56 @@ const officialLinks = [
         >
       </div>
 
-      <ul class="call-facts">
-        <li v-for="fact in call911.facts" :key="fact.title" class="health-tip">
-          <span class="health-icon" aria-hidden="true"><Icon :name="fact.icon" :size="24" /></span>
-          <strong>{{ fact.title }}</strong>
-          <span>{{ fact.text }}</span>
+      <ul class="call-chips">
+        <li v-for="fact in call911.facts" :key="fact.title">
+          <Icon :name="fact.icon" :size="18" /> {{ fact.title }}
         </li>
       </ul>
 
-      <h3 class="call-subtitle">Paso a paso</h3>
-      <ol class="call-steps">
+      <ol class="call-steps call-steps-short">
         <li v-for="(step, i) in call911.steps" :key="step.title">
           <span class="call-step-n" aria-hidden="true">{{ i + 1 }}</span>
           <strong>{{ step.title }}</strong>
-          <span>{{ step.text }}</span>
         </li>
       </ol>
 
-      <div class="call-columns">
-        <div class="call-box call-dont">
-          <h3><Icon name="close" :size="22" /> No uses el 911 para…</h3>
-          <ul>
-            <li v-for="item in call911.dont" :key="item">{{ item }}</li>
-          </ul>
+      <details class="call-more">
+        <summary>Qué no hacer, qué enseñarle a tus hijos y qué hacer si no puedes hablar</summary>
+        <div class="call-columns">
+          <div class="call-box call-dont">
+            <h3><Icon name="close" :size="22" /> No uses el 911 para…</h3>
+            <ul>
+              <li v-for="item in call911.dont" :key="item">{{ item }}</li>
+            </ul>
+          </div>
+          <div class="call-box call-kids">
+            <h3><Icon name="people" :size="22" /> Enséñale a tus hijos</h3>
+            <ul>
+              <li v-for="item in call911.kids" :key="item">{{ item }}</li>
+            </ul>
+          </div>
         </div>
-        <div class="call-box call-kids">
-          <h3><Icon name="people" :size="22" /> Enséñale a tus hijos</h3>
-          <ul>
-            <li v-for="item in call911.kids" :key="item">{{ item }}</li>
-          </ul>
+        <div class="call-silent">
+          <span class="health-icon" aria-hidden="true"><Icon name="phone" :size="24" /></span>
+          <div>
+            <strong>{{ call911.silent.title }}</strong>
+            <p>{{ call911.silent.text }}</p>
+          </div>
+          <a class="button secondary" :href="call911.silent.url" target="_blank" rel="noopener"
+            ><Icon name="external" :size="18" /> Ver la app</a
+          >
         </div>
-      </div>
-
-      <div class="call-silent">
-        <span class="health-icon" aria-hidden="true"><Icon name="phone" :size="24" /></span>
-        <div>
-          <strong>{{ call911.silent.title }}</strong>
-          <p>{{ call911.silent.text }}</p>
-        </div>
-        <a class="button secondary" :href="call911.silent.url" target="_blank" rel="noopener"
-          ><Icon name="external" :size="18" /> Ver la app</a
-        >
-      </div>
+      </details>
 
       <div v-if="practice" class="call-practice">
-        <p><strong>Practica antes de que pase.</strong> En «Alerta 911» reportas tres emergencias de lluvia y ves qué decir.</p>
+        <p><strong>Practica antes de que pase</strong></p>
         <a class="button primary cta" :href="practice.href" target="_blank" rel="noopener"
           ><Icon name="gamepad" :size="22" /> Jugar Alerta 911</a
         >
       </div>
     </section>
 
-    <section aria-labelledby="titulo-quien-llamo" class="section-space">
+    <section id="numeros" aria-labelledby="titulo-quien-llamo" class="section-space agencies">
       <div class="gm-section-head">
         <h2 id="titulo-quien-llamo" class="section-title">¿A quién le llamo?</h2>
         <p class="section-lead">Busca lo que está pasando y toca el número</p>
@@ -263,17 +250,9 @@ const officialLinks = [
           >
         </li>
       </ul>
-    </section>
 
-    <section id="quien-te-ayuda" aria-labelledby="titulo-quien" class="section-space agencies">
-      <div class="gm-section-head">
-        <h2 id="titulo-quien" class="section-title">Quién te ayuda y en qué</h2>
-        <p class="section-lead">
-          Qué hace cada dependencia, cuándo llamarle en temporada de lluvias y a
-          quién le toca lo que ella no atiende
-        </p>
-      </div>
-      <div class="agency-grid">
+      <h3 id="quien-te-ayuda" class="call-subtitle directory-title">Directorio</h3>
+      <div class="agency-grid directory-grid">
         <article
           v-for="agency in agencies"
           :id="`dependencia-${agency.id}`"
@@ -282,9 +261,9 @@ const officialLinks = [
         >
           <header class="agency-head">
             <span class="agency-icon" aria-hidden="true"
-              ><Icon :name="agency.icon" :size="26"
+              ><Icon :name="agency.icon" :size="24"
             /></span>
-            <h3>{{ agency.name }}</h3>
+            <h4>{{ agency.name }}</h4>
             <span class="agency-phones">
               <a
                 v-for="number in agency.phones"
@@ -296,76 +275,50 @@ const officialLinks = [
               >
             </span>
           </header>
-          <p class="agency-what">{{ agency.what }}</p>
-          <p class="agency-label">Llámales si…</p>
-          <ul class="agency-when">
-            <li v-for="item in agency.callWhen" :key="item">
-              <Icon name="check" :size="18" /> {{ item }}
-            </li>
-          </ul>
-          <p v-if="agency.detail" class="agency-detail">{{ agency.detail }}</p>
-          <p class="agency-not">
-            <Icon name="info" :size="18" /> <span>{{ agency.notFor }}</span>
-          </p>
-          <a
-            v-if="agency.source"
-            class="agency-source"
-            :href="agency.source"
-            target="_blank"
-            rel="noopener"
-            ><Icon name="external" :size="16" /> Sitio oficial</a
-          >
+          <details class="agency-more">
+            <summary>Cuándo llamarles</summary>
+            <p class="agency-what">{{ agency.what }}</p>
+            <ul class="agency-when">
+              <li v-for="item in agency.callWhen" :key="item">
+                <Icon name="check" :size="18" /> {{ item }}
+              </li>
+            </ul>
+            <p v-if="agency.detail" class="agency-detail">{{ agency.detail }}</p>
+            <p class="agency-not">
+              <Icon name="info" :size="18" /> <span>{{ agency.notFor }}</span>
+            </p>
+            <a
+              v-if="agency.source"
+              class="agency-source"
+              :href="agency.source"
+              target="_blank"
+              rel="noopener"
+              ><Icon name="external" :size="16" /> Sitio oficial</a
+            >
+          </details>
         </article>
-      </div>
-    </section>
-
-    <section id="numeros" aria-labelledby="titulo-numeros-info" class="section-space agencies">
-      <h2 id="titulo-numeros-info" class="section-title">Números de emergencia</h2>
-      <p class="tap-hint">Si hay peligro, llama al 911. Toca un número para llamar</p>
-      <div class="phone-grid info-phones">
-        <div class="phone-card theme-911">
-          <span class="phone-icon" aria-hidden="true"><Icon name="phone" :size="26" /></span>
-          <p class="phone-name">Emergencias</p>
-          <a href="tel:911" class="cta" aria-label="Llamar al 911">911</a>
-        </div>
-        <div
-          v-for="item in cityPhones"
-          :key="item.name"
-          :class="['phone-card', `theme-${item.theme}`]"
-        >
-          <span class="phone-icon" aria-hidden="true"
-            ><Icon :name="item.icon" :size="26"
-          /></span>
-          <p class="phone-name">{{ item.name }}</p>
-          <a
-            v-for="number in item.numbers"
-            :key="number"
-            :href="telHref(number)"
-            class="cta"
-            :aria-label="`Llamar a ${item.name}, ${number}`"
-            >{{ number }}</a
-          >
-        </div>
-      </div>
-      <h3 class="call-subtitle">Más números de ayuda</h3>
-      <div class="help-lines">
         <article
-          v-for="line in helpLines"
+          v-for="line in extraLines"
           :key="line.id"
-          :class="['help-line', 'agency-card', `agency-${line.theme}`]"
+          :class="['agency-card', `agency-${line.theme}`]"
         >
-          <span class="agency-icon" aria-hidden="true"><Icon :name="line.icon" :size="24" /></span>
-          <div>
+          <header class="agency-head">
+            <span class="agency-icon" aria-hidden="true"><Icon :name="line.icon" :size="24" /></span>
             <h4>{{ line.name }}</h4>
-            <p>{{ line.what }}</p>
-          </div>
-          <a
-            class="agency-call"
-            :href="telHref(line.number)"
-            :aria-label="`Llamar a ${line.name}, ${line.number}${line.note ? ', ' + line.note : ''}`"
-            ><Icon name="phone" :size="16" /> {{ line.number }}</a
-          >
-          <span v-if="line.note" class="help-note">{{ line.note }}</span>
+            <span class="agency-phones">
+              <a
+                class="agency-call"
+                :href="telHref(line.number)"
+                :aria-label="`Llamar a ${line.name}, ${line.number}${line.note ? ', ' + line.note : ''}`"
+                ><Icon name="phone" :size="16" /> {{ line.number }}</a
+              >
+              <span v-if="line.note" class="help-note">{{ line.note }}</span>
+            </span>
+          </header>
+          <details class="agency-more">
+            <summary>Para qué sirve</summary>
+            <p class="agency-what">{{ line.what }}</p>
+          </details>
         </article>
       </div>
       <div class="official-links">
