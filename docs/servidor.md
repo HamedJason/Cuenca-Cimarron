@@ -68,7 +68,7 @@ Para un servidor sin HTTPS, el compose trae el servicio `proxy` (Caddy), apagado
 
 Caddy escucha en los puertos 80 y 443 y pide el certificado a Let's Encrypt la primera vez que alguien entra con ese dominio. Solo lo pide para el dominio aprobado. El dominio debe apuntar al servidor y los puertos deben estar abiertos desde internet.
 
-La dirección que usan los enlaces de los correos y de los grupos se guarda sola al crear la cuenta de administración, con la dirección desde la que se configuró. Se puede cambiar en el panel (Ajustes, Dirección pública).
+La dirección que usan los enlaces que da el sitio (grupos, docentes, invitaciones) se guarda sola al crear la cuenta de administración, con la dirección desde la que se configuró. Se puede cambiar en el panel (Ajustes, Dirección pública).
 
 ## Si al descargar sale "denied" o "unauthorized"
 
