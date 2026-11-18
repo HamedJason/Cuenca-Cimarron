@@ -14,7 +14,7 @@ import { storageAvailable } from "./composables/useProgress";
 import { useVisits } from "./composables/useVisits";
 import { useTheme } from "./composables/useTheme";
 const { theme, toggleTheme } = useTheme();
-import { socials } from "./data";
+import { socials, developers as team } from "./data";
 const liveSocials = socials.filter((social) => social.href);
 const route = useRoute();
 function recoverLogo(event) {
@@ -31,6 +31,7 @@ const navigation = [
   { to: "/juegos", label: "Juegos", icon: "gamepad" },
   { to: "/informacion", label: "Información", icon: "book" },
   { to: "/consejos", label: "Consejos", icon: "shield" },
+  { to: "/equipo", label: "Equipo", icon: "people" },
 ];
 const isActive = (item) =>
   item.to === route.path || (item.match || []).includes(route.path);
@@ -45,11 +46,6 @@ watch(
 // Siempre visible, salvo en la página de juegos.
 // Con un alumno con sesión, su lista de tareas toma ese lugar.
 const showPlayButton = computed(() => route.path !== "/juegos" && !student.value);
-const team = [
-  "Jason Alejandro Hamed Valdez",
-  "Fernando Onit Sibaja Gomez",
-  "Kevin Osmar Valdez Meza",
-];
 const contactEmails = [
   "jason.hamed@uabc.edu.mx",
   "onit.sibaja@uabc.edu.mx",
@@ -209,10 +205,16 @@ onMounted(() => {
           </ul>
         </div>
         <div>
-          <h2 class="footer-title">Equipo de diseño</h2>
+          <h2 class="footer-title">Equipo de desarrollo</h2>
           <ul class="footer-list">
             <li v-for="name in team" :key="name">{{ name }}</li>
           </ul>
+          <RouterLink to="/equipo" class="footer-mail footer-team-link"
+            ><Icon name="people" :size="18" />Conoce a todo el equipo</RouterLink
+          >
+          <RouterLink to="/migrantes?lang=ht" class="footer-mail footer-team-link" lang="ht"
+            ><Icon name="book" :size="18" />Enfòmasyon an kreyòl</RouterLink
+          >
         </div>
         <div>
           <h2 class="footer-title">Contacto</h2>

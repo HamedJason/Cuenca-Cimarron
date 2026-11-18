@@ -4,15 +4,18 @@ import Icon from "../components/Icon.vue";
 import MascotGuide from "../components/MascotGuide.vue";
 import { icons, iconSvg } from "../icons";
 
+// Paleta "Cimarrón verde": verde y ocre UABC, con el guinda de gobierno solo como acento
 const brandColors = [
-  { name: "Verde UABC", hex: "#00723F", use: "Botones, menú y bloques de énfasis", dark: true },
-  { name: "Ocre UABC", hex: "#DD971A", use: "Avisos, números de paso y detalles", dark: false },
+  { name: "Verde UABC", hex: "#00723f", use: "Botones, menú, portadas y bloques de énfasis", dark: true },
+  { name: "Verde profundo", hex: "#003d24", use: "Títulos y cantos de tarjeta", dark: true },
+  { name: "Ocre UABC", hex: "#dd971a", use: "Avisos, números de paso y detalles", dark: false },
+  { name: "Guinda gobierno", hex: "#9b2247", use: "Solo la franja del encabezado y el botón del 911 (Pantone 7420 C)", dark: true },
 ];
 const supportColors = [
-  { name: "Verde profundo", hex: "#003D24", use: "Títulos y texto sobre ocre", dark: true },
-  { name: "Ocre texto", hex: "#8A5A00", use: "Texto chico en tono ocre", dark: true },
-  { name: "Verde claro", hex: "#E6F4EC", use: "Fondos de tarjetas", dark: false },
-  { name: "Ocre claro", hex: "#FFF1D6", use: "Fondos de avisos", dark: false },
+  { name: "Ocre texto", hex: "#8a5a00", use: "Texto chico en tono ocre", dark: true },
+  { name: "Crema", hex: "#FBF6EA", use: "Fondo de página", dark: false },
+  { name: "Verde claro", hex: "#e6f4ec", use: "Fondos de tarjetas", dark: false },
+  { name: "Ocre claro", hex: "#fff1d6", use: "Fondos de avisos", dark: false },
 ];
 const cardColors = [
   { name: "Protección Civil", bg: "#EAF2FF", ink: "#0B4FA8" },
@@ -27,9 +30,11 @@ const writing = [
   ["Sin eslóganes", "Nada de frases que suenan bonito y no dicen nada"],
 ];
 const tokens = `--uabc-green: #00723f;
+--band: #003d24;
 --uabc-gold: #dd971a;
 --green-deep: #003d24;
 --gold-text: #8a5a00;
+--paper: #fbf6ea;
 --green-tint: #e6f4ec;
 --gold-tint: #fff1d6;
 --radius-card: 20px;

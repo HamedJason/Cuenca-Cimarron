@@ -24,6 +24,8 @@ const TeacherAccess = () => import("./views/TeacherAccess.vue");
 const Teacher = () => import("./views/Teacher.vue");
 const Join = () => import("./views/Join.vue");
 const MyCimarron = () => import("./views/MyCimarron.vue");
+const Team = () => import("./views/Team.vue");
+const Migrants = () => import("./views/Migrants.vue");
 import "./style.css";
 import "./cuentas.css";
 // Las direcciones viejas con # (enlaces compartidos, QR impresos) se pasan a la forma nueva sin #.
@@ -57,6 +59,10 @@ const router = createRouter({
     { path: "/unirse/:code?", component: Join, meta: { title: "Entra a tu grupo", mode: "unirse" } },
     { path: "/regresar", component: Join, meta: { title: "Regresa a tu grupo", mode: "regresar" } },
     { path: "/mi-cimarron", component: MyCimarron, meta: { title: "Mi cimarrón" } },
+    { path: "/equipo", component: Team, meta: { title: "Equipo" } },
+    { path: "/nosotros", redirect: "/equipo" },
+    { path: "/migrantes", component: Migrants, meta: { title: "Para todas las familias" } },
+    { path: "/kreyol", redirect: "/migrantes?lang=ht" },
     { path: "/:pathMatch(.*)*", redirect: "/" },
   ],
   // Al cargar o recargar, la página empieza hasta arriba (en el propósito).

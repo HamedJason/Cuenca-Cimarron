@@ -65,6 +65,23 @@ return [
         ],
     ],
     [
+        'key' => 'lectura-salud',
+        'title' => 'Botiquín y salud',
+        'kind' => 'lectura',
+        'mode' => 'pregunta',
+        'points' => 10,
+        'route' => '/informacion?tema=salud',
+        'question' => [
+            'text' => '¿Qué va en el botiquín de la casa?',
+            'options' => [
+                'Medicinas de todos, sin receta, para lo que se ofrezca',
+                'Material para curar y limpiar heridas. Las medicinas van aparte, con su receta',
+                'Solo curitas, lo demás lo da el hospital',
+            ],
+            'answer' => 1,
+        ],
+    ],
+    [
         'key' => 'consejo-antes',
         'title' => 'Consejos: antes de la lluvia',
         'kind' => 'consejo',

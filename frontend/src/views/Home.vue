@@ -89,22 +89,86 @@ const mapHref = (shelter) =>
   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     `${shelter.name}, ${shelter.address}, Tijuana, B.C.`,
   )}`;
-// Bomberos: la lista de estaciones se abre en una ventana con buscador.
+// Ayuda cerca de ti: bomberos y polic\u00eda en una ventana con mapa, filtro y buscador.
+// Con "Usar mi ubicaci\u00f3n" la lista se ordena de la m\u00e1s cercana a la m\u00e1s lejana;
+// la ubicaci\u00f3n solo se usa en este navegador, no se guarda ni se env\u00eda.
+const places = [
+  ...emergency.fireStations.map((item) => ({ ...item, kind: "fire" })),
+  ...emergency.policeStations.map((item) => ({ ...item, kind: "police" })),
+  ...emergency.redCrossStations.map((item) => ({ ...item, kind: "redcross" })),
+];
+const kindLabel = { fire: "Bomberos", police: "Policía", redcross: "Cruz Roja" };
+const kindIcon = { fire: "flame", police: "shield", redcross: "medical" };
+// Sin teléfono propio: las estaciones de bomberos de Tijuana se atienden por la
+// Central; lo demás (Rosarito y bases de Cruz Roja) se pide al 911.
+const usesCentral = (item) => item.kind === "fire" && !item.city;
+const placeKinds = [
+  { id: "all", label: "Todo" },
+  { id: "fire", label: "Bomberos", icon: "flame" },
+  { id: "police", label: "Polic\u00eda", icon: "shield" },
+  { id: "redcross", label: "Cruz Roja", icon: "medical" },
+];
 const showStations = ref(false);
 const stationQuery = ref("");
+const stationKind = ref("all");
+const here = ref(null);
+const locating = ref(false);
+const locateError = ref("");
 const plain = (text) =>
   (text || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+// Distancia en l\u00ednea recta (km); por calle puede ser un poco m\u00e1s
+function distanceKm(a, b) {
+  const rad = (deg) => (deg * Math.PI) / 180;
+  const dLat = rad(b.lat - a.lat);
+  const dLng = rad(b.lng - a.lng);
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(dLng / 2) ** 2;
+  return 6371 * 2 * Math.asin(Math.sqrt(h));
+}
+const formatKm = (km) =>
+  km < 1 ? `a ${Math.round(km * 10) * 100} m` : `a ${km.toFixed(1)} km`;
 const stations = computed(() => {
   const query = plain(stationQuery.value.trim());
-  if (!query) return emergency.fireStations;
-  return emergency.fireStations.filter((item) =>
-    plain(`${item.name} ${item.area} ${item.address}`).includes(query),
+  let list = places.filter(
+    (item) =>
+      (stationKind.value === "all" || item.kind === stationKind.value) &&
+      (!query || plain(`${item.name} ${item.area} ${item.address}`).includes(query)),
   );
+  if (here.value) {
+    list = list
+      .map((item) => ({ ...item, km: item.lat ? distanceKm(here.value, item) : null }))
+      .sort((a, b) => (a.km ?? Infinity) - (b.km ?? Infinity));
+  }
+  return list;
 });
 const centralPhone = emergency.fireStations[0].phone;
-function openStations() {
+function openStations(kind = "all") {
   stationQuery.value = "";
+  stationKind.value = kind;
   showStations.value = true;
+}
+function locate() {
+  locateError.value = "";
+  if (!("geolocation" in navigator)) {
+    locateError.value = "Este navegador no puede dar tu ubicaci\u00f3n. Busca por colonia";
+    return;
+  }
+  locating.value = true;
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      here.value = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      locating.value = false;
+    },
+    (err) => {
+      locating.value = false;
+      locateError.value =
+        err.code === 1
+          ? "No diste permiso para usar tu ubicaci\u00f3n. Puedes buscar por colonia"
+          : "No pudimos saber d\u00f3nde est\u00e1s. Intenta de nuevo o busca por colonia";
+    },
+    { enableHighAccuracy: false, timeout: 12000, maximumAge: 300000 },
+  );
 }
 const stationMapHref = (item) =>
   `https://www.google.com/maps/search/?api=1&query=${
@@ -120,10 +184,8 @@ const stationMapHref = (item) =>
         <div class="purpose-text">
           <h1 id="titulo-proposito">Tijuana se prepara para El Niño</h1>
           <p class="purpose-lead">
-            En la comunidad cimarrona nos unimos para que tu familia y tu colonia
-            sepan qué hacer antes, durante y después de las lluvias. Aquí
-            encuentras información clara, juegos para practicar y un plan para
-            armar en casa, todo gratis y pensado para toda Tijuana
+            Información clara, juegos y un plan para que tu familia sepa qué hacer
+            antes, durante y después de las lluvias
           </p>
           <ul class="purpose-ways" aria-label="Formas de aprender en el sitio">
             <li>
@@ -199,13 +261,14 @@ const stationMapHref = (item) =>
           ><Icon name="flame" :size="40"
         /></span>
         <div class="fire-text">
-          <h2 id="titulo-bomberos">Estaciones de bomberos</h2>
+          <h2 id="titulo-bomberos">¿Qué ayuda tienes cerca?</h2>
           <p>
-            Ubica la más cercana a tu colonia, su teléfono y cómo llegar
+            Bomberos, policía y Cruz Roja de Tijuana y Rosarito: la más cercana a
+            tu colonia, su teléfono y cómo llegar
           </p>
         </div>
-        <button class="button primary cta" type="button" @click="openStations">
-          <Icon name="pin" :size="20" /> Ver estaciones y teléfonos
+        <button class="button primary cta" type="button" @click="openStations()">
+          <Icon name="pin" :size="20" /> Ver ayuda cerca de ti
         </button>
       </div>
     </section>
@@ -256,7 +319,14 @@ const stationMapHref = (item) =>
       <section aria-labelledby="titulo-numeros">
         <h2 id="titulo-numeros" class="section-title">Números de dependencias</h2>
         <PointsTag />
-        <p class="tap-hint">Toca para llamar</p>
+        <p class="tap-hint">
+          Toca para llamar ·
+          <RouterLink
+            class="text-link inline-link"
+            :to="{ path: '/informacion', query: { ver: 'dependencias' } }"
+            >Ver todo el directorio</RouterLink
+          >
+        </p>
         <div class="phone-grid">
           <div
             v-for="item in emergency.phones"
@@ -280,6 +350,10 @@ const stationMapHref = (item) =>
             >
           </div>
         </div>
+        <RouterLink class="kreyol-link" to="/migrantes?lang=ht" lang="ht"
+          ><Icon name="people" :size="20" /> Enfòmasyon an kreyòl ayisyen
+          <Icon name="arrow" :size="18"
+        /></RouterLink>
       </section>
 
       <div class="split">
@@ -357,9 +431,7 @@ const stationMapHref = (item) =>
           <div class="section-head-text">
             <span class="label">Aprende jugando</span>
             <h2 id="titulo-juegos" class="section-title">Juegos y dinámicas</h2>
-            <p class="section-lead">
-              Pon a prueba lo que sabes de El Niño, tu colonia y tu mochila de emergencia
-            </p>
+            <p class="section-lead">Pon a prueba lo que sabes</p>
           </div>
           <RouterLink to="/juegos" class="button secondary games-more-top"
             >Ver todos los juegos</RouterLink
@@ -426,9 +498,6 @@ const stationMapHref = (item) =>
             ></span
           ></span>
         </div>
-        <p class="section-lead">
-          Lo esencial sobre El Niño, tu familia y lo que conviene tener listo
-        </p>
         <div class="prep-grid">
           <button type="button" class="prep-card cc-watermark" @click="openLesson('conozca')"
             ><span class="prep-icon" aria-hidden="true"
@@ -523,9 +592,6 @@ const stationMapHref = (item) =>
             <h2 id="titulo-consejos" class="section-title">
               Consejos para actuar mejor
             </h2>
-            <p class="section-lead">
-              Qué hacer antes, durante y después de la lluvia
-            </p>
           </div>
           <RouterLink to="/consejos" class="button secondary"
             >Ver todos los consejos</RouterLink
@@ -635,61 +701,122 @@ const stationMapHref = (item) =>
     </div>
     <Modal
       :open="showStations"
-      title="Estaciones de bomberos"
+      title="Ayuda cerca de ti"
       wide
       @close="showStations = false"
     >
       <p class="modal-intro">
-        Si hay fuego o alguien está en peligro, llama primero al
-        <a href="tel:911" class="station-911">911</a>
+        Si hay fuego, un delito o alguien está en peligro, llama primero al
+        <a href="tel:911" class="station-911">911</a>. No vayas a buscar ayuda
+        a una estación: la ayuda va hacia ti
+      </p>
+      <div class="place-tools">
+        <div class="place-kinds" role="group" aria-label="Qué mostrar">
+          <button
+            v-for="kind in placeKinds"
+            :key="kind.id"
+            type="button"
+            :class="['pill', 'place-kind', `kind-${kind.id}`, { on: stationKind === kind.id }]"
+            :aria-pressed="stationKind === kind.id"
+            @click="stationKind = kind.id"
+          >
+            <Icon v-if="kind.icon" :name="kind.icon" :size="18" /> {{ kind.label }}
+          </button>
+        </div>
+        <button
+          type="button"
+          class="button secondary place-locate"
+          :disabled="locating"
+          @click="locate"
+        >
+          <Icon name="pin" :size="18" />
+          {{ locating ? "Buscando dónde estás…" : here ? "Actualizar mi ubicación" : "Usar mi ubicación" }}
+        </button>
+      </div>
+      <p v-if="locateError" class="station-empty" role="status">{{ locateError }}</p>
+      <p v-else-if="here" class="station-map-hint" role="status">
+        Ordenado de la más cercana a la más lejana, en línea recta. Tu ubicación
+        no se guarda ni se envía
       </p>
       <StationsMap
         v-if="showStations"
         :stations="stations"
         :central-phone="centralPhone"
         :map-href="stationMapHref"
+        :here="here"
       />
       <p class="station-map-hint">Toca un punto para ver su teléfono y cómo llegar</p>
       <label for="buscar-estacion" class="field-label"
-        >Busca por colonia o número de estación</label
+        >Busca por colonia, delegación o número de estación</label
       >
       <input
         id="buscar-estacion"
         v-model="stationQuery"
         class="station-search"
         type="search"
-        placeholder="Por ejemplo: La Mesa, Playas, 8"
+        placeholder="Por ejemplo: La Mesa, Playas, Otay, Rosarito, 8"
         autocomplete="off"
       />
       <p v-if="!stations.length" class="station-empty" role="status">
-        No encontramos esa colonia. Prueba con otra o llama a la Central al
-        <a :href="telHref(centralPhone)">{{ centralPhone }}</a>
+        No encontramos esa colonia. Prueba con otra, cambia el filtro o llama al
+        <a href="tel:911">911</a>
       </p>
       <ul class="station-list">
         <li
           v-for="item in stations"
           :key="item.id"
-          :class="['station-card', { 'is-central': item.id === 'central' }]"
+          :class="[
+            'station-card',
+            {
+              'is-central': item.id === 'central',
+              'is-police': item.kind === 'police',
+              'is-redcross': item.kind === 'redcross',
+            },
+          ]"
         >
           <span class="station-icon" aria-hidden="true"
-            ><Icon name="flame" :size="24"
+            ><Icon :name="kindIcon[item.kind]" :size="24"
           /></span>
           <span class="station-info"
             ><span v-if="item.id === 'central'" class="station-tag"
               >Base principal</span
+            ><span class="station-kind">{{ kindLabel[item.kind]
+            }}{{ item.city ? ` · ${item.city}` : "" }}</span
             ><strong>{{ item.name }}</strong
             ><span v-if="item.area">{{ item.area }}</span
             ><span v-if="item.address" class="station-address">{{
               item.address
+            }}</span
+            ><span v-if="item.km != null" class="station-distance">{{
+              formatKm(item.km)
             }}</span></span
           >
           <span class="station-actions">
+            <template v-if="item.phones">
+              <a
+                v-for="phone in item.phones"
+                :key="phone"
+                class="pill station-call"
+                :href="telHref(phone)"
+                :aria-label="`Llamar a ${item.name}, ${phone}`"
+                ><Icon name="phone" :size="18" /> {{ phone }}</a
+              >
+            </template>
             <a
-              v-if="item.phone"
+              v-else-if="item.phone"
               class="pill station-call"
               :href="telHref(item.phone)"
               :aria-label="`Llamar a ${item.name}, ${item.phone}`"
               ><Icon name="phone" :size="18" /> {{ item.phone }}</a
+            >
+            <span v-else-if="!usesCentral(item)" class="station-central-call"
+              ><small>Sin teléfono propio publicado, pide ayuda al 911</small
+              ><a
+                class="pill station-call"
+                href="tel:911"
+                :aria-label="`Pedir ayuda al 911 para ${item.name}`"
+                ><Icon name="phone" :size="18" /> 911</a
+              ></span
             >
             <span v-else class="station-central-call"
               ><small>Sin teléfono propio, llama a la Central</small
@@ -712,13 +839,47 @@ const stationMapHref = (item) =>
           </span>
         </li>
       </ul>
-      <a
-        class="text-link"
-        :href="emergency.fireStationsUrl"
-        target="_blank"
-        rel="noopener"
-        ><Icon name="external" :size="18" /> Directorio oficial de Bomberos Tijuana</a
-      >
+      <div class="note place-note">
+        <Icon name="info" />
+        <p>
+          <strong>Casetas y módulos de policía:</strong> no aparecen aquí porque
+          muchas no tienen personal todo el tiempo y puedes llegar y no encontrar
+          a nadie. En una emergencia llama al 911. Las delegaciones de la lista
+          son las sedes de la policía municipal en cada zona
+        </p>
+      </div>
+      <div class="note place-note">
+        <Icon name="medical" />
+        <p>
+          <strong>Ambulancia de la Cruz Roja:</strong> pídela al 911, es gratis.
+          La ambulancia sale de la base más cercana a ti. Además de las que ves
+          en el mapa, la Cruz Roja Tijuana tiene bases en
+          {{ emergency.redCrossBases }}, sin dirección publicada
+        </p>
+      </div>
+      <div class="place-links">
+        <a
+          class="text-link"
+          :href="emergency.fireStationsUrl"
+          target="_blank"
+          rel="noopener"
+          ><Icon name="external" :size="18" /> Directorio oficial de Bomberos Tijuana</a
+        >
+        <a
+          class="text-link"
+          :href="emergency.policeStationsUrl"
+          target="_blank"
+          rel="noopener"
+          ><Icon name="external" :size="18" /> Delegaciones de la policía municipal</a
+        >
+        <a
+          class="text-link"
+          :href="emergency.redCrossUrl"
+          target="_blank"
+          rel="noopener"
+          ><Icon name="external" :size="18" /> Bases de la Cruz Roja Tijuana (Zeta)</a
+        >
+      </div>
     </Modal>
     <Modal
       :open="showMap"

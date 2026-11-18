@@ -19,11 +19,14 @@
   src: url("/assets/fonts/baloo-2-latin-800-normal.woff2") format("woff2");
 }
 :root {
+  /* Paleta "Cimarrón verde": verde y ocre UABC en todo el sitio, fondo crema,
+     y el guinda del Gobierno de México (7420 C / 7421 C) solo como acento
+     institucional: la franja de arriba del encabezado y el botón del 911. */
   --uabc-green: #00723f;
   --uabc-gold: #dd971a;
   --green-deep: #003d24;
   --gold-text: #8a5a00;
-  --paper: #ffffff;
+  --paper: #fbf6ea;
   --surface: #ffffff;
   --ink: #1c2621;
   --muted: #4a5650;
@@ -37,6 +40,11 @@
   --shadow: #003d24;
   --deep-fill: #003d24;
   --link: #00723f;
+  /* Bandas de portada: verde UABC */
+  --band: #00723f;
+  /* Acento de gobierno (guinda) */
+  --gov: #9b2247;
+  --gov-deep: #611232;
   --font-heading: "Barlow Condensed", sans-serif;
   --font-body: "DM Sans", sans-serif;
   --font-play: "Baloo 2", "Barlow Condensed", sans-serif;
@@ -74,5 +82,6 @@
   --shadow: #16191b;
   --deep-fill: #2f4a3e;
   --link: #a4c3b2;
+  --band: #1f3a2e;
   color-scheme: dark;
 }
