@@ -118,6 +118,17 @@ Las cuentas de solo lectura ven únicamente Panel de datos y Escuelas, sin boton
 - Los juegos de otros sitios suman al regresar: el servidor revisa el tiempo fuera y hace una pregunta.
 - Cada actividad suma una sola vez por alumno (índice único en `completions`).
 
+## Mi cimarrón y Cimacoins
+
+El avatar (`/mi-cimarron`) es el mismo para visitantes y alumnos. Lo que cambia es dónde se guarda:
+
+- **Visitante**: cartera de Cimacoins y avatar en su navegador.
+- **Alumno con sesión**: en su cuenta (`students.wallet` y `students.avatar`). El servidor valida cada premio, cada compra y que el avatar solo lleve piezas suyas. Lo conserva al cambiar de equipo con su código personal.
+- **Puntos y Cimacoins**: los puntos nunca se gastan y son los que ve el docente. Cada punto le da también 5 Cimacoins al alumno. Saldo = 80 + puntos × 5 + premios − lo gastado.
+- La cartera que tenía como visitante no se pasa a su cuenta al entrar a un grupo.
+
+Rutas (`/api/yo/cimarron` y `/api/yo/cimacoins/...`), reglas y cómo agregar piezas en [avatar-cimarron.md](avatar-cimarron.md).
+
 ## Dónde está el código
 
 | Qué | Archivo |
@@ -136,12 +147,14 @@ Las cuentas de solo lectura ven únicamente Panel de datos y Escuelas, sin boton
 | Cookies de docentes y alumnos | `backend/app/Support/DeviceAuth.php` y `backend/app/Http/Middleware/DeviceSession.php` |
 | Códigos de recuperación | `backend/app/Support/RecoveryCodes.php` |
 | Borrado de nombres por privacidad | `backend/app/Support/Privacy.php` |
-| Pantallas de cuentas | `frontend/src/views/` (`Schools.vue`, `SchoolRegister.vue`, `AccountLinks.vue`, `Setup.vue`, `Admin.vue`, `Teacher.vue`, `Join.vue`, `MyCimarron.vue`) |
+| Mi cimarrón del alumno: avatar, premios y compras | `backend/app/Http/Controllers/CimarronController.php` y `backend/app/Support/Cimacoins.php` |
+| Pantallas de cuentas | `frontend/src/views/` (`Schools.vue`, `SchoolRegister.vue`, `AccountLinks.vue`, `Setup.vue`, `Admin.vue`, `Teacher.vue`, `Join.vue`) |
+| Mi cimarrón y Cimacoins en el sitio | `frontend/src/views/Avatar.vue` y `frontend/src/composables/useCimacoins.js` |
 | Pruebas | `backend/tests/Feature/` y `frontend/tests/` |
 
 ## Privacidad
 
-- Del alumno solo se guarda el nombre que escribe, su grupo, sus actividades y su cimarrón. Sin correo, fotos ni IP.
+- Del alumno solo se guarda el nombre que escribe, su grupo, sus actividades, su cimarrón y sus Cimacoins (lo que gastó, los premios que recibió y sus cosméticos). Sin correo, fotos ni IP.
 - 60 días después de archivar un grupo se borran los nombres y códigos de sus alumnos. Las actividades quedan sin nombre para las cifras.
 - El docente puede borrar a un alumno y se borra todo lo suyo.
 - El aviso completo está en `/privacidad`.

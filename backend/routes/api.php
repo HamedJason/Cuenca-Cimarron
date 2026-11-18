@@ -4,6 +4,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CimarronController;
 use App\Http\Controllers\GameSessionController;
 use App\Http\Controllers\SchoolAdminController;
 use App\Http\Controllers\SchoolCatalogController;
@@ -110,7 +111,14 @@ Route::middleware('throttle:aula')->group(function (): void {
         Route::post('/yo/salir', [StudentController::class, 'logout']);
     });
 
-    Route::put('/yo/cimarron', [StudentController::class, 'saveAvatar'])->middleware('equipo:student');
+    // Mi cimarrón del alumno: avatar y Cimacoins guardados en su cuenta.
+    Route::middleware('equipo:student')->group(function (): void {
+        Route::put('/yo/cimarron', [CimarronController::class, 'save']);
+        Route::post('/yo/cimacoins/premio', [CimarronController::class, 'reward']);
+        Route::post('/yo/cimacoins/reto', [CimarronController::class, 'challenge']);
+        Route::post('/yo/cimacoins/secreto', [CimarronController::class, 'secret']);
+        Route::post('/yo/cimacoins/compra', [CimarronController::class, 'buy']);
+    });
 
     Route::middleware('equipo:student')->prefix('actividades/{key}')->where(['key' => '[a-z0-9-]{2,60}'])->group(function (): void {
         Route::post('/inicio', [ActivityController::class, 'start']);

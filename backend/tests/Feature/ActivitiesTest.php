@@ -131,18 +131,93 @@ class ActivitiesTest extends TestCase
         $this->withCredentials()->withUnencryptedCookie('cc_alumno', str_repeat('a', 64))->getJson('/api/yo')->assertJsonPath('progress', null);
     }
 
-    public function test_cimarron_solo_con_piezas_desbloqueadas(): void
+    public function test_cartera_inicial_y_puntos_que_dan_cimacoins(): void
     {
-        $this->asStudent()->getJson('/api/yo')->assertJsonPath('student.avatar', ['background' => 'verde', 'pieces' => []]);
-        $this->asStudent()->putJson('/api/yo/cimarron', ['background' => 'ocre', 'pieces' => ['casco']])
-            ->assertUnprocessable()->assertJsonValidationErrors('pieces');
-        $this->asStudent()->putJson('/api/yo/cimarron', ['background' => 'morado', 'pieces' => []])->assertUnprocessable();
-        // 3 lecturas = 30 puntos: ya se puede el casco, todavía no el impermeable.
+        $this->asStudent()->getJson('/api/yo')
+            ->assertJsonPath('student.avatar.cabeza', 'casco-verde')
+            ->assertJsonPath('student.wallet.coins', 80)
+            ->assertJsonPath('student.wallet.extra', 80);
+        // 10 puntos = 50 Cimacoins. Los puntos no cambian al comprar.
         $this->asStudent()->postJson('/api/actividades/lectura-conozca/respuesta', ['answer' => 0])->assertOk();
-        $this->asStudent()->postJson('/api/actividades/lectura-planfamiliar/respuesta', ['answer' => 1])->assertOk();
-        $this->asStudent()->postJson('/api/actividades/lectura-mochila/respuesta', ['answer' => 2])->assertOk();
-        $this->asStudent()->putJson('/api/yo/cimarron', ['background' => 'ocre', 'pieces' => ['casco', 'impermeable']])->assertUnprocessable();
-        $this->asStudent()->putJson('/api/yo/cimarron', ['background' => 'ocre', 'pieces' => ['casco']])->assertOk();
-        $this->asStudent()->getJson('/api/yo')->assertJsonPath('student.avatar', ['background' => 'ocre', 'pieces' => ['casco']]);
+        $this->asStudent()->getJson('/api/yo')
+            ->assertJsonPath('student.wallet.coins', 130)
+            ->assertJsonPath('student.wallet.extra', 80);
+        $this->asStudent()->postJson('/api/yo/cimacoins/compra', ['group' => 'ojos', 'id' => 'alegres'])
+            ->assertOk()->assertJsonPath('wallet.coins', 110);
+        $this->asStudent()->getJson('/api/yo')->assertJsonPath('progress.points', 10);
+    }
+
+    public function test_compras_validadas_en_el_servidor(): void
+    {
+        $buy = fn (array $body) => $this->asStudent()->postJson('/api/yo/cimacoins/compra', $body);
+        $buy(['group' => 'ojos', 'id' => 'alegres'])->assertOk()->assertJsonPath('new', true)->assertJsonPath('wallet.coins', 60);
+        // Comprar otra vez lo mismo no cobra.
+        $buy(['group' => 'ojos', 'id' => 'alegres'])->assertOk()->assertJsonPath('new', false)->assertJsonPath('wallet.coins', 60);
+        $buy(['group' => 'pelaje', 'id' => 'menta'])->assertUnprocessable();
+        // Las piezas de premio no se venden.
+        $buy(['group' => 'espalda', 'id' => 'mochila'])->assertUnprocessable();
+        $buy(['group' => 'ojos', 'id' => 'no-existe'])->assertNotFound();
+        $buy(['kit' => 'no-existe'])->assertNotFound();
+        $buy([])->assertUnprocessable();
+        $this->assertSame(['ojos/alegres'], $this->student->fresh()->wallet['owned']);
+    }
+
+    public function test_avatar_solo_con_piezas_propias(): void
+    {
+        $save = fn (array $avatar) => $this->asStudent()->putJson('/api/yo/cimarron', ['avatar' => $avatar]);
+        $save(['ojos' => 'alegres'])->assertUnprocessable()->assertJsonValidationErrors('avatar');
+        $save(['inventado' => 'x'])->assertUnprocessable();
+        $this->asStudent()->postJson('/api/yo/cimacoins/compra', ['group' => 'ojos', 'id' => 'alegres'])->assertOk();
+        $save(['ojos' => 'alegres', 'fondo' => 'cerro'])->assertOk()->assertJsonPath('avatar.ojos', 'alegres');
+        $this->asStudent()->getJson('/api/yo')
+            ->assertJsonPath('student.avatar.ojos', 'alegres')
+            ->assertJsonPath('student.avatar.cabeza', 'casco-verde');
+    }
+
+    public function test_avatar_del_formato_anterior_queda_con_piezas_iniciales(): void
+    {
+        $this->student->avatar = ['background' => 'ocre', 'pieces' => ['casco']];
+        $this->student->save();
+        $this->asStudent()->getJson('/api/yo')->assertJsonPath('student.avatar.fondo', 'cerro');
+    }
+
+    public function test_premios_una_vez_y_diarios_una_vez_al_dia(): void
+    {
+        $claim = fn (string $id) => $this->asStudent()->postJson('/api/yo/cimacoins/premio', ['id' => $id]);
+        $claim('moneda-conozca')->assertOk()->assertJsonPath('new', true)->assertJsonPath('wallet.coins', 110);
+        $claim('moneda-conozca')->assertOk()->assertJsonPath('new', false)->assertJsonPath('wallet.coins', 110);
+        $claim('mochila-lista')->assertOk()->assertJsonPath('wallet.owned', ['espalda/mochila']);
+        $claim('no-existe')->assertNotFound();
+        $claim('visita-diaria')->assertJsonPath('new', true);
+        $claim('visita-diaria')->assertJsonPath('new', false);
+        $this->travel(1)->days();
+        $claim('visita-diaria')->assertJsonPath('new', true)->assertJsonPath('wallet.coins', 250);
+    }
+
+    public function test_kit_con_descuento(): void
+    {
+        $this->asStudent()->postJson('/api/yo/cimacoins/reto', ['id' => 'senal-radio'])->assertOk()->assertJsonPath('wallet.coins', 300);
+        $this->asStudent()->postJson('/api/yo/cimacoins/reto', ['id' => 'senal-radio'])->assertJsonPath('new', false);
+        $this->asStudent()->postJson('/api/yo/cimacoins/compra', ['kit' => 'futbolista'])
+            ->assertOk()->assertJsonPath('price', 230)->assertJsonPath('wallet.coins', 70);
+        $this->asStudent()->putJson('/api/yo/cimarron', ['avatar' => config('avatar.kits.futbolista')])->assertOk();
+    }
+
+    public function test_secreto_solo_con_los_tres_fragmentos(): void
+    {
+        $secret = fn (array $answer) => $this->asStudent()->postJson('/api/yo/cimacoins/secreto', ['answer' => $answer]);
+        $secret(['drop', 'cloud', 'star'])->assertUnprocessable();
+        foreach (['senal-lluvia', 'ruta-mochila', 'mapa-cuenca'] as $id) {
+            $this->asStudent()->postJson('/api/yo/cimacoins/reto', ['id' => $id])->assertOk();
+        }
+        $secret(['cloud', 'drop', 'star'])->assertUnprocessable();
+        $secret(['drop', 'cloud', 'star'])->assertOk()->assertJsonPath('wallet.angelic', true);
+        $this->assertContains('cabeza/halo', $this->student->fresh()->wallet['owned']);
+    }
+
+    public function test_cimacoins_solo_con_sesion(): void
+    {
+        $this->postJson('/api/yo/cimacoins/premio', ['id' => 'moneda-conozca'])->assertUnauthorized();
+        $this->putJson('/api/yo/cimarron', ['avatar' => []])->assertUnauthorized();
     }
 }

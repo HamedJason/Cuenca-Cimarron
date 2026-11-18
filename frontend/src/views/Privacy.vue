@@ -10,7 +10,7 @@
       <h2 id="alumnos">Alumnas y alumnos</h2>
       <p>Solo guardamos tu nombre y tu grupo para que tu maestra o maestro vea tu avance. No pedimos correo, fotos ni fecha de nacimiento.</p>
       <ul>
-        <li>Guardamos el nombre que escribes, tu grupo, las actividades que terminas, tus puntos y las piezas que eliges para tu cimarrón</li>
+        <li>Guardamos el nombre que escribes, tu grupo, las actividades que terminas, tus puntos, tus Cimacoins y las piezas que eliges para tu cimarrón</li>
         <li>Tu navegador guarda una cookie para que no tengas que escribir tu nombre cada vez. No tiene tu nombre, solo un código al azar</li>
         <li>No guardamos tu dirección IP ni lo que haces en cada página</li>
         <li>Tu docente puede corregir tu nombre o borrarte del grupo. Al borrarte se borra todo lo tuyo</li>

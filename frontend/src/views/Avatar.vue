@@ -2,7 +2,9 @@
 // Mi cimarrón: editor del avatar, tienda de cosméticos y retos para ganar Cimacoins.
 // El arte se genera con src/avatar/art.js (kit de avatares) y las reglas de la
 // tienda con src/avatar/economy.js. El saldo es el mismo de todo el sitio.
-import { computed, ref, nextTick } from "vue";
+// Visitantes: cartera y avatar en este navegador. Alumnos con sesión: en su cuenta
+// (ver composables/useCimacoins.js y docs/avatar-cimarron.md).
+import { computed, ref, nextTick, watch } from "vue";
 import Icon from "../components/Icon.vue";
 import {
   catalog,
@@ -21,32 +23,26 @@ import {
   owns,
   kitOffer,
   itemOffer,
-  purchase,
   rewardItems,
   activities,
   activityPattern,
   activityClaimed,
-  completeActivity,
   foundClues,
-  unlockSecret,
   signals,
 } from "../avatar/economy.js";
 import {
   wallet,
-  updateWallet,
   siteRewards,
   isClaimed,
   localDay,
+  isAccountWallet,
+  savedAvatar,
+  saveAvatar,
+  buy as buyTarget,
+  completeChallenge,
+  revealSecret,
 } from "../composables/useCimacoins";
-
-const AVATAR_KEY = "cuenca-cimarrona.avatar.v1";
-const readAvatar = () => {
-  try {
-    return JSON.parse(localStorage.getItem(AVATAR_KEY)) ?? {};
-  } catch {
-    return {};
-  }
-};
+import { student, progress } from "../composables/useStudent";
 // Solo se puede llevar puesto lo que ya es tuyo; lo demás vuelve a la pieza inicial.
 const available = (candidate) =>
   Object.fromEntries(
@@ -56,7 +52,15 @@ const available = (candidate) =>
     ]),
   );
 
-const equipped = ref(available(readAvatar()));
+const equipped = ref(available(savedAvatar()));
+// Al entrar o salir de la cuenta del alumno se muestra el avatar de esa cartera.
+watch(
+  () => [isAccountWallet.value, student.value?.id],
+  () => {
+    pending.value = null;
+    equipped.value = available(savedAvatar());
+  },
+);
 const mode = ref("tienda");
 const pending = ref(null);
 const sectionIcons = { eyes: "face", helmet: "helmet", shirt: "shirt", backpack: "backpack", landscape: "landscape", kits: "kit" };
@@ -88,11 +92,9 @@ const stageEffect = computed(() => normalize(preview.value).efecto);
 function commit(next) {
   pending.value = null;
   equipped.value = available(next);
-  try {
-    localStorage.setItem(AVATAR_KEY, JSON.stringify(equipped.value));
-  } catch {
-    notify("Este navegador no deja guardar tu avatar.");
-  }
+  saveAvatar(equipped.value).then((ok) => {
+    if (!ok) notify(isAccountWallet.value ? "No se pudo guardar tu cimarrón. Revisa tu internet." : "Este navegador no deja guardar tu avatar.");
+  });
 }
 
 // --- Navegación ---
@@ -209,13 +211,18 @@ const offer = computed(() => {
   else detail = `Te faltan ${result.price - w.coins} Cimacoins.`;
   return { ...result, name, detail, canBuy: result.price !== null && result.price <= w.coins };
 });
-function buy() {
+const buying = ref(false);
+async function buy() {
   const target = pending.value;
-  if (!target) return;
-  if (updateWallet((latest) => purchase(latest, target))) {
-    commit(pendingKit.value?.state ?? { ...equipped.value, [target.group]: target.id });
+  if (!target || buying.value) return;
+  const state = pendingKit.value?.state ?? { ...equipped.value, [target.group]: target.id };
+  buying.value = true;
+  const result = await buyTarget(target);
+  buying.value = false;
+  if (result.ok) {
+    commit(state);
     notify("¡Listo! Ya es parte de tu colección.");
-  } else notify("Revisa tu saldo o tu colección.");
+  } else notify(result.message || "Revisa tu saldo o tu colección.");
 }
 
 function reset() {
@@ -302,10 +309,10 @@ function addSignal(id) {
   if (game.value.answer.length < game.value.length) game.value.answer.push(id);
   game.value.error = "";
 }
-function submitGame() {
+async function submitGame() {
   const attempt = game.value;
   if (attempt.id === "secreto") {
-    if (updateWallet((latest) => unlockSecret(latest, attempt.answer))) {
+    if (await revealSecret(attempt.answer)) {
       commit(secretKit.state);
       attempt.result = "¡Encontraste al Cimarrón Angelical! Todas sus piezas ya son tuyas.";
     } else attempt.error = "Las señales no encajan. Revisa los números de los fragmentos.";
@@ -321,7 +328,7 @@ function submitGame() {
     attempt.error = "Ese orden no coincide. Borra e inténtalo, o vuelve a mirar.";
     return;
   }
-  if (updateWallet((latest) => completeActivity(latest, attempt.id, attempt.answer, attempt.day))) {
+  if (await completeChallenge(attempt.id, attempt.answer, attempt.day)) {
     attempt.result = `¡Ganaste ${attempt.activity.coins} Cimacoins!`;
     if (attempt.activity.clue) attempt.result += " También encontraste un fragmento de constelación.";
   } else attempt.result = "¡Correcto! Ya habías recibido el premio de este reto.";
@@ -352,6 +359,15 @@ const siteGoals = computed(() => {
       <div>
         <h1 class="page-title">Mi cimarrón</h1>
         <p class="section-lead">Gana Cimacoins jugando y explorando, y viste a tu cimarrón como quieras</p>
+        <p v-if="isAccountWallet" class="av-account">
+          <Icon name="star" :size="18" />Tu cimarrón se guarda en tu grupo. Cada punto de tus actividades también te da
+          {{ wallet.perPoint }} Cimacoins ({{ progress.points }} puntos)
+        </p>
+        <p v-else class="av-account">
+          Tu cimarrón se guarda en este navegador.
+          <RouterLink to="/unirse">Entra con el código de tu grupo</RouterLink> para ganar Cimacoins con tus puntos
+          y llevar tu cimarrón a cualquier equipo
+        </p>
       </div>
       <p class="av-wallet" aria-live="polite">
         <Icon name="coin" :size="22" /><strong>{{ coins.toLocaleString("es-MX") }}</strong> Cimacoins
@@ -400,7 +416,7 @@ const siteGoals = computed(() => {
             <p>{{ offer.detail }}</p>
           </div>
           <div class="av-offer-actions">
-            <button v-if="offer.price !== null" type="button" class="av-buy" :disabled="!offer.canBuy" @click="buy">
+            <button v-if="offer.price !== null" type="button" class="av-buy" :disabled="!offer.canBuy || buying" @click="buy">
               <Icon name="coin" :size="16" /> Comprar · {{ offer.price }}
             </button>
             <button v-else type="button" class="av-buy" @click="setMode('retos')">Cómo ganarlo</button>
@@ -595,6 +611,8 @@ const siteGoals = computed(() => {
 .av-intro { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
 .av-intro .section-lead { margin-top: 6px; }
 .av-wallet { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px; background: var(--gold-tint); border: 2px solid var(--uabc-gold); color: var(--gold-text); font-weight: 700; margin: 0; }
+.av-account { margin: 6px 0 0; font-size: 0.95rem; color: var(--muted); }
+.av-account svg { vertical-align: -3px; margin-right: 4px; }
 .av-wallet strong { font-size: 1.35rem; color: var(--title); }
 .av-modes { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
 .av-modes button { font: inherit; font-weight: 700; padding: 10px 16px; border-radius: 999px; border: 2px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; min-height: 44px; }

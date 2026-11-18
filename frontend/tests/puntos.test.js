@@ -136,12 +136,12 @@ describe("Lista flotante de tareas", () => {
 import CimarronAvatar from "../src/components/CimarronAvatar.vue";
 
 describe("Cimarrón del alumno", () => {
-  it("dibuja solo las piezas elegidas y el fondo", () => {
-    const plain = mount(CimarronAvatar, { props: { avatar: { background: "cielo", pieces: [] } } });
-    const dressed = mount(CimarronAvatar, { props: { avatar: { background: "cielo", pieces: ["casco", "insignia"] } } });
-    expect(plain.findAll("circle").map((c) => c.attributes("fill"))).toContain("#cfe6f7");
-    expect(dressed.findAll("path").length).toBeGreaterThan(plain.findAll("path").length);
-    expect(dressed.html()).toContain("#dd971a");
-    expect(plain.html()).not.toContain("#dd971a");
+  it("dibuja el avatar guardado con el arte de Mi cimarrón", async () => {
+    const plain = mount(CimarronAvatar, { props: { avatar: {}, size: 48 } });
+    const dressed = mount(CimarronAvatar, { props: { avatar: { cabeza: "corona", ojos: "alegres" }, size: 48 } });
+    await plain.vm.loadArt();
+    await flushPromises();
+    expect(plain.find("svg").attributes("width")).toBe("48");
+    expect(dressed.html()).not.toBe(plain.html());
   });
 });

@@ -1,13 +1,12 @@
 <?php
 
-// Piezas del cimarrón del alumno. No se gastan puntos: cada pieza se desbloquea al llegar a cierta cantidad.
-return [
-    'backgrounds' => ['verde', 'ocre', 'cielo'],
-    'pieces' => [
-        'casco' => 30,
-        'impermeable' => 60,
-        'mochila' => 100,
-        'linterna' => 150,
-        'insignia' => 200,
-    ],
+// Kit de avatares (Mi cimarrón) para los alumnos con sesión.
+// avatar-catalogo.json se genera desde el frontend con `node scripts/catalogo-avatar.mjs`
+// (precios, piezas iniciales, kits, premios, retos y secreto). No se edita a mano.
+// Ver docs/avatar-cimarron.md.
+$catalog = json_decode((string) file_get_contents(__DIR__.'/avatar-catalogo.json'), true, flags: JSON_THROW_ON_ERROR);
+
+return $catalog + [
+    // Día de los premios diarios (visita del día, reto diario).
+    'timezone' => 'America/Tijuana',
 ];
