@@ -1,4 +1,5 @@
 <script setup>
+import SecretCoin from "../components/SecretCoin.vue";
 import Icon from "../components/Icon.vue";
 import { games, gameCredits, developers, designSupport } from "../data";
 
@@ -63,6 +64,7 @@ const studentCount = new Set(
     <section aria-labelledby="titulo-creadores" class="team-section">
       <div class="gm-section-head">
         <h2 id="titulo-creadores" class="section-title">Creadores de los juegos</h2>
+        <SecretCoin id="moneda-equipo" class="page-coin" />
         <p class="section-lead">Cada juego lo hizo un equipo de estudiantes</p>
       </div>
       <div class="team-games">

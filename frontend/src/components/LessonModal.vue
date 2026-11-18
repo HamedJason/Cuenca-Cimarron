@@ -1,10 +1,12 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import Icon from "./Icon.vue";
 import Modal from "./Modal.vue";
 import PacificLab from "./PacificLab.vue";
 import PointsTag from "./PointsTag.vue";
 import ActivityQuestion from "./ActivityQuestion.vue";
+import SecretCoin from "./SecretCoin.vue";
+import { earn } from "../composables/useCimacoins";
 import { activeLesson, closeLesson, openLesson } from "../composables/useLesson";
 import { savedList } from "../composables/storage";
 import {
@@ -43,6 +45,12 @@ const stepDone = (s) =>
 const groupCount = (group) =>
   group.items.filter((item) => kitDone.value.includes(item.id)).length;
 const kitComplete = computed(() => kitDone.value.length === kitIds.length);
+const planComplete = computed(() => planDone.value.length === planIds.length);
+
+// Cimacoins por terminar cada lista (se entregan una sola vez)
+watch(kitComplete, (done) => done && earn("mochila-lista"), { immediate: true });
+watch(planComplete, (done) => done && earn("plan-listo"), { immediate: true });
+watch(aidComplete, (done) => done && earn("botiquin-listo"), { immediate: true });
 
 const lesson = activeLesson;
 // Cada tema empieza desde arriba: la ventana se regresa al inicio al cerrarla
@@ -385,6 +393,8 @@ function goTo(id) {
         </div>
       </template>
       <ActivityQuestion :key="lesson.id" :activity-key="`lectura-${lesson.id}`" />
+      <!-- Moneda escondida al final de cada tema -->
+      <p class="lesson-coin"><SecretCoin :id="`moneda-${lesson.id}`" /></p>
     </template>
   </Modal>
 </template>

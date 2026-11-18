@@ -1,4 +1,5 @@
 <script setup>
+import SecretCoin from "../components/SecretCoin.vue";
 import { onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Icon from "../components/Icon.vue";
@@ -229,6 +230,7 @@ const officialLinks = [
 
       <div v-if="practice" class="call-practice">
         <p><strong>Practica antes de que pase</strong></p>
+        <SecretCoin id="moneda-911" class="page-coin" />
         <a class="button primary cta" :href="practice.href" target="_blank" rel="noopener"
           ><Icon name="gamepad" :size="22" /> Jugar Alerta 911</a
         >

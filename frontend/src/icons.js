@@ -75,6 +75,18 @@ export const icons = {
     '<path d="M12 21a6 6 0 0 0 6-6c0-4-3-6-4-10-2 2-3 4-3 6-1-1-1.5-2-1.5-3C7 9 6 12 6 15a6 6 0 0 0 6 6Z"/><path d="M12 21a2.5 2.5 0 0 1-2.5-2.5c0-2 2.5-3.5 2.5-3.5s2.5 1.5 2.5 3.5A2.5 2.5 0 0 1 12 21Z"/>',
   eyeOff:
     '<path d="m3 3 18 18M10.6 6.1A10 10 0 0 1 12 6c6 0 9.5 6 9.5 6a17 17 0 0 1-3 3.6M6.4 7.6A17 17 0 0 0 2.5 12S6 18 12 18a9 9 0 0 0 4.2-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
+  coin: '<circle cx="12" cy="12" r="9"/><path d="M12 6.5v11m-2.5-9h3.2a1.7 1.7 0 0 1 0 3.4h-1.4a1.7 1.7 0 0 0 0 3.4h3.2"/>',
+  shuffle:
+    '<path d="M3 5h3c4 0 8 14 12 14h3M17 15l4 4-4 3M3 19h3c1 0 3-2 4-4M14 9l2-3c1-1 2-1 5-1M17 2l4 3-4 4"/>',
+  shirt: '<path d="m8 4-6 4 2 5 4-2v9h8v-9l4 2 2-5-6-4a4 4 0 0 1-8 0Z"/>',
+  helmet: '<path d="M3 15a9 9 0 0 1 18 0m-11-9 1 7m3-7-1 7M2 15h20v4H2z"/>',
+  landscape:
+    '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="m3 16 5-6 4 5 3-3 6 5"/><circle cx="16" cy="8" r="1"/>',
+  kit: '<rect x="4" y="6" width="16" height="15" rx="2"/><path d="M9 6V3h6v3M4 12h16m-10-1v3h4v-3"/>',
+  blank: '<circle cx="12" cy="12" r="8"/><path d="m6.3 17.7 11.4-11.4"/>',
+  bolt: '<path d="m13 2-7 11h5l-1 9 8-12h-5z"/>',
+  hill: '<path d="m2 19 7-13 6 10 2-4 5 7H2Zm5-9 2 2 2-2"/>',
+  face: '<circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M8.5 14.5a4.5 4.5 0 0 0 7 0"/>',
 };
 export function iconSvg(name) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${icons[name] || icons.info}</svg>`;

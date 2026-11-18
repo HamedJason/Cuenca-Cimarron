@@ -7,6 +7,7 @@ import { activityByKey, isDone, startActivity } from "./useActivities";
 
 // Juego externo abierto por un alumno: al regresar a la pestaña se le pregunta si ya terminó.
 export const PENDING_EXTERNAL = "cuenca.juego-externo";
+import { earn } from "./useCimacoins";
 
 const plays = ref({});
 let loading = null;
@@ -39,6 +40,8 @@ export async function registerPlay(game) {
       }
     }
   }
+  // Cimacoins por abrir cada juego la primera vez
+  earn(`juego-${game}`);
   try {
     const { visitor, session } = browserIds();
     const response = await fetch("/api/game-sessions", {

@@ -10,6 +10,9 @@ import ExternalReturn from "./components/ExternalReturn.vue";
 import TasksFab from "./components/TasksFab.vue";
 import { loadStudent, student } from "./composables/useStudent";
 import { loadActivities, retryPending } from "./composables/useActivities";
+import CoinToast from "./components/CoinToast.vue";
+import { closeLesson } from "./composables/useLesson";
+import { coins, earn, visitPage } from "./composables/useCimacoins";
 import { storageAvailable } from "./composables/useProgress";
 import { useVisits } from "./composables/useVisits";
 import { useTheme } from "./composables/useTheme";
@@ -32,20 +35,27 @@ const navigation = [
   { to: "/informacion", label: "Información", icon: "book" },
   { to: "/consejos", label: "Consejos", icon: "shield" },
   { to: "/equipo", label: "Equipo", icon: "people" },
+  // En escritorio se entra con el saldo del encabezado; en el menú del celular, con este enlace
+  { to: "/mi-cimarron", label: "Mi cimarrón", icon: "coin", mobileOnly: true },
 ];
 const isActive = (item) =>
   item.to === route.path || (item.match || []).includes(route.path);
 const menuOpen = ref(false);
 watch(
   () => route.path,
-  () => {
+  (path) => {
     menuOpen.value = false;
+    // Al cambiar de página (por ejemplo desde el aviso de monedas) se cierra el tema abierto
+    closeLesson();
+    // Cimacoins: cuenta la sección visitada (premio de explorador)
+    visitPage(path);
   },
 );
 // El botón flotante no se muestra donde ya están los juegos.
 // Siempre visible, salvo en la página de juegos.
 // Con un alumno con sesión, su lista de tareas toma ese lugar.
-const showPlayButton = computed(() => route.path !== "/juegos" && !student.value);
+// Tampoco en Mi cimarrón, donde taparía la tienda.
+const showPlayButton = computed(() => !["/juegos", "/mi-cimarron"].includes(route.path) && !student.value);
 const contactEmails = [
   "jason.hamed@uabc.edu.mx",
   "onit.sibaja@uabc.edu.mx",
@@ -68,6 +78,8 @@ onMounted(() => {
     loadActivities();
     retryPending();
   });
+  // Se espera a que pase la pantalla de bienvenida para que se vea el aviso
+  setTimeout(() => earn("visita-diaria"), 3500);
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
 });
@@ -86,6 +98,13 @@ onMounted(() => {
           height="44"
           @error="recoverLogo"
         /><span class="wordmark">Cuenca Cimarrona</span></RouterLink
+      >
+      <RouterLink
+        to="/mi-cimarron"
+        class="coin-chip"
+        :aria-label="`${coins} Cimacoins. Ir a Mi cimarrón`"
+        title="Tus Cimacoins"
+        ><Icon name="coin" :size="20" /><span>{{ coins.toLocaleString("es-MX") }}</span></RouterLink
       >
       <button
         :class="['theme-toggle', { 'is-dark': theme === 'dark' }]"
@@ -116,11 +135,12 @@ onMounted(() => {
           <RouterLink
             v-if="item.to"
             :to="item.to"
-            :class="['nav-link', { active: isActive(item) }]"
+            :class="['nav-link', { active: isActive(item), 'nav-mobile-only': item.mobileOnly }]"
             :aria-current="isActive(item) ? 'page' : undefined"
             ><span class="nav-icon" aria-hidden="true"
               ><Icon :name="item.icon" :size="20" /></span
-            >{{ item.label }}</RouterLink
+            >{{ item.label
+            }}<span v-if="item.mobileOnly" class="nav-coins">{{ coins.toLocaleString("es-MX") }} Cimacoins</span></RouterLink
           >
           <a
             v-else
@@ -290,4 +310,5 @@ onMounted(() => {
   <StudentCheck />
   <ExternalReturn />
   <TasksFab />
+  <CoinToast />
 </template>

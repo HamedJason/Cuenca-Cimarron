@@ -1,4 +1,5 @@
 <script setup>
+import SecretCoin from "../components/SecretCoin.vue";
 import { nextTick, watch } from "vue";
 import { useRoute } from "vue-router";
 import Icon from "../components/Icon.vue";
@@ -86,6 +87,7 @@ watch(
         <MascotGuide :size="130" bubble="¡Prepárate conmigo!" />
         <div>
           <h2 id="titulo-preparate" class="section-title">Prepárate antes</h2>
+        <SecretCoin id="moneda-consejos" class="page-coin" />
           <p>Haz tu plan familiar y revisa tu mochila de emergencia</p>
         </div>
         <div class="info-play-actions">
