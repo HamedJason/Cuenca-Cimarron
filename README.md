@@ -40,7 +40,7 @@ El servidor de la facultad ya tiene HTTPS con un proxy propio delante del puerto
 
 Si algún día se instala en un servidor sin HTTPS, el sitio trae Caddy, que saca el certificado solo. Se activa agregando `HTTPS_CADDY=1` al `.env` y volviendo a correr `sh Cuenca-Cimarron/instalar.sh`. Después se escribe el dominio en el panel de administración.
 
-El detalle, los ajustes opcionales y cómo regresar a una versión anterior están en `docs/servidor.md`.
+El detalle, los ajustes opcionales y cómo regresar a una versión anterior están en `docs/servidor.md`. Cómo funcionan las cuentas de escuelas, docentes, alumnos y administración está en `docs/cuentas.md`.
 
 ## Integración de interfaces
 
