@@ -8,6 +8,7 @@ import { api } from "../composables/api";
 const props = defineProps({ classroom: { type: Object, required: true } });
 const tasks = ref([]);
 const catalog = ref([]);
+const paths = ref([]);
 const table = ref({ tasks: [], students: [] });
 const state = ref("loading");
 const picked = ref([]);
@@ -16,7 +17,7 @@ const message = ref("");
 const today = new Date().toISOString().slice(0, 10);
 
 const available = computed(() => catalog.value.filter((a) => !tasks.value.some((t) => t.key === a.key)));
-const kinds = { lectura: "Lecturas", consejo: "Consejos", juego: "Juegos", externo: "Juegos de otros sitios" };
+const kinds = { lectura: "Lecturas", modulo: "Lecturas cortas", consejo: "Consejos", juego: "Juegos", externo: "Juegos de otros sitios" };
 const groups = computed(() =>
   Object.entries(kinds)
     .map(([kind, label]) => ({ kind, label, items: available.value.filter((a) => a.kind === kind) }))
@@ -28,6 +29,7 @@ async function load() {
     const [t, p] = await Promise.all([api(`/docente/grupos/${props.classroom.id}/tareas`), api(`/docente/grupos/${props.classroom.id}/avance`)]);
     tasks.value = t.tasks;
     catalog.value = t.catalog;
+    paths.value = t.paths ?? [];
     table.value = p;
     state.value = "ready";
   } catch (e) {
@@ -44,6 +46,18 @@ async function assign() {
     await load();
   } catch (e) {
     message.value = e.errors?.due_date || e.errors?.activities || e.message;
+  }
+}
+// Camino predeterminado: asigna de una vez las actividades que falten.
+const titleOf = (key) => catalog.value.find((a) => a.key === key)?.title ?? key;
+const pending = (path) => path.activities.filter((key) => !tasks.value.some((t) => t.key === key));
+async function assignPath(path) {
+  message.value = "";
+  try {
+    await api(`/docente/grupos/${props.classroom.id}/tareas`, { method: "POST", body: { activities: pending(path), due_date: dueDate.value || null } });
+    await load();
+  } catch (e) {
+    message.value = e.message;
   }
 }
 async function remove(task) {
@@ -94,6 +108,26 @@ const dateText = (iso) => new Date(`${iso}T12:00:00`).toLocaleDateString("es-MX"
           <Icon name="task" :size="20" />
           <span><b>{{ task.title }}</b> · {{ task.points }} puntos<span v-if="task.due_date"> · Para el {{ dateText(task.due_date) }}</span></span>
           <button class="text-link" type="button" @click="remove(task)">Quitar</button>
+        </li>
+      </ul>
+    </section>
+
+    <section v-if="!classroom.archived && paths.length" class="form-card">
+      <h2 class="form-title">Caminos listos</h2>
+      <p class="muted-text">Cada camino es una serie de lecturas, consejos y juegos sobre un tema. Asígnalo completo con un clic</p>
+      <ul class="path-list">
+        <li v-for="path in paths" :key="path.key" class="path-card">
+          <div>
+            <h3>{{ path.title }}</h3>
+            <p class="muted-text">{{ path.description }}</p>
+            <ol class="path-steps">
+              <li v-for="key in path.activities" :key="key" :class="{ assigned: tasks.some((t) => t.key === key) }">{{ titleOf(key) }}</li>
+            </ol>
+          </div>
+          <button v-if="pending(path).length" class="button primary small-button" type="button" @click="assignPath(path)">
+            Asignar camino ({{ pending(path).length }})
+          </button>
+          <span v-else class="status-badge is-approved"><Icon name="check" :size="16" />Asignado</span>
         </li>
       </ul>
     </section>

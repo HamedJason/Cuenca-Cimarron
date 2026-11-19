@@ -12,7 +12,7 @@ class Teacher extends Model
 
     protected function casts(): array
     {
-        return ['active' => 'boolean'];
+        return ['active' => 'boolean', 'avatar' => 'array'];
     }
 
     public function school(): BelongsTo

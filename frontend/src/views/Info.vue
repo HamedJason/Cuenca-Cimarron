@@ -158,6 +158,18 @@ const officialLinks = [
       </div>
     </section>
 
+    <section aria-labelledby="titulo-lecturas" class="section-space">
+      <div class="info-play cc-watermark lessons-invite">
+        <div>
+          <h2 id="titulo-lecturas" class="section-title">Lecturas cortas</h2>
+          <p>Un tema en un minuto, con una pregunta al final. Riesgos, plan familiar y mochila</p>
+        </div>
+        <RouterLink to="/aprende" class="button primary"
+          ><Icon name="book" :size="22" /> Empezar a leer</RouterLink
+        >
+      </div>
+    </section>
+
     <section aria-labelledby="titulo-jugar" class="section-space">
       <div class="info-play cc-watermark">
         <MascotGuide :size="130" bubble="¡Practica conmigo!" />

@@ -111,4 +111,17 @@ class Cimacoins
 
         return $result;
     }
+
+    // El docente tiene todas las piezas: solo se revisa que existan en el catálogo.
+    public static function teacherAvatar(?array $candidate): array
+    {
+        $candidate ??= [];
+        $result = [];
+        foreach (config('avatar.defaults') as $group => $default) {
+            $id = $candidate[$group] ?? null;
+            $result[$group] = is_string($id) && self::price("{$group}/{$id}") !== false ? $id : $default;
+        }
+
+        return $result;
+    }
 }

@@ -120,12 +120,17 @@ Las cuentas de solo lectura ven únicamente Panel de datos y Escuelas, sin boton
 
 ## Mi cimarrón y Cimacoins
 
-El avatar (`/mi-cimarron`) es el mismo para visitantes y alumnos. Lo que cambia es dónde se guarda:
+Cualquiera puede jugar y leer sin cuenta. Solo los alumnos ganan Cimacoins y solo alumnos y docentes arman su cimarrón (`/mi-cimarron`):
 
-- **Visitante**: cartera de Cimacoins y avatar en su navegador.
+- **Visitante**: juega y lee, pero no ve Cimacoins ni el cimarrón. `/mi-cimarron` le pide entrar con el código de su grupo.
 - **Alumno con sesión**: en su cuenta (`students.wallet` y `students.avatar`). El servidor valida cada premio, cada compra y que el avatar solo lleve piezas suyas. Lo conserva al cambiar de equipo con su código personal.
-- **Puntos y Cimacoins**: los puntos nunca se gastan y son los que ve el docente. Cada punto le da también 5 Cimacoins al alumno. Saldo = 80 + puntos × 5 + premios − lo gastado.
-- La cartera que tenía como visitante no se pasa a su cuenta al entrar a un grupo.
+- **Docente**: arma su cimarrón con todas las piezas desbloqueadas y sin monedas (`teachers.avatar`, `PUT /api/docente/cimarron`). Entra desde el botón Mi cimarrón de su panel.
+- **Puntos y Cimacoins**: los puntos nunca se gastan y son los que ve el docente. Cada punto le da también 10 Cimacoins al alumno. Saldo = 150 + puntos × 10 + premios − lo gastado.
+
+## Lecturas cortas y caminos listos
+
+- **Lecturas cortas** (`/aprende`): 11 temas que se leen en un minuto (El Niño y los riesgos, plan familiar y mochila). Cada una termina con una pregunta que da 10 puntos, o sea 100 Cimacoins. El texto sale de `frontend/src/learnModules.js` y la pregunta de `backend/config/activities.php` (claves `modulo-...`).
+- **Caminos listos**: series de actividades sobre un tema que el docente asigna completas con un clic desde las tareas de su grupo. Están en `backend/config/paths.php`. Para agregar uno se escribe ahí con claves de `activities.php`, y las que no existan se ignoran.
 
 Rutas (`/api/yo/cimarron` y `/api/yo/cimacoins/...`), reglas y cómo agregar piezas en [avatar-cimarron.md](avatar-cimarron.md).
 

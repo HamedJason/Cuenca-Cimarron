@@ -3,7 +3,7 @@ import { flushPromises } from "@vue/test-utils";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { buildCatalog } from "../src/avatar/catalog-export.js";
-import { student, progress, studentState } from "../src/composables/useStudent";
+import { student, teacher, progress, studentState } from "../src/composables/useStudent";
 import {
   WALLET_KEY,
   buy,
@@ -15,6 +15,9 @@ import {
   savedAvatar,
   updateWallet,
   wallet,
+  earnsCoins,
+  canCustomize,
+  isTeacherAvatar,
 } from "../src/composables/useCimacoins";
 
 const reply = (data, status = 200) =>
@@ -52,20 +55,25 @@ describe("Catálogo de la API", () => {
   });
 });
 
-describe("Cartera del visitante", () => {
-  it("se guarda en el navegador y cada premio se da una vez", async () => {
+describe("Visitante sin cuenta", () => {
+  it("juega sin monedas ni personalización", async () => {
     const fetch = vi.fn();
     vi.stubGlobal("fetch", fetch);
     expect(isAccountWallet.value).toBe(false);
-    expect(coins.value).toBe(80);
-    expect(await earn("moneda-conozca")).toBe(true);
+    expect(earnsCoins.value).toBe(false);
+    expect(canCustomize.value).toBe(false);
     expect(await earn("moneda-conozca")).toBe(false);
-    expect(coins.value).toBe(110);
-    expect(JSON.parse(localStorage.getItem(WALLET_KEY)).coins).toBe(110);
-    expect(lastReward.value.id).toBe("moneda-conozca");
-    expect((await buy({ group: "ojos", id: "alegres" })).ok).toBe(true);
-    expect(coins.value).toBe(90);
+    expect((await buy({ group: "ojos", id: "alegres" })).ok).toBe(false);
+    expect(localStorage.getItem(WALLET_KEY)).toBe(null);
     expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("el docente se personaliza con todo y sin monedas", () => {
+    teacher.value = { name: "Laura", avatar: {} };
+    expect(isTeacherAvatar.value).toBe(true);
+    expect(canCustomize.value).toBe(true);
+    expect(earnsCoins.value).toBe(false);
+    teacher.value = null;
   });
 });
 

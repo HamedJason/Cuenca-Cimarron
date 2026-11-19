@@ -3,13 +3,13 @@
 // Ya recogida, se queda como un hueco discreto para que se note que ya pasaste por ahí.
 import { computed } from "vue";
 import Icon from "./Icon.vue";
-import { earn, isClaimed, siteRewards, wallet } from "../composables/useCimacoins";
+import { earn, isClaimed, siteRewards, wallet, earnsCoins } from "../composables/useCimacoins";
 const props = defineProps({ id: { type: String, required: true } });
 const claimed = computed(() => (wallet.value, isClaimed(props.id)));
 </script>
 <template>
   <button
-    v-if="siteRewards[id]"
+    v-if="earnsCoins && siteRewards[id]"
     type="button"
     :class="['secret-coin', { claimed }]"
     :disabled="claimed"

@@ -2,10 +2,10 @@
 // la tienda y el script que exporta el catálogo para la API (scripts/catalogo-avatar.mjs).
 
 // Monedas con las que empieza toda cartera nueva (visitante o alumno).
-export const STARTER_COINS = 80;
+export const STARTER_COINS = 150;
 // Alumnos con sesión: cada punto de una actividad también da estas Cimacoins.
 // Los puntos nunca se gastan; las Cimacoins sí.
-export const COINS_PER_POINT = 5;
+export const COINS_PER_POINT = 10;
 
 // Cada premio se entrega una sola vez (o una vez al día si es daily).
 // items: cosméticos que se agregan a la colección junto con las monedas.

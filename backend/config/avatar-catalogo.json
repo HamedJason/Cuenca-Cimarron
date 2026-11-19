@@ -1,6 +1,6 @@
 {
- "starter": 80,
- "per_point": 5,
+ "starter": 150,
+ "per_point": 10,
  "bundle_discount": 0.2,
  "defaults": {
   "pelaje": "caramelo",

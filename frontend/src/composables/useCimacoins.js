@@ -10,7 +10,7 @@
 // Ver docs/avatar-cimarron.md.
 import { ref, computed } from "vue";
 import { api } from "./api";
-import { student, progress, studentState, loadStudent } from "./useStudent";
+import { student, teacher, progress, studentState, loadStudent } from "./useStudent";
 import { STARTER_COINS, siteRewards, explorerPages } from "../avatar/rewards.js";
 
 export { STARTER_COINS, siteRewards, explorerPages };
@@ -58,6 +58,11 @@ const localWallet = ref(read());
 
 // ¿La cartera es la de la cuenta del alumno?
 export const isAccountWallet = computed(() => Boolean(student.value?.wallet));
+// Solo los alumnos con sesión ganan Cimacoins. Los docentes se personalizan con todo desbloqueado.
+// Los visitantes sin cuenta juegan igual, pero sin monedas ni personalización.
+export const earnsCoins = computed(() => Boolean(student.value));
+export const isTeacherAvatar = computed(() => !student.value && Boolean(teacher.value));
+export const canCustomize = computed(() => earnsCoins.value || isTeacherAvatar.value);
 
 // Cartera que ve el sitio. Para el alumno el saldo se recalcula con sus puntos,
 // así sube en cuanto gana puntos sin volver a pedir nada al servidor.
@@ -109,6 +114,8 @@ export async function earn(id) {
   const reward = siteRewards[id];
   if (!reward) return false;
   let given = false;
+  // Sin alumno con sesión no hay monedas.
+  if (!(await ready())) return false;
   if (await ready()) {
     if (isClaimed(id)) return false;
     try {
@@ -137,7 +144,7 @@ export async function earn(id) {
 // Cuenta la visita a una sección; al ver todas se entrega el premio de explorador.
 // Las secciones visitadas se cuentan en cada navegador.
 export function visitPage(path) {
-  if (!explorerPages.includes(path)) return;
+  if (!earnsCoins.value || !explorerPages.includes(path)) return;
   updateWallet((w) => (w.visited.includes(path) ? null : { ...w, visited: [...w.visited, path] }));
   if (explorerPages.every((p) => localWallet.value.visited.includes(p))) earn("explorador");
 }
@@ -148,6 +155,7 @@ const economy = () => import("../avatar/economy.js");
 
 // Compra una pieza ({group, id}) o un kit ({kit}). Resuelve { ok, message }.
 export async function buy(target) {
+  if (!(await ready())) return { ok: false, message: "Entra con el código de tu grupo para comprar" };
   if (await ready()) {
     try {
       const body = target.kit ? { kit: target.kit } : { group: target.group, id: target.id };
@@ -163,6 +171,7 @@ export async function buy(target) {
 
 // Reto de "Ganar monedas" con la secuencia correcta. Resuelve true si dio monedas ahora.
 export async function completeChallenge(id, answer, day) {
+  if (!(await ready())) return false;
   if (await ready()) {
     try {
       const data = await api("/yo/cimacoins/reto", { method: "POST", body: { id } });
@@ -178,6 +187,7 @@ export async function completeChallenge(id, answer, day) {
 
 // Secreto del Cimarrón Angelical. Resuelve true si se desbloqueó.
 export async function revealSecret(answer) {
+  if (!(await ready())) return false;
   if (await ready()) {
     try {
       applyAccount(await api("/yo/cimacoins/secreto", { method: "POST", body: { answer } }));
@@ -193,6 +203,7 @@ export async function revealSecret(answer) {
 // Avatar puesto: el del alumno viene de su cuenta; el del visitante, de este navegador.
 export function savedAvatar() {
   if (isAccountWallet.value) return student.value.avatar ?? {};
+  if (isTeacherAvatar.value) return teacher.value.avatar ?? {};
   try {
     return JSON.parse(localStorage.getItem(AVATAR_KEY)) ?? {};
   } catch {
@@ -203,6 +214,20 @@ export function savedAvatar() {
 // Guarda el avatar. Para el alumno se espera un momento por si sigue cambiando piezas.
 let avatarTimer;
 export function saveAvatar(state) {
+  if (isTeacherAvatar.value) {
+    teacher.value = { ...teacher.value, avatar: state };
+    clearTimeout(avatarTimer);
+    return new Promise((resolve) => {
+      avatarTimer = setTimeout(async () => {
+        try {
+          await api("/docente/cimarron", { method: "PUT", body: { avatar: state } });
+          resolve(true);
+        } catch {
+          resolve(false);
+        }
+      }, 600);
+    });
+  }
   if (!isAccountWallet.value) {
     try {
       localStorage.setItem(AVATAR_KEY, JSON.stringify(state));

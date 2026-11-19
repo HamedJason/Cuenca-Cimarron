@@ -31,7 +31,9 @@ import {
   signals,
 } from "../avatar/economy.js";
 import {
-  wallet,
+  wallet as baseWallet,
+  isTeacherAvatar,
+  canCustomize,
   siteRewards,
   isClaimed,
   localDay,
@@ -42,7 +44,13 @@ import {
   completeChallenge,
   revealSecret,
 } from "../composables/useCimacoins";
-import { student, progress } from "../composables/useStudent";
+import { student, teacher, progress } from "../composables/useStudent";
+
+// El docente tiene todas las piezas desbloqueadas y no usa monedas.
+const allItems = Object.entries(catalog).flatMap(([group, c]) => c.items.map((item) => `${group}/${item.id}`));
+const wallet = computed(() =>
+  isTeacherAvatar.value ? { ...baseWallet.value, coins: 0, owned: allItems, angelic: true } : baseWallet.value,
+);
 // Solo se puede llevar puesto lo que ya es tuyo; lo demás vuelve a la pieza inicial.
 const available = (candidate) =>
   Object.fromEntries(
@@ -55,13 +63,14 @@ const available = (candidate) =>
 const equipped = ref(available(savedAvatar()));
 // Al entrar o salir de la cuenta del alumno se muestra el avatar de esa cartera.
 watch(
-  () => [isAccountWallet.value, student.value?.id],
+  () => [isAccountWallet.value, student.value?.id, isTeacherAvatar.value],
   () => {
+    if (isTeacherAvatar.value) mode.value = "coleccion";
     pending.value = null;
     equipped.value = available(savedAvatar());
   },
 );
-const mode = ref("tienda");
+const mode = ref(isTeacherAvatar.value ? "coleccion" : "tienda");
 const pending = ref(null);
 const sectionIcons = { eyes: "face", helmet: "helmet", shirt: "shirt", backpack: "backpack", landscape: "landscape", kits: "kit" };
 const kitSection = sections.findIndex((section) => section.icon === "kits");
@@ -354,12 +363,31 @@ const siteGoals = computed(() => {
 </script>
 
 <template>
-  <div class="wrap av-page">
+  <div v-if="!canCustomize" class="wrap av-page">
     <header class="av-intro">
       <div>
         <h1 class="page-title">Mi cimarrón</h1>
-        <p class="section-lead">Gana Cimacoins jugando y explorando, y viste a tu cimarrón como quieras</p>
-        <p v-if="isAccountWallet" class="av-account">
+        <p class="section-lead">Tu propio cimarrón, con ropa, cascos y fondos que ganas con Cimacoins</p>
+      </div>
+    </header>
+    <div class="av-gate">
+      <p>Para tener tu cimarrón y ganar Cimacoins entra con el código de tu grupo. Pídeselo a tu maestra o maestro</p>
+      <div class="av-gate-actions">
+        <RouterLink to="/unirse" class="button primary">Entrar a mi grupo</RouterLink>
+        <RouterLink to="/juegos" class="button secondary">Ir a los juegos</RouterLink>
+      </div>
+      <p class="small muted-text">Los juegos y la información están abiertos para todos, sin cuenta</p>
+    </div>
+  </div>
+  <div v-else class="wrap av-page">
+    <header class="av-intro">
+      <div>
+        <h1 class="page-title">Mi cimarrón</h1>
+        <p v-if="!isTeacherAvatar" class="section-lead">Gana Cimacoins jugando y explorando, y viste a tu cimarrón como quieras</p>
+        <p v-if="isTeacherAvatar" class="av-account">
+          <Icon name="star" :size="18" />Como docente tienes todas las piezas desbloqueadas. Arma tu cimarrón como quieras
+        </p>
+        <p v-else-if="isAccountWallet" class="av-account">
           <Icon name="star" :size="18" />Tu cimarrón se guarda en tu grupo. Cada punto de tus actividades también te da
           {{ wallet.perPoint }} Cimacoins ({{ progress.points }} puntos)
         </p>
@@ -369,12 +397,12 @@ const siteGoals = computed(() => {
           y llevar tu cimarrón a cualquier equipo
         </p>
       </div>
-      <p class="av-wallet" aria-live="polite">
+      <p v-if="!isTeacherAvatar" class="av-wallet" aria-live="polite">
         <Icon name="coin" :size="22" /><strong>{{ coins.toLocaleString("es-MX") }}</strong> Cimacoins
       </p>
     </header>
 
-    <nav class="av-modes" aria-label="Secciones de Mi cimarrón">
+    <nav v-if="!isTeacherAvatar" class="av-modes" aria-label="Secciones de Mi cimarrón">
       <button
         v-for="m in [{ id: 'coleccion', label: 'Mi colección' }, { id: 'tienda', label: 'Tienda' }, { id: 'retos', label: 'Ganar monedas' }]"
         :key="m.id"
@@ -599,7 +627,7 @@ const siteGoals = computed(() => {
       </section>
     </div>
     <p v-if="status" class="av-status" role="status">{{ status }}</p>
-    <p class="av-note small muted-text">
+    <p v-if="!isAccountWallet && !isTeacherAvatar" class="av-note small muted-text">
       Tus monedas y tu avatar se guardan solo en este navegador. Si borras los datos del navegador o
       usas otro dispositivo, empiezas de nuevo.
     </p>
@@ -614,6 +642,9 @@ const siteGoals = computed(() => {
 .av-account { margin: 6px 0 0; font-size: 0.95rem; color: var(--muted); }
 .av-account svg { vertical-align: -3px; margin-right: 4px; }
 .av-wallet strong { font-size: 1.35rem; color: var(--title); }
+.av-gate { display: grid; gap: 14px; max-width: 640px; padding: 24px; border: 2px solid var(--edge); border-radius: var(--radius-card); background: var(--green-tint); box-shadow: 0 4px 0 var(--shadow); }
+.av-gate > p:first-child { font-size: 1.15rem; color: var(--ink); }
+.av-gate-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .av-modes { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
 .av-modes button { font: inherit; font-weight: 700; padding: 10px 16px; border-radius: 999px; border: 2px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; min-height: 44px; }
 .av-modes button[aria-pressed="true"] { background: var(--uabc-green); border-color: var(--uabc-green); color: #fff; }

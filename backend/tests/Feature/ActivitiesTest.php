@@ -135,24 +135,24 @@ class ActivitiesTest extends TestCase
     {
         $this->asStudent()->getJson('/api/yo')
             ->assertJsonPath('student.avatar.cabeza', 'casco-verde')
-            ->assertJsonPath('student.wallet.coins', 80)
-            ->assertJsonPath('student.wallet.extra', 80);
-        // 10 puntos = 50 Cimacoins. Los puntos no cambian al comprar.
+            ->assertJsonPath('student.wallet.coins', 150)
+            ->assertJsonPath('student.wallet.extra', 150);
+        // 10 puntos = 100 Cimacoins. Los puntos no cambian al comprar.
         $this->asStudent()->postJson('/api/actividades/lectura-conozca/respuesta', ['answer' => 0])->assertOk();
         $this->asStudent()->getJson('/api/yo')
-            ->assertJsonPath('student.wallet.coins', 130)
-            ->assertJsonPath('student.wallet.extra', 80);
+            ->assertJsonPath('student.wallet.coins', 250)
+            ->assertJsonPath('student.wallet.extra', 150);
         $this->asStudent()->postJson('/api/yo/cimacoins/compra', ['group' => 'ojos', 'id' => 'alegres'])
-            ->assertOk()->assertJsonPath('wallet.coins', 110);
+            ->assertOk()->assertJsonPath('wallet.coins', 230);
         $this->asStudent()->getJson('/api/yo')->assertJsonPath('progress.points', 10);
     }
 
     public function test_compras_validadas_en_el_servidor(): void
     {
         $buy = fn (array $body) => $this->asStudent()->postJson('/api/yo/cimacoins/compra', $body);
-        $buy(['group' => 'ojos', 'id' => 'alegres'])->assertOk()->assertJsonPath('new', true)->assertJsonPath('wallet.coins', 60);
+        $buy(['group' => 'ojos', 'id' => 'alegres'])->assertOk()->assertJsonPath('new', true)->assertJsonPath('wallet.coins', 130);
         // Comprar otra vez lo mismo no cobra.
-        $buy(['group' => 'ojos', 'id' => 'alegres'])->assertOk()->assertJsonPath('new', false)->assertJsonPath('wallet.coins', 60);
+        $buy(['group' => 'ojos', 'id' => 'alegres'])->assertOk()->assertJsonPath('new', false)->assertJsonPath('wallet.coins', 130);
         $buy(['group' => 'pelaje', 'id' => 'menta'])->assertUnprocessable();
         // Las piezas de premio no se venden.
         $buy(['group' => 'espalda', 'id' => 'mochila'])->assertUnprocessable();
@@ -184,22 +184,22 @@ class ActivitiesTest extends TestCase
     public function test_premios_una_vez_y_diarios_una_vez_al_dia(): void
     {
         $claim = fn (string $id) => $this->asStudent()->postJson('/api/yo/cimacoins/premio', ['id' => $id]);
-        $claim('moneda-conozca')->assertOk()->assertJsonPath('new', true)->assertJsonPath('wallet.coins', 110);
-        $claim('moneda-conozca')->assertOk()->assertJsonPath('new', false)->assertJsonPath('wallet.coins', 110);
+        $claim('moneda-conozca')->assertOk()->assertJsonPath('new', true)->assertJsonPath('wallet.coins', 180);
+        $claim('moneda-conozca')->assertOk()->assertJsonPath('new', false)->assertJsonPath('wallet.coins', 180);
         $claim('mochila-lista')->assertOk()->assertJsonPath('wallet.owned', ['espalda/mochila']);
         $claim('no-existe')->assertNotFound();
         $claim('visita-diaria')->assertJsonPath('new', true);
         $claim('visita-diaria')->assertJsonPath('new', false);
         $this->travel(1)->days();
-        $claim('visita-diaria')->assertJsonPath('new', true)->assertJsonPath('wallet.coins', 250);
+        $claim('visita-diaria')->assertJsonPath('new', true)->assertJsonPath('wallet.coins', 320);
     }
 
     public function test_kit_con_descuento(): void
     {
-        $this->asStudent()->postJson('/api/yo/cimacoins/reto', ['id' => 'senal-radio'])->assertOk()->assertJsonPath('wallet.coins', 300);
+        $this->asStudent()->postJson('/api/yo/cimacoins/reto', ['id' => 'senal-radio'])->assertOk()->assertJsonPath('wallet.coins', 370);
         $this->asStudent()->postJson('/api/yo/cimacoins/reto', ['id' => 'senal-radio'])->assertJsonPath('new', false);
         $this->asStudent()->postJson('/api/yo/cimacoins/compra', ['kit' => 'futbolista'])
-            ->assertOk()->assertJsonPath('price', 230)->assertJsonPath('wallet.coins', 70);
+            ->assertOk()->assertJsonPath('price', 230)->assertJsonPath('wallet.coins', 140);
         $this->asStudent()->putJson('/api/yo/cimarron', ['avatar' => config('avatar.kits.futbolista')])->assertOk();
     }
 

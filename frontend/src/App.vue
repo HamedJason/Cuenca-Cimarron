@@ -12,7 +12,7 @@ import { loadStudent, student } from "./composables/useStudent";
 import { loadActivities, retryPending } from "./composables/useActivities";
 import CoinToast from "./components/CoinToast.vue";
 import { closeLesson } from "./composables/useLesson";
-import { coins, earn, visitPage } from "./composables/useCimacoins";
+import { coins, earn, visitPage, earnsCoins, canCustomize } from "./composables/useCimacoins";
 import { storageAvailable } from "./composables/useProgress";
 import { useVisits } from "./composables/useVisits";
 import { useTheme } from "./composables/useTheme";
@@ -29,7 +29,7 @@ function recoverLogo(event) {
 const showStats = ref(false);
 const { stats, statsState, loadStats } = useVisits();
 // Mismo orden que el menú que ya estaba publicado: Inicio, Juegos, Información, Consejos.
-const navigation = [
+const allNavigation = [
   { to: "/", label: "Inicio", icon: "home" },
   { to: "/juegos", label: "Juegos", icon: "gamepad" },
   { to: "/informacion", label: "Información", icon: "book" },
@@ -38,6 +38,8 @@ const navigation = [
   // En escritorio se entra con el saldo del encabezado; en el menú del celular, con este enlace
   { to: "/mi-cimarron", label: "Mi cimarrón", icon: "coin", mobileOnly: true },
 ];
+// Mi cimarrón solo aparece para alumnos y docentes con sesión.
+const navigation = computed(() => allNavigation.filter((item) => item.to !== "/mi-cimarron" || canCustomize.value));
 const isActive = (item) =>
   item.to === route.path || (item.match || []).includes(route.path);
 const menuOpen = ref(false);
@@ -100,6 +102,7 @@ onMounted(() => {
         /><span class="wordmark">Cuenca Cimarrona</span></RouterLink
       >
       <RouterLink
+        v-if="earnsCoins"
         to="/mi-cimarron"
         class="coin-chip"
         :aria-label="`${coins} Cimacoins. Ir a Mi cimarrón`"
@@ -140,7 +143,7 @@ onMounted(() => {
             ><span class="nav-icon" aria-hidden="true"
               ><Icon :name="item.icon" :size="20" /></span
             >{{ item.label
-            }}<span v-if="item.mobileOnly" class="nav-coins">{{ coins.toLocaleString("es-MX") }} Cimacoins</span></RouterLink
+            }}<span v-if="item.mobileOnly && earnsCoins" class="nav-coins">{{ coins.toLocaleString("es-MX") }} Cimacoins</span></RouterLink
           >
           <a
             v-else

@@ -4,6 +4,8 @@ import { api } from "./api";
 import { tasks } from "./useTasks";
 
 export const student = ref(null);
+// Docente con sesión en este equipo: arma su cimarrón con todo desbloqueado, sin monedas.
+export const teacher = ref(null);
 // Puntos y actividades completadas. Siempre vienen del servidor.
 export const progress = ref({ points: 0, completed: [] });
 export const studentState = ref("idle");
@@ -15,6 +17,7 @@ export function loadStudent(force = false) {
   loading = api("/yo")
     .then((data) => {
       student.value = data.student;
+      teacher.value = data.teacher ?? null;
       progress.value = data.progress ?? { points: 0, completed: [] };
       tasks.value = data.tasks ?? [];
       studentState.value = "ready";

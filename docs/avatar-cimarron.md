@@ -20,11 +20,11 @@ sobre el mismo personaje.
   rareza y del tipo de pieza (ojos, boca y marcas son más baratos, y cabeza, torso, espalda, fondo,
   marco y efecto más caros). Las piezas iniciales y "ninguno" cuestan 0. Las de premio y las
   secretas no se venden.
-- **Formas de ganar Cimacoins**:
+- **Formas de ganar Cimacoins** (solo alumnos con sesión):
 
 | Cómo | Cuánto | Dónde está |
 | --- | --- | --- |
-| Monedas iniciales | 80 | `STARTER_COINS` en `src/avatar/rewards.js` |
+| Monedas iniciales | 150 | `STARTER_COINS` en `src/avatar/rewards.js` |
 | Visita del día | 20 al día | `App.vue` (a los 3.5 s, después de la bienvenida) |
 | Abrir cada juego la primera vez | 40 c/u | `useGamePlays.js` (`juego-<id>`) |
 | Completar la mochila, el plan familiar o el botiquín | 100, 100 y 60 (la mochila y el plan dan además un cosmético) | `LessonModal.vue` |
@@ -32,31 +32,35 @@ sobre el mismo personaje.
 | Monedas escondidas en los temas y páginas | 30 c/u | `<SecretCoin id="moneda-...">` |
 | Retos de memoria de señales | 85 a 220, y 150 el reto diario | `activities` en `src/avatar/economy.js` |
 | Secreto: Cimarrón Angelical | Todas sus piezas | Los 3 primeros retos dan fragmentos y con ellos se abre el destello del avatar |
-| **Solo alumnos**: puntos de actividades | 5 Cimacoins por punto | `COINS_PER_POINT` en `src/avatar/rewards.js` |
+| Puntos de actividades (lecturas cortas, lecturas, consejos y juegos) | 10 Cimacoins por punto, o sea 100 por cada lectura corta |  `COINS_PER_POINT` en `src/avatar/rewards.js` |
 
-### Dos carteras: visitante y alumno
+### Quién tiene cimarrón y Cimacoins
 
-| | Visitante (sin cuenta) | Alumno con sesión |
-| --- | --- | --- |
-| Dónde se guarda | Este navegador (`localStorage`: `cuenca-cimarrona.economia.v1` y `cuenca-cimarrona.avatar.v1`) | Su cuenta, en la base (`students.wallet` y `students.avatar`) |
-| Quién valida premios y compras | La página | El servidor (`CimarronController`) |
-| Saldo | Lo que guarda el navegador | `80 + puntos × 5 + premios − gastado`, calculado por el servidor |
-| Si cambia de equipo o borra el navegador | Lo pierde | Lo conserva al entrar con su código personal |
+| | Visitante (sin cuenta) | Alumno con sesión | Docente |
+| --- | --- | --- | --- |
+| Juega y lee | Sí | Sí | Sí |
+| Gana Cimacoins | No, ni ve el contador | Sí | No las necesita |
+| Arma su cimarrón | No, `/mi-cimarron` le pide entrar con el código de su grupo | Con las piezas que compra o gana | Con todas las piezas desbloqueadas |
+| Dónde se guarda | Nada | Su cuenta (`students.wallet` y `students.avatar`) | Su cuenta (`teachers.avatar`, `PUT /api/docente/cimarron`) |
+| Quién valida | | El servidor (`CimarronController`) | El servidor (solo revisa que cada pieza exista) |
 
-Las páginas no tienen que saber cuál de las dos es: usan las funciones de
+Las páginas no tienen que saber quién es: usan las funciones de
 `src/composables/useCimacoins.js` (`earn`, `buy`, `completeChallenge`, `revealSecret`,
-`saveAvatar`, `savedAvatar`), que deciden según haya o no un alumno con sesión
-(`student.wallet` viene en `/api/yo`).
+`saveAvatar`, `savedAvatar`, `earnsCoins`, `canCustomize`). `/api/yo` manda `student` para el
+alumno y `teacher` cuando en el equipo hay un docente con sesión. Sin alumno, `earn` y `buy` no
+hacen nada y las monedas escondidas no se muestran. Las carteras que se guardaron en el navegador
+antes de este cambio ya no se usan.
 
 **Puntos y Cimacoins no son lo mismo.** Los puntos son el avance que ve el docente y nunca
 bajan. Las Cimacoins se gastan en la tienda. Cada punto que gana el alumno le da también
-5 Cimacoins, así que comprar no le quita puntos. El servidor manda `wallet.extra`
-(saldo sin contar los puntos) y la página calcula `extra + puntos × 5`, para que el saldo
+10 Cimacoins, así que comprar no le quita puntos. Saldo = 150 + puntos × 10 + premios − gastado.
+El servidor manda `wallet.extra` (saldo sin contar los puntos) y la página calcula
+`extra + puntos × 10`, para que el saldo
 suba en cuanto el alumno contesta bien, sin volver a pedir nada.
 
-**Al entrar a un grupo** la cartera del navegador no se pasa a la cuenta: el alumno empieza con
-80 Cimacoins más las de sus puntos. Lo que tenía como visitante se queda en ese navegador y
-vuelve a verse si sale de su cuenta. Así nadie puede inflar una cuenta con una cartera local.
+**Al entrar a un grupo** el alumno empieza con 150 Cimacoins más las de sus puntos. Con eso
+ya compra unas piezas, y cada lectura corta bien contestada le da 100 más, así que en una o
+dos clases arma su personaje.
 
 **Lo que se cuenta por navegador aun con sesión**: las secciones visitadas (premio de
 explorador) y las listas de mochila, plan y botiquín, porque esas listas ya se guardaban así.

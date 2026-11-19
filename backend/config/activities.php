@@ -3,6 +3,8 @@
 // Catálogo de actividades que dan puntos. Al arrancar la API se copia a la tabla activities
 // (php artisan actividades:sincronizar), así el frontend lo pide por API y hay una sola lista.
 //
+// Tipos (kind): lectura, modulo (lectura corta de /aprende), consejo, juego y externo.
+//
 // Modos:
 // - pregunta: lecturas y consejos. Se contesta una pregunta al final y, si es correcta, suma.
 // - aviso: juegos propios. El juego avisa al terminar con CuencaPuntos.terminar(clave).
@@ -79,6 +81,193 @@ return [
                 'Solo curitas, lo demás lo da el hospital',
             ],
             'answer' => 1,
+        ],
+    ],
+    [
+        'key' => 'modulo-nino-tijuana',
+        'title' => 'El Niño en Tijuana',
+        'kind' => 'modulo',
+        'mode' => 'pregunta',
+        'points' => 10,
+        'route' => '/aprende/nino-tijuana',
+        'question' => [
+            'text' => '¿Una tormenta sola quiere decir que ya llegó El Niño?',
+            'options' => [
+                'Sí, siempre que llueve fuerte',
+                'No. Hay que seguir los avisos del clima y de Protección Civil',
+                'Solo si llueve de noche',
+            ],
+            'answer' => 1,
+        ],
+    ],
+    [
+        'key' => 'modulo-riesgo-lluvias',
+        'title' => 'Lluvias fuertes',
+        'kind' => 'modulo',
+        'mode' => 'pregunta',
+        'points' => 10,
+        'route' => '/aprende/riesgo-lluvias',
+        'question' => [
+            'text' => 'Con lluvia fuerte, ¿qué puede pasar en poco tiempo?',
+            'options' => [
+                'No cambia nada si es de día',
+                'El agua se va sola',
+                'Se pierde visibilidad y el suelo se satura',
+            ],
+            'answer' => 2,
+        ],
+    ],
+    [
+        'key' => 'modulo-riesgo-deslaves',
+        'title' => 'Deslaves',
+        'kind' => 'modulo',
+        'mode' => 'pregunta',
+        'points' => 10,
+        'route' => '/aprende/riesgo-deslaves',
+        'question' => [
+            'text' => '¿Dónde se puede venir abajo la tierra mojada?',
+            'options' => [
+                'En laderas y cañadas',
+                'En la playa',
+                'En las calles planas',
+            ],
+            'answer' => 0,
+        ],
+    ],
+    [
+        'key' => 'modulo-riesgo-inundaciones',
+        'title' => 'Inundaciones',
+        'kind' => 'modulo',
+        'mode' => 'pregunta',
+        'points' => 10,
+        'route' => '/aprende/riesgo-inundaciones',
+        'question' => [
+            'text' => 'Un arroyo o un paso a desnivel se está llenando. ¿Qué haces?',
+            'options' => [
+                'Lo cruzo rápido',
+                'No lo cruzo nunca',
+                'Lo cruzo si hay poca agua',
+            ],
+            'answer' => 1,
+        ],
+    ],
+    [
+        'key' => 'modulo-plan-riesgos',
+        'title' => 'Plan familiar: ubiquen los riesgos',
+        'kind' => 'modulo',
+        'mode' => 'pregunta',
+        'points' => 10,
+        'route' => '/aprende/plan-riesgos',
+        'question' => [
+            'text' => '¿Qué hacen primero para su plan familiar?',
+            'options' => [
+                'Comprar comida para un mes',
+                'Recorrer la casa y encontrar las zonas seguras',
+                'Esperar a que llueva',
+            ],
+            'answer' => 1,
+        ],
+    ],
+    [
+        'key' => 'modulo-plan-rutas',
+        'title' => 'Plan familiar: rutas y punto de encuentro',
+        'kind' => 'modulo',
+        'mode' => 'pregunta',
+        'points' => 10,
+        'route' => '/aprende/plan-rutas',
+        'question' => [
+            'text' => '¿Para qué sirve el punto de encuentro?',
+            'options' => [
+                'Para verse si no pueden quedarse en casa',
+                'Para guardar la mochila',
+                'Para jugar después de la lluvia',
+            ],
+            'answer' => 0,
+        ],
+    ],
+    [
+        'key' => 'modulo-plan-tareas',
+        'title' => 'Plan familiar: repartan tareas',
+        'kind' => 'modulo',
+        'mode' => 'pregunta',
+        'points' => 10,
+        'route' => '/aprende/plan-tareas',
+        'question' => [
+            'text' => '¿Por qué se reparten tareas en familia?',
+            'options' => [
+                'Para que una sola persona haga todo',
+                'No hace falta repartirlas',
+                'Para que cada quien sepa qué le toca y cómo avisar',
+            ],
+            'answer' => 2,
+        ],
+    ],
+    [
+        'key' => 'modulo-plan-practica',
+        'title' => 'Plan familiar: practiquen',
+        'kind' => 'modulo',
+        'mode' => 'pregunta',
+        'points' => 10,
+        'route' => '/aprende/plan-practica',
+        'question' => [
+            'text' => '¿Para qué es un simulacro?',
+            'options' => [
+                'Para aprender y ajustar el plan',
+                'Para ver quién gana',
+                'Para asustar a la familia',
+            ],
+            'answer' => 0,
+        ],
+    ],
+    [
+        'key' => 'modulo-mochila-esencial',
+        'title' => 'Mochila: lo esencial',
+        'kind' => 'modulo',
+        'mode' => 'pregunta',
+        'points' => 10,
+        'route' => '/aprende/mochila-esencial',
+        'question' => [
+            'text' => '¿Qué va en lo esencial de la mochila?',
+            'options' => [
+                'Juguetes y videojuegos',
+                'Agua, comida, botiquín y linterna',
+                'Ropa de fiesta',
+            ],
+            'answer' => 1,
+        ],
+    ],
+    [
+        'key' => 'modulo-mochila-documentos',
+        'title' => 'Mochila: comunicación y documentos',
+        'kind' => 'modulo',
+        'mode' => 'pregunta',
+        'points' => 10,
+        'route' => '/aprende/mochila-documentos',
+        'question' => [
+            'text' => '¿Para qué llevar un radio de pilas?',
+            'options' => [
+                'Para escuchar música',
+                'No sirve en una emergencia',
+                'Para oír los avisos oficiales',
+            ],
+            'answer' => 2,
+        ],
+    ],
+    [
+        'key' => 'modulo-mochila-familia',
+        'title' => 'Mochila: cuidado de tu familia',
+        'kind' => 'modulo',
+        'mode' => 'pregunta',
+        'points' => 10,
+        'route' => '/aprende/mochila-familia',
+        'question' => [
+            'text' => '¿Para qué sirve el silbato de la mochila?',
+            'options' => [
+                'Para pedir ayuda',
+                'Para jugar en el camino',
+                'Para despertar a la familia',
+            ],
+            'answer' => 0,
         ],
     ],
     [

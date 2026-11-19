@@ -129,6 +129,18 @@ class StudentController extends Controller
         ];
     }
 
+    // Docente con sesión en este equipo (para su cimarrón con todo desbloqueado).
+    private static function teacherOnDevice(Request $request): ?array
+    {
+        $session = DeviceAuth::resolve($request, 'teacher');
+        $teacher = $session ? \App\Models\Teacher::with('school')->where('active', true)->find($session->owner_id) : null;
+        if (! $teacher || ! $teacher->school?->isApproved()) {
+            return null;
+        }
+
+        return TeacherController::summary($teacher);
+    }
+
     // Lo único que pide el sitio al abrir: quién es el alumno de este equipo, si hay.
     public function me(Request $request): JsonResponse
     {
@@ -138,6 +150,7 @@ class StudentController extends Controller
             'student' => $student ? self::summary($student) : null,
             'progress' => $student ? ActivityController::progress($student->id) : null,
             'tasks' => $student ? AssignmentController::forStudent($student->id, $student->classroom_id) : [],
+            'teacher' => $student ? null : self::teacherOnDevice($request),
         ])->header('Cache-Control', 'no-store');
     }
 

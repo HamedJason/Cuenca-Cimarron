@@ -26,6 +26,7 @@ const Join = () => import("./views/Join.vue");
 const Team = () => import("./views/Team.vue");
 const Migrants = () => import("./views/Migrants.vue");
 const Avatar = () => import("./views/Avatar.vue");
+const ShortLessons = () => import("./views/ShortLessons.vue");
 import "./style.css";
 import "./cuentas.css";
 // Las direcciones viejas con # (enlaces compartidos, QR impresos) se pasan a la forma nueva sin #.
@@ -59,6 +60,7 @@ const router = createRouter({
     { path: "/unirse/:code?", component: Join, meta: { title: "Entra a tu grupo", mode: "unirse" } },
     { path: "/regresar", component: Join, meta: { title: "Regresa a tu grupo", mode: "regresar" } },
     { path: "/mi-cimarron", component: Avatar, meta: { title: "Mi cimarrón" } },
+    { path: "/aprende/:id?", component: ShortLessons, meta: { title: "Lecturas cortas" } },
     { path: "/equipo", component: Team, meta: { title: "Equipo" } },
     { path: "/nosotros", redirect: "/equipo" },
     { path: "/migrantes", component: Migrants, meta: { title: "Para todas las familias" } },

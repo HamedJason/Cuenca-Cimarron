@@ -42,7 +42,10 @@ class AssignmentController extends Controller
     {
         $classroom = $this->classroomOf($request, $classroom);
 
-        return response()->json(['tasks' => self::assigned($classroom->id), 'catalog' => ActivityController::catalog()]);
+        $active = collect(ActivityController::catalog())->pluck('key')->all();
+        $paths = array_map(fn ($p) => $p + ['activities' => array_values(array_intersect($p['activities'], $active))], config('paths', []));
+
+        return response()->json(['tasks' => self::assigned($classroom->id), 'catalog' => ActivityController::catalog(), 'paths' => $paths]);
     }
 
     public function store(Request $request, Classroom $classroom): JsonResponse

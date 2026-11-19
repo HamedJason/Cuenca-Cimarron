@@ -129,6 +129,7 @@ Route::middleware('throttle:aula')->group(function (): void {
     Route::middleware('equipo:teacher')->prefix('docente')->group(function (): void {
         Route::get('/', [TeacherController::class, 'me']);
         Route::post('/salir', [TeacherController::class, 'logout']);
+        Route::put('/cimarron', [TeacherController::class, 'saveAvatar']);
         Route::get('/grupos', [TeacherController::class, 'classrooms']);
         Route::post('/grupos', [TeacherController::class, 'createClassroom']);
         Route::put('/grupos/{classroom}', [TeacherController::class, 'updateClassroom']);

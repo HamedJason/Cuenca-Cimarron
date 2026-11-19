@@ -1363,3 +1363,103 @@
     background: #fff;
   }
 }
+
+/* Lecturas cortas (/aprende) */
+.lesson-short {
+  gap: 16px;
+}
+.lesson-short-lead {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 20px;
+  color: var(--ink);
+}
+.lesson-short-lead svg {
+  flex-shrink: 0;
+  color: var(--link);
+  margin-top: 2px;
+}
+.lesson-short-points li {
+  align-items: flex-start;
+  font-size: 18px;
+  color: var(--ink);
+}
+.lesson-short-points svg {
+  color: var(--link);
+  margin-top: 3px;
+}
+.lesson-short-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lesson-short-card {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  min-height: 90px;
+  padding: 14px 16px;
+  border: 2px solid var(--edge);
+  border-radius: 16px;
+  background: var(--green-tint);
+  color: var(--ink);
+  box-shadow: 0 3px 0 var(--shadow);
+}
+.lesson-short-card:hover {
+  background: var(--surface);
+}
+.lesson-short-card svg {
+  flex-shrink: 0;
+  color: var(--link);
+}
+.lesson-short-card span {
+  display: grid;
+  gap: 6px;
+}
+.lessons-page .note {
+  margin-bottom: 18px;
+}
+
+/* Caminos listos del docente */
+.path-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.path-card {
+  display: grid;
+  gap: 12px;
+  align-content: space-between;
+  padding: 16px;
+  border: 2px solid var(--edge);
+  border-radius: 16px;
+  background: var(--green-tint);
+}
+.path-card h3 {
+  font-size: 26px;
+}
+.path-card .button,
+.path-card .status-badge {
+  justify-self: start;
+}
+.path-steps {
+  margin: 8px 0 0;
+  padding-left: 22px;
+  font-size: 15px;
+  color: var(--ink);
+}
+.path-steps li.assigned {
+  color: var(--muted);
+}
+.path-steps li.assigned::after {
+  content: " ✓";
+  color: var(--link);
+  font-weight: 700;
+}
