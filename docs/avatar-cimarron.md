@@ -3,7 +3,7 @@
 Documento del avatar personalizable de Cuenca Cimarrona ("Mi cimarrón", en `/mi-cimarron`).
 La sección 0 explica cómo está hecho y cómo se junta con las cuentas de alumnos
 (ver también [cuentas.md](cuentas.md)). Las secciones 1 a 6 son la guía para dibujar
-(o generar con IA) los cosméticos, de forma que todas las piezas encajen en capas
+los cosméticos, de forma que todas las piezas encajen en capas
 sobre el mismo personaje.
 
 ## 0. Cómo funciona
@@ -17,7 +17,7 @@ sobre el mismo personaje.
 - **324 piezas en 21 grupos** (pelaje, cuernos, ojos, cabeza, torso, fondo, marco, efecto...)
   y **24 kits** completos con 20 % de descuento en las piezas que falten.
 - **Rarezas y precios**: Común, Poco común, Raro, Épico y Legendario. El precio depende de la
-  rareza y del tipo de pieza (ojos, boca y marcas más baratos; cabeza, torso, espalda, fondo,
+  rareza y del tipo de pieza (ojos, boca y marcas son más baratos, y cabeza, torso, espalda, fondo,
   marco y efecto más caros). Las piezas iniciales y "ninguno" cuestan 0. Las de premio y las
   secretas no se venden.
 - **Formas de ganar Cimacoins**:
@@ -31,7 +31,7 @@ sobre el mismo personaje.
 | Visitar todas las secciones | 60 y el marco Explorador | `visitPage()` en `App.vue` |
 | Monedas escondidas en los temas y páginas | 30 c/u | `<SecretCoin id="moneda-...">` |
 | Retos de memoria de señales | 85 a 220, y 150 el reto diario | `activities` en `src/avatar/economy.js` |
-| Secreto: Cimarrón Angelical | Todas sus piezas | Los 3 primeros retos dan fragmentos; con ellos se abre el destello del avatar |
+| Secreto: Cimarrón Angelical | Todas sus piezas | Los 3 primeros retos dan fragmentos y con ellos se abre el destello del avatar |
 | **Solo alumnos**: puntos de actividades | 5 Cimacoins por punto | `COINS_PER_POINT` en `src/avatar/rewards.js` |
 
 ### Dos carteras: visitante y alumno
@@ -74,7 +74,7 @@ Todas usan la cookie `cc_alumno` (middleware `equipo:student`). Cada una respond
 | `POST /api/yo/cimacoins/premio` | `{ id: "moneda-conozca" }` | Premio del sitio, una vez (o una vez al día) |
 | `POST /api/yo/cimacoins/reto` | `{ id: "senal-lluvia" }` | Reto de memoria, una vez (el diario, una vez al día) |
 | `POST /api/yo/cimacoins/secreto` | `{ answer: ["drop", "cloud", "star"] }` | Cimarrón Angelical, solo con los 3 fragmentos |
-| `POST /api/yo/cimacoins/compra` | `{ group, id }` o `{ kit }` | Compra con el precio del servidor; 422 si falta saldo o no se vende |
+| `POST /api/yo/cimacoins/compra` | `{ group, id }` o `{ kit }` | Compra con el precio del servidor. Responde 422 si falta saldo o no se vende |
 
 Los cambios a la cartera se hacen con el registro del alumno bloqueado (`lockForUpdate`), para que
 dos pestañas no cobren ni gasten lo mismo dos veces. El día de los premios diarios es el de Tijuana
@@ -322,8 +322,8 @@ bold dark-brown outline, flat colors with one cel-shade tone, centered on a
 
 - Generar primero la base, aprobarla y usarla como **plantilla** (imagen de referencia)
   para todos los cosméticos.
-- Revisar cada cosmético encima de la base antes de aprobarlo; la IA suele moverlos de
-  lugar. Lo más seguro es que una persona los ajuste en Illustrator, Inkscape o Figma.
+- Revisar cada cosmético encima de la base antes de aprobarlo, porque es común que queden
+  movidos de lugar. Lo más seguro es que una persona los ajuste en Illustrator, Inkscape o Figma.
 - Guardar cada pieza en **SVG** si se puede: pesa poco, escala sin perder calidad y
   permite cambiar colores desde el código.
 - Nombrar los archivos por capa: `cabeza-casco-verde.svg`, `cara-lentes-pixel.svg`.
