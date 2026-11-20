@@ -8,6 +8,7 @@ import LessonModal from "./components/LessonModal.vue";
 import StudentCheck from "./components/StudentCheck.vue";
 import ExternalReturn from "./components/ExternalReturn.vue";
 import TasksFab from "./components/TasksFab.vue";
+import DemoDock from "./components/DemoDock.vue";
 import HeaderWave from "./components/HeaderWave.vue";
 import LocationAsk from "./components/LocationAsk.vue";
 import { loadStudent, student } from "./composables/useStudent";
@@ -105,6 +106,7 @@ onBeforeUnmount(() => headerObserver?.disconnect());
 <template>
   <SplashScreen />
   <LocationAsk />
+  <DemoDock />
   <a class="skip-link" href="#main-content">Saltar al contenido</a>
   <header ref="siteHeader" :class="['site-header', { scrolled, 'menu-open': menuOpen }]">
     <div class="wrap header-row">

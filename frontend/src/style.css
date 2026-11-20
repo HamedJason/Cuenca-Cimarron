@@ -9965,3 +9965,33 @@ details.call-more {
   flex-direction: column;
   align-items: stretch;
 }
+
+/* Modo testeo: botones grandes a la izquierda del logo, solo en computadora.
+   En pantallas anchas caben junto al logo; en las más angostas bajan un poco, debajo del encabezado. */
+.demo-dock {
+  position: fixed;
+  top: 14px;
+  left: 16px;
+  z-index: 40;
+  display: grid;
+  gap: 10px;
+  width: 210px;
+}
+.demo-dock .button {
+  width: 100%;
+  justify-content: center;
+}
+.demo-dock-back {
+  min-height: 56px;
+  font-size: 18px;
+}
+@media (max-width: 1719px) {
+  .demo-dock {
+    top: calc(var(--header-h, 96px) + 4px);
+  }
+}
+@media (max-width: 1000px) {
+  .demo-dock {
+    display: none;
+  }
+}

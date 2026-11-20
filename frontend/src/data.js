@@ -497,7 +497,6 @@ export const callGuide = [
   { title: "Di dónde estás", text: "Calle, número, colonia y algo que se vea cerca", alt: "En un globo aparecen su casa con número, el letrero de la calle y la tiendita de la esquina" },
   { title: "Di qué pasa", text: "Cuenta lo que ves con pocas palabras", alt: "En un globo aparece una casa con fuego y humo" },
   { title: "Contesta lo que te pregunten", text: "Escucha y contesta con calma", alt: "La operadora pregunta y la niña contesta cuántas personas son" },
-  { title: "Deja el teléfono libre", text: "No lo uses para otra cosa. Te pueden regresar la llamada", alt: "El teléfono queda en la mesa, la niña no juega con él y el teléfono suena" },
 ];
 
 // ¿Es una emergencia? Mini juego de Sí o No.

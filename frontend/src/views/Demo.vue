@@ -1,23 +1,42 @@
 <script setup>
 // Demo para la exposición del 20 de noviembre. Solo funciona si el servidor tiene DEMO_20NOV=true:
 // si no, la API responde 404 y aquí no aparece ningún botón.
-import { onMounted, ref } from "vue";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 import Icon from "../components/Icon.vue";
 import { api } from "../composables/api";
+import { markDemo, clearDemo } from "../composables/useDemo";
 
 const state = ref("loading");
 const info = ref(null);
 const busy = ref("");
 const error = ref("");
 
-onMounted(async () => {
+async function load() {
   try {
     info.value = await api("/demo");
     state.value = "on";
+    // Desde aquí el sitio muestra los botones "Regresar a testeo" y "Salir de testeo"
+    markDemo();
   } catch {
     state.value = "off";
+    clearDemo();
   }
+}
+
+// Al regresar con el botón Atrás del navegador la página sale del caché tal como se dejó,
+// con el botón en "Entrando…" y todos deshabilitados. Se reinicia y se vuelve a consultar.
+function onPageShow(event) {
+  if (!event.persisted) return;
+  busy.value = "";
+  error.value = "";
+  load();
+}
+
+onMounted(() => {
+  load();
+  window.addEventListener("pageshow", onPageShow);
 });
+onBeforeUnmount(() => window.removeEventListener("pageshow", onPageShow));
 
 const roles = [
   { id: "admin", icon: "shield", title: "Entrar como super admin", text: "Ver escuelas, cifras y desde dónde nos visitan", to: "/admin" },
