@@ -95,12 +95,12 @@ async function submit() {
         <div v-if="picked" class="note">
           <Icon name="check" />
           <div>
-            <p>Elegiste <b>{{ picked.name }}</b> (CCT {{ picked.cct }}). Ya llenamos sus datos y su ubicación. Solo completa lo que falte</p>
+            <p>Elegiste <b>{{ picked.name }}</b> (CCT {{ picked.cct }}). Ya llenamos sus datos{{ picked.lat ? " y su ubicación" : "" }}. Solo completa lo que falte</p>
             <button class="text-link" type="button" @click="mode = 'buscar'">Buscar otra escuela</button>
           </div>
         </div>
         <button v-else class="text-link" type="button" @click="mode = 'buscar'">Buscar mi escuela en el catálogo</button>
-        <SchoolForm :key="formKey" v-model="school" :errors="errors" :from-catalog="Boolean(picked)" :no-cct="login.sin_cct" @no-cct="login.sin_cct = $event" />
+        <SchoolForm :key="formKey" v-model="school" :errors="errors" :from-catalog="Boolean(picked)" :geo="picked?.geo ?? ''" :no-cct="login.sin_cct" @no-cct="login.sin_cct = $event" />
       </template>
       <template v-if="mode !== 'buscar'">
       <fieldset class="form-group">

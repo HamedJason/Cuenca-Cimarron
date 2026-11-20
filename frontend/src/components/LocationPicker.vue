@@ -1,5 +1,5 @@
 <script setup>
-// Mapa para marcar dónde está la escuela. Un toque en el mapa mueve el punto.
+// Mapa para marcar dónde está la escuela. Un toque en el mapa o arrastrar el punto lo mueve.
 import { ref, watch, onMounted, onBeforeUnmount } from "vue";
 // near: [lat, lng, zoom] aproximado (la calle o la colonia) para acercar el mapa cuando todavía no hay ubicación
 const props = defineProps({ lat: Number, lng: Number, readonly: Boolean, near: { type: Array, default: null } });
@@ -18,8 +18,16 @@ function place(lat, lng) {
     iconSize: [30, 30],
     iconAnchor: [15, 15],
   });
-  if (marker) marker.setLatLng([lat, lng]);
-  else marker = L.marker([lat, lng], { icon, alt: "Ubicación de la escuela" }).addTo(map);
+  if (marker) {
+    marker.setLatLng([lat, lng]);
+    return;
+  }
+  marker = L.marker([lat, lng], { icon, alt: "Ubicación de la escuela", draggable: !props.readonly }).addTo(map);
+  // El punto también se puede arrastrar a la entrada
+  marker.on("dragend", () => {
+    const point = marker.getLatLng();
+    emit("update", { lat: Number(point.lat.toFixed(6)), lng: Number(point.lng.toFixed(6)) });
+  });
 }
 
 onMounted(async () => {
@@ -54,7 +62,13 @@ onMounted(async () => {
 watch(
   () => [props.lat, props.lng],
   ([lat, lng]) => {
-    if (!map || !lat || !lng) return;
+    if (!map) return;
+    // Se quitó el punto (por ejemplo uno automático que ya no corresponde a la dirección)
+    if (!lat || !lng) {
+      marker?.remove();
+      marker = null;
+      return;
+    }
     place(lat, lng);
     map.setView([lat, lng], 16);
   },

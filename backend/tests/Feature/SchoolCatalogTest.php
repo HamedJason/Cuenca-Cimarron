@@ -73,7 +73,19 @@ class SchoolCatalogTest extends TestCase
         $this->getJson('/api/catalogo-escuelas?q=pipila')->assertOk()
             ->assertJsonPath('schools.0.lat', null)->assertJsonPath('schools.0.lng', null);
         $this->getJson('/api/catalogo-escuelas?q=benito')->assertOk()
-            ->assertJsonPath('schools.0.lat', 32.527144)->assertJsonPath('schools.0.lng', -117.020861);
+            ->assertJsonPath('schools.0.lat', 32.527144)->assertJsonPath('schools.0.lng', -117.020861)
+            ->assertJsonPath('schools.0.geo', 'sep');
+    }
+
+    public function test_actualizar_sin_punto_conserva_el_que_tenia(): void
+    {
+        \App\Http\Controllers\SchoolCatalogController::save(\App\Http\Controllers\SchoolCatalogController::rows([
+            $this->row(['lat' => 32.531, 'lng' => -117.012, 'geo' => 'inegi']),
+        ]));
+        $this->actingAs($this->admin())->postJson('/api/admin/catalogo-escuelas', ['schools' => [$this->row(['name' => 'Escuela Pípila'])]])->assertOk();
+        $this->getJson('/api/catalogo-escuelas?q=pipila')->assertOk()
+            ->assertJsonPath('schools.0.name', 'Escuela Pípila')
+            ->assertJsonPath('schools.0.lat', 32.531)->assertJsonPath('schools.0.geo', 'inegi');
     }
 
     public function test_marca_las_escuelas_ya_registradas(): void

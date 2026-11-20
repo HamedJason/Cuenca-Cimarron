@@ -11,7 +11,9 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 // Catálogo oficial de escuelas para buscar la propia al registrarse.
-// Viene incluido en database/data (Tijuana y Playas de Rosarito, SEP 2026) y se carga solo al arrancar
+// Viene incluido en database/data (Tijuana y Playas de Rosarito, SEP 2026) y se carga solo al arrancar.
+// Los puntos de las escuelas que la SEP no ubicó vienen del DENUE del INEGI (05/2026), cruzados por
+// nombre, colonia y calle con infra/ubicar-escuelas-denue.py. El campo geo dice de dónde salió cada punto.
 // si la tabla está vacía (php artisan escuelas:catalogo). El administrador también puede actualizarlo
 // desde el panel: su navegador lo pide a datos.gob.mx y lo manda aquí por partes.
 class SchoolCatalogController extends Controller
@@ -24,6 +26,8 @@ class SchoolCatalogController extends Controller
     // Punto que la SEP pone cuando no sabe dónde está la escuela (el centro de Tijuana, en la Zona Río).
     // Lo traen 1,728 de las 2,155 escuelas de Tijuana del catálogo 2026, así que no es su ubicación.
     public const UNKNOWN_POINT = [32.497, -117.08];
+
+    public const GEO_SOURCES = ['sep', 'inegi', 'aprox'];
 
     public static function knownPoint(mixed $lat, mixed $lng): bool
     {
@@ -75,6 +79,7 @@ class SchoolCatalogController extends Controller
             'municipality' => $s->municipality,
             'lat' => $s->lat !== null ? (float) $s->lat : null,
             'lng' => $s->lng !== null ? (float) $s->lng : null,
+            'geo' => $s->lat !== null ? ($s->geo ?? 'sep') : null,
             'registered' => in_array($s->cct, $taken, true),
         ])])->header('Cache-Control', 'no-store');
     }
@@ -134,14 +139,23 @@ class SchoolCatalogController extends Controller
             'municipality' => $s['municipality'],
             'lat' => self::knownPoint($s['lat'] ?? null, $s['lng'] ?? null) ? $s['lat'] : null,
             'lng' => self::knownPoint($s['lat'] ?? null, $s['lng'] ?? null) ? $s['lng'] : null,
+            'geo' => self::knownPoint($s['lat'] ?? null, $s['lng'] ?? null)
+                ? (in_array($s['geo'] ?? null, self::GEO_SOURCES, true) ? $s['geo'] : 'sep')
+                : null,
             'updated_at' => $now,
         ], $schools);
     }
 
+    // Una escuela que llega sin punto (por ejemplo al actualizar desde datos.gob.mx, donde la SEP
+    // no la ubica) conserva el que ya tenía, como los del INEGI.
     public static function save(array $rows): void
     {
-        foreach (array_chunk($rows, 500) as $chunk) {
-            DB::table('school_catalog')->upsert($chunk, ['cct'], array_keys(array_diff_key($chunk[0], ['cct' => true])));
+        foreach ([true, false] as $withPoint) {
+            $part = array_values(array_filter($rows, fn ($r) => ($r['lat'] !== null) === $withPoint));
+            foreach (array_chunk($part, 500) as $chunk) {
+                $skip = $withPoint ? ['cct' => true] : ['cct' => true, 'lat' => true, 'lng' => true, 'geo' => true];
+                DB::table('school_catalog')->upsert($chunk, ['cct'], array_keys(array_diff_key($chunk[0], $skip)));
+            }
         }
     }
 
