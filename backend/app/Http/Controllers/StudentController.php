@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Classroom;
 use App\Models\Student;
+use App\Support\Cimacoins;
 use App\Support\DeviceAuth;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
@@ -123,8 +124,21 @@ class StudentController extends Controller
             'grade' => $classroom->grade,
             'teacher' => $classroom->teacher->name,
             'school' => $classroom->teacher->school->name,
-            'avatar' => $student->avatar ?? ['background' => 'verde', 'pieces' => []],
+            'avatar' => Cimacoins::avatar($student),
+            'wallet' => Cimacoins::forClient($student),
         ];
+    }
+
+    // Docente con sesión en este equipo (para su cimarrón con todo desbloqueado).
+    private static function teacherOnDevice(Request $request): ?array
+    {
+        $session = DeviceAuth::resolve($request, 'teacher');
+        $teacher = $session ? \App\Models\Teacher::with('school')->where('active', true)->find($session->owner_id) : null;
+        if (! $teacher || ! $teacher->school?->isApproved()) {
+            return null;
+        }
+
+        return TeacherController::summary($teacher);
     }
 
     // Lo único que pide el sitio al abrir: quién es el alumno de este equipo, si hay.
@@ -136,29 +150,8 @@ class StudentController extends Controller
             'student' => $student ? self::summary($student) : null,
             'progress' => $student ? ActivityController::progress($student->id) : null,
             'tasks' => $student ? AssignmentController::forStudent($student->id, $student->classroom_id) : [],
+            'teacher' => $student ? null : self::teacherOnDevice($request),
         ])->header('Cache-Control', 'no-store');
-    }
-
-    // El alumno elige fondo y piezas para su cimarrón. El servidor revisa que ya las haya desbloqueado.
-    public function saveAvatar(Request $request): JsonResponse
-    {
-        $student = $request->attributes->get('student');
-        $pieces = config('avatar.pieces');
-        $data = $request->validate([
-            'background' => ['required', \Illuminate\Validation\Rule::in(config('avatar.backgrounds'))],
-            'pieces' => ['present', 'array', 'max:'.count($pieces)],
-            'pieces.*' => ['string', 'distinct', \Illuminate\Validation\Rule::in(array_keys($pieces))],
-        ]);
-        $points = ActivityController::total($student->id);
-        foreach ($data['pieces'] as $piece) {
-            if ($points < $pieces[$piece]) {
-                throw ValidationException::withMessages(['pieces' => "Esa pieza se desbloquea con {$pieces[$piece]} puntos."]);
-            }
-        }
-        $student->avatar = ['background' => $data['background'], 'pieces' => array_values($data['pieces'])];
-        $student->save();
-
-        return response()->json(['avatar' => $student->avatar]);
     }
 
     public function logout(Request $request): JsonResponse

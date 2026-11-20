@@ -18,6 +18,7 @@ class DeviceSession
         if (! $request->isMethodSafe() && ! self::sameOrigin($request)) {
             return response()->json(['message' => 'Petición de otro sitio.'], 403);
         }
+        \App\Support\DemoMode::expireIfNeeded();
         $session = DeviceAuth::resolve($request, $kind);
         $owner = null;
         if ($session) {

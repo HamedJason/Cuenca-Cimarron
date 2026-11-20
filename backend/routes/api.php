@@ -4,6 +4,8 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CimarronController;
+use App\Http\Controllers\DemoController;
 use App\Http\Controllers\GameSessionController;
 use App\Http\Controllers\SchoolAdminController;
 use App\Http\Controllers\SchoolCatalogController;
@@ -16,6 +18,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SystemAdminController;
 use App\Http\Controllers\SystemController;
 use App\Http\Controllers\VisitController;
+use App\Http\Controllers\VisitZoneController;
 use Illuminate\Support\Facades\Route;
 
 // Límites por IP altos (AppServiceProvider): un salón entero sale a internet con la misma IP de la escuela.
@@ -29,7 +32,17 @@ Route::middleware('throttle:publico')->group(function (): void {
     Route::get('/respaldo', [AdminController::class, 'backupWithKey']);
 });
 
+// Zona aproximada del visitante: el navegador la manda una sola vez, con límite por minuto.
+Route::post('/visitas/zona', [VisitZoneController::class, 'store'])->middleware('throttle:zona');
+
 Route::get('/tls/permitir', [SystemController::class, 'allowCertificate']);
+
+// Demo de la exposición (/testeo_20nov). Sin DEMO_20NOV=true todas responden 404 (DemoController).
+Route::middleware(['web', 'throttle:cuentas'])->prefix('demo')->group(function (): void {
+    Route::get('/', [DemoController::class, 'info']);
+    Route::post('/entrar/{role}', [DemoController::class, 'enter'])->whereIn('role', DemoController::ROLES);
+    Route::post('/salir', [DemoController::class, 'leave']);
+});
 
 // Escuelas y administradores: sesión con cookie y protección CSRF.
 Route::middleware(['web', 'throttle:cuentas'])->group(function (): void {
@@ -63,7 +76,28 @@ Route::middleware(['web', 'throttle:cuentas'])->group(function (): void {
     Route::middleware('rol:admin|viewer')->prefix('admin')->group(function (): void {
         Route::get('/escuelas', [AdminController::class, 'schools']);
         Route::get('/estadisticas', [StatsController::class, 'index']);
+        Route::get('/zonas', [VisitZoneController::class, 'index']);
         Route::get('/catalogo-escuelas', [SchoolCatalogController::class, 'status']);
+    });
+
+    // Solo cuentas reales de administración: la cuenta de demostración no ve ni toca esto.
+    Route::middleware(['rol:admin', 'sin-demo'])->prefix('admin')->group(function (): void {
+        Route::get('/usuarios', [StaffController::class, 'index']);
+        Route::post('/usuarios', [StaffController::class, 'invite']);
+        Route::put('/usuarios/{user}', [StaffController::class, 'update']);
+        Route::post('/usuarios/{user}/enlace', [StaffController::class, 'newLink']);
+        Route::delete('/usuarios/{user}', [StaffController::class, 'remove']);
+        Route::get('/bitacora', [SystemAdminController::class, 'audit']);
+        Route::post('/sistema/limpieza', [SystemAdminController::class, 'cleanup']);
+        Route::post('/sistema/demo', [SystemAdminController::class, 'demo']);
+        Route::post('/catalogo-escuelas', [SchoolCatalogController::class, 'import']);
+        Route::get('/ajustes', [AdminController::class, 'settings']);
+        Route::put('/ajustes', [AdminController::class, 'saveSettings']);
+        Route::post('/ajustes/correo-prueba', [AdminController::class, 'testMail']);
+        Route::get('/respaldo', [AdminController::class, 'backup']);
+        Route::get('/respaldos', [AdminController::class, 'savedBackups']);
+        Route::get('/respaldos/{file}', [AdminController::class, 'downloadSaved']);
+        Route::post('/respaldo/clave', [AdminController::class, 'backupKey']);
     });
 
     Route::middleware('rol:admin')->prefix('admin')->group(function (): void {
@@ -75,24 +109,6 @@ Route::middleware(['web', 'throttle:cuentas'])->group(function (): void {
         Route::put('/escuelas/{school}/correo', [SchoolAdminController::class, 'changeEmail']);
         Route::post('/docentes/{teacher}/enlace', [SchoolAdminController::class, 'teacherLink']);
         Route::get('/sistema', [SystemAdminController::class, 'status']);
-        Route::post('/sistema/limpieza', [SystemAdminController::class, 'cleanup']);
-        Route::post('/sistema/cerrar-ciclo', [SystemAdminController::class, 'closeSchoolYear']);
-        Route::get('/bitacora', [SystemAdminController::class, 'audit']);
-        Route::get('/usuarios', [StaffController::class, 'index']);
-        Route::post('/usuarios', [StaffController::class, 'invite']);
-        Route::put('/usuarios/{user}', [StaffController::class, 'update']);
-        Route::post('/usuarios/{user}/enlace', [StaffController::class, 'newLink']);
-        Route::delete('/usuarios/{user}', [StaffController::class, 'remove']);
-        Route::post('/catalogo-escuelas', [SchoolCatalogController::class, 'import']);
-        Route::post('/escuelas/{school}/aprobar', [AdminController::class, 'approve']);
-        Route::post('/escuelas/{school}/rechazar', [AdminController::class, 'reject']);
-        Route::get('/ajustes', [AdminController::class, 'settings']);
-        Route::put('/ajustes', [AdminController::class, 'saveSettings']);
-        Route::post('/ajustes/correo-prueba', [AdminController::class, 'testMail']);
-        Route::get('/respaldo', [AdminController::class, 'backup']);
-        Route::get('/respaldos', [AdminController::class, 'savedBackups']);
-        Route::get('/respaldos/{file}', [AdminController::class, 'downloadSaved']);
-        Route::post('/respaldo/clave', [AdminController::class, 'backupKey']);
     });
 });
 
@@ -110,7 +126,14 @@ Route::middleware('throttle:aula')->group(function (): void {
         Route::post('/yo/salir', [StudentController::class, 'logout']);
     });
 
-    Route::put('/yo/cimarron', [StudentController::class, 'saveAvatar'])->middleware('equipo:student');
+    // Mi cimarrón del alumno: avatar y Cimacoins guardados en su cuenta.
+    Route::middleware('equipo:student')->group(function (): void {
+        Route::put('/yo/cimarron', [CimarronController::class, 'save']);
+        Route::post('/yo/cimacoins/premio', [CimarronController::class, 'reward']);
+        Route::post('/yo/cimacoins/reto', [CimarronController::class, 'challenge']);
+        Route::post('/yo/cimacoins/secreto', [CimarronController::class, 'secret']);
+        Route::post('/yo/cimacoins/compra', [CimarronController::class, 'buy']);
+    });
 
     Route::middleware('equipo:student')->prefix('actividades/{key}')->where(['key' => '[a-z0-9-]{2,60}'])->group(function (): void {
         Route::post('/inicio', [ActivityController::class, 'start']);
@@ -121,6 +144,7 @@ Route::middleware('throttle:aula')->group(function (): void {
     Route::middleware('equipo:teacher')->prefix('docente')->group(function (): void {
         Route::get('/', [TeacherController::class, 'me']);
         Route::post('/salir', [TeacherController::class, 'logout']);
+        Route::put('/cimarron', [TeacherController::class, 'saveAvatar']);
         Route::get('/grupos', [TeacherController::class, 'classrooms']);
         Route::post('/grupos', [TeacherController::class, 'createClassroom']);
         Route::put('/grupos/{classroom}', [TeacherController::class, 'updateClassroom']);

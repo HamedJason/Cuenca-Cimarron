@@ -87,7 +87,7 @@ async function setStatus(action) {
           <thead><tr><th>Grupo</th><th>Docente</th><th>Código</th><th class="num">Alumnos</th></tr></thead>
           <tbody>
             <tr v-for="c in data.classrooms" :key="c.id">
-              <td>{{ c.name }} <span class="small muted-text">{{ c.grade }} · {{ c.school_year }}</span></td>
+              <td>{{ c.name }} <span class="small muted-text">{{ c.grade }}</span></td>
               <td>{{ c.teacher }}</td>
               <td>{{ c.archived ? "Archivado" : c.code }}</td>
               <td class="num">{{ c.students }}</td>

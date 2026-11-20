@@ -8,7 +8,7 @@ import MyRecoveryCodes from "./MyRecoveryCodes.vue";
 import { api } from "../composables/api";
 
 const roles = [
-  { value: "viewer", label: "Solo ver datos", hint: "Ve el panel de datos y la lista de escuelas. No puede aprobar, cambiar ajustes ni descargar respaldos" },
+  { value: "viewer", label: "Solo ver datos", hint: "Ve el panel de datos y la lista de escuelas. No puede suspender escuelas, cambiar la dirección del sitio ni descargar respaldos" },
   { value: "admin", label: "Administración completa", hint: "Puede hacer todo, también invitar y quitar cuentas" },
 ];
 const users = ref([]);

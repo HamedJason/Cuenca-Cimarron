@@ -36,15 +36,6 @@ class Classroom extends Model
         return $code;
     }
 
-    // Ciclo escolar de agosto a julio, por ejemplo 2026-2027.
-    public static function currentSchoolYear(): string
-    {
-        $year = (int) now()->format('Y');
-        $start = (int) now()->format('n') >= 8 ? $year : $year - 1;
-
-        return $start.'-'.($start + 1);
-    }
-
     public function isActive(): bool
     {
         return $this->archived_at === null;

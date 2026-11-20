@@ -1,5 +1,7 @@
 <script setup>
-// Botón flotante del alumno: "Tareas 2 de 5". Abre su lista con puntos, tareas y actividades extra.
+import { coins } from "../composables/useCimacoins";
+import { COINS_PER_POINT } from "../avatar/rewards.js";
+// Botón flotante del alumno: "Tareas 2 de 5". Abre su lista con sus Cimacoins, tareas y actividades extra.
 import { ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Icon from "./Icon.vue";
@@ -14,7 +16,7 @@ const router = useRouter();
 const open = ref(false);
 const done = computed(() => tasks.value.filter((t) => t.done).length);
 const extras = computed(() => activities.value.filter((a) => !tasks.value.some((t) => t.key === a.key)));
-const label = computed(() => (tasks.value.length ? `Tareas ${done.value} de ${tasks.value.length}` : `${progress.value.points} puntos`));
+const label = computed(() => (tasks.value.length ? `Tareas ${done.value} de ${tasks.value.length}` : `${coins.value.toLocaleString("es-MX")} Cimacoins`));
 watch(
   () => route.fullPath,
   () => (open.value = false),
@@ -35,9 +37,9 @@ async function leave() {
     <Modal :open="open" :title="student.name" class="tasks-sheet" @close="open = false">
       <p class="muted-text">{{ student.classroom }} con {{ student.teacher }}</p>
       <div class="tasks-points">
-        <Icon name="star" :size="30" />
-        <strong>{{ progress.points }}</strong>
-        <span>puntos</span>
+        <Icon name="coin" :size="30" />
+        <strong>{{ coins.toLocaleString("es-MX") }}</strong>
+        <span>Cimacoins</span>
       </div>
 
       <h3 class="tasks-title">Mis tareas</h3>
@@ -47,20 +49,20 @@ async function leave() {
           <span class="tasks-check" aria-hidden="true"><Icon v-if="task.done" name="check" :size="20" /></span>
           <RouterLink :to="task.route" class="tasks-link">
             <span>{{ task.title }}</span>
-            <small>{{ task.done ? "Hecha" : `+${task.points} puntos` }}<template v-if="task.due_date && !task.done"> · para el {{ dateText(task.due_date) }}</template></small>
+            <small>{{ task.done ? "Hecha" : `+${task.points * COINS_PER_POINT} Cimacoins` }}<template v-if="task.due_date && !task.done"> · para el {{ dateText(task.due_date) }}</template></small>
           </RouterLink>
           <span class="sr-only">{{ task.done ? "Hecha" : "Pendiente" }}</span>
         </li>
       </ul>
 
       <template v-if="extras.length">
-        <h3 class="tasks-title">Más actividades con puntos</h3>
+        <h3 class="tasks-title">Más actividades para ganar Cimacoins</h3>
         <ul class="tasks-list">
           <li v-for="item in extras" :key="item.key" :class="{ done: isDone(item.key) }">
             <span class="tasks-check" aria-hidden="true"><Icon v-if="isDone(item.key)" name="check" :size="20" /></span>
             <RouterLink :to="item.route" class="tasks-link">
               <span>{{ item.title }}</span>
-              <small>{{ isDone(item.key) ? "Hecha" : `+${item.points} puntos` }}</small>
+              <small>{{ isDone(item.key) ? "Hecha" : `+${item.points * COINS_PER_POINT} Cimacoins` }}</small>
             </RouterLink>
           </li>
         </ul>

@@ -1,9 +1,12 @@
-// Avisa al sitio cuando un alumno termina un juego propio. nginx lo agrega a cada página de /juegos/.
-// Si no hay alumno con sesión no hace nada y el juego sigue igual.
+// Avisa al sitio cuando un alumno termina un juego propio (le da Cimacoins). nginx lo agrega a cada página de /juegos/.
+// Sin alumno con sesión no gana nada: solo se le invita una vez a entrar con el código de su grupo.
 // Si no hay internet, guarda el aviso y el sitio lo reintenta la próxima vez que se abra.
 (function () {
   if (window.CuencaPuntos) return;
   var PENDIENTES = "cuenca.puntos.pendientes";
+  // Juegos terminados en este navegador, para invitar al visitante una sola vez por juego.
+  // Las Cimacoins solo las gana el alumno con sesión y se las da el servidor (useFinishRewards.js).
+  var TERMINADOS = "cuenca.juegos.terminados";
   var enviados = {};
 
   function guardarPendiente(clave) {
@@ -13,6 +16,20 @@
       localStorage.setItem(PENDIENTES, JSON.stringify(lista.slice(-20)));
     } catch (e) {
       // Sin almacenamiento el aviso se pierde, el juego sigue igual.
+    }
+  }
+
+  // Regresa true si es la primera vez que se termina este juego en el navegador.
+  function anotarTerminado(clave) {
+    try {
+      var lista = JSON.parse(localStorage.getItem(TERMINADOS) || "[]");
+      if (!Array.isArray(lista)) lista = [];
+      if (lista.indexOf(clave) !== -1) return false;
+      lista.push(clave);
+      localStorage.setItem(TERMINADOS, JSON.stringify(lista.slice(-40)));
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 
@@ -42,13 +59,19 @@
   function terminar(clave) {
     if (!/^[a-z0-9-]{2,60}$/.test(clave) || enviados[clave]) return;
     enviados[clave] = true;
+    var nuevo = anotarTerminado(clave);
     pedir(clave, "terminar")
       .then(function (respuesta) {
+        // Sin alumno con sesión no hay Cimacoins: se le invita a entrar con su grupo.
+        if (respuesta.status === 401) {
+          if (nuevo) aviso("¡Terminaste! Entra con el código de tu grupo para ganar Cimacoins");
+          return null;
+        }
         if (!respuesta.ok) return null;
         return respuesta.json();
       })
       .then(function (datos) {
-        if (datos && datos.new && datos.points) aviso("¡Sumaste " + datos.points + " puntos!");
+        if (datos && datos.new && datos.points) aviso("¡Ganaste " + datos.points * 10 + " Cimacoins!");
       })
       .catch(function () {
         guardarPendiente(clave);
@@ -65,6 +88,10 @@
 
   // Arma tu mochila avisa desde su propio código al mostrar los resultados.
   if (ruta.indexOf("/juegos/reto-60-segundos/") === 0) iniciar("mochila");
+
+  // El memorama y Alto al Fuego avisan desde su propio código al terminar la partida.
+  if (ruta.indexOf("/juegos/memorama/") === 0) iniciar("memorama");
+  if (ruta.indexOf("/juegos/alto-al-fuego/") === 0) iniciar("alto-al-fuego");
 
   // La novela visual avisa desde Ren'Py al llegar a cualquiera de sus finales (script.rpy).
   if (ruta.indexOf("/juegos/novela-visual/") === 0) iniciar("novela-visual");

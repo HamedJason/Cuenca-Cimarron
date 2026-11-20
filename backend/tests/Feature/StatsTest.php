@@ -19,13 +19,12 @@ class StatsTest extends TestCase
         Catalog::sync();
         $school = $this->school();
         $school->school->forceFill(['lat' => 32.5, 'lng' => -117.0])->save();
-        $this->school('pending');
+        $this->school('suspended');
         $teacher = new Teacher(['name' => 'Laura']);
         $teacher->school_id = $school->school->id;
         $teacher->save();
         $classroom = new Classroom(['name' => '3° A', 'grade' => '3°']);
         $classroom->teacher_id = $teacher->id;
-        $classroom->school_year = Classroom::currentSchoolYear();
         $classroom->code = Classroom::newCode();
         $classroom->save();
         foreach (['Ana', 'Beto'] as $name) {
@@ -41,14 +40,14 @@ class StatsTest extends TestCase
         $this->actingAs($school)->getJson('/api/admin/estadisticas')->assertForbidden();
         $response = $this->actingAs($this->admin())->getJson('/api/admin/estadisticas')->assertOk()
             ->assertJsonPath('totals.schools', 1)
-            ->assertJsonPath('totals.pending_schools', 1)
+            ->assertJsonPath('totals.suspended_schools', 1)
             ->assertJsonPath('totals.students', 2)
             ->assertJsonPath('totals.points', 20)
             ->assertJsonPath('schools.0.students', 2)
             ->assertJsonPath('schools.0.completions', 1)
             ->assertJsonPath('colonias.0.name', 'Sánchez Taboada')
             ->assertJsonPath('colonias.0.students', 2)
-            ->assertJsonPath('municipalities.0.name', 'Sin dato')
+            ->assertJsonPath('municipalities.0.name', 'Tijuana')
             ->assertJsonPath('levels.0.name', 'primaria')
             ->assertJsonPath('schools.0.teachers', 1)
             ->assertJsonPath('activities.0.key', 'mochila')

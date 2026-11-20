@@ -39,7 +39,7 @@ const toneStyle = (id, i) => ({
     <div class="page-heading pack-hero">
       <div class="pack-hero-text">
         <h1>Mochila de emergencia</h1>
-        <p>Prepara lo esencial con tiempo y adapta la lista a tu familia</p>
+        <p>Junta lo más importante con tiempo y ajusta la lista a tu familia</p>
       </div>
       <div class="pack-scene"><BackpackScene /></div>
     </div>
@@ -102,7 +102,7 @@ const toneStyle = (id, i) => ({
           {{
             storageAvailable
               ? "Guardado automáticamente en este navegador"
-              : "Avance disponible solo durante esta sesión"
+              : "Tu avance se borra al cerrar la página"
           }}
         </p>
         <button class="button primary full" @click="print">
@@ -119,8 +119,8 @@ const toneStyle = (id, i) => ({
     <div class="note section-space">
       <Icon name="info" />
       <p>
-        Ubica la mochila en un lugar accesible, comprueba su peso y revisa
-        periódicamente las caducidades ·
+        Pon la mochila en un lugar fácil de alcanzar, que no pese mucho, y
+        revisa seguido que nada esté vencido ·
         <a :href="sources.backpack" target="_blank" rel="noopener"
           >Guía de CENAPRED <Icon name="external" :size="13"
         /></a>
@@ -131,8 +131,7 @@ const toneStyle = (id, i) => ({
       title="¿Empezar la lista de nuevo?"
       @close="resetOpen = false"
       ><p class="modal-intro">
-        Se desmarcarán los artículos de tu mochila en este navegador. Tu plan
-        familiar se conservará.
+        Se quitan las marcas de tu mochila. Tu plan familiar no se borra
       </p>
       <div class="button-row">
         <button class="button secondary" @click="resetOpen = false">

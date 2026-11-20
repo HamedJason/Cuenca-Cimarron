@@ -1,6 +1,6 @@
 <script setup>
 // Bitácora: quién hizo qué y cuándo.
-import { ref, watch } from "vue";
+import { ref, watch, nextTick, onBeforeUnmount } from "vue";
 import { api } from "../composables/api";
 
 const labels = {
@@ -35,17 +35,25 @@ const labels = {
   "actualizar-catalogo-escuelas": "Actualizó el catálogo de escuelas",
   limpieza: "Hizo limpieza",
   "cerrar-ciclo": "Cerró un ciclo escolar",
+  "encender-demo": "Encendió el modo demostración",
+  "apagar-demo": "Apagó el modo demostración",
 };
 const entries = ref([]);
 const actions = ref([]);
 const filter = ref("");
 const more = ref(false);
 const state = ref("loading");
+const loadingMore = ref(false);
+const sentinel = ref(null);
+let observer = null;
 
 async function load(append = false) {
+  if (append && (loadingMore.value || !more.value)) return;
+  loadingMore.value = append;
   try {
     const params = new URLSearchParams();
     if (filter.value) params.set("accion", filter.value);
+    params.set("por", "20");
     if (append && entries.value.length) params.set("antes_de", entries.value[entries.value.length - 1].id);
     const data = await api(`/admin/bitacora?${params}`);
     entries.value = append ? [...entries.value, ...data.entries] : data.entries;
@@ -54,8 +62,22 @@ async function load(append = false) {
     state.value = "ready";
   } catch (e) {
     state.value = e.message;
+  } finally {
+    loadingMore.value = false;
   }
+  await nextTick();
+  watchSentinel();
 }
+// Al llegar al final de la tabla se piden los 20 siguientes
+function watchSentinel() {
+  observer?.disconnect();
+  if (!sentinel.value) return;
+  observer = new IntersectionObserver((list) => {
+    if (list.some((e) => e.isIntersecting)) load(true);
+  }, { rootMargin: "300px" });
+  observer.observe(sentinel.value);
+}
+onBeforeUnmount(() => observer?.disconnect());
 watch(filter, () => load(), { immediate: true });
 const date = (iso) => new Date(iso).toLocaleString("es-MX", { dateStyle: "medium", timeStyle: "short" });
 const detail = (d) => (d ? Object.entries(d).map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(", ") : v}`).join(" · ") : "");
@@ -88,6 +110,7 @@ const detail = (d) => (d ? Object.entries(d).map(([k, v]) => `${k}: ${Array.isAr
         </tbody>
       </table>
     </div>
-    <button v-if="more" class="button secondary small-button" type="button" @click="load(true)">Ver más</button>
+    <div v-if="more" ref="sentinel" class="list-sentinel" aria-hidden="true"></div>
+    <p v-if="loadingMore" class="small muted-text" role="status">Cargando más…</p>
   </section>
 </template>

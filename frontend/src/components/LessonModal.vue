@@ -1,10 +1,13 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
+import AnimClip from "./AnimClip.vue";
 import Icon from "./Icon.vue";
 import Modal from "./Modal.vue";
 import PacificLab from "./PacificLab.vue";
 import PointsTag from "./PointsTag.vue";
 import ActivityQuestion from "./ActivityQuestion.vue";
+import SecretCoin from "./SecretCoin.vue";
+import { earn } from "../composables/useCimacoins";
 import { activeLesson, closeLesson, openLesson } from "../composables/useLesson";
 import { savedList } from "../composables/storage";
 import {
@@ -43,6 +46,12 @@ const stepDone = (s) =>
 const groupCount = (group) =>
   group.items.filter((item) => kitDone.value.includes(item.id)).length;
 const kitComplete = computed(() => kitDone.value.length === kitIds.length);
+const planComplete = computed(() => planDone.value.length === planIds.length);
+
+// Cimacoins por terminar cada lista (se entregan una sola vez)
+watch(kitComplete, (done) => done && earn("mochila-lista"), { immediate: true });
+watch(planComplete, (done) => done && earn("plan-listo"), { immediate: true });
+watch(aidComplete, (done) => done && earn("botiquin-listo"), { immediate: true });
 
 const lesson = activeLesson;
 // Cada tema empieza desde arriba: la ventana se regresa al inicio al cerrarla
@@ -99,11 +108,6 @@ function goTo(id) {
         </section>
         <section class="lesson-part" aria-labelledby="leccion-tijuana">
           <h3 id="leccion-tijuana">¿Qué significa para Tijuana?</h3>
-          <p class="lesson-lead">
-            El Niño hace más probable que llueva fuerte, pero no dice cuándo ni
-            cuánto lloverá en tu colonia. Por eso hay que seguir los avisos
-            oficiales
-          </p>
           <div class="lesson-cards">
             <article
               v-for="(card, i) in ninoOutlook.cards"
@@ -158,6 +162,11 @@ function goTo(id) {
               ></progress>
             </div>
           </div>
+          <AnimClip
+            name="plan-familiar"
+            class="lesson-clip"
+            label="La familia sale de la casa y se junta en el punto de reunión"
+          />
           <ol class="plan-steps">
             <li
               v-for="(step, s) in familyPlan"
@@ -350,6 +359,7 @@ function goTo(id) {
           <h3 id="leccion-lluvia-salud">Tu salud con la lluvia</h3>
           <div class="health-tips">
             <article v-for="tip in rainHealth" :key="tip.title" class="health-tip">
+              <AnimClip v-if="tip.clip" :name="`salud-${tip.clip}`" class="health-clip" />
               <span class="health-icon" aria-hidden="true"><Icon :name="tip.icon" :size="24" /></span>
               <strong>{{ tip.title }}</strong>
               <span>{{ tip.text }}</span>
@@ -368,7 +378,7 @@ function goTo(id) {
             ><Icon name="phone" :size="20" /> Llamar al 911</a
           >
           <p class="lesson-note">
-            No reemplaza la consulta médica. La Cruz Roja da cursos de primeros auxilios
+            Esto no sustituye ir al médico. La Cruz Roja da clases de primeros auxilios
           </p>
         </section>
 
@@ -385,6 +395,8 @@ function goTo(id) {
         </div>
       </template>
       <ActivityQuestion :key="lesson.id" :activity-key="`lectura-${lesson.id}`" />
+      <!-- Moneda escondida al final de cada tema -->
+      <p class="lesson-coin"><SecretCoin :id="`moneda-${lesson.id}`" /></p>
     </template>
   </Modal>
 </template>

@@ -18,6 +18,7 @@ export const icons = {
     '<path d="M12 3a9 9 0 1 0 0 18h2a2 2 0 0 0 1-4c-2-1-1-3 1-3h3c4 0 2-11-7-11Z"/><path d="M7 9h.01M11 6h.01M16 8h.01M6 14h.01"/>',
   arrow: '<path d="M4 12h16m-6-6 6 6-6 6"/>',
   chevron: '<path d="m9 5 7 7-7 7"/>',
+  chevronLeft: '<path d="m15 5-7 7 7 7"/>',
   check: '<path d="m5 12 4 4L19 6"/>',
   search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
   star: '<path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8Z"/>',
@@ -68,6 +69,11 @@ export const icons = {
     '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/>',
   pin: '<path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/>',
   snow: '<path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7M9.5 4 12 6.5 14.5 4M9.5 20l2.5-2.5 2.5 2.5M4 10.5l3.4-1 .9-3.4M20 13.5l-3.4 1-.9 3.4M4 13.5l3.4 1 .9 3.4M20 10.5l-3.4-1-.9-3.4"/>',
+  contacts:
+    '<rect x="6" y="3" width="14" height="18" rx="2"/><path d="M3.5 7.5h4M3.5 12h4M3.5 16.5h4"/><path d="M11 9c0 3.3 2.2 5.8 5.5 6l1-1.6-2-1.3-1 .8a3.8 3.8 0 0 1-1.6-1.7l.8-1-1.2-2Z"/>',
+  speaker: '<path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4Z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/>',
+  hourglass: '<path d="M7 3h10M7 21h10M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9s8 4 8 9"/>',
+  violet: '<path d="M12 21s-7.5-4.6-7.5-10A4.5 4.5 0 0 1 12 8a4.5 4.5 0 0 1 7.5 3c0 5.4-7.5 10-7.5 10Z"/><path d="M9.5 13.5 12 16l3-4"/>',
   bell: '<path d="M4 17h16l-2-4V8a6 6 0 0 0-12 0v5ZM9 21h6"/>',
   battery:
     '<rect x="2" y="7" width="17" height="10" rx="2"/><path d="M22 10.5v3M6 10v4m4-4v4"/>',
@@ -75,6 +81,18 @@ export const icons = {
     '<path d="M12 21a6 6 0 0 0 6-6c0-4-3-6-4-10-2 2-3 4-3 6-1-1-1.5-2-1.5-3C7 9 6 12 6 15a6 6 0 0 0 6 6Z"/><path d="M12 21a2.5 2.5 0 0 1-2.5-2.5c0-2 2.5-3.5 2.5-3.5s2.5 1.5 2.5 3.5A2.5 2.5 0 0 1 12 21Z"/>',
   eyeOff:
     '<path d="m3 3 18 18M10.6 6.1A10 10 0 0 1 12 6c6 0 9.5 6 9.5 6a17 17 0 0 1-3 3.6M6.4 7.6A17 17 0 0 0 2.5 12S6 18 12 18a9 9 0 0 0 4.2-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
+  coin: '<circle cx="12" cy="12" r="9"/><path d="M12 6.5v11m-2.5-9h3.2a1.7 1.7 0 0 1 0 3.4h-1.4a1.7 1.7 0 0 0 0 3.4h3.2"/>',
+  shuffle:
+    '<path d="M3 5h3c4 0 8 14 12 14h3M17 15l4 4-4 3M3 19h3c1 0 3-2 4-4M14 9l2-3c1-1 2-1 5-1M17 2l4 3-4 4"/>',
+  shirt: '<path d="m8 4-6 4 2 5 4-2v9h8v-9l4 2 2-5-6-4a4 4 0 0 1-8 0Z"/>',
+  helmet: '<path d="M3 15a9 9 0 0 1 18 0m-11-9 1 7m3-7-1 7M2 15h20v4H2z"/>',
+  landscape:
+    '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="m3 16 5-6 4 5 3-3 6 5"/><circle cx="16" cy="8" r="1"/>',
+  kit: '<rect x="4" y="6" width="16" height="15" rx="2"/><path d="M9 6V3h6v3M4 12h16m-10-1v3h4v-3"/>',
+  blank: '<circle cx="12" cy="12" r="8"/><path d="m6.3 17.7 11.4-11.4"/>',
+  bolt: '<path d="m13 2-7 11h5l-1 9 8-12h-5z"/>',
+  hill: '<path d="m2 19 7-13 6 10 2-4 5 7H2Zm5-9 2 2 2-2"/>',
+  face: '<circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M8.5 14.5a4.5 4.5 0 0 0 7 0"/>',
 };
 export function iconSvg(name) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${icons[name] || icons.info}</svg>`;

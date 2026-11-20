@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'rol' => \App\Http\Middleware\EnsureRole::class,
             'equipo' => \App\Http\Middleware\DeviceSession::class,
+            'sin-demo' => \App\Http\Middleware\NotDemoAccount::class,
         ]);
         // Las cookies de alumnos y docentes llevan un token propio, no se cifran con la APP_KEY.
         $middleware->encryptCookies(except: ['cc_alumno', 'cc_docente']);

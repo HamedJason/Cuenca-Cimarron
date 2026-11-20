@@ -21,6 +21,32 @@ class StatsController extends Controller
         return $query->pluck('total', $column)->map(fn ($v) => (int) $v);
     }
 
+    // Escuelas sin CCT (o que no están en el catálogo): el municipio sale de su ubicación en el mapa.
+    private const SEATS = [
+        'Tijuana' => [32.5149, -117.0382],
+        'Playas de Rosarito' => [32.3615, -117.0554],
+        'Tecate' => [32.5725, -116.6266],
+        'Ensenada' => [31.8667, -116.5964],
+        'Mexicali' => [32.6245, -115.4523],
+    ];
+
+    public static function municipalityNear(mixed $lat, mixed $lng): string
+    {
+        if ($lat === null || $lng === null) {
+            return 'Sin dato';
+        }
+        $best = 'Sin dato';
+        $min = INF;
+        foreach (self::SEATS as $name => [$y, $x]) {
+            $d = (($lat - $y) * 111) ** 2 + (($lng - $x) * 94) ** 2;
+            if ($d < $min) {
+                [$min, $best] = [$d, $name];
+            }
+        }
+
+        return $best;
+    }
+
     public function index(): JsonResponse
     {
         // Alumnos, docentes, grupos y actividades por escuela.
@@ -53,7 +79,7 @@ class StatsController extends Controller
                 'name' => $s->name,
                 'cct' => $s->cct,
                 'colonia' => mb_convert_case(trim($s->colonia), MB_CASE_TITLE),
-                'municipality' => $s->municipality ?? 'Sin dato',
+                'municipality' => $s->municipality ?? self::municipalityNear($s->lat, $s->lng),
                 'level' => $s->level,
                 'sector' => $s->sector,
                 'status' => $s->status,
@@ -106,13 +132,17 @@ class StatsController extends Controller
         return response()->json([
             'totals' => [
                 'schools' => (int) ($statusCounts['approved'] ?? 0),
-                'pending_schools' => (int) ($statusCounts['pending'] ?? 0),
+                'suspended_schools' => (int) ($statusCounts['suspended'] ?? 0),
                 'teachers' => DB::table('teachers')->where('active', true)->count(),
                 'classrooms' => DB::table('classrooms')->whereNull('archived_at')->count(),
                 'students' => DB::table('students')->whereNull('anonymized_at')->count(),
                 'active_students' => DB::table('device_sessions')->where('kind', 'student')->where('last_used_on', '>=', now()->subDays(7)->toDateString())->distinct()->count('owner_id'),
                 'completions' => DB::table('completions')->count(),
                 'points' => (int) DB::table('completions')->sum('points'),
+                // Cimacoins ganadas por todos los alumnos (sin las 150 iniciales ni lo gastado)
+                'coins_earned' => (int) DB::table('completions')->sum('points') * (int) config('avatar.per_point')
+                    + DB::table('students')->whereNotNull('wallet')->pluck('wallet')
+                        ->sum(fn ($w) => max(0, (int) ((is_string($w) ? json_decode($w, true) : $w)['bonus'] ?? 0))),
                 'catalog' => DB::table('school_catalog')->count(),
             ],
             'schools' => $approved->map(fn ($s) => collect($s)->except('created_at')->all())->values(),

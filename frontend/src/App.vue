@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, onMounted } from "vue";
+import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import { useRoute } from "vue-router";
 import Icon from "./components/Icon.vue";
 import Modal from "./components/Modal.vue";
@@ -8,8 +8,14 @@ import LessonModal from "./components/LessonModal.vue";
 import StudentCheck from "./components/StudentCheck.vue";
 import ExternalReturn from "./components/ExternalReturn.vue";
 import TasksFab from "./components/TasksFab.vue";
+import HeaderWave from "./components/HeaderWave.vue";
+import LocationAsk from "./components/LocationAsk.vue";
 import { loadStudent, student } from "./composables/useStudent";
 import { loadActivities, retryPending } from "./composables/useActivities";
+import { setupFinishRewards } from "./composables/useFinishRewards";
+import CoinToast from "./components/CoinToast.vue";
+import { closeLesson } from "./composables/useLesson";
+import { coins, earn, visitPage, earnsCoins, canCustomize } from "./composables/useCimacoins";
 import { storageAvailable } from "./composables/useProgress";
 import { useVisits } from "./composables/useVisits";
 import { useTheme } from "./composables/useTheme";
@@ -26,26 +32,35 @@ function recoverLogo(event) {
 const showStats = ref(false);
 const { stats, statsState, loadStats } = useVisits();
 // Mismo orden que el menú que ya estaba publicado: Inicio, Juegos, Información, Consejos.
-const navigation = [
+const allNavigation = [
   { to: "/", label: "Inicio", icon: "home" },
   { to: "/juegos", label: "Juegos", icon: "gamepad" },
   { to: "/informacion", label: "Información", icon: "book" },
   { to: "/consejos", label: "Consejos", icon: "shield" },
   { to: "/equipo", label: "Equipo", icon: "people" },
+  // En escritorio se entra con el saldo del encabezado; en el menú del celular, con este enlace
+  { to: "/mi-cimarron", label: "Mi cimarrón", icon: "coin", mobileOnly: true },
 ];
+// Mi cimarrón solo aparece para alumnos y docentes con sesión.
+const navigation = computed(() => allNavigation.filter((item) => item.to !== "/mi-cimarron" || canCustomize.value));
 const isActive = (item) =>
   item.to === route.path || (item.match || []).includes(route.path);
 const menuOpen = ref(false);
 watch(
   () => route.path,
-  () => {
+  (path) => {
     menuOpen.value = false;
+    // Al cambiar de página (por ejemplo desde el aviso de monedas) se cierra el tema abierto
+    closeLesson();
+    // Cimacoins: cuenta la sección visitada (premio de explorador)
+    visitPage(path);
   },
 );
 // El botón flotante no se muestra donde ya están los juegos.
 // Siempre visible, salvo en la página de juegos.
 // Con un alumno con sesión, su lista de tareas toma ese lugar.
-const showPlayButton = computed(() => route.path !== "/juegos" && !student.value);
+// Tampoco en Mi cimarrón, donde taparía la tienda.
+const showPlayButton = computed(() => !["/juegos", "/mi-cimarron"].includes(route.path) && !student.value);
 const contactEmails = [
   "jason.hamed@uabc.edu.mx",
   "onit.sibaja@uabc.edu.mx",
@@ -68,14 +83,30 @@ onMounted(() => {
     loadActivities();
     retryPending();
   });
+  // Se espera a que pase la pantalla de bienvenida para que se vea el aviso
+  setTimeout(() => earn("visita-diaria"), 3500);
+  // Cimacoins por los juegos terminados (en otra pestaña o antes de entrar)
+  setTimeout(setupFinishRewards, 4000);
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
+  // Alto real del encabezado (con la línea de agua): lo usan los saltos a secciones para no quedar tapados
+  if (siteHeader.value && "ResizeObserver" in window) {
+    headerObserver = new ResizeObserver(() => {
+      const h = Math.round(siteHeader.value.getBoundingClientRect().height) + 12;
+      document.documentElement.style.setProperty("--header-h", `${h}px`);
+    });
+    headerObserver.observe(siteHeader.value);
+  }
 });
+const siteHeader = ref(null);
+let headerObserver = null;
+onBeforeUnmount(() => headerObserver?.disconnect());
 </script>
 <template>
   <SplashScreen />
+  <LocationAsk />
   <a class="skip-link" href="#main-content">Saltar al contenido</a>
-  <header :class="['site-header', { scrolled, 'menu-open': menuOpen }]">
+  <header ref="siteHeader" :class="['site-header', { scrolled, 'menu-open': menuOpen }]">
     <div class="wrap header-row">
       <RouterLink class="brand" to="/" aria-label="Cuenca Cimarrona, inicio"
         ><img
@@ -87,6 +118,17 @@ onMounted(() => {
           @error="recoverLogo"
         /><span class="wordmark">Cuenca Cimarrona</span></RouterLink
       >
+      <RouterLink
+        v-if="earnsCoins"
+        to="/mi-cimarron"
+        class="coin-chip"
+        :aria-label="`${coins} Cimacoins. Ir a Mi cimarrón`"
+        title="Tus Cimacoins"
+        ><Icon name="coin" :size="20" /><span>{{ coins.toLocaleString("es-MX") }}</span></RouterLink
+      >
+      <RouterLink to="/directorio" class="theme-toggle dir-toggle" aria-label="Directorio" title="Directorio"
+        ><Icon name="phone" :size="22"
+      /></RouterLink>
       <button
         :class="['theme-toggle', { 'is-dark': theme === 'dark' }]"
         type="button"
@@ -116,11 +158,12 @@ onMounted(() => {
           <RouterLink
             v-if="item.to"
             :to="item.to"
-            :class="['nav-link', { active: isActive(item) }]"
+            :class="['nav-link', { active: isActive(item), 'nav-mobile-only': item.mobileOnly }]"
             :aria-current="isActive(item) ? 'page' : undefined"
             ><span class="nav-icon" aria-hidden="true"
               ><Icon :name="item.icon" :size="20" /></span
-            >{{ item.label }}</RouterLink
+            >{{ item.label
+            }}<span v-if="item.mobileOnly && earnsCoins" class="nav-coins">{{ coins.toLocaleString("es-MX") }} Cimacoins</span></RouterLink
           >
           <a
             v-else
@@ -148,10 +191,7 @@ onMounted(() => {
       </nav>
     </div>
     <!-- Agua que corre por la cuenca: una línea de olas bajo el encabezado -->
-    <div class="header-wave-wrap" aria-hidden="true"><svg class="header-wave" viewBox="0 0 240 12" preserveAspectRatio="none">
-      <path class="hw-fill" d="M0 0V8c20-5 40-5 60 0s40 5 60 0 40-5 60 0 40 5 60 0V0Z" />
-      <path class="hw-front" d="M0 8c20-5 40-5 60 0s40 5 60 0 40-5 60 0 40 5 60 0" />
-    </svg></div>
+    <HeaderWave />
   </header>
   <div class="workspace">
     <main id="main-content" tabindex="-1">
@@ -228,6 +268,7 @@ onMounted(() => {
         </div>
       </div>
       <div class="footer-tools">
+        <RouterLink to="/directorio" class="footer-link">Directorio</RouterLink>
         <RouterLink to="/escuelas" class="footer-link">Escuelas</RouterLink>
         <RouterLink to="/privacidad" class="footer-link">Aviso de privacidad</RouterLink>
         <RouterLink to="/estilos" class="footer-link">Estilos</RouterLink>
@@ -290,4 +331,5 @@ onMounted(() => {
   <StudentCheck />
   <ExternalReturn />
   <TasksFab />
+  <CoinToast />
 </template>

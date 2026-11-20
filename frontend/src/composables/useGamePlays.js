@@ -4,9 +4,19 @@ import { ref } from "vue";
 import { browserIds } from "./useVisits";
 import { student } from "./useStudent";
 import { activityByKey, isDone, startActivity } from "./useActivities";
+import { earn } from "./useCimacoins";
 
 // Juego externo abierto por un alumno: al regresar a la pestaña se le pregunta si ya terminó.
+// Le da puntos y las Cimacoins de terminarlo. Sin sesión no hay pregunta ni monedas.
 export const PENDING_EXTERNAL = "cuenca.juego-externo";
+
+function rememberExternal(game) {
+  try {
+    localStorage.setItem(PENDING_EXTERNAL, JSON.stringify({ key: game, at: Date.now() }));
+  } catch {
+    // Sin almacenamiento la pregunta no aparece sola, pero el juego se abre igual.
+  }
+}
 
 const plays = ref({});
 let loading = null;
@@ -31,14 +41,10 @@ export async function registerPlay(game) {
   const activity = activityByKey.value[game];
   if (student.value && activity && activity.mode !== "pregunta" && !isDone(game)) {
     startActivity(game);
-    if (activity.mode === "externo") {
-      try {
-        localStorage.setItem(PENDING_EXTERNAL, JSON.stringify({ key: game, at: Date.now() }));
-      } catch {
-        // Sin almacenamiento la pregunta no aparece sola, pero el juego se abre igual.
-      }
-    }
+    if (activity.mode === "externo") rememberExternal(game);
   }
+  // Cimacoins por abrir cada juego la primera vez (solo alumnos: sin sesión earn no da nada)
+  earn(`juego-${game}`);
   try {
     const { visitor, session } = browserIds();
     const response = await fetch("/api/game-sessions", {

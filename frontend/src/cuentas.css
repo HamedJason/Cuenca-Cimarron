@@ -937,83 +937,14 @@
   }
 }
 
-/* Mi cimarrón */
-.avatar-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
-  gap: 24px;
-  align-items: start;
-}
-.avatar-preview {
-  justify-items: center;
-  text-align: center;
-}
+/* Cimarrón del alumno en el botón de tareas (Mi cimarrón tiene sus estilos en views/Avatar.vue) */
 .tasks-fab .cimarron-avatar {
   flex-shrink: 0;
 }
-.swatch-choice {
-  gap: 8px;
-}
-.swatch {
-  display: inline-block;
-  flex: 0 0 28px;
-  align-self: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 2px solid var(--edge);
-}
-.swatch-verde {
-  background: #cfe9d9;
-}
-.swatch-ocre {
-  background: #ffe1a3;
-}
-.swatch-cielo {
-  background: #cfe6f7;
-}
-.piece-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 10px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.piece {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 10px;
-  border: 2px solid var(--line);
-  border-radius: 16px;
-  background: var(--surface);
-  text-align: left;
-}
-.piece span {
-  display: grid;
-}
-.piece small {
-  color: var(--muted);
-}
-.piece.on {
-  border-color: var(--uabc-green);
-  background: var(--green-tint);
-}
-.piece.locked {
-  opacity: 0.6;
-}
-.piece.locked .cimarron-avatar {
-  filter: grayscale(1);
-}
 @media (max-width: 760px) {
-  .avatar-layout {
-    grid-template-columns: 1fr;
-  }
   .tasks-fab .cimarron-avatar {
-    width: 40px;
-    height: 40px;
+    width: 40px !important;
+    height: 40px !important;
   }
 }
 
@@ -1131,7 +1062,8 @@
 .combo {
   position: relative;
 }
-.field .combo input {
+/* El texto empieza después de la lupa (le gana a la regla general de .field input) */
+.field .combo input:not([type="checkbox"]):not([type="radio"]) {
   padding-left: 44px;
   padding-right: 44px;
   font-size: 18px;
@@ -1431,4 +1363,316 @@
   .recovery-codes li {
     background: #fff;
   }
+}
+
+/* Lecturas cortas (/aprende) */
+.lesson-short {
+  gap: 16px;
+}
+.lesson-short-lead {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 20px;
+  color: var(--ink);
+}
+.lesson-short-lead svg {
+  flex-shrink: 0;
+  color: var(--link);
+  margin-top: 2px;
+}
+.lesson-short-points li {
+  align-items: flex-start;
+  font-size: 18px;
+  color: var(--ink);
+}
+.lesson-short-points svg {
+  color: var(--link);
+  margin-top: 3px;
+}
+.lesson-short-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lesson-short-card {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  min-height: 90px;
+  padding: 14px 16px;
+  border: 2px solid var(--edge);
+  border-radius: 16px;
+  background: var(--green-tint);
+  color: var(--ink);
+  box-shadow: 0 3px 0 var(--shadow);
+}
+.lesson-short-card:hover {
+  background: var(--surface);
+}
+.lesson-short-card svg {
+  flex-shrink: 0;
+  color: var(--link);
+}
+/* Todas las tarjetas de una fila miden lo mismo y la pastilla de puntos queda abajo a la izquierda */
+.lesson-short-list > li {
+  display: flex;
+}
+.lesson-short-card {
+  flex: 1;
+  align-items: stretch;
+}
+.lesson-short-card > svg {
+  align-self: flex-start;
+}
+.lesson-short-card > span {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+.lesson-short-card > span > .points-tags,
+.lesson-short-card > span > .points-tag {
+  margin-top: auto;
+}
+.lesson-short-card .points-tag svg {
+  flex: none;
+}
+.lessons-page .note {
+  margin-bottom: 18px;
+}
+
+/* Caminos listos del docente */
+.path-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.path-card {
+  display: grid;
+  gap: 12px;
+  align-content: space-between;
+  padding: 16px;
+  border: 2px solid var(--edge);
+  border-radius: 16px;
+  background: var(--green-tint);
+}
+.path-card h3 {
+  font-size: 26px;
+}
+.path-card .button,
+.path-card .status-badge {
+  justify-self: start;
+}
+.path-steps {
+  margin: 8px 0 0;
+  padding-left: 22px;
+  font-size: 15px;
+  color: var(--ink);
+}
+.path-steps li.assigned {
+  color: var(--muted);
+}
+.path-steps li.assigned::after {
+  content: " ✓";
+  color: var(--link);
+  font-weight: 700;
+}
+
+/* Los mapas de Leaflet traen capas con z-index 400 o más: se encierran en su propia capa
+   para que nunca queden encima del encabezado fijo del sitio */
+.leaflet-container {
+  isolation: isolate;
+  z-index: 0;
+}
+
+/* Ventanas del panel (mapa de una escuela y "Ver todas"): debajo de la barra y con fondo oscuro */
+.modal.modal-map,
+.modal.modal-list {
+  margin-top: calc(var(--header-h, 96px) + 8px);
+  max-height: calc(100dvh - var(--header-h, 96px) - 24px);
+}
+.modal.modal-map {
+  width: min(900px, calc(100vw - 32px));
+}
+.modal.modal-list {
+  width: min(820px, calc(100vw - 32px));
+}
+.modal.modal-map::backdrop,
+.modal.modal-list::backdrop {
+  background: rgba(0, 20, 12, 0.72);
+}
+.modal-map .modal-close,
+.modal-list .modal-close {
+  z-index: 2;
+}
+.school-map-canvas {
+  height: min(60vh, 460px);
+  border: 2px solid var(--edge);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.school-pin.is-selected {
+  width: 40px;
+  height: 40px;
+  background: #d64545;
+  border-color: #fff;
+  box-shadow: 0 0 0 4px #d64545aa;
+}
+.modal-list .review-list {
+  margin-top: 4px;
+}
+.modal-map .modal-body,
+.modal-list .modal-body {
+  align-content: start;
+}
+.list-sentinel {
+  height: 1px;
+}
+@media (max-width: 600px) {
+  .modal.modal-map,
+  .modal.modal-list {
+    margin-top: calc(var(--header-h, 76px) + 4px);
+    max-height: calc(100dvh - var(--header-h, 76px) - 12px);
+  }
+  .modal-map .modal-body,
+  .modal-list .modal-body {
+    padding: 22px 16px;
+  }
+  .school-map-canvas {
+    height: 55vh;
+  }
+}
+
+/* Ranking del grupo (ClassroomTasks.vue): podio con los tres primeros lugares y la lista del resto */
+.podium {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+  gap: 12px;
+  margin: 8px 0 16px;
+  padding: 0;
+  list-style: none;
+}
+.podium-step {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 14px 10px 16px;
+  border: 3px solid var(--edge);
+  border-radius: 20px 20px 10px 10px;
+  background: var(--surface);
+  box-shadow: 0 5px 0 var(--shadow);
+  text-align: center;
+}
+.podium-step.is-place-1 {
+  order: 2;
+  min-height: 190px;
+  background: var(--gold-tint);
+  border-color: var(--uabc-gold);
+}
+.podium-step.is-place-2 {
+  order: 1;
+  min-height: 160px;
+  background: var(--green-tint);
+}
+.podium-step.is-place-3 {
+  order: 3;
+  min-height: 140px;
+  background: var(--green-tint);
+}
+.podium-medal {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 3px solid var(--edge);
+  background: #b5b9bd;
+  color: #1c2621;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 30px;
+}
+.is-place-1 .podium-medal {
+  width: 64px;
+  height: 64px;
+  background: var(--uabc-gold);
+  color: #003d24;
+  font-size: 36px;
+}
+.is-place-3 .podium-medal {
+  background: #c98a4b;
+  color: #2a1608;
+}
+.podium-name {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  line-height: 1.05;
+  color: var(--title);
+  overflow-wrap: anywhere;
+}
+.podium-coins,
+.ranking-coins {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 800;
+  color: var(--gold-text);
+  font-variant-numeric: tabular-nums;
+}
+.ranking-list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ranking-list li {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.ranking-place {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--green-tint);
+  color: var(--title);
+  font-weight: 800;
+}
+.ranking-name {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+:root[data-theme="dark"] .podium-coins,
+:root[data-theme="dark"] .ranking-coins {
+  color: var(--uabc-gold);
+}
+@media (max-width: 480px) {
+  .podium {
+    gap: 6px;
+  }
+  .podium-step {
+    padding: 10px 4px 12px;
+  }
+  .podium-name {
+    font-size: 17px;
+  }
+  .podium-step.is-place-1 { min-height: 160px; }
+  .podium-step.is-place-2 { min-height: 135px; }
+  .podium-step.is-place-3 { min-height: 120px; }
 }

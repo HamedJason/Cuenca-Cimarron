@@ -27,5 +27,7 @@ class AppServiceProvider extends ServiceProvider
         foreach (['publico' => 600, 'cuentas' => 300, 'aula' => 1200, 'codigos' => 300] as $name => $perMinute) {
             RateLimiter::for($name, fn (Request $request) => Limit::perMinute($perMinute)->by($name.'|'.$request->ip()));
         }
+        // La zona del visitante se manda una sola vez por navegador: un salón entero cabe de sobra.
+        RateLimiter::for('zona', fn (Request $request) => Limit::perMinute(60)->by('zona|'.$request->ip()));
     }
 }

@@ -1,0 +1,1067 @@
+/* ============================================================
+   ALTO AL FUEGO · MISIÓN EXTINTOR
+   Identidad Institucional Oficial: Cuenca Cimarrona · UABC
+   Universidad Autónoma de Baja California
+   ============================================================ */
+
+/* ── 1. Paleta de Colores y Variables Oficiales UABC ────────── */
+:root {
+  color-scheme: light;
+  --ink: #0b3d2b;       /* Verde oscuro profundo para textos principales y títulos */
+  --green: #0a7a45;     /* Verde institucional UABC (bordes superiores, botones primarios) */
+  --gold: #d9951a;      /* Oro/Ocre institucional (acentos, subrayados, bordes activos) */
+  --brown: #8a5a0a;     /* Café dorado oscuro para texto sobre fondos crema/durazno */
+  --mint: #e6f3ea;      /* Verde menta suave para paneles secundarios y cajas de ayuda */
+  --mintb: #b9d9c6;     /* Borde para contenedores menta */
+  --peach: #fdf0d5;     /* Crema/dorado cálido para paneles destacados o alertas */
+  --peachb: #ecd6a4;    /* Borde para contenedores crema */
+  --muted: #4b6458;     /* Verde grisáceo apagado para textos secundarios y pie de página */
+  --surface: #ffffff;   /* Blanco puro para la tarjeta principal del juego */
+  --back: #0a5c38;      /* Verde esmeralda oscuro para fondos de tarjetas cerradas/headers */
+  --line: #cfe0d5;      /* Líneas divisoras y bordes sutiles */
+
+  /* Colores funcionales del conato */
+  --fire-red: #ef4444;
+  --fire-orange: #f97316;
+  --fire-yellow: #fbbf24;
+  --danger-red: #c2410c;
+
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ── 2. Reset y Tipografía Base ────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+  background: #eef6f1;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #f7fcf9 0%, #eef6f1 55%, #ebe6d0 100%) fixed;
+  color: var(--ink);
+  font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+  line-height: 1.4;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── 3. Tarjeta Central Elevada (Main) ───────────────────────── */
+main {
+  flex: none;
+  width: calc(100% - 20px);
+  max-width: 920px;
+  margin: 16px auto;
+  background: var(--surface);
+  border-radius: 28px;
+  border-top: 12px solid var(--green);
+  box-shadow: 0 18px 50px rgba(11, 61, 43, 0.13);
+  padding: 18px 22px 24px;
+}
+
+/* ── 4. Identificador de Marca y Encabezado Hero ────────────── */
+.brand {
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--ink);
+  line-height: 1.1;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 0 0 14px;
+}
+
+h1 {
+  margin: 0;
+  text-align: left;
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  font-size: 3rem;
+  line-height: 0.95;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+/* Subrayado dorado característico bajo el título */
+h1::after {
+  content: "";
+  display: block;
+  width: 70px;
+  height: 5px;
+  background: var(--gold);
+  border-radius: 4px;
+  margin: 10px 0 0;
+}
+
+.mascot {
+  height: 140px;
+  width: auto;
+  display: block;
+  flex: none;
+  filter: drop-shadow(0 8px 10px rgba(11, 61, 43, 0.25));
+  object-fit: contain;
+}
+
+/* ── 5. Control de Pantallas ───────────────────────────────── */
+.screen {
+  display: none;
+  width: 100%;
+}
+
+.screen.active {
+  display: block;
+  animation: fadeInScreen 0.3s ease-out;
+}
+
+@keyframes fadeInScreen {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 6. Pantalla 1: Introducción ───────────────────────────── */
+.intro-lead {
+  font-size: 1.05rem;
+  color: var(--ink);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.intro-classes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.chip-title {
+  display: block;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.chip-desc {
+  display: block;
+  font-size: 0.8rem;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+.chip-badge {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(11, 61, 43, 0.15);
+  white-space: nowrap;
+}
+
+/* ── 7. Indicadores HUD y Tarjetas de Estado ────────────────── */
+.scenario-title-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 6px 12px;
+  background: var(--mint);
+  border: 1px solid var(--mintb);
+  border-radius: 12px;
+}
+
+.scenario-badge {
+  background: var(--green);
+  color: #ffffff;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.scenario-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.hud-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.stat-box {
+  border: 3px solid transparent;
+  border-radius: 18px;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border-color 0.2s, transform 0.2s;
+  background: var(--surface);
+}
+
+.stat-box.warm {
+  background: var(--peach);
+  border-color: var(--peachb);
+  color: var(--brown);
+}
+
+.stat-box.cool {
+  background: var(--mint);
+  border-color: var(--mintb);
+  color: var(--green);
+}
+
+.stat-box.active-alert {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.stat-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.stat-label {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.stat-box .big-number,
+.hud-timer {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--brown);
+}
+
+.hud-timer.danger-pulse {
+  color: var(--danger-red);
+  animation: pulse-ring 0.8s infinite;
+}
+
+/* Barras de progreso integradas en el HUD */
+.hud-bar-track {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(11, 61, 43, 0.12);
+  overflow: hidden;
+}
+
+.hud-fire-bar {
+  height: 100%;
+  width: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #fbbf24, #f97316, #ef4444);
+  transition: width 0.1s linear;
+}
+
+.hud-charge-bar {
+  height: 100%;
+  width: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #34d399, var(--green));
+  transition: width 0.1s linear;
+}
+
+/* Insignias de la Técnica T.A.P.E. */
+.tape-indicators {
+  display: flex;
+  gap: 6px;
+}
+
+.tape-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--mintb);
+  color: var(--muted);
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.tape-badge.active {
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: scale(1.15);
+  box-shadow: 0 0 0 4px rgba(217, 149, 26, 0.25);
+  animation: pulse-ring 1.2s infinite;
+}
+
+.tape-badge.done {
+  background: var(--green);
+  border-color: var(--green);
+  color: #ffffff;
+}
+
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0   rgba(217, 149, 26, 0.7); }
+  70%  { box-shadow: 0 0 0 10px rgba(217, 149, 26, 0); }
+  100% { box-shadow: 0 0 0 0   rgba(217, 149, 26, 0); }
+}
+
+/* Mensaje dinámico de estado */
+#msg {
+  min-height: 2.2em;
+  text-align: center;
+  margin: 10px 0 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--mint);
+  border: 1px solid var(--mintb);
+  border-radius: 12px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── 8. Área Principal del Juego (Game Stage) ────────────────── */
+.game-stage {
+  background: #f7fcf9;
+  border: 3px solid var(--line);
+  border-radius: 18px;
+  padding: 12px;
+  margin: 10px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.canvas-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #111827;
+  border: 2px solid var(--line);
+  box-shadow: 0 6px 20px rgba(11, 61, 43, 0.12);
+}
+
+#game-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 800 / 500;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+/* Alertas flotantes sobre el conato */
+.aim-alert,
+.sweep-tip {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  pointer-events: none;
+  animation: fadeInUp 0.25s ease-out both;
+  transition: opacity 0.3s ease;
+  z-index: 25;
+}
+
+.aim-alert {
+  background: var(--danger-red);
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 14px rgba(194, 65, 12, 0.45);
+}
+
+.sweep-tip {
+  background: var(--green);
+  color: #ffffff;
+  border: 2px solid var(--gold);
+  box-shadow: 0 4px 14px rgba(10, 122, 69, 0.4);
+}
+
+.aim-alert.hidden,
+.sweep-tip.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translate(-50%, -8px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ── 9. Panel Interactivo de Fases (Phase Overlay) ──────────── */
+.phase-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 4px solid var(--gold);
+  padding: 14px 18px;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 -8px 25px rgba(11, 61, 43, 0.12);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 30;
+}
+
+.phase-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(100%);
+}
+
+.phase-title {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.phase-subtitle {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+/* Cuadrícula de diagnóstico (Clases A, B, C, K) */
+.fire-class-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+  gap: 8px;
+  width: 100%;
+  margin: 6px 0;
+}
+
+.btn-fire-class {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 8px 6px;
+  background: var(--surface);
+  border: 3px solid var(--line);
+  border-radius: 14px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, background-color 0.15s;
+  min-height: 80px;
+}
+
+.btn-fire-class:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold);
+  background: var(--peach);
+}
+
+.btn-fire-class .fire-class-icon {
+  font-size: 1.5rem;
+}
+
+.btn-fire-class .fire-class-label {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.btn-fire-class .fire-class-name {
+  font-size: 0.68rem;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.phase-error {
+  color: var(--danger-red);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 6px;
+  text-align: center;
+  background: var(--peach);
+  border: 1px solid var(--peachb);
+  padding: 6px 12px;
+  border-radius: 10px;
+}
+
+.phase-error.hidden {
+  display: none;
+}
+
+/* Gabinete de Extintores */
+.ext-cabinet {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+.ext-card {
+  width: 125px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 6px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 3px solid var(--line);
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  user-select: none;
+}
+
+.ext-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold);
+  box-shadow: 0 8px 20px rgba(11, 61, 43, 0.15);
+}
+
+.ext-card.selected {
+  border-color: var(--green);
+  box-shadow: 0 0 0 4px var(--mintb);
+  background: var(--mint);
+}
+
+.ext-card.danger {
+  border-color: var(--danger-red);
+  animation: shake 0.4s ease-in-out;
+}
+
+.ext-card .ext-icon {
+  width: 48px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ext-card .ext-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.ext-card .ext-name {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--ink);
+  text-align: center;
+  line-height: 1.1;
+}
+
+.ext-card .ext-label {
+  font-size: 0.75rem;
+  color: var(--brown);
+  font-weight: 700;
+}
+
+/* Instrucción de pasador y válvula */
+.pin-instruction-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 4px auto;
+}
+
+.pin-svg {
+  width: 150px;
+  height: 175px;
+  filter: drop-shadow(0 6px 16px rgba(11, 61, 43, 0.2));
+}
+
+.pin-hint {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--brown);
+  background: var(--peach);
+  border: 1px solid var(--peachb);
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.pull-arrow {
+  animation: pullHint 1.2s infinite ease-in-out;
+}
+
+@keyframes pullHint {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-8px); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.correct-flash {
+  border-color: var(--green) !important;
+  background: var(--mint) !important;
+}
+
+/* ── 10. Botones Estilo Píldora Institucional UABC ──────────── */
+.actions,
+.result-actions {
+  text-align: center;
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+button.btn,
+.btn-primary,
+.btn-secondary {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 9px 28px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--green);
+  color: #ffffff;
+  cursor: pointer;
+  transition: transform 0.15s, background-color 0.15s, box-shadow 0.15s;
+  box-shadow: 0 4px 12px rgba(10, 122, 69, 0.22);
+}
+
+button.btn:hover,
+.btn-primary:hover {
+  background: var(--back);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(10, 92, 56, 0.3);
+}
+
+button.btn.secondary,
+.btn-secondary {
+  background: var(--gold);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(217, 149, 26, 0.25);
+}
+
+button.btn.secondary:hover,
+.btn-secondary:hover {
+  background: var(--brown);
+  transform: translateY(-2px);
+}
+
+/* ── 11. Caja de Ayuda Educativa (.help) ────────────────────── */
+.help {
+  color: var(--ink);
+  font-size: 0.9rem;
+  margin-top: 18px;
+  background: var(--mint);
+  border-left: 6px solid var(--gold);
+  border-radius: 14px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--mintb);
+  border-right: 1px solid var(--mintb);
+  border-bottom: 1px solid var(--mintb);
+}
+
+.help p {
+  margin: 4px 0;
+}
+
+/* ── 12. Pantalla de Resultados y Evaluación Final ──────────── */
+.result-container {
+  padding: 8px 0;
+}
+
+.result-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.result-icon {
+  font-size: 3rem;
+  margin-bottom: 4px;
+}
+
+#result-grade,
+.result-title {
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  font-size: 2.4rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+#result-message,
+.result-grade {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.result-grade.grade-expert {
+  color: var(--green);
+}
+
+.result-grade.grade-training {
+  color: var(--gold);
+}
+
+.result-grade.grade-practice {
+  color: var(--danger-red);
+}
+
+.result-section {
+  margin: 16px 0;
+}
+
+.result-section h2,
+.quick-ref h3 {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.metric-card {
+  border: 3px solid var(--mintb);
+  background: var(--mint);
+  border-radius: 16px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.metric-card.metric-bonus {
+  border-color: var(--peachb);
+  background: var(--peach);
+}
+
+.metric-card .metric-label {
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.metric-card .metric-value {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--green);
+  line-height: 1;
+}
+
+/* Tabla de Referencia Rápida con Filas Alternadas */
+.ref-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.ref-table thead th {
+  background: var(--mint);
+  color: var(--ink);
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--mintb);
+  text-align: left;
+}
+
+.ref-table tbody td {
+  padding: 10px 14px;
+  font-size: 0.92rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.ref-table tbody tr:nth-child(even) {
+  background: var(--mint);
+}
+
+.ref-table tbody tr:nth-child(odd) {
+  background: var(--peach);
+}
+
+.ref-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* ── 13. Modales Institucionales (.modal-box) ───────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(11, 61, 43, 0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.modal-overlay.active,
+.modal-overlay.modal-visible,
+.modal-overlay:not(.hidden) {
+  display: flex;
+}
+
+.modal-overlay.hidden {
+  display: none !important;
+}
+
+.modal-box,
+.modal-content {
+  background: var(--surface);
+  border-radius: 24px;
+  border-top: 10px solid var(--green);
+  border-bottom: 4px solid var(--gold);
+  color: var(--ink);
+  box-shadow: 0 18px 50px rgba(11, 61, 43, 0.25);
+  max-width: 500px;
+  width: 100%;
+  padding: 22px 26px;
+  position: relative;
+  animation: slideUpModal 0.25s ease-out;
+}
+
+@keyframes slideUpModal {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.modal-header h3,
+#modal-title {
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.modal-body,
+#modal-body {
+  font-size: 0.95rem;
+  color: var(--ink);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.modal-body p {
+  margin: 6px 0;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  color: var(--muted);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal-close:hover {
+  color: var(--ink);
+}
+
+/* ── 14. Notificaciones Toasts ──────────────────────────────── */
+#toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10000;
+  pointer-events: none;
+  max-width: 90vw;
+}
+
+.toast {
+  pointer-events: auto;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 24px rgba(11, 61, 43, 0.25);
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.toast.toast-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast-success {
+  background: var(--green);
+  color: #ffffff;
+  border: 2px solid var(--mintb);
+}
+
+.toast-warning {
+  background: var(--gold);
+  color: #ffffff;
+  border: 2px solid var(--peachb);
+}
+
+.toast-danger {
+  background: var(--danger-red);
+  color: #ffffff;
+  border: 2px solid #ffffff;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.3rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* ── 15. Pie de Página Institucional (Footer) ───────────────── */
+footer {
+  margin-top: auto;
+  padding: 8px 14px 20px;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+footer strong {
+  color: var(--ink);
+  display: block;
+  font-size: 0.9rem;
+  font-family: "Barlow Condensed", sans-serif;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ── 16. Adaptación Móvil (Responsive) ──────────────────────── */
+@media (max-width: 600px) {
+  main {
+    padding: 14px 12px 18px;
+    border-radius: 22px;
+    width: calc(100% - 14px);
+    margin: 8px auto;
+  }
+
+  .brand {
+    font-size: 1.2rem;
+  }
+
+  h1 {
+    font-size: 1.9rem;
+  }
+
+  h1::after {
+    width: 50px;
+    height: 4px;
+    margin: 6px 0 0;
+  }
+
+  .mascot {
+    height: 84px;
+  }
+
+  .hero {
+    gap: 8px;
+  }
+
+  .stat-box .big-number,
+  .hud-timer {
+    font-size: 1.8rem;
+  }
+
+  .hud-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .btn-fire-class {
+    min-height: 70px;
+  }
+
+  button.btn {
+    font-size: 1.1rem;
+    padding: 8px 22px;
+  }
+}

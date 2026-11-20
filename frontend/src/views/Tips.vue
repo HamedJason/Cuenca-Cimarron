@@ -1,12 +1,17 @@
 <script setup>
+import SecretCoin from "../components/SecretCoin.vue";
 import { nextTick, watch } from "vue";
 import { useRoute } from "vue-router";
+import AnimClip from "../components/AnimClip.vue";
 import Icon from "../components/Icon.vue";
 import MascotGuide from "../components/MascotGuide.vue";
 import PointsTag from "../components/PointsTag.vue";
 import ActivityQuestion from "../components/ActivityQuestion.vue";
 import { openLesson } from "../composables/useLesson";
 import { tips } from "../data";
+
+// Animación de cada momento (public/assets/animaciones/consejo-<id>)
+const tipClips = new Set(["antes", "durante", "manejo", "despues"]);
 
 // /consejos?momento=durante lleva directo a esa tarjeta (desde el inicio).
 const route = useRoute();
@@ -63,11 +68,12 @@ watch(
             'tip-card',
             'cc-watermark',
             `tone-${tip.tone}`,
-            { highlighted: route.query.momento === tip.id },
+            { highlighted: route.query.momento === tip.id, 'has-clip': tipClips.has(tip.id) },
           ]"
           :style="{ '--i': i }"
         >
-          <span class="advice-icon" aria-hidden="true"
+          <AnimClip v-if="tipClips.has(tip.id)" :name="`consejo-${tip.id}`" />
+          <span v-else class="advice-icon" aria-hidden="true"
             ><Icon :name="tip.icon" :size="32"
           /></span>
           <div>
@@ -86,6 +92,7 @@ watch(
         <MascotGuide :size="130" bubble="¡Prepárate conmigo!" />
         <div>
           <h2 id="titulo-preparate" class="section-title">Prepárate antes</h2>
+        <SecretCoin id="moneda-consejos" class="page-coin" />
           <p>Haz tu plan familiar y revisa tu mochila de emergencia</p>
         </div>
         <div class="info-play-actions">

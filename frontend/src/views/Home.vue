@@ -1,4 +1,5 @@
 <script setup>
+import AnimClip from "../components/AnimClip.vue";
 import Icon from "../components/Icon.vue";
 import PointsTag from "../components/PointsTag.vue";
 import { ref, computed, watch } from "vue";
@@ -288,13 +289,13 @@ const stationMapHref = (item) =>
       <div class="wrap alert-row">
         <div>
           <h2 id="titulo-alerta">
-            Tijuana está en emergencia preventiva por El Niño
+            Tijuana se está preparando para El Niño
           </h2>
           <p>
             Las lluvias más fuertes se esperan en diciembre y enero
           </p>
           <p>
-            Declaratoria del Cabildo, 5 de noviembre de 2026
+            Aviso del gobierno de Tijuana, 5 de noviembre de 2026
           </p>
         </div>
         <div class="alert-actions">
@@ -323,7 +324,7 @@ const stationMapHref = (item) =>
           Toca para llamar ·
           <RouterLink
             class="text-link inline-link"
-            :to="{ path: '/informacion', query: { ver: 'dependencias' } }"
+            to="/directorio"
             >Ver todo el directorio</RouterLink
           >
         </p>
@@ -409,7 +410,7 @@ const stationMapHref = (item) =>
         </section>
 
         <section class="risk-card" aria-labelledby="titulo-riesgo">
-          <Icon name="pin" :size="44" />
+          <AnimClip name="colonia-riesgo" class="risk-card-clip" />
           <h2 id="titulo-riesgo">¿Tu colonia es zona de riesgo?</h2>
           <p>Búscala en el mapa de inundaciones y deslaves del municipio</p>
           <button class="button primary cta" type="button" @click="openMap">
@@ -602,43 +603,9 @@ const stationMapHref = (item) =>
             v-for="item in advice"
             :key="item.id"
             :href="item.href"
-            :class="['advice-card', `tone-${item.tone}`]"
-            ><span class="advice-icon" aria-hidden="true"
-              ><svg
-                v-if="item.icon === 'umbrella'"
-                class="advice-umbrella"
-                viewBox="0 0 48 48"
-              >
-                <path
-                  class="umbrella-canopy"
-                  d="M5 23a19 19 0 0 1 38 0c-4-3-8-3-12 0-4-3-8-3-12 0-5-3-9-3-14 0Z"
-                />
-                <path class="umbrella-stem" d="M24 22v15c0 5 8 6 8 0" />
-                <path class="drop-line rain-a" d="m12 30-2 5" />
-                <path class="drop-line rain-b" d="m37 31-2 5" /></svg
-              ><svg
-                v-else-if="item.icon === 'storm'"
-                class="advice-storm"
-                viewBox="0 0 48 48"
-              >
-                <path
-                  class="storm-cloud"
-                  d="M11 27a8 8 0 0 1 1-16 12 12 0 0 1 23 4 7 7 0 0 1 2 13H11Z"
-                />
-                <path class="drop-line rain-a" d="m17 32-2 6" />
-                <path class="drop-line rain-b" d="m26 32-2 8" />
-                <path class="drop-line rain-c" d="m35 32-2 6" /></svg
-              ><svg v-else class="advice-home" viewBox="0 0 48 48">
-                <circle class="home-sun" cx="34" cy="13" r="5" />
-                <path
-                  class="home-rays"
-                  d="M34 3v3m0 14v3m10-10h-3M27 13h-3m17-7-2 2m-10 10-2 2m14 0-2-2M28 8l-2-2"
-                />
-                <path
-                  class="home-shape"
-                  d="m7 23 17-14 17 14M12 20v21h24V20M20 41V28h9v13"
-                /></svg></span
-            ><strong>{{ item.title }}</strong
+            :class="['advice-card', 'has-strip', `tone-${item.tone}`]"
+            ><AnimClip :name="`inicio-${item.id}`" :width="640" :height="130" class="advice-strip"
+            /><strong>{{ item.title }}</strong
             ><span>{{ item.text }}</span></a
           >
         </div>
@@ -667,15 +634,13 @@ const stationMapHref = (item) =>
             Nació en las aulas cimarronas
           </h2>
           <p>
-            Cuenca Cimarrona es un proyecto de la comunidad cimarrona de la
-            UABC. Trabajamos en equipo para que las familias de Tijuana sepan
-            qué hacer antes, durante y después de las lluvias de El Niño, con
-            información clara y gratuita
+            Cuenca Cimarrona es un proyecto de la UABC. Queremos que las
+            familias de Tijuana sepan qué hacer antes, durante y después de las
+            lluvias. Todo es gratis
           </p>
           <h3>Cada quien aprende distinto</h3>
           <p>
-            Por eso usamos el Diseño Universal para el Aprendizaje (DUA): la
-            misma información viene en varias formas, para llegar a más personas
+            Por eso aquí puedes aprender de varias formas
           </p>
           <ul class="team-ways">
             <li>
@@ -735,8 +700,8 @@ const stationMapHref = (item) =>
       </div>
       <p v-if="locateError" class="station-empty" role="status">{{ locateError }}</p>
       <p v-else-if="here" class="station-map-hint" role="status">
-        Ordenado de la más cercana a la más lejana, en línea recta. Tu ubicación
-        no se guarda ni se envía
+        Primero sale la más cercana. Tu ubicación no se guarda ni se manda a
+        nadie
       </p>
       <StationsMap
         v-if="showStations"
@@ -758,7 +723,7 @@ const stationMapHref = (item) =>
         autocomplete="off"
       />
       <p v-if="!stations.length" class="station-empty" role="status">
-        No encontramos esa colonia. Prueba con otra, cambia el filtro o llama al
+        No encontramos esa colonia. Prueba con otra o llama al
         <a href="tel:911">911</a>
       </p>
       <ul class="station-list">

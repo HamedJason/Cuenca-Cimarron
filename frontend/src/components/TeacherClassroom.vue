@@ -7,6 +7,7 @@ import CopyLink from "./CopyLink.vue";
 import { api } from "../composables/api";
 
 const ClassroomTasks = defineAsyncComponent(() => import("./ClassroomTasks.vue"));
+const GroupRanking = defineAsyncComponent(() => import("./GroupRanking.vue"));
 const tab = ref("alumnos");
 const props = defineProps({ classroomId: { type: Number, required: true } });
 const emit = defineEmits(["updated"]);
@@ -55,7 +56,7 @@ async function rename(student) {
   }
 }
 async function remove(student) {
-  if (!confirm(`¿Borrar a ${student.name}? Se borran su nombre, sus puntos y su avance`)) return;
+  if (!confirm(`¿Borrar a ${student.name}? Se borran su nombre, sus Cimacoins y su avance`)) return;
   await api(`/docente/alumnos/${student.id}`, { method: "DELETE" });
   students.value = students.value.filter((s) => s.id !== student.id);
 }
@@ -78,7 +79,7 @@ const joinedText = computed(() => `${students.value.length} ${students.value.len
       <div class="panel-head">
         <div>
           <h2 class="form-title">{{ classroom.name }}</h2>
-          <p class="muted-text">{{ classroom.grade }} · {{ joinedText }} · Ciclo {{ classroom.school_year }}</p>
+          <p class="muted-text">{{ classroom.grade }} · {{ joinedText }}</p>
         </div>
         <span v-if="classroom.archived" class="status-badge is-rejected">Archivado</span>
         <span v-else :class="['status-badge', classroom.open ? 'is-approved' : 'is-pending']">{{ classroom.open ? "Abierto a alumnos nuevos" : "Cerrado a alumnos nuevos" }}</span>
@@ -98,6 +99,8 @@ const joinedText = computed(() => `${students.value.length} ${students.value.len
         <button class="button secondary" type="button" @click="archive">Archivar</button>
       </div>
     </section>
+
+    <GroupRanking :classroom-id="classroom.id" class="no-print" />
 
     <div class="panel-tabs no-print" role="tablist" aria-label="Secciones del grupo">
       <button v-for="item in [['alumnos', 'Alumnos'], ['tareas', 'Tareas y avance']]" :key="item[0]" role="tab" type="button" :aria-selected="tab === item[0]" :class="['panel-tab', { active: tab === item[0] }]" @click="tab = item[0]">{{ item[1] }}</button>

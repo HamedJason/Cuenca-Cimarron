@@ -1,4 +1,5 @@
 <script setup>
+import SecretCoin from "../components/SecretCoin.vue";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Icon from "../components/Icon.vue";
@@ -324,6 +325,7 @@ function printCard() {
     <section aria-labelledby="titulo-maestros" class="section-space migrant-teachers" lang="es">
       <div class="gm-section-head">
         <h2 id="titulo-maestros" class="section-title">Para maestras y maestros</h2>
+        <SecretCoin id="moneda-familias" class="page-coin" />
         <p class="section-lead">
           Cómo usar esta página con alumnos que llegan de Haití y de otros países
         </p>

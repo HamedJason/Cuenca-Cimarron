@@ -45,13 +45,25 @@ class SchoolController extends Controller
     {
         AuthController::normalizeEmail($request);
         $request->merge(['cct' => $request->filled('cct') ? strtoupper(trim((string) $request->input('cct'))) : null]);
-        $data = $request->validate(self::schoolRules() + [
+        // La CCT se pide siempre. Solo puede quedar vacía si la escuela marca que no la sabe.
+        $rules = self::schoolRules();
+        $rules['cct'][] = Rule::requiredIf(! $request->boolean('sin_cct'));
+        $data = $request->validate($rules + [
+            'sin_cct' => ['nullable', 'boolean'],
             'email' => ['required', 'email', 'max:160', 'unique:users,email'],
             'password' => ['required', 'string', 'max:200', AuthController::passwordRule()],
             'privacy' => ['accepted'],
             'families_informed' => ['accepted'],
         ]);
         $data = self::normalize($data);
+        // Si la CCT está en el catálogo de la SEP y no marcaron el mapa, se usa la ubicación del catálogo.
+        if (! empty($data['cct']) && (empty($data['lat']) || empty($data['lng']))) {
+            $found = DB::table('school_catalog')->where('cct', $data['cct'])->first(['lat', 'lng']);
+            if ($found && $found->lat !== null && $found->lng !== null) {
+                $data['lat'] = (float) $found->lat;
+                $data['lng'] = (float) $found->lng;
+            }
+        }
         $user = DB::transaction(function () use ($data): User {
             $user = User::create([
                 'name' => $data['contact_name'],
@@ -62,6 +74,8 @@ class SchoolController extends Controller
             $school = new School(collect($data)->only(array_keys(self::schoolRules()))->all());
             $school->user_id = $user->id;
             $school->families_informed_at = now();
+            // Sin revisión: la escuela tiene acceso en cuanto se registra.
+            $school->status = 'approved';
             $school->save();
             Audit::log('school', $user->id, 'registro', 'school', $school->id);
 
@@ -81,11 +95,6 @@ class SchoolController extends Controller
         $request->merge(['cct' => $request->filled('cct') ? strtoupper(trim((string) $request->input('cct'))) : null]);
         $data = self::normalize($request->validate(self::schoolRules($school->id)));
         $school->fill($data);
-        // Si la rechazaron y corrige sus datos, vuelve a la fila de revisión.
-        if ($school->status === 'rejected') {
-            $school->status = 'pending';
-            $school->rejection_reason = null;
-        }
         $school->save();
         Audit::log('school', $request->user()->id, 'editar-datos', 'school', $school->id);
 

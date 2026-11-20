@@ -104,6 +104,15 @@ class ActivityController extends Controller
         ];
     }
 
+    public static function isCompleted(int $studentId, string $key): bool
+    {
+        return DB::table('completions')
+            ->join('activities', 'activities.id', '=', 'completions.activity_id')
+            ->where('completions.student_id', $studentId)
+            ->where('activities.key', $key)
+            ->exists();
+    }
+
     public static function total(int $studentId): int
     {
         return (int) DB::table('completions')->where('student_id', $studentId)->sum('points');

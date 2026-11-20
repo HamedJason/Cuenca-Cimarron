@@ -1,7 +1,8 @@
 <script setup>
 // Mapa para marcar dónde está la escuela. Un toque en el mapa mueve el punto.
-import { ref, onMounted, onBeforeUnmount } from "vue";
-const props = defineProps({ lat: Number, lng: Number, readonly: Boolean });
+import { ref, watch, onMounted, onBeforeUnmount } from "vue";
+// near: punto aproximado (la colonia) para acercar el mapa cuando todavía no hay ubicación
+const props = defineProps({ lat: Number, lng: Number, readonly: Boolean, near: { type: Array, default: null } });
 const emit = defineEmits(["update"]);
 const el = ref(null);
 const failed = ref(false);
@@ -47,6 +48,21 @@ onMounted(async () => {
     });
   }
 });
+// Si la ubicación cambia desde fuera (por ejemplo al elegir una escuela del catálogo), el punto se mueve solo
+watch(
+  () => [props.lat, props.lng],
+  ([lat, lng]) => {
+    if (!map || !lat || !lng) return;
+    place(lat, lng);
+    map.setView([lat, lng], 16);
+  },
+);
+watch(
+  () => props.near,
+  (point) => {
+    if (map && point && !props.lat) map.setView(point, 15);
+  },
+);
 onBeforeUnmount(() => map?.remove());
 </script>
 <template>

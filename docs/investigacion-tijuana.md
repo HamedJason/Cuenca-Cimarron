@@ -42,3 +42,11 @@ Fuentes de prensa:
 - Para el texto: oraciones de menos de 20 palabras, acciones en voz activa, vocabulario consistente.
 
 Cómo se aplica aquí: lo primero en pantalla son los números para tocar y llamar (enlaces `tel:`), luego los avisos oficiales con fecha y después lo educativo. Sin frases de campaña. Cada botón hace algo concreto (llamar, abrir aviso, ver refugios).
+
+## Directorio y apartado del 911 (noviembre de 2026)
+
+- Pasos de la llamada, "No cuelgues" y "Si la familia se separa": recomendaciones de personal del 911
+- 075, línea de intervención en crisis del DIF Tijuana, las 24 horas. En algunos celulares no entra y se pide por el 911. Zeta, enero de 2025: https://zetatijuana.com/2025/01/casi-5-mil-llamadas-a-la-linea-de-crisis-075-en-tijuana-en-2024/ y El Imparcial, noviembre de 2025: https://www.elimparcial.com/tij/tijuana/2025/11/24/linea-075-del-dif-tijuana-atiende-2-mil-llamadas-al-ano-por-crisis-emocional/
+- Escuadrón Violeta de Tijuana (SSPCM): 664 680 3187, según Diario Tijuana del 16 de abril de 2025, que cita a la SSPCM: https://diariotijuana.info/2025/04/reafirma-sspcm-compromiso-del-escuadron-violeta-para-brindar-atencion-especializada-a-mujeres-y-menores-tijuanenses. No aparece en un sitio oficial del Ayuntamiento. **Pendiente de confirmar con la SSPCM.** Se cambia en `VIOLET_SQUAD_PHONE` (`frontend/src/data.js`)
+- Línea Violeta estatal (SSCBC): 686 837 3700 ext. 11017, de 7:00 a 23:00: http://www.seguridadbc.gob.mx/PrevencionDelito/EV.php. Es un número de Mexicali, por eso no se usa en el botón
+- Restablecimiento del Contacto entre Familiares (Cruz Roja y CICR): https://www.icrc.org/es/nuestras-actividades/restablecimiento-del-contacto-entre-familiares

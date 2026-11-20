@@ -5,6 +5,7 @@ import Icon from "../components/Icon.vue";
 import FormField from "../components/FormField.vue";
 import TeacherClassroom from "../components/TeacherClassroom.vue";
 import { api } from "../composables/api";
+import { loadStudent } from "../composables/useStudent";
 
 const route = useRoute();
 const router = useRouter();
@@ -24,6 +25,8 @@ async function load() {
   try {
     const [me, list] = await Promise.all([api("/docente"), api("/docente/grupos")]);
     teacher.value = me.teacher;
+    // El sitio también sabe que en este equipo hay un docente (para su cimarrón).
+    loadStudent(true);
     classrooms.value = list.classrooms;
     state.value = "ready";
   } catch (e) {
@@ -93,7 +96,6 @@ async function logout() {
         <ul v-if="showArchived" class="plain-list">
           <li v-for="item in archived" :key="item.id">
             <RouterLink :to="{ query: { grupo: item.id } }" class="text-link">{{ item.name }}</RouterLink>
-            <span class="small muted-text">{{ item.school_year }}</span>
           </li>
         </ul>
       </section>
@@ -113,7 +115,10 @@ async function logout() {
           <button class="button primary" type="submit" :disabled="creating || !form.name || !form.grade">Crear grupo</button>
         </div>
       </form>
-      <button class="button secondary" type="button" @click="logout">Salir de este equipo</button>
+      <div class="form-actions">
+        <RouterLink to="/mi-cimarron" class="button secondary"><Icon name="palette" :size="20" />Mi cimarrón</RouterLink>
+        <button class="button secondary" type="button" @click="logout">Salir de este equipo</button>
+      </div>
     </template>
   </div>
 </template>

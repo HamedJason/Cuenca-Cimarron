@@ -1,6 +1,7 @@
 <script setup>
 // Juegos de otros sitios: cuando el alumno regresa a esta pestaña se le pregunta si ya terminó.
-// El servidor revisa cuánto tiempo pasó y, si va bien, hace una pregunta corta sobre el juego.
+// El servidor revisa cuánto tiempo pasó y, si va bien, hace una pregunta corta sobre el juego
+// y da los puntos (y con ellos las Cimacoins de terminar). Sin sesión no se pregunta nada.
 import { ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
 import Modal from "./Modal.vue";
 import ActivityQuestion from "./ActivityQuestion.vue";
@@ -21,12 +22,15 @@ function read() {
     return null;
   }
 }
-function clear() {
+function forgetSaved() {
   try {
     localStorage.removeItem(PENDING_EXTERNAL);
   } catch {
     // Nada que borrar.
   }
+}
+function clear() {
+  forgetSaved();
   pending.value = null;
 }
 function check() {
@@ -52,8 +56,9 @@ onMounted(() => {
 onBeforeUnmount(() => document.removeEventListener("visibilitychange", check));
 watch([student, () => Object.keys(activityByKey.value).length], check);
 
+// Ya contestó bien: se borra lo guardado, pero la ventana sigue con el "¡Correcto!" hasta que la cierre.
 function done() {
-  clear();
+  forgetSaved();
 }
 function later() {
   open.value = false;

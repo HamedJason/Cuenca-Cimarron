@@ -22,7 +22,7 @@ class Student extends Model
 
     protected function casts(): array
     {
-        return ['avatar' => 'array', 'anonymized_at' => 'datetime'];
+        return ['avatar' => 'array', 'wallet' => 'array', 'anonymized_at' => 'datetime'];
     }
 
     public function classroom(): BelongsTo

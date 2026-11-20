@@ -19,7 +19,12 @@ class TeacherController extends Controller
 {
     public static function summary(Teacher $teacher): array
     {
-        return ['id' => $teacher->id, 'name' => $teacher->name, 'school' => $teacher->school->name];
+        return [
+            'id' => $teacher->id,
+            'name' => $teacher->name,
+            'school' => $teacher->school->name,
+            'avatar' => \App\Support\Cimacoins::teacherAvatar($teacher->avatar),
+        ];
     }
 
     private function teacher(Request $request): Teacher
@@ -50,7 +55,6 @@ class TeacherController extends Controller
             'code' => $classroom->code,
             'link' => $classroom->code ? Settings::publicUrl().'/unirse/'.$classroom->code : null,
             'open' => $classroom->open,
-            'school_year' => $classroom->school_year,
             'archived' => $classroom->archived_at !== null,
             'students' => $classroom->students_count ?? $classroom->students()->count(),
         ];
@@ -59,6 +63,26 @@ class TeacherController extends Controller
     public function me(Request $request): JsonResponse
     {
         return response()->json(['teacher' => self::summary($this->teacher($request))]);
+    }
+
+    // El docente arma su cimarrón con todas las piezas desbloqueadas, sin monedas.
+    public function saveAvatar(Request $request): JsonResponse
+    {
+        $groups = array_keys(config('avatar.defaults'));
+        $data = $request->validate([
+            'avatar' => ['required', 'array:'.implode(',', $groups)],
+            'avatar.*' => ['string', 'max:40'],
+        ]);
+        $teacher = $this->teacher($request);
+        foreach ($data['avatar'] as $group => $id) {
+            if (\App\Support\Cimacoins::price("{$group}/{$id}") === false) {
+                throw ValidationException::withMessages(['avatar' => 'Esa pieza no existe.']);
+            }
+        }
+        $teacher->avatar = \App\Support\Cimacoins::teacherAvatar($data['avatar']);
+        $teacher->save();
+
+        return response()->json(['avatar' => $teacher->avatar]);
     }
 
     public function logout(Request $request): JsonResponse
@@ -93,7 +117,6 @@ class TeacherController extends Controller
         }
         $classroom = new Classroom(['name' => trim($data['name']), 'grade' => trim($data['grade'])]);
         $classroom->teacher_id = $teacher->id;
-        $classroom->school_year = Classroom::currentSchoolYear();
         // Dos grupos creados al mismo tiempo podrían sacar el mismo código: se reintenta.
         for ($try = 0; ; $try++) {
             try {

@@ -54,6 +54,7 @@ export async function answerActivity(key, answer) {
   }
 }
 
+
 export async function finishActivity(key) {
   try {
     const data = await api(`/actividades/${key}/terminar`, { method: "POST" });
