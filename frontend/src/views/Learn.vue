@@ -27,25 +27,25 @@ const facts = [
     icon: "clock",
     kind: "fact-time",
     title: "Diciembre y enero",
-    text: "Las lluvias más fuertes llegarían desde la segunda semana de diciembre",
+    text: "Las lluvias más fuertes llegarían a mediados de diciembre",
   },
   {
     icon: "cloud",
     kind: "fact-rain",
     title: "Hasta marzo de 2027",
-    text: "Las lluvias podrían seguir en febrero y marzo",
+    text: "Puede seguir lloviendo en febrero y marzo",
   },
   {
     icon: "risk",
     kind: "fact-slide",
     title: "Inundaciones y deslaves",
-    text: "Los riesgos que señalan las autoridades, sobre todo en laderas",
+    text: "El agua puede llenar calles y tirar la tierra de los cerros",
   },
   {
     icon: "info",
     kind: "fact-change",
     title: "El pronóstico puede cambiar",
-    text: "Revisa los avisos oficiales antes de salir",
+    text: "Mira los avisos oficiales antes de salir",
   },
 ];
 </script>
@@ -55,8 +55,8 @@ const facts = [
       <div class="learn-hero-text">
         <h1>Qué es El Niño</h1>
         <p>
-          Un calentamiento del océano Pacífico que cambia el viento, la lluvia y
-          la temperatura
+          El agua del océano Pacífico se calienta y eso cambia la lluvia y el
+          clima
         </p>
       </div>
       <div class="wx-cycle">
@@ -192,8 +192,7 @@ const facts = [
           target="_blank"
           rel="noopener"
           >Punto Norte, 5 de noviembre de 2026</a
-        >, con declaraciones del alcalde y del director de Protección Civil
-        Municipal ·
+        > ·
         <RouterLink to="/">Ver avisos oficiales</RouterLink>
       </p>
     </section>
@@ -220,8 +219,7 @@ const facts = [
           </svg>
           <h3>No toda lluvia es El Niño</h3>
           <p>
-            Este sitio no muestra alertas en tiempo real; revisa los avisos
-            oficiales
+            Aquí no salen alertas en vivo. Mira los avisos oficiales
           </p>
         </article>
         <article class="family-card fc-green">
@@ -264,7 +262,7 @@ const facts = [
           </svg>
           <h3>No cruces corrientes</h3>
           <p>
-            Si hay agua corriendo en la calle o el arroyo, espera y busca otro
+            Si el agua corre por la calle o el arroyo, espera o busca otro
             camino
           </p>
         </article>
@@ -274,7 +272,7 @@ const facts = [
     <section class="sources-section">
       <h2>Fuentes para seguir aprendiendo</h2>
       <a :href="sources.climate" target="_blank" rel="noopener"
-        ><span><strong>NOAA</strong> · Entender El Niño y ENOS</span
+        ><span><strong>NOAA</strong> · Qué es El Niño</span
         ><Icon name="external" :size="18" /></a
       ><a :href="sources.plan" target="_blank" rel="noopener"
         ><span><strong>CENAPRED</strong> · Plan familiar en cuatro pasos</span
@@ -283,7 +281,7 @@ const facts = [
         ><span><strong>CENAPRED</strong> · Mochila de emergencia</span
         ><Icon name="external" :size="18" /></a
       ><a :href="sources.forecast" target="_blank" rel="noopener"
-        ><span><strong>SMN / CONAGUA</strong> · Avisos meteorológicos</span
+        ><span><strong>SMN / CONAGUA</strong> · Avisos del clima</span
         ><Icon name="external" :size="18"
       /></a>
     </section>

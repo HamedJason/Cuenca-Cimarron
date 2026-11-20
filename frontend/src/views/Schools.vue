@@ -36,7 +36,7 @@ async function submit() {
   <div class="page account-page">
     <header class="page-heading">
       <h1>Escuelas</h1>
-      <p>Grupos, tareas y puntos para tus alumnos</p>
+      <p>Grupos, tareas y Cimacoins para tus alumnos</p>
     </header>
 
     <p v-if="accountState === 'loading' && !account" class="form-card muted-text" role="status">Cargando…</p>
@@ -47,7 +47,7 @@ async function submit() {
 
     <template v-else-if="account?.role === 'school'">
       <SchoolPanel :is-new="isNew">
-        <SchoolTeachers v-if="account.school.status === 'approved'" />
+        <SchoolTeachers v-if="account.school.status !== 'suspended'" />
       </SchoolPanel>
     </template>
 
@@ -80,7 +80,7 @@ async function submit() {
         <ul class="plain-list">
           <li><Icon name="check" :size="20" />Tus docentes arman grupos con un código</li>
           <li><Icon name="check" :size="20" />Los alumnos entran solo con su nombre</li>
-          <li><Icon name="check" :size="20" />Cada actividad suma puntos</li>
+          <li><Icon name="check" :size="20" />Cada actividad da Cimacoins</li>
         </ul>
         <RouterLink to="/escuelas/registro" class="button primary">Registrar mi escuela</RouterLink>
         <p class="small muted-text">¿Eres docente? Pide a tu escuela tu enlace de acceso</p>

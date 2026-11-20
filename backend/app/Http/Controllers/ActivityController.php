@@ -159,23 +159,6 @@ class ActivityController extends Controller
         return response()->json(self::complete($activity, $studentId));
     }
 
-    // Visitantes sin cuenta: revisa la respuesta de un juego de otro sitio sin guardar nada.
-    // Con eso la página les da Cimacoins por terminarlo; la respuesta correcta nunca sale al navegador.
-    public function check(Request $request, string $key): JsonResponse
-    {
-        $activity = self::activity($key);
-        if (! $activity || $activity->mode !== 'externo') {
-            return response()->json(['message' => 'Esa actividad no existe.'], 404);
-        }
-        $data = $request->validate(['answer' => ['required', 'integer', 'between:0,9']]);
-        $correct = DB::table('activity_questions')->where('activity_id', $activity->id)->value('answer');
-        if ($correct === null || (int) $correct !== (int) $data['answer']) {
-            return response()->json(['correct' => false, 'message' => 'Esa no es. Piensa en lo que viste en el juego y contesta otra vez.'], 422);
-        }
-
-        return response()->json(['correct' => true]);
-    }
-
     // Lo que el alumno ya completó, para las etiquetas del sitio.
     public static function progress(int $studentId): array
     {

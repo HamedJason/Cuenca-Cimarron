@@ -14,4 +14,4 @@ ENV APP_COMMIT=$GIT_SHA
 USER www-data
 EXPOSE 8000
 # FrankenPHP atiende varias peticiones a la vez. Escucha en el mismo puerto 8000 que antes.
-CMD ["sh", "-c", "php artisan migrate --force && php artisan actividades:sincronizar && exec frankenphp php-server --listen 0.0.0.0:8000 --root /app/public"]
+CMD ["sh", "-c", "php artisan migrate --force && php artisan actividades:sincronizar && php artisan escuelas:catalogo --si-vacio && exec frankenphp php-server --listen 0.0.0.0:8000 --root /app/public"]

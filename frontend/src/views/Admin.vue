@@ -1,31 +1,36 @@
 <script setup>
-import { ref, reactive, watch, computed, defineAsyncComponent } from "vue";
+import { ref, watch, computed, defineAsyncComponent } from "vue";
 import Icon from "../components/Icon.vue";
-import FormField from "../components/FormField.vue";
+import AdminSchoolItem from "../components/AdminSchoolItem.vue";
 import { api } from "../composables/api";
-import { account, accountState, loadAccount, logout, labelOf, levels, shifts, sectors, cctPattern } from "../composables/useAccount";
+import { account, accountState, loadAccount, logout } from "../composables/useAccount";
 
 const AdminStats = defineAsyncComponent(() => import("../components/AdminStats.vue"));
 const AdminCatalog = defineAsyncComponent(() => import("../components/AdminCatalog.vue"));
 const AdminStaff = defineAsyncComponent(() => import("../components/AdminStaff.vue"));
 const AdminSystem = defineAsyncComponent(() => import("../components/AdminSystem.vue"));
 const AdminAudit = defineAsyncComponent(() => import("../components/AdminAudit.vue"));
-const AdminSchoolDetail = defineAsyncComponent(() => import("../components/AdminSchoolDetail.vue"));
-const openDetail = ref(null);
+const AdminSchoolsAll = defineAsyncComponent(() => import("../components/AdminSchoolsAll.vue"));
+const SchoolMapModal = defineAsyncComponent(() => import("../components/SchoolMapModal.vue"));
 loadAccount();
 // admin: todo. viewer: cuenta de solo lectura, ve el panel de datos y la lista de escuelas.
 const isAdmin = computed(() => account.value?.role === "admin");
 const isStaff = computed(() => ["admin", "viewer"].includes(account.value?.role));
+// La cuenta del modo demostración no ve cuentas, bitácora ni respaldos (el servidor tampoco se los da).
+const isDemo = computed(() => String(account.value?.email ?? "").endsWith("@demo-20nov.invalid"));
 const tabs = computed(() =>
   isAdmin.value
     ? [
         { id: "escuelas", label: "Escuelas" },
         { id: "estadisticas", label: "Panel de datos" },
         { id: "sistema", label: "Sistema" },
-        { id: "cuentas", label: "Cuentas" },
-        { id: "bitacora", label: "Bitácora" },
-        { id: "ajustes", label: "Ajustes" },
-        { id: "respaldos", label: "Respaldos" },
+        ...(isDemo.value
+          ? []
+          : [
+              { id: "cuentas", label: "Cuentas" },
+              { id: "bitacora", label: "Bitácora" },
+              { id: "respaldos", label: "Respaldos" },
+            ]),
       ]
     : [
         { id: "estadisticas", label: "Panel de datos" },
@@ -37,19 +42,27 @@ watch(isStaff, () => {
   if (isStaff.value && !isAdmin.value) tab.value = "estadisticas";
 }, { immediate: true });
 
-// Escuelas
-const filter = ref("pending");
+// Escuelas: se ven las 5 más recientes y "Ver todas" abre la lista completa con buscador.
+const filters = [
+  { id: "approved", label: "Registradas" },
+  { id: "suspended", label: "Suspendidas" },
+];
+const filter = ref("approved");
 const schools = ref([]);
 const counts = ref({});
+const total = ref(0);
 const loadingSchools = ref(false);
 const listError = ref("");
+const showAll = ref(false);
+const mapSchool = ref(null);
 async function loadSchools() {
   loadingSchools.value = true;
   listError.value = "";
   try {
-    const data = await api(`/admin/escuelas?estado=${filter.value}`);
+    const data = await api(`/admin/escuelas?estado=${filter.value}&por=5`);
     schools.value = data.schools;
     counts.value = data.counts;
+    total.value = data.total;
   } catch (error) {
     listError.value = error.message;
   } finally {
@@ -57,71 +70,25 @@ async function loadSchools() {
   }
 }
 watch([filter, isStaff], () => isStaff.value && loadSchools(), { immediate: true });
-
-const reviewing = reactive({ id: null, cct: "", reason: "", error: "", busy: false });
-function openReview(school) {
-  Object.assign(reviewing, { id: school.id, cct: school.cct ?? "", reason: "", error: "", busy: false });
-}
-async function review(school, action) {
-  reviewing.busy = true;
-  reviewing.error = "";
-  try {
-    if (action === "aprobar") {
-      if (reviewing.cct && !cctPattern.test(reviewing.cct)) throw new Error("La CCT debe verse como 02DPR0123X");
-      await api(`/admin/escuelas/${school.id}/aprobar`, { method: "POST", body: { cct: reviewing.cct || null } });
-    } else {
-      await api(`/admin/escuelas/${school.id}/rechazar`, { method: "POST", body: { reason: reviewing.reason } });
-    }
-    reviewing.id = null;
-    loadSchools();
-  } catch (error) {
-    reviewing.error = error.errors?.cct || error.errors?.reason || error.message;
-  } finally {
-    reviewing.busy = false;
-  }
-}
-
-// Ajustes
-const settings = ref(null);
-const form = reactive({});
-const settingsErrors = ref({});
-const settingsMessage = ref("");
-async function loadSettings() {
-  const data = await api("/admin/ajustes");
-  settings.value = data.settings;
-  Object.assign(form, {
-    domain: data.settings.domain ?? "",
-    public_url: data.settings.public_url ?? "",
-  });
-}
-async function saveSettings() {
-  settingsErrors.value = {};
-  settingsMessage.value = "";
-  try {
-    const body = { ...form };
-    const data = await api("/admin/ajustes", { method: "PUT", body });
-    settings.value = data.settings;
-    settingsMessage.value = "Guardado";
-  } catch (error) {
-    settingsErrors.value = error.errors;
-    settingsMessage.value = Object.keys(error.errors).length ? "Revisa los campos marcados" : error.message;
-  }
-}
+const filterLabel = computed(() => filters.find((f) => f.id === filter.value)?.label ?? "");
 
 // Respaldos
 const backups = ref([]);
 const folderReady = ref(true);
 const backupKey = ref("");
+const backupKeySet = ref(false);
 async function loadBackups() {
   const data = await api("/admin/respaldos");
   backups.value = data.backups;
   folderReady.value = data.folder_ready;
+  const settings = await api("/admin/ajustes");
+  backupKeySet.value = settings.settings.backup_key_set;
 }
 async function newBackupKey() {
-  if (settings.value?.backup_key_set && !confirm("Ya hay una clave. Si generas otra, la anterior deja de funcionar. ¿Seguir?")) return;
+  if (backupKeySet.value && !confirm("Ya hay una clave. Si generas otra, la anterior deja de funcionar. ¿Seguir?")) return;
   const data = await api("/admin/respaldo/clave", { method: "POST" });
   backupKey.value = data.key;
-  if (settings.value) settings.value.backup_key_set = true;
+  backupKeySet.value = true;
 }
 const size = (bytes) => (bytes > 1048576 ? `${(bytes / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`);
 const date = (iso) => new Date(iso).toLocaleString("es-MX", { dateStyle: "medium", timeStyle: "short" });
@@ -129,9 +96,7 @@ const date = (iso) => new Date(iso).toLocaleString("es-MX", { dateStyle: "medium
 watch(
   [tab, isAdmin],
   () => {
-    if (!isAdmin.value) return;
-    if (tab.value === "ajustes" || tab.value === "respaldos") loadSettings().catch(() => {});
-    if (tab.value === "respaldos") loadBackups().catch(() => {});
+    if (isAdmin.value && tab.value === "respaldos") loadBackups().catch(() => {});
   },
   { immediate: true },
 );
@@ -167,73 +132,34 @@ watch(
 
       <section v-if="tab === 'escuelas'" class="form-card" role="tabpanel">
         <div class="chip-filter" role="group" aria-label="Mostrar">
-          <button v-for="item in [['pending', 'En revisión'], ['approved', 'Aprobadas'], ['rejected', 'Rechazadas'], ['suspended', 'Suspendidas']]" :key="item[0]" type="button" :class="['filter-chip', { active: filter === item[0] }]" :aria-pressed="filter === item[0]" @click="filter = item[0]">
-            {{ item[1] }} <b>{{ counts[item[0]] ?? 0 }}</b>
+          <button v-for="item in filters" :key="item.id" type="button" :class="['filter-chip', { active: filter === item.id }]" :aria-pressed="filter === item.id" @click="filter = item.id">
+            {{ item.label }} <b>{{ counts[item.id] ?? 0 }}</b>
           </button>
         </div>
         <p v-if="listError" class="form-alert is-error" role="alert">{{ listError }}</p>
-        <p v-else-if="loadingSchools" role="status">Cargando…</p>
+        <p v-else-if="loadingSchools && !schools.length" role="status">Cargando…</p>
         <p v-else-if="!schools.length" class="muted-text">No hay escuelas en esta lista</p>
         <ul class="review-list">
-          <li v-for="school in schools" :key="school.id" class="review-item">
-            <div class="review-main">
-              <h3>{{ school.name }}</h3>
-              <p>{{ labelOf(levels, school.level) }} · {{ labelOf(shifts, school.shift) }} · {{ labelOf(sectors, school.sector) }}</p>
-              <p>{{ school.address }}, {{ school.colonia }}</p>
-              <p>CCT: <b>{{ school.cct || "sin CCT" }}</b> · {{ school.contact_name }} · {{ school.email }}
-              </p>
-              <p v-if="school.lat"><a class="text-link" :href="`https://www.openstreetmap.org/?mlat=${school.lat}&mlon=${school.lng}#map=17/${school.lat}/${school.lng}`" target="_blank" rel="noopener">Ver en el mapa</a></p>
-              <p v-if="school.rejection_reason" class="small">Motivo: {{ school.rejection_reason }}</p>
-            </div>
-            <div v-if="reviewing.id === school.id" class="review-form">
-              <FormField v-slot="{ id }" label="CCT" optional>
-                <input :id="id" v-model.trim="reviewing.cct" maxlength="10" @input="reviewing.cct = reviewing.cct.toUpperCase()" />
-              </FormField>
-              <button class="button primary" type="button" :disabled="reviewing.busy" @click="review(school, 'aprobar')">Aprobar</button>
-              <FormField v-slot="{ id }" label="Motivo para rechazar">
-                <input :id="id" v-model.trim="reviewing.reason" maxlength="300" />
-              </FormField>
-              <button class="button secondary" type="button" :disabled="reviewing.busy || reviewing.reason.length < 5" @click="review(school, 'rechazar')">Rechazar</button>
-              <p v-if="reviewing.error" class="field-error" role="alert">{{ reviewing.error }}</p>
-            </div>
-            <button v-else-if="isAdmin && ['pending', 'rejected'].includes(school.status)" class="button secondary" type="button" @click="openReview(school)">Revisar</button>
-            <button v-else-if="isAdmin" class="button secondary" type="button" :aria-expanded="openDetail === school.id" @click="openDetail = openDetail === school.id ? null : school.id">{{ openDetail === school.id ? "Cerrar" : "Ver detalle" }}</button>
-            <AdminSchoolDetail v-if="isAdmin && openDetail === school.id" :school-id="school.id" class="review-detail" @changed="loadSchools" />
-          </li>
+          <AdminSchoolItem v-for="school in schools" :key="school.id" :school="school" :is-admin="isAdmin" @map="mapSchool = $event" @changed="loadSchools" />
         </ul>
+        <button v-if="total > schools.length" class="button secondary" type="button" @click="showAll = true">
+          <Icon name="search" :size="20" /> Ver todas ({{ total }})
+        </button>
       </section>
+      <AdminSchoolsAll :open="showAll" :status="filter" :title="`Escuelas ${filterLabel.toLowerCase()}`" :is-admin="isAdmin" @close="showAll = false" @map="mapSchool = $event" @changed="loadSchools" />
+      <SchoolMapModal :school="mapSchool" @close="mapSchool = null" />
 
       <AdminCatalog v-if="tab === 'escuelas'" :can-edit="isAdmin" />
 
       <AdminStats v-else-if="tab === 'estadisticas'" />
 
-      <AdminStaff v-else-if="tab === 'cuentas' && isAdmin" />
+      <AdminStaff v-else-if="tab === 'cuentas' && isAdmin && !isDemo" />
 
-      <AdminSystem v-else-if="tab === 'sistema' && isAdmin" />
+      <AdminSystem v-else-if="tab === 'sistema' && isAdmin" :is-demo="isDemo" />
 
-      <AdminAudit v-else-if="tab === 'bitacora' && isAdmin" />
+      <AdminAudit v-else-if="tab === 'bitacora' && isAdmin && !isDemo" />
 
-      <form v-else-if="tab === 'ajustes' && isAdmin" class="form-card" role="tabpanel" novalidate @submit.prevent="saveSettings">
-        <p v-if="!settings" role="status">Cargando…</p>
-        <template v-else>
-          <fieldset class="form-group">
-            <legend>Dirección del sitio</legend>
-            <FormField v-slot="{ id, describedby }" label="Dominio para el HTTPS de Caddy" optional hint="Solo si el servidor usa el HTTPS propio del sitio (HTTPS_CADDY=1). En el servidor de la facultad no hace falta" :error="settingsErrors.domain">
-              <input :id="id" v-model.trim="form.domain" maxlength="200" spellcheck="false" :aria-describedby="describedby" :placeholder="settings.domain_env || ''" />
-            </FormField>
-            <FormField v-slot="{ id, describedby }" label="Dirección pública" optional hint="Con ella se arman los enlaces de los correos y de los grupos. Se guardó sola al configurar el sitio" :error="settingsErrors.public_url">
-              <input :id="id" v-model.trim="form.public_url" type="url" maxlength="200" :aria-describedby="describedby" />
-            </FormField>
-            <p class="small muted-text">Los enlaces de los correos usan: <b>{{ settings.effective_url }}</b></p>
-          </fieldset>
-          <p v-if="settingsMessage" :class="['form-alert', settingsMessage === 'Guardado' ? 'is-ok' : 'is-error']" role="status">{{ settingsMessage }}</p>
-          <div class="form-actions">
-            <button class="button primary" type="submit">Guardar ajustes</button>
-          </div>
-        </template>
-      </form>
-
-      <section v-else-if="tab === 'respaldos' && isAdmin" class="form-card" role="tabpanel">
+      <section v-else-if="tab === 'respaldos' && isAdmin && !isDemo" class="form-card" role="tabpanel">
         <h2 class="form-title">Respaldo en este momento</h2>
         <p class="muted-text">Descarga toda la base de datos en un archivo comprimido</p>
         <a class="button primary" href="/api/admin/respaldo" download><Icon name="download" :size="20" />Descargar respaldo</a>
@@ -250,7 +176,7 @@ watch(
 
         <h2 class="form-title">Respaldo automático en GitHub</h2>
         <p class="muted-text">GitHub puede descargar un respaldo cada día y guardarlo cifrado 14 días. Genera la clave y pégala en el repositorio como secreto <b>RESPALDO_CLAVE</b></p>
-        <p v-if="settings?.backup_key_set && !backupKey" class="small">Ya hay una clave guardada</p>
+        <p v-if="backupKeySet && !backupKey" class="small">Ya hay una clave guardada</p>
         <button class="button secondary" type="button" @click="newBackupKey">Generar clave</button>
         <div v-if="backupKey" class="note is-gold">
           <Icon name="info" />

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\Notice;
 use App\Models\School;
 use App\Support\Audit;
+use App\Support\DemoMode;
 use App\Support\Mailer;
 use App\Support\Settings;
 use Illuminate\Http\JsonResponse;
@@ -17,13 +18,35 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AdminController extends Controller
 {
+    // Escuelas registradas o suspendidas, de 20 en 20 (o las que pida "por"), con buscador.
+    // La cuenta de demostración solo ve las escuelas demo.
     public function schools(Request $request): JsonResponse
     {
-        $data = $request->validate(['estado' => ['nullable', Rule::in(['pending', 'approved', 'rejected', 'suspended'])]]);
-        $schools = School::with('user:id,email,email_verified_at')
-            ->when($data['estado'] ?? null, fn ($q, $status) => $q->where('status', $status))
-            ->orderBy('created_at')
-            ->get()
+        $data = $request->validate([
+            'estado' => ['nullable', Rule::in(['approved', 'suspended'])],
+            'q' => ['nullable', 'string', 'max:80'],
+            'pagina' => ['nullable', 'integer', 'min:1'],
+            'por' => ['nullable', 'integer', 'min:1', 'max:50'],
+        ]);
+        $demo = DemoMode::isDemoUser($request->user());
+        $scope = fn ($q) => $demo
+            ? $q->whereHas('user', fn ($u) => $u->where('email', 'like', '%@'.config('demo.domain')))
+            : $q;
+        $query = $scope(School::with('user:id,email,email_verified_at'))
+            ->when($data['estado'] ?? null, fn ($q, $status) => $q->where('status', $status));
+        foreach (self::searchWords($data['q'] ?? '') as $word) {
+            $query->where(fn ($q) => $q
+                ->whereRaw('lower(schools.name) like ?', ["%{$word}%"])
+                ->orWhereRaw('lower(schools.colonia) like ?', ["%{$word}%"])
+                ->orWhereRaw('lower(coalesce(schools.cct, \'\')) like ?', ["%{$word}%"])
+                ->orWhereHas('user', fn ($u) => $u->whereRaw('lower(email) like ?', ["%{$word}%"]))
+                ->orWhereRaw('lower(schools.name) like ?', ['%'.self::accented($word).'%'])
+                ->orWhereRaw('lower(schools.colonia) like ?', ['%'.self::accented($word).'%']));
+        }
+        $per = (int) ($data['por'] ?? 20);
+        $page = (int) ($data['pagina'] ?? 1);
+        $total = (clone $query)->count();
+        $schools = $query->orderByDesc('created_at')->orderByDesc('id')->skip(($page - 1) * $per)->take($per)->get()
             ->map(fn (School $school) => $school->toPublic() + [
                 'email' => $school->user->email,
                 'email_verified' => $school->user->email_verified_at !== null,
@@ -32,50 +55,24 @@ class AdminController extends Controller
 
         return response()->json([
             'schools' => $schools,
-            'counts' => School::select('status', DB::raw('count(*) as total'))->groupBy('status')->pluck('total', 'status'),
+            'total' => $total,
+            'more' => $page * $per < $total,
+            'counts' => $scope(School::query())->select('status', DB::raw('count(*) as total'))->groupBy('status')->pluck('total', 'status'),
         ]);
     }
 
-    public function approve(Request $request, School $school): JsonResponse
+    // Palabras para buscar, en minúsculas y sin acentos.
+    private static function searchWords(string $q): array
     {
-        $request->merge(['cct' => $request->filled('cct') ? strtoupper(trim((string) $request->input('cct'))) : $school->cct]);
-        $data = $request->validate([
-            'cct' => ['nullable', 'string', 'regex:'.SchoolController::CCT_PATTERN, Rule::unique('schools', 'cct')->ignore($school->id)],
-        ]);
-        $school->cct = $data['cct'] ?? null;
-        $school->status = 'approved';
-        $school->rejection_reason = null;
-        $school->reviewed_by = $request->user()->id;
-        $school->reviewed_at = now();
-        $school->save();
-        Audit::log('admin', $request->user()->id, 'aprobar-escuela', 'school', $school->id);
-        Mailer::send($school->user->email, new Notice(
-            'Tu escuela ya está aprobada',
-            ["{$school->name} ya puede usar Cuenca Cimarrona.", 'Entra a tu cuenta para dar de alta a tus docentes.'],
-            'Entrar',
-            Settings::publicUrl().'/escuelas',
-        ));
+        $key = \Illuminate\Support\Str::of($q)->ascii()->lower()->squish()->toString();
 
-        return response()->json(['school' => $school->toPublic()]);
+        return array_slice(array_values(array_filter(explode(' ', str_replace(['%', '_'], '', $key)))), 0, 5);
     }
 
-    public function reject(Request $request, School $school): JsonResponse
+    // Las bases guardan los nombres con acentos: se prueba también con la vocal acentuada más común.
+    private static function accented(string $word): string
     {
-        $data = $request->validate(['reason' => ['required', 'string', 'min:5', 'max:300']]);
-        $school->status = 'rejected';
-        $school->rejection_reason = $data['reason'];
-        $school->reviewed_by = $request->user()->id;
-        $school->reviewed_at = now();
-        $school->save();
-        Audit::log('admin', $request->user()->id, 'rechazar-escuela', 'school', $school->id, ['motivo' => $data['reason']]);
-        Mailer::send($school->user->email, new Notice(
-            'Revisamos el registro de tu escuela',
-            ["No pudimos aprobar el registro de {$school->name} por este motivo: {$data['reason']}", 'Puedes entrar a tu cuenta, corregir los datos y se vuelve a revisar.'],
-            'Entrar',
-            Settings::publicUrl().'/escuelas',
-        ));
-
-        return response()->json(['school' => $school->toPublic()]);
+        return strtr($word, ['a' => '_', 'e' => '_', 'i' => '_', 'o' => '_', 'u' => '_', 'n' => '_']);
     }
 
     private const SETTING_KEYS = ['domain', 'public_url', 'mail_host', 'mail_port', 'mail_username', 'mail_encryption', 'mail_from_address', 'mail_from_name'];

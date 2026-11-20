@@ -11,6 +11,8 @@ import App from "./App.vue";
 import Home from "./views/Home.vue";
 // El inicio carga de inmediato; las demás páginas se descargan al visitarlas.
 const Info = () => import("./views/Info.vue");
+const Directory = () => import("./views/Directory.vue");
+const Demo = () => import("./views/Demo.vue");
 const Tips = () => import("./views/Tips.vue");
 const Styles = () => import("./views/Styles.vue");
 const Games = () => import("./views/Games.vue");
@@ -38,6 +40,7 @@ const router = createRouter({
   routes: [
     { path: "/", component: Home, meta: { title: "Emergencias" } },
     { path: "/informacion", component: Info, meta: { title: "Información" } },
+    { path: "/directorio", component: Directory, meta: { title: "Directorio" } },
     { path: "/consejos", component: Tips, meta: { title: "Consejos" } },
     // Las páginas anteriores abren el mismo tema en Información
     { path: "/el-nino", redirect: "/informacion?tema=conozca" },
@@ -66,6 +69,8 @@ const router = createRouter({
     { path: "/migrantes", component: Migrants, meta: { title: "Para todas las familias" } },
     { path: "/kreyol", redirect: "/migrantes?lang=ht" },
     { path: "/cimarron", redirect: "/mi-cimarron" },
+    // Demo de la exposición: solo muestra algo si el servidor tiene DEMO_20NOV=true
+    { path: "/testeo_20nov", component: Demo, meta: { title: "Demo" } },
     { path: "/:pathMatch(.*)*", redirect: "/" },
   ],
   // Al cargar o recargar, la página empieza hasta arriba (en el propósito).
@@ -73,7 +78,10 @@ const router = createRouter({
   // se queda donde está, para que el botón pueda llevar a las instrucciones.
   // Con atrás y adelante del navegador se vuelve a donde estabas.
   scrollBehavior: (to, from, saved) => {
-    if (to.hash) return { el: to.hash, top: 80 };
+    if (to.hash) {
+      const header = document.querySelector(".site-header")?.getBoundingClientRect().height ?? 80;
+      return { el: to.hash, top: Math.round(header) + 24 };
+    }
     if (from === START_LOCATION) return { top: 0 };
     if (saved) return saved;
     if (to.path === from.path) return false;

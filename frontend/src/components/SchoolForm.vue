@@ -1,10 +1,42 @@
 <script setup>
 // Datos de la escuela. Se usa al registrarse y al corregir los datos desde el panel.
+import { ref, watch } from "vue";
 import FormField from "./FormField.vue";
 import LocationPicker from "./LocationPicker.vue";
 import { levels, shifts, sectors } from "../composables/useAccount";
+import { searchCatalog } from "../composables/useCatalog";
 const model = defineModel({ type: Object, required: true });
-defineProps({ errors: { type: Object, default: () => ({}) } });
+// fromCatalog: los datos vienen del catálogo de la SEP y la CCT no se cambia.
+// noCct: la escuela marcó que no sabe su CCT (solo al registrarse a mano).
+const props = defineProps({
+  errors: { type: Object, default: () => ({}) },
+  fromCatalog: Boolean,
+  noCct: Boolean,
+  askNoCct: { type: Boolean, default: true },
+});
+const emit = defineEmits(["no-cct"]);
+
+// Sin ubicación: el mapa se acerca a la colonia usando escuelas del catálogo que están en ella
+const near = ref(null);
+const plain = (t) => String(t ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+let timer;
+watch(
+  () => model.value.colonia,
+  (colonia) => {
+    clearTimeout(timer);
+    if (model.value.lat || plain(colonia).length < 3) return;
+    timer = setTimeout(async () => {
+      try {
+        const found = (await searchCatalog(colonia)).filter((s) => s.lat && plain(s.colonia).includes(plain(colonia)));
+        if (!found.length) return;
+        near.value = [found.reduce((a, s) => a + s.lat, 0) / found.length, found.reduce((a, s) => a + s.lng, 0) / found.length];
+      } catch {
+        // Sin catálogo el mapa se queda en Tijuana
+      }
+    }, 600);
+  },
+  { immediate: true },
+);
 function setLocation({ lat, lng }) {
   model.value.lat = lat;
   model.value.lng = lng;
@@ -19,8 +51,8 @@ function setLocation({ lat, lng }) {
     <FormField
       v-slot="{ id, describedby }"
       label="Clave de Centro de Trabajo (CCT)"
-      optional
-      hint="Ejemplo 02DPR0123X. Si no la tienes a la mano, la completamos al revisar tu registro"
+      :optional="noCct"
+      :hint="fromCatalog ? 'Viene del catálogo de la SEP' : 'Ejemplo 02DPR0123X. Viene en la boleta o en los documentos de la escuela'"
       :error="errors.cct"
     >
       <input
@@ -30,9 +62,17 @@ function setLocation({ lat, lng }) {
         maxlength="10"
         autocapitalize="characters"
         spellcheck="false"
+        :readonly="fromCatalog"
+        :disabled="askNoCct && noCct && !fromCatalog"
+        :required="!noCct"
+        pattern="[0-9]{2}[A-Za-z]{3}[0-9]{4}[A-Za-z]"
         @input="model.cct = model.cct.toUpperCase()"
       />
     </FormField>
+    <label v-if="askNoCct && !fromCatalog" class="consent-row">
+      <input type="checkbox" :checked="noCct" @change="emit('no-cct', $event.target.checked); if ($event.target.checked) model.cct = ''" />
+      <span>No sé la CCT de mi escuela. La agrego después</span>
+    </label>
     <div class="field-row">
       <FormField v-slot="{ id }" label="Nivel" :error="errors.level">
         <select :id="id" v-model="model.level" required>
@@ -66,8 +106,8 @@ function setLocation({ lat, lng }) {
     </FormField>
     <div class="field">
       <span class="field-label">Ubicación en el mapa <span class="field-optional">(opcional)</span></span>
-      <p class="field-hint">Toca el mapa donde está la entrada de la escuela</p>
-      <LocationPicker :lat="model.lat" :lng="model.lng" @update="setLocation" />
+      <p class="field-hint">{{ model.lat ? "Ya está marcada. Si no es la entrada, toca el lugar correcto en el mapa" : "Toca el mapa donde está la entrada de la escuela" }}</p>
+      <LocationPicker :lat="model.lat" :lng="model.lng" :near="near" @update="setLocation" />
       <p v-if="errors.lat || errors.lng" class="field-error" role="alert">{{ errors.lat || errors.lng }}</p>
     </div>
   </fieldset>

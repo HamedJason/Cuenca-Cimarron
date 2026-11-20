@@ -1,48 +1,25 @@
 <script setup>
-// Pregunta al final de una lectura, un consejo o un juego externo. Si contesta bien, suma puntos.
+// Pregunta al final de una lectura, un consejo o un juego externo. Si contesta bien, gana Cimacoins.
+import { COINS_PER_POINT } from "../avatar/rewards.js";
 // La respuesta correcta solo la conoce el servidor.
-// Visitante sin cuenta: solo en juegos de otros sitios, y en lugar de puntos gana las Cimacoins de terminarlo.
 import { ref, computed, useId } from "vue";
 import Icon from "./Icon.vue";
 import { student } from "../composables/useStudent";
-import { activityByKey, isDone, answerActivity, checkAnswer } from "../composables/useActivities";
-import { earn, finishRewardId, isClaimed, siteRewards } from "../composables/useCimacoins";
+import { activityByKey, isDone, answerActivity } from "../composables/useActivities";
 
-const props = defineProps({
-  activityKey: { type: String, required: true },
-  compact: Boolean,
-  // Hora en que el visitante abrió el juego, para revisar el tiempo mínimo
-  startedAt: { type: Number, default: 0 },
-});
+const props = defineProps({ activityKey: { type: String, required: true }, compact: Boolean });
 const emit = defineEmits(["done"]);
 const activity = computed(() => activityByKey.value[props.activityKey]);
-// Premio de Cimacoins del visitante (null si esta pregunta no le da nada)
-const visitorReward = computed(() => {
-  if (student.value || activity.value?.mode !== "externo") return null;
-  const id = finishRewardId(props.activityKey);
-  return id ? { id, coins: siteRewards[id].coins } : null;
-});
-const answered = computed(() => (visitorReward.value ? isClaimed(visitorReward.value.id) : isDone(props.activityKey)));
 const choice = ref(null);
 const state = ref("idle");
 const message = ref("");
 const earned = ref(0);
 const name = useId();
 
-async function sendAsVisitor() {
-  const minimum = (activity.value.min_minutes ?? 0) * 60 * 1000;
-  if (props.startedAt && Date.now() - props.startedAt < minimum) {
-    return { ok: false, message: "Parece que fue muy rápido. Termina el juego y regresa." };
-  }
-  const result = await checkAnswer(props.activityKey, choice.value);
-  if (result.ok) await earn(visitorReward.value.id);
-  return result;
-}
-
 async function send() {
   if (choice.value === null) return;
   state.value = "sending";
-  const result = visitorReward.value ? await sendAsVisitor() : await answerActivity(props.activityKey, choice.value);
+  const result = await answerActivity(props.activityKey, choice.value);
   if (result.ok) {
     state.value = "done";
     earned.value = result.points ?? 0;
@@ -54,18 +31,10 @@ async function send() {
 }
 </script>
 <template>
-  <section
-    v-if="(student || visitorReward) && activity?.question"
-    :class="['activity-question', { compact }]"
-    :aria-label="`${visitorReward ? 'Pregunta para ganar Cimacoins' : 'Pregunta para sumar puntos'}: ${activity.title}`"
-  >
-    <p v-if="answered && state !== 'done'" class="aq-done"><Icon name="check" :size="20" />Ya contestaste esta pregunta</p>
+  <section v-if="student && activity?.question" :class="['activity-question', { compact }]" :aria-label="`Pregunta para ganar Cimacoins: ${activity.title}`">
+    <p v-if="isDone(activityKey) && state !== 'done'" class="aq-done"><Icon name="check" :size="20" />Ya contestaste esta pregunta</p>
     <template v-else>
-      <p class="aq-kicker">
-        <Icon name="star" :size="18" />{{
-          visitorReward ? `Pregunta para ganar ${visitorReward.coins} Cimacoins` : `Pregunta para sumar ${activity.points} puntos`
-        }}
-      </p>
+      <p class="aq-kicker"><Icon name="star" :size="18" />Pregunta para ganar {{ activity.points * COINS_PER_POINT }} Cimacoins</p>
       <fieldset v-if="state !== 'done'" class="aq-fieldset">
         <legend class="aq-text">{{ activity.question.text }}</legend>
         <label v-for="(option, i) in activity.question.options" :key="i" :class="['aq-option', { selected: choice === i }]">
@@ -75,13 +44,7 @@ async function send() {
       </fieldset>
       <p v-if="state === 'error'" class="form-alert is-error" role="alert"><Icon name="info" :size="20" />{{ message }}</p>
       <p v-if="state === 'done'" class="form-alert is-ok" role="status">
-        <Icon name="star" :size="20" />{{
-          visitorReward
-            ? `¡Correcto! Ganaste ${visitorReward.coins} Cimacoins`
-            : earned
-              ? `¡Correcto! Sumaste ${earned} puntos`
-              : "¡Correcto!"
-        }}
+        <Icon name="star" :size="20" />{{ earned ? `¡Correcto! Ganaste ${earned * COINS_PER_POINT} Cimacoins` : "¡Correcto!" }}
       </p>
       <button v-else class="button primary" type="button" :disabled="choice === null || state === 'sending'" @click="send">Contestar</button>
     </template>

@@ -54,16 +54,6 @@ export async function answerActivity(key, answer) {
   }
 }
 
-// Visitante sin cuenta: el servidor solo dice si la respuesta es correcta, sin guardar puntos.
-// Regresa { ok, message }.
-export async function checkAnswer(key, answer) {
-  try {
-    await api(`/actividades/${key}/revisar`, { method: "POST", body: { answer } });
-    return { ok: true };
-  } catch (error) {
-    return { ok: false, message: error.message };
-  }
-}
 
 export async function finishActivity(key) {
   try {

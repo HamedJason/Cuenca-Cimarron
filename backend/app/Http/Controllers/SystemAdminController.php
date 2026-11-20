@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Classroom;
 use App\Support\Audit;
+use App\Support\DemoMode;
 use App\Support\DeviceAuth;
 use App\Support\Mailer;
 use App\Support\Privacy;
@@ -47,7 +47,6 @@ class SystemAdminController extends Controller
         $newestBackup = collect([$savedBackup, $lastAutoBackup, $lastManualBackup])->filter()->max();
         $catalogAt = DB::table('school_catalog')->max('updated_at');
         $catalogTotal = DB::table('school_catalog')->count();
-        $pendingSchools = DB::table('schools')->where('status', 'pending')->count();
         $publicUrl = Settings::publicUrl();
 
         $checks = [
@@ -55,12 +54,7 @@ class SystemAdminController extends Controller
             ['key' => 'backup', 'ok' => $newestBackup && now()->subDays(2)->lessThan($newestBackup), 'label' => 'Respaldos', 'detail' => $newestBackup ? 'Último respaldo: '.\Illuminate\Support\Carbon::parse($newestBackup)->toIso8601String() : 'Todavía no hay ningún respaldo', 'date' => $newestBackup],
             ['key' => 'https', 'ok' => str_starts_with($publicUrl, 'https://'), 'label' => 'Dirección pública', 'detail' => $publicUrl],
             ['key' => 'catalog', 'ok' => $catalogTotal > 0, 'label' => 'Catálogo de escuelas', 'detail' => $catalogTotal ? "{$catalogTotal} escuelas" : 'Vacío. Cárgalo en la pestaña Escuelas', 'date' => $catalogAt ? \Illuminate\Support\Carbon::parse($catalogAt)->toIso8601String() : null],
-            ['key' => 'pending', 'ok' => $pendingSchools === 0, 'label' => 'Escuelas por revisar', 'detail' => $pendingSchools ? "{$pendingSchools} esperan revisión" : 'Ninguna pendiente'],
         ];
-
-        $years = DB::table('classrooms')->whereNull('archived_at')
-            ->select('school_year', DB::raw('count(*) as total'))->groupBy('school_year')->orderBy('school_year')
-            ->pluck('total', 'school_year');
 
         return response()->json([
             'commit' => config('app.commit'),
@@ -80,8 +74,11 @@ class SystemAdminController extends Controller
                 'sesiones_de_cuentas' => DB::table('sessions')->whereNotNull('user_id')->count(),
                 'bitacora' => DB::table('audit_logs')->count(),
             ],
-            'school_years' => $years,
-            'current_school_year' => Classroom::currentSchoolYear(),
+            'demo' => [
+                'on' => DemoMode::enabled(),
+                'until' => DemoMode::until()?->toIso8601String(),
+                'forced' => DemoMode::forced(),
+            ],
         ]);
     }
 
@@ -101,18 +98,23 @@ class SystemAdminController extends Controller
         ]);
     }
 
-    // Al terminar el ciclo escolar se archivan todos los grupos de ese ciclo.
-    public function closeSchoolYear(Request $request): JsonResponse
+    // Modo demostración: encenderlo crea los datos demo y abre /testeo_20nov por 24 horas.
+    // Apagarlo borra todo lo demo. Pide escribir ENCENDER o APAGAR para confirmar.
+    public function demo(Request $request): JsonResponse
     {
-        $data = $request->validate([
-            'school_year' => ['required', 'string', 'regex:/^\d{4}-\d{4}$/'],
-            'confirm' => ['required', 'in:CERRAR'],
-        ]);
-        $count = DB::table('classrooms')->whereNull('archived_at')->where('school_year', $data['school_year'])
-            ->update(['archived_at' => now(), 'code' => null, 'open' => false, 'updated_at' => now()]);
-        Audit::log('admin', $request->user()->id, 'cerrar-ciclo', null, null, ['ciclo' => $data['school_year'], 'grupos' => $count]);
+        $data = $request->validate(['accion' => ['required', 'in:encender,apagar'], 'confirm' => ['required', 'string']]);
+        if (strtoupper($data['confirm']) !== strtoupper($data['accion'])) {
+            return response()->json(['message' => 'Escribe '.strtoupper($data['accion']).' para confirmar.'], 422);
+        }
+        if ($data['accion'] === 'encender') {
+            $until = DemoMode::turnOn();
+            Audit::log('admin', $request->user()->id, 'encender-demo', null, null, ['hasta' => $until->toIso8601String()]);
+        } else {
+            DemoMode::turnOff();
+            Audit::log('admin', $request->user()->id, 'apagar-demo');
+        }
 
-        return response()->json(['archived' => $count]);
+        return response()->json(['on' => DemoMode::enabled(), 'until' => DemoMode::until()?->toIso8601String()]);
     }
 
     public function audit(Request $request): JsonResponse
@@ -120,11 +122,13 @@ class SystemAdminController extends Controller
         $data = $request->validate([
             'accion' => ['nullable', 'string', 'max:60'],
             'antes_de' => ['nullable', 'integer', 'min:1'],
+            'por' => ['nullable', 'integer', 'min:1', 'max:50'],
         ]);
+        $per = (int) ($data['por'] ?? 20);
         $rows = DB::table('audit_logs')
             ->when($data['accion'] ?? null, fn ($q, $a) => $q->where('action', $a))
             ->when($data['antes_de'] ?? null, fn ($q, $id) => $q->where('id', '<', $id))
-            ->orderByDesc('id')->limit(50)->get();
+            ->orderByDesc('id')->limit($per)->get();
 
         $users = DB::table('users')->whereIn('id', $rows->whereIn('actor_type', ['admin', 'school'])->pluck('actor_id')->merge($rows->where('subject_type', 'user')->pluck('subject_id'))->filter())->pluck('email', 'id');
         $teachers = DB::table('teachers')->whereIn('id', $rows->where('actor_type', 'teacher')->pluck('actor_id')->merge($rows->where('subject_type', 'teacher')->pluck('subject_id'))->filter())->pluck('name', 'id');
@@ -156,7 +160,7 @@ class SystemAdminController extends Controller
                 'details' => $r->details ? json_decode($r->details, true) : null,
             ]),
             'actions' => DB::table('audit_logs')->distinct()->orderBy('action')->pluck('action'),
-            'more' => $rows->count() === 50,
+            'more' => $rows->count() === $per,
         ]);
     }
 }

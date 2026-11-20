@@ -22,7 +22,7 @@ const school = ref({
   lng: null,
   contact_name: "",
 });
-const login = reactive({ email: "", password: "", privacy: false, families_informed: false });
+const login = reactive({ email: "", password: "", privacy: false, families_informed: false, sin_cct: false });
 const errors = ref({});
 const message = ref("");
 const sending = ref(false);
@@ -50,6 +50,10 @@ function pick(found) {
 }
 function manual() {
   picked.value = null;
+  // Si venía de una escuela del catálogo, se limpian sus datos para escribir la propia
+  Object.assign(school.value, { name: "", cct: "", level: "", shift: "", sector: "", colonia: "", address: "", lat: null, lng: null });
+  login.sin_cct = false;
+  formKey.value++;
   mode.value = "manual";
 }
 
@@ -75,7 +79,7 @@ async function submit() {
   <div class="page account-page">
     <header class="page-heading">
       <h1>Registra tu escuela</h1>
-      <p>Para que tus docentes armen grupos y sus alumnos sumen puntos</p>
+      <p>Para que tus docentes armen grupos y sus alumnos ganen Cimacoins</p>
     </header>
     <div v-if="codes" class="form-card">
       <RecoveryCodes :codes="codes" :email="login.email" @done="finish" />
@@ -84,19 +88,19 @@ async function submit() {
       <ol class="steps-mini" aria-label="Cómo funciona">
         <li>Llenas este registro</li>
         <li>Guardas tus códigos de recuperación</li>
-        <li>Revisamos los datos y aprobamos tu escuela</li>
+        <li>Das de alta a tus docentes</li>
       </ol>
       <SchoolPicker v-if="mode === 'buscar'" @pick="pick" @manual="manual" />
       <template v-else>
         <div v-if="picked" class="note">
           <Icon name="check" />
           <div>
-            <p>Elegiste <b>{{ picked.name }}</b> (CCT {{ picked.cct }}). Revisa los datos y completa lo que falte</p>
+            <p>Elegiste <b>{{ picked.name }}</b> (CCT {{ picked.cct }}). Ya llenamos sus datos y su ubicación. Solo completa lo que falte</p>
             <button class="text-link" type="button" @click="mode = 'buscar'">Buscar otra escuela</button>
           </div>
         </div>
         <button v-else class="text-link" type="button" @click="mode = 'buscar'">Buscar mi escuela en el catálogo</button>
-        <SchoolForm :key="formKey" v-model="school" :errors="errors" />
+        <SchoolForm :key="formKey" v-model="school" :errors="errors" :from-catalog="Boolean(picked)" :no-cct="login.sin_cct" @no-cct="login.sin_cct = $event" />
       </template>
       <template v-if="mode !== 'buscar'">
       <fieldset class="form-group">

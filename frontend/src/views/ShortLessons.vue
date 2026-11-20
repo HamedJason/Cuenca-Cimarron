@@ -1,6 +1,6 @@
 <script setup>
 // Lecturas cortas: un tema por página, se lee en un minuto y termina con una pregunta.
-// Los alumnos con sesión ganan puntos (y con ellos Cimacoins). Los demás leen igual.
+// Los alumnos con sesión ganan Cimacoins. Los demás leen igual.
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import Icon from "../components/Icon.vue";
@@ -35,7 +35,7 @@ const doneCount = computed(() => allModules.filter((m) => isDone(activityKeyOf(m
         </ul>
         <p v-if="current.tip" class="note"><Icon name="info" /><span>{{ current.tip }}</span></p>
         <ActivityQuestion :key="current.id" :activity-key="activityKeyOf(current.id)" />
-        <p v-if="!student" class="small muted-text">Entra con el código de tu grupo para ganar puntos y Cimacoins con estas preguntas</p>
+        <p v-if="!student" class="small muted-text">Entra con el código de tu grupo para ganar Cimacoins con estas preguntas</p>
       </article>
       <div class="form-actions">
         <RouterLink v-if="next" :to="`/aprende/${next.id}`" class="button primary">Siguiente: {{ next.title }}</RouterLink>
@@ -46,7 +46,7 @@ const doneCount = computed(() => allModules.filter((m) => isDone(activityKeyOf(m
     <p v-else-if="route.params.id" class="form-card">No encontramos esa lectura. <RouterLink to="/aprende" class="inline-link">Ver todas</RouterLink></p>
 
     <template v-else>
-      <p v-if="student" class="note"><Icon name="star" /><span>Llevas {{ doneCount }} de {{ allModules.length }} lecturas. Cada pregunta bien contestada te da 10 puntos</span></p>
+      <p v-if="student" class="note"><Icon name="star" /><span>Llevas {{ doneCount }} de {{ allModules.length }} lecturas. Cada pregunta bien contestada te da 100 Cimacoins</span></p>
       <section v-for="theme in moduleThemes" :key="theme.id" class="form-card">
         <h2 class="form-title">{{ theme.title }}</h2>
         <ul class="lesson-short-list">

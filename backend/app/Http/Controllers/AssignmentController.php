@@ -77,17 +77,20 @@ class AssignmentController extends Controller
         return response()->json(['tasks' => self::assigned($classroom->id)]);
     }
 
-    // Tabla de avance: alumnos en filas, tareas en columnas y el total de puntos.
+    // Tabla de avance: alumnos en filas, tareas en columnas y las Cimacoins ganadas.
+    // Cimacoins ganadas = puntos × Cimacoins por punto + premios. Las 150 iniciales no cuentan
+    // y gastar en la tienda no las baja: es la calificación de participación que ve el docente.
     public static function progressTable(Classroom $classroom): array
     {
         $tasks = self::assigned($classroom->id);
-        $students = DB::table('students')->where('classroom_id', $classroom->id)->whereNull('anonymized_at')->orderBy('name')->get(['id', 'name']);
+        $students = DB::table('students')->where('classroom_id', $classroom->id)->whereNull('anonymized_at')->orderBy('name')->get(['id', 'name', 'wallet']);
+        $perPoint = (int) config('avatar.per_point');
         $completions = DB::table('completions')->whereIn('student_id', $students->pluck('id'))->get(['student_id', 'activity_id', 'points']);
         $byStudent = $completions->groupBy('student_id');
 
         return [
             'tasks' => $tasks,
-            'students' => $students->map(function ($s) use ($byStudent, $tasks) {
+            'students' => $students->map(function ($s) use ($byStudent, $tasks, $perPoint) {
                 $mine = $byStudent->get($s->id, collect());
                 $done = $mine->pluck('activity_id')->all();
 
@@ -97,6 +100,7 @@ class AssignmentController extends Controller
                     'done' => array_values(array_map(fn ($t) => $t['key'], array_filter($tasks, fn ($t) => in_array($t['id'], $done)))),
                     'tasks_done' => count(array_filter($tasks, fn ($t) => in_array($t['id'], $done))),
                     'points' => (int) $mine->sum('points'),
+                    'coins_earned' => self::coinsEarned((int) $mine->sum('points'), $s->wallet, $perPoint),
                 ];
             })->values()->all(),
         ];
@@ -117,18 +121,25 @@ class AssignmentController extends Controller
             $out = fopen('php://output', 'w');
             // Marca BOM para que Excel abra bien los acentos.
             fwrite($out, "\xEF\xBB\xBF");
-            fputcsv($out, array_merge(['Alumno'], array_map(fn ($t) => $t['title'], $table['tasks']), ['Tareas hechas', 'Puntos']));
+            fputcsv($out, array_merge(['Alumno'], array_map(fn ($t) => $t['title'], $table['tasks']), ['Tareas hechas', 'Cimacoins ganadas']));
             foreach ($table['students'] as $s) {
                 $row = [self::safeCell($s['name'])];
                 foreach ($table['tasks'] as $t) {
                     $row[] = in_array($t['key'], $s['done'], true) ? 'Sí' : 'No';
                 }
                 $row[] = $s['tasks_done'].' de '.count($table['tasks']);
-                $row[] = $s['points'];
+                $row[] = $s['coins_earned'];
                 fputcsv($out, $row);
             }
             fclose($out);
         }, $name, ['Content-Type' => 'text/csv; charset=UTF-8']);
+    }
+
+    public static function coinsEarned(int $points, mixed $wallet, int $perPoint): int
+    {
+        $data = is_string($wallet) ? json_decode($wallet, true) : $wallet;
+
+        return $points * $perPoint + max(0, (int) (is_array($data) ? ($data['bonus'] ?? 0) : 0));
     }
 
     // Evita que una hoja de cálculo interprete un nombre como fórmula.

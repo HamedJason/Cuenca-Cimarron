@@ -37,11 +37,11 @@ class StaffTest extends TestCase
     public function test_solo_lectura_ve_datos_pero_no_cambia_nada(): void
     {
         $viewer = User::factory()->create(['role' => 'viewer']);
-        $pending = $this->school('pending');
+        $school = $this->school();
         $this->actingAs($viewer)->getJson('/api/admin/estadisticas')->assertOk();
-        $this->actingAs($viewer)->getJson('/api/admin/escuelas?estado=pending')->assertOk()->assertJsonCount(1, 'schools');
+        $this->actingAs($viewer)->getJson('/api/admin/escuelas?estado=approved')->assertOk()->assertJsonCount(1, 'schools');
         $this->actingAs($viewer)->getJson('/api/admin/catalogo-escuelas')->assertOk();
-        $this->actingAs($viewer)->postJson("/api/admin/escuelas/{$pending->school->id}/aprobar")->assertForbidden();
+        $this->actingAs($viewer)->postJson("/api/admin/escuelas/{$school->school->id}/suspender", ['reason' => 'Prueba de permisos'])->assertForbidden();
         $this->actingAs($viewer)->getJson('/api/admin/ajustes')->assertForbidden();
         $this->actingAs($viewer)->getJson('/api/admin/respaldo')->assertForbidden();
         $this->actingAs($viewer)->getJson('/api/admin/usuarios')->assertForbidden();

@@ -1,0 +1,15 @@
+# Construye las imágenes en el mismo servidor en lugar de bajarlas de GitHub.
+# Sirve cuando el código todavía no está en main (por ejemplo, copiado con scp).
+# Uso: docker compose -f compose.servidor.yaml -f compose.construir.yaml up -d --build
+# Watchtower no toca estos contenedores, así que no los cambia por las imágenes de main.
+services:
+  frontend:
+    build: ./frontend
+    image: cuenca-cimarron-frontend:local
+    labels:
+      com.centurylinklabs.watchtower.enable: "false"
+  backend:
+    build: ./backend
+    image: cuenca-cimarron-backend:local
+    labels:
+      com.centurylinklabs.watchtower.enable: "false"

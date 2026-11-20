@@ -1,11 +1,11 @@
-// Avisa al sitio cuando alguien termina un juego propio (puntos al alumno, Cimacoins al visitante). nginx lo agrega a cada página de /juegos/.
-// Sin alumno con sesión solo anota el juego terminado en este navegador.
+// Avisa al sitio cuando un alumno termina un juego propio (le da Cimacoins). nginx lo agrega a cada página de /juegos/.
+// Sin alumno con sesión no gana nada: solo se le invita una vez a entrar con el código de su grupo.
 // Si no hay internet, guarda el aviso y el sitio lo reintenta la próxima vez que se abra.
 (function () {
   if (window.CuencaPuntos) return;
   var PENDIENTES = "cuenca.puntos.pendientes";
-  // Juegos terminados en este navegador. El sitio da a los visitantes Cimacoins por cada uno
-  // (src/composables/useFinishRewards.js). A los alumnos se las da el servidor.
+  // Juegos terminados en este navegador, para invitar al visitante una sola vez por juego.
+  // Las Cimacoins solo las gana el alumno con sesión y se las da el servidor (useFinishRewards.js).
   var TERMINADOS = "cuenca.juegos.terminados";
   var enviados = {};
 
@@ -62,16 +62,16 @@
     var nuevo = anotarTerminado(clave);
     pedir(clave, "terminar")
       .then(function (respuesta) {
-        // Sin alumno con sesión: el visitante recibe sus Cimacoins al volver al sitio.
+        // Sin alumno con sesión no hay Cimacoins: se le invita a entrar con su grupo.
         if (respuesta.status === 401) {
-          if (nuevo) aviso("¡Terminaste! Ganaste Cimacoins para tu cimarrón");
+          if (nuevo) aviso("¡Terminaste! Entra con el código de tu grupo para ganar Cimacoins");
           return null;
         }
         if (!respuesta.ok) return null;
         return respuesta.json();
       })
       .then(function (datos) {
-        if (datos && datos.new && datos.points) aviso("¡Sumaste " + datos.points + " puntos!");
+        if (datos && datos.new && datos.points) aviso("¡Ganaste " + datos.points * 10 + " Cimacoins!");
       })
       .catch(function () {
         guardarPendiente(clave);

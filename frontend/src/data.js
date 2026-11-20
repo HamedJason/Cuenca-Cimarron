@@ -6,14 +6,14 @@ export const steps = [
     title: "Reconoce los riesgos",
     short: "Observa tu entorno",
     description:
-      "Identifica los riesgos dentro y fuera de casa. Encuentra tus zonas seguras",
+      "Busca qué puede ser peligroso dentro y fuera de casa. Encuentra los lugares seguros",
     color: "green",
     tasks: [
-      "Recorrimos la casa y detectamos objetos que pueden caer",
-      "Identificamos zonas expuestas a inundación y revisamos instalaciones",
-      "Ubicamos zonas seguras dentro y fuera de casa",
+      "Recorrimos la casa y vimos qué cosas se pueden caer",
+      "Vimos qué partes se pueden inundar y revisamos la luz, el gas y el agua",
+      "Encontramos lugares seguros dentro y fuera de casa",
     ],
-    tip: "Observen juntos cada espacio. Si una instalación necesita reparación, soliciten apoyo de una persona capacitada",
+    tip: "Revisen juntos cada cuarto. Si algo está roto, pidan ayuda a alguien que sepa arreglarlo",
   },
   {
     id: "rutas",
@@ -22,14 +22,14 @@ export const steps = [
     title: "Traza un plan",
     short: "Encuentra el camino",
     description:
-      "Dibuja tus rutas de evacuación y acuerda un punto de encuentro con tu familia",
+      "Dibuja por dónde salir de casa y elige con tu familia un lugar para verse",
     color: "gold",
     tasks: [
-      "Dibujamos un croquis con salidas y riesgos identificados",
-      "Elegimos rutas accesibles y un punto de encuentro",
-      "Compartimos el croquis y nuestros contactos de emergencia",
+      "Dibujamos un mapa de la casa con las salidas y los peligros",
+      "Elegimos caminos fáciles y un lugar para vernos",
+      "Compartimos el mapa y los teléfonos de emergencia",
     ],
-    tip: "Incluyan las necesidades de niñas y niños, personas mayores, personas con discapacidad y mascotas",
+    tip: "Piensen en los niños, los abuelos, quien tenga alguna discapacidad y las mascotas",
   },
   {
     id: "decisiones",
@@ -38,14 +38,14 @@ export const steps = [
     title: "Decide cómo actuar",
     short: "Hagan equipo",
     description:
-      "Asigna responsabilidades. Saber qué hacer ayuda a tomar mejores decisiones",
+      "Repartan las tareas. Si cada quien sabe qué hacer, todo sale mejor",
     color: "clay",
     tasks: [
-      "Acordamos quién ayuda a cada integrante y a las mascotas",
-      "Sabemos dónde consultar avisos oficiales y cómo comunicarnos",
-      "Acordamos cómo seguir una indicación de evacuación",
+      "Decidimos quién ayuda a cada persona y a las mascotas",
+      "Sabemos dónde ver los avisos y cómo hablarnos",
+      "Sabemos qué hacer si nos piden salir de casa",
     ],
-    tip: "No todas las emergencias requieren la misma respuesta. Atiendan las indicaciones de las autoridades locales",
+    tip: "Cada emergencia es diferente. Hagan caso a las autoridades",
   },
   {
     id: "simulacros",
@@ -54,63 +54,63 @@ export const steps = [
     title: "Practica tu plan",
     short: "Prepárense juntos",
     description:
-      "Realiza al menos tres simulacros al año. Aprende de cada uno y mejora tu plan",
+      "Practica tu plan tres veces al año o más. Cada vez lo harás mejor",
     color: "sage",
     tasks: [
-      "Agendamos al menos tres simulacros durante el año",
-      "Practicamos las rutas y el encuentro sin exponernos a riesgos",
-      "Revisamos lo aprendido y actualizamos nuestro plan",
+      "Apartamos tres días del año para practicar",
+      "Practicamos los caminos y el lugar para vernos, con cuidado",
+      "Platicamos lo que aprendimos y mejoramos el plan",
     ],
-    tip: "Ensayen con calma. Un simulacro es una oportunidad para aprender y ajustar, no una competencia",
+    tip: "Practiquen con calma. Un simulacro es una práctica para aprender, no una carrera",
   },
 ];
 export const supplies = [
   {
     id: "agua",
     name: "Agua potable",
-    detail: "En envases cerrados; revisa su caducidad",
+    detail: "En botellas cerradas y que no estén vencidas",
     icon: "drop",
     group: "Lo esencial",
   },
   {
     id: "alimentos",
-    name: "Alimentos no perecederos",
-    detail: "Listos para consumir y adecuados para tu familia",
+    name: "Comida que no se echa a perder",
+    detail: "Lista para comer y que le guste a tu familia",
     icon: "food",
     group: "Lo esencial",
   },
   {
     id: "botiquin",
     name: "Botiquín y medicamentos",
-    detail: "Material básico y tratamientos prescritos",
+    detail: "Lo básico y las medicinas que toman en casa",
     icon: "medical",
     group: "Lo esencial",
   },
   {
     id: "linterna",
     name: "Linterna y pilas",
-    detail: "Verifica que funcionen y agrega repuestos",
+    detail: "Que funcionen, con pilas de repuesto",
     icon: "flashlight",
     group: "Lo esencial",
   },
   {
     id: "radio",
     name: "Radio portátil",
-    detail: "De pilas, para escuchar información oficial",
+    detail: "De pilas, para oír los avisos oficiales",
     icon: "radio",
     group: "Comunicación y documentos",
   },
   {
     id: "documentos",
     name: "Documentos importantes",
-    detail: "Copias protegidas del agua y directorio familiar",
+    detail: "Copias en una bolsa contra agua y una lista de teléfonos",
     icon: "document",
     group: "Comunicación y documentos",
   },
   {
     id: "dinero",
     name: "Dinero en efectivo",
-    detail: "Incluye monedas y billetes de baja denominación",
+    detail: "Monedas y billetes chicos",
     icon: "wallet",
     group: "Comunicación y documentos",
   },
@@ -124,28 +124,28 @@ export const supplies = [
   {
     id: "abrigo",
     name: "Manta y ropa de abrigo",
-    detail: "Considera el clima y una muda de ropa",
+    detail: "Según el clima, con un cambio de ropa",
     icon: "blanket",
     group: "Cuidado de tu familia",
   },
   {
     id: "higiene",
     name: "Artículos de higiene",
-    detail: "Incluye las necesidades de cada integrante",
+    detail: "Lo que necesite cada quien",
     icon: "heart",
     group: "Cuidado de tu familia",
   },
   {
     id: "mascotas",
     name: "Kit para tus mascotas",
-    detail: "Si tienes: alimento, agua, correa y sus documentos",
+    detail: "Si tienes: comida, agua, correa y su cartilla",
     icon: "paw",
     group: "Cuidado de tu familia",
   },
   {
     id: "carga",
     name: "Batería para el celular",
-    detail: "Cargada y con el cable compatible",
+    detail: "Cargada y con su cable",
     icon: "battery",
     group: "Comunicación y documentos",
   },
@@ -315,6 +315,7 @@ export const emergency = {
 export const agencies = [
   {
     id: "911",
+    kid: "Cuando alguien está en peligro, herido o hay fuego",
     name: "Emergencias 911",
     icon: "phone",
     theme: "911",
@@ -330,6 +331,7 @@ export const agencies = [
   },
   {
     id: "proteccion-civil",
+    kid: "Cuando ves grietas en tu casa o en el cerro",
     name: "Protección Civil Tijuana",
     icon: "shield",
     theme: "civil",
@@ -337,7 +339,7 @@ export const agencies = [
     what: "Revisa zonas y casas en riesgo, vigila los deslizamientos de tierra, abre los refugios temporales y avisa cuando viene una tormenta",
     callWhen: [
       "Aparecen grietas en paredes, piso o en el cerro junto a tu casa",
-      "La tierra o un talud se está moviendo o se cae de a poco",
+      "La tierra de un cerro o un bordo se mueve o se cae poco a poco",
       "Quieres saber si tu casa está en zona de riesgo",
       "Necesitas saber qué refugio está abierto",
     ],
@@ -347,6 +349,7 @@ export const agencies = [
   },
   {
     id: "bomberos",
+    kid: "Para dudas. Si hay fuego, marca al 911",
     name: "Bomberos Tijuana",
     icon: "flame",
     theme: "fire",
@@ -364,6 +367,7 @@ export const agencies = [
   },
   {
     id: "policia",
+    kid: "Cuando un choque o el agua tapan la calle",
     name: "Policía municipal",
     icon: "shield",
     theme: "police",
@@ -380,6 +384,7 @@ export const agencies = [
   },
   {
     id: "cruz-roja",
+    kid: "Para pedir una ambulancia, marca al 911",
     name: "Cruz Roja Tijuana",
     icon: "medical",
     theme: "redcross",
@@ -394,6 +399,7 @@ export const agencies = [
   },
   {
     id: "denuncia",
+    kid: "Para avisar de un delito sin decir tu nombre",
     name: "Denuncia anónima 089",
     icon: "eyeOff",
     theme: "secret",
@@ -407,6 +413,7 @@ export const agencies = [
   },
   {
     id: "cfe",
+    kid: "Cuando se va la luz o se cae un cable",
     name: "CFE, luz",
     icon: "flashlight",
     theme: "cfe",
@@ -421,6 +428,7 @@ export const agencies = [
   },
   {
     id: "cespt",
+    kid: "Cuando hay una fuga o se desborda el drenaje",
     name: "CESPT, agua y drenaje",
     icon: "drop",
     theme: "water",
@@ -476,10 +484,50 @@ export const call911 = {
   ],
   silent: {
     title: "Si no puedes hablar",
-    text: "La app 911 Móvil BC, de la Secretaría de Seguridad Ciudadana del estado, tiene un chat con la operadora que manda tu ubicación. Sirve si no puedes hablar o no oyes bien. Descárgala antes de necesitarla",
+    text: "La app 911 Móvil BC tiene un chat con la operadora y le dice dónde estás. Sirve si no puedes hablar o no oyes bien. Descárgala antes de necesitarla",
     url: "https://apps.apple.com/mx/app/911movilbc/id742612886",
   },
 };
+
+// Tu llamada al 911, paso a paso (/informacion). Pasos revisados con personal del 911.
+// Cada paso tiene su animación en public/assets/animaciones/llamada-paso-N.
+export const callGuide = [
+  { title: "Ponte a salvo", text: "Primero aléjate del peligro", alt: "Una niña cimarrón se aleja de un cable con chispas y se cubre de la lluvia" },
+  { title: "Llama al 911", text: "Marca 9, 1, 1. Es gratis", alt: "La niña marca 9, 1, 1 y se pone el teléfono en la oreja" },
+  { title: "Di dónde estás", text: "Calle, número, colonia y algo que se vea cerca", alt: "En un globo aparecen su casa con número, el letrero de la calle y la tiendita de la esquina" },
+  { title: "Di qué pasa", text: "Cuenta lo que ves con pocas palabras", alt: "En un globo aparece una casa con fuego y humo" },
+  { title: "Contesta lo que te pregunten", text: "Escucha y contesta con calma", alt: "La operadora pregunta y la niña contesta cuántas personas son" },
+  { title: "Deja el teléfono libre", text: "No lo uses para otra cosa. Te pueden regresar la llamada", alt: "El teléfono queda en la mesa, la niña no juega con él y el teléfono suena" },
+];
+
+// ¿Es una emergencia? Mini juego de Sí o No.
+export const emergencyQuiz = [
+  { text: "Hay fuego en una casa", icon: "flame", yes: true },
+  { text: "Quiero saber qué hora es", icon: "clock", yes: false },
+  { text: "Alguien no respira", icon: "heart", yes: true },
+  { text: "Un gato se subió a un árbol", icon: "paw", yes: false },
+  { text: "El agua entra a la casa", icon: "drop", yes: true },
+  { text: "Quiero hacer una broma", icon: "face", yes: false },
+  { text: "Se cayó un cerro sobre la calle", icon: "hill", yes: true },
+  { text: "El vecino pone la música muy fuerte", icon: "radio", yes: false },
+  { text: "Alguien está muy herido", icon: "medical", yes: true },
+  { text: "Alguien está en peligro", icon: "bell", yes: true },
+];
+
+// Si la familia se separa (/informacion). Recomendaciones de personal del 911.
+// Restablecimiento del Contacto entre Familiares: servicio de la Cruz Roja y el CICR.
+export const familySeparation = [
+  { icon: "route", text: "Acuerden rutas y un punto de encuentro por si no hay señal" },
+  { icon: "phone", text: "Apréndete de memoria el teléfono de mamá, papá o quien te cuida" },
+  { icon: "eyeOff", text: "No te vayas con desconocidos. Solo con alguien de uniforme", uniforms: true },
+  { icon: "medical", text: "La Cruz Roja ayuda a las familias separadas a volver a encontrarse", url: "https://www.icrc.org/es/nuestras-actividades/restablecimiento-del-contacto-entre-familiares", link: "Restablecimiento del Contacto entre Familiares" },
+];
+
+// Escuadrón Violeta de Tijuana (SSPCM): atiende violencia contra mujeres, niñas y niños.
+// Número tomado de Diario Tijuana (16 de abril de 2025), que cita a la SSPCM.
+// No se encontró en un sitio oficial del Ayuntamiento: confirmar con la SSPCM y cambiarlo aquí si hace falta.
+// La Línea Violeta estatal (SSCBC) es 686 837 3700 ext. 11017, de 7:00 a 23:00 (seguridadbc.gob.mx).
+export const VIOLET_SQUAD_PHONE = "664 680 3187";
 
 // Otros números de ayuda, además del 911 y de las dependencias de arriba.
 // 088 y 089: Uno TV con datos del SESNSP. Línea de la Vida: CONASAMA, Secretaría de Salud.
@@ -496,6 +544,7 @@ export const helpLines = [
   {
     id: "088",
     name: "Guardia Nacional",
+    kid: "Si te quedas varado en la carretera",
     number: "088",
     icon: "car",
     theme: "police",
@@ -508,6 +557,18 @@ export const helpLines = [
     icon: "heart",
     theme: "redcross",
     what: "Apoyo emocional gratis, las 24 horas: crisis, ansiedad, tristeza que no se va, ideas de hacerte daño o problemas con alcohol y drogas",
+  },
+  // 075: línea de intervención en crisis del municipio, las 24 horas. Puede mandar a la UMAS
+  // (Unidad Municipal de Apoyo Social) (Zeta, enero de 2025;
+  // El Imparcial, noviembre de 2025). En algunos celulares no entra: entonces se marca al 911.
+  {
+    id: "075",
+    name: "Línea de intervención en crisis",
+    number: "075",
+    note: "Solo en Tijuana",
+    icon: "heart",
+    theme: "redcross",
+    what: "Psicólogos del municipio te escuchan las 24 horas. Si hace falta, mandan a la UMAS a ayudarte. Si no entra la llamada, marca al 911",
   },
   {
     id: "mujeres",
@@ -798,7 +859,7 @@ export const advice = [
     icon: "home",
     tone: "green",
     title: "Después de la lluvia",
-    text: "Revisa tu entorno y reporta riesgos",
+    text: "Revisa tu alrededor y avisa de los peligros",
     href: "/consejos?momento=despues",
   },
 ];
@@ -811,14 +872,14 @@ export const lessons = [
     icon: "cloud",
     tone: "blue",
     title: "Qué es El Niño",
-    short: "Cómo cambia la lluvia y el clima en Tijuana",
+    short: "Por qué puede llover más en Tijuana",
     intro:
-      "Un calentamiento del océano Pacífico que cambia la lluvia, el viento y la temperatura",
-    body: "Saber cómo funciona te ayuda a entender los avisos y a prepararte antes. No pega igual en todos lados, por eso hay que seguir la información oficial y fijarse en lo que pasa en tu colonia",
+      "El Niño es un calentamiento del océano Pacífico. Eso cambia la lluvia y el clima",
+    body: "En Tijuana puede traer mucha lluvia, inundaciones y deslaves. Un deslave es cuando la tierra de un cerro se cae",
     points: [
-      "Cambia cuándo y cuánto llueve",
-      "No afecta igual a todas las zonas",
-      "Prepararse empieza con información confiable",
+      "Haz un plan con tu familia",
+      "Ten lista tu mochila",
+      "No cruces calles ni arroyos con agua",
     ],
     image: "/assets/images/hero-el-nino.webp",
     alt: "Ilustración de Tijuana durante la lluvia",
@@ -862,12 +923,12 @@ export const lessons = [
     tone: "blue",
     title: "Botiquín y salud",
     short: "Qué lleva un botiquín y cómo cuidarte en la lluvia",
-    intro: "Con lo básico a la mano puedes atender una herida mientras llega la ayuda",
-    body: "Debe haber un botiquín en cada casa y en cada lugar donde se junta gente. Arma el tuyo con material de curación, no con medicinas: esas van aparte, con su receta. Y después de una inundación, cuida el agua que toman y no se metan al agua de la calle",
+    intro: "Con un botiquín puedes curar una herida mientras llega la ayuda",
+    body: "Ten un botiquín en casa. Lleva cosas para curar y limpiar. Las medicinas van aparte, con su receta. Después de una inundación, toma agua limpia y no te metas al agua de la calle",
     points: [
-      "Material para curar, limpiar y protegerte",
-      "Medicinas aparte, con receta y nombre",
-      "Agua segura y alerta a fiebre después de la lluvia",
+      "Cosas para curar, limpiar y protegerte",
+      "Medicinas aparte, con su receta",
+      "Agua limpia y cuidado con la fiebre",
     ],
     image: "/assets/images/botiquin.webp",
     alt: "Ilustración de un botiquín rojo abierto con venda, gasas, medicina y termómetro, junto a curitas, tijeras y guantes",
@@ -880,38 +941,38 @@ export const firstAidGroups = [
   {
     title: "Para curar",
     items: [
-      { id: "fa-gasas", name: "Gasas de 5 × 5 cm y compresas de 10 × 10 cm", detail: "Para cubrir y presionar heridas" },
-      { id: "fa-vendas", name: "Vendas elásticas de 5 y 10 cm", detail: "Y una triangular para cabestrillo" },
-      { id: "fa-tela", name: "Tela adhesiva y curitas", detail: "Para fijar gasas y cortadas chicas" },
-      { id: "fa-algodon", name: "Torundas de algodón", detail: "Alrededor de la herida, no dentro" },
+      { id: "fa-gasas", name: "Gasas chicas y grandes", detail: "Para tapar heridas" },
+      { id: "fa-vendas", name: "Vendas", detail: "Una angosta, una ancha y una de triángulo para el brazo" },
+      { id: "fa-tela", name: "Tela adhesiva y curitas", detail: "Para pegar gasas y tapar cortadas chicas" },
+      { id: "fa-algodon", name: "Bolitas de algodón", detail: "Se usan junto a la herida, no adentro" },
     ],
   },
   {
     title: "Para limpiar",
     items: [
-      { id: "fa-jabon", name: "Jabón neutro líquido", detail: "Lo primero para lavar una herida" },
-      { id: "fa-agua", name: "Agua hervida o estéril", detail: "En botella cerrada y etiquetada" },
-      { id: "fa-antiseptico", name: "Antiséptico (benzal o yodo)", detail: "En frascos de plástico con nombre" },
-      { id: "fa-vaselina", name: "Vaselina", detail: "Para rozaduras" },
+      { id: "fa-jabon", name: "Jabón líquido suave", detail: "Primero lava la herida con jabón" },
+      { id: "fa-agua", name: "Agua hervida", detail: "En botella cerrada y con nombre" },
+      { id: "fa-antiseptico", name: "Líquido para limpiar heridas (benzal o yodo)", detail: "En frasco de plástico con nombre" },
+      { id: "fa-vaselina", name: "Vaselina", detail: "Para la piel raspada o irritada" },
     ],
   },
   {
     title: "Herramientas y protección",
     items: [
       { id: "fa-tijeras", name: "Tijeras de punta redonda y pinzas", detail: "Limpias y sin óxido" },
-      { id: "fa-termometro", name: "Termómetro", detail: "Revisa que tenga pila" },
-      { id: "fa-guantes", name: "Guantes desechables y cubrebocas", detail: "Para ti y para quien ayudas" },
-      { id: "fa-extra", name: "Linterna, lápiz y papel", detail: "Para ver de noche y anotar qué pasó" },
+      { id: "fa-termometro", name: "Termómetro", detail: "Para medir la fiebre. Revisa su pila" },
+      { id: "fa-guantes", name: "Guantes desechables y cubrebocas", detail: "Para cuidarte a ti y a quien ayudas" },
+      { id: "fa-extra", name: "Linterna, lápiz y papel", detail: "Para ver de noche y anotar lo que pasó" },
     ],
   },
 ];
 
 // Cómo guardar el botiquín y las medicinas (STCONAPRA)
 export const firstAidRules = [
-  { icon: "medical", title: "Las medicinas van aparte", text: "Con su receta y el nombre de quien la toma. Inhalador o insulina: uno en casa y otro en la mochila" },
-  { icon: "drop", title: "Fresco, seco y cerrado", text: "Sin sol ni humedad, dentro de una bolsa que cierre" },
-  { icon: "eye", title: "A la mano, lejos de los niños", text: "Sin candado y con la lista de lo que tiene" },
-  { icon: "clock", title: "Revísalo cada seis meses", text: "Repón lo usado. Lo caducado va al contenedor de una farmacia, no a la basura" },
+  { icon: "medical", title: "Las medicinas van aparte", text: "Con su receta y el nombre de quien la toma. Si alguien usa inhalador o insulina, ten uno en casa y otro en la mochila" },
+  { icon: "drop", title: "Fresco, seco y cerrado", text: "Lejos del sol y del agua, en una bolsa que cierre" },
+  { icon: "eye", title: "A la mano, lejos de los más chicos", text: "Sin candado y con una lista de lo que tiene" },
+  { icon: "clock", title: "Revísalo cada seis meses", text: "Cambia lo que ya usaste. Lo viejo se lleva a una farmacia, no a la basura" },
 ];
 
 // Salud durante y después de la lluvia. Agua: material del Estado de México
@@ -919,40 +980,46 @@ export const firstAidRules = [
 export const rainHealth = [
   {
     icon: "drop",
+    clip: "agua",
     title: "Agua segura para tomar",
-    text: "Si sale turbia, hiérvela 3 minutos o ponle 2 gotas de cloro por litro y espera 30 minutos",
+    text: "Si sale sucia, un adulto la hierve 3 minutos. O le pone 2 gotas de cloro por litro y espera media hora",
   },
   {
     icon: "wave",
+    clip: "calle",
     title: "No te metas al agua de la calle",
-    text: "Trae aguas negras. Si la cruzaste, lávate con jabón y cubre tus heridas",
+    text: "Está sucia y te puede enfermar. Si te mojaste, lávate con jabón",
   },
   {
     icon: "medical",
+    clip: "fiebre",
     title: "Fiebre días después",
-    text: "Si estuviste en agua de inundación, ve al médico y díselo: puede ser leptospirosis",
+    text: "Si tocaste agua de inundación y te da fiebre, ve al médico y cuéntale",
   },
   {
     icon: "heart",
+    clip: "diarrea",
     title: "Diarrea",
-    text: "Vida Suero Oral: un sobre en un litro de agua hervida",
+    text: "Toma suero. Un sobre de Vida Suero Oral va en un litro de agua hervida",
   },
   {
     icon: "blanket",
+    clip: "frio",
     title: "Mojado y con frío",
-    text: "Quita la ropa mojada, cubre con una cobija y da algo tibio",
+    text: "Quítate la ropa mojada, tápate con una cobija y toma algo tibio",
   },
   {
     icon: "hygiene",
+    clip: "herida",
     title: "Una cortada o un raspón",
-    text: "Lava con jabón y cubre con gasa. Si sangra, presiona sin soltar",
+    text: "Lávala con jabón y tápala con gasa. Si sangra, aprieta sin soltar",
   },
 ];
 // Cuándo no esperar: llamar al 911
 export const healthAlarms = [
   "Le cuesta respirar o tiene labios morados",
   "Sangra y no para aunque presiones",
-  "Se desmayó, convulsiona o está confundido",
+  "Se desmayó, tiembla sin control o no sabe dónde está",
   "Un bebé con diarrea que casi no orina",
   "Casi se ahoga o tragó agua de arroyo",
 ];
@@ -961,23 +1028,23 @@ export const healthAlarms = [
 export const ninoOutlook = {
   cards: [
     {
-      title: "El pronóstico cambia",
-      text: "El municipio pidió prepararse desde ahora. Revisa los avisos antes de decidir",
+      title: "Prepárate desde ahora",
+      text: "Las lluvias pueden llegar pronto",
     },
     {
       title: "Inundaciones y deslaves",
-      text: "Con lluvia fuerte, las calles bajas, los arroyos y las laderas son más peligrosos. Ubica rutas y zonas seguras cerca de tu casa",
+      text: "Aléjate de arroyos, calles bajas y cerros",
     },
     {
       title: "No toda lluvia es El Niño",
-      text: "Una tormenta sola no quiere decir que ya llegó El Niño. Sigue los avisos del clima y de Protección Civil",
+      text: "Una tormenta sola no es El Niño. Sigue los avisos oficiales",
     },
   ],
-  note: "El 2 de noviembre de 2026 el municipio informó que las lluvias podrían empezar entre finales de noviembre y principios de diciembre. El pronóstico puede cambiar",
+  note: "Las lluvias podrían empezar entre finales de noviembre y diciembre de 2026",
   noteHref:
     "https://apps.tijuana.gob.mx/webpanel/comunicado/comunicadoCompleto.aspx?iIdComunicado=+37235",
   links: [
-    { label: "NOAA, qué es El Niño", href: "https://www.noaa.gov/understanding-el-nino" },
+    { label: "Qué es El Niño (NOAA)", href: "https://www.noaa.gov/understanding-el-nino" },
     { label: "SMN, avisos del clima", href: "https://smn.conagua.gob.mx/" },
     { label: "Protección Civil Tijuana", href: "https://proteccioncivil.tijuana.gob.mx/" },
   ],
@@ -991,18 +1058,18 @@ export const familyPlan = [
     text: "Revisen su casa y encuentren las zonas seguras",
     tasks: [
       "Recorran la casa y busquen cosas que se puedan caer",
-      "Ubiquen zonas que se inundan y revisen las instalaciones",
+      "Vean qué partes se inundan y revisen la luz, el gas y el agua",
       "Elijan zonas seguras y pidan ayuda para lo que haya que arreglar",
     ],
-    tip: "Revisen cada cuarto juntos. No toquen instalaciones dañadas si no saben cómo",
+    tip: "Revisen cada cuarto juntos. No toquen cables ni tubos rotos",
   },
   {
     title: "Rutas y punto de encuentro",
     text: "Decidan por dónde salir y dónde verse si no pueden quedarse en casa",
     tasks: [
-      "Dibujen un croquis con salidas y riesgos",
+      "Dibujen un mapa de la casa con las salidas y los peligros",
       "Elijan rutas fáciles y un punto de encuentro",
-      "Compartan el croquis y los teléfonos de emergencia",
+      "Compartan el mapa de la casa y los teléfonos de emergencia",
     ],
     tip: "Piensen en los niños, los abuelos, quien tenga alguna discapacidad y las mascotas",
   },
@@ -1014,7 +1081,7 @@ export const familyPlan = [
       "Acuerden dónde ver los avisos y cómo comunicarse",
       "Acuerden qué hacer si les piden salir de casa",
     ],
-    tip: "No todas las emergencias se atienden igual. Sigan lo que indiquen las autoridades",
+    tip: "Cada emergencia es diferente. Hagan caso a las autoridades",
   },
   {
     title: "Practiquen el plan",
@@ -1034,7 +1101,7 @@ export const kitGroups = [
     title: "Lo esencial",
     items: [
       { id: "item-0", icon: "drop", name: "Agua potable", detail: "En envases cerrados y sin caducar" },
-      { id: "item-1", icon: "food", name: "Alimentos no perecederos", detail: "Listos para comer y que le gusten a tu familia" },
+      { id: "item-1", icon: "food", name: "Comida que no se echa a perder", detail: "Lista para comer y que le guste a tu familia" },
       { id: "item-2", icon: "medical", name: "Botiquín y medicamentos", detail: "Lo básico y las medicinas que toman en casa" },
       { id: "item-3", icon: "flashlight", name: "Linterna y pilas", detail: "Que funcionen, con pilas de repuesto" },
     ],
@@ -1052,7 +1119,7 @@ export const kitGroups = [
     title: "Cuidado de tu familia",
     items: [
       { id: "item-8", icon: "whistle", name: "Silbato", detail: "A la mano para pedir ayuda" },
-      { id: "item-9", icon: "blanket", name: "Manta y ropa de abrigo", detail: "Según el clima, con una muda de ropa" },
+      { id: "item-9", icon: "blanket", name: "Manta y ropa de abrigo", detail: "Según el clima, con un cambio de ropa" },
       { id: "item-10", icon: "hygiene", name: "Artículos de higiene", detail: "Lo que necesite cada quien" },
       { id: "item-11", icon: "paw", name: "Kit para tus mascotas", detail: "Comida, agua, correa y su cartilla" },
     ],
@@ -1061,17 +1128,17 @@ export const kitGroups = [
 
 // Qué puede pasar en Tijuana
 export const risks = [
-  { icon: "cloud", tone: "blue", title: "Lluvias fuertes", text: "El suelo se satura y moverse se vuelve difícil" },
-  { icon: "risk", tone: "gold", title: "Deslaves", text: "Laderas y cañadas se pueden venir abajo" },
-  { icon: "wave", tone: "green", title: "Inundaciones", text: "Arroyos y pasos a desnivel se llenan rápido. Nunca los cruces" },
+  { icon: "cloud", clip: "lluvia", tone: "blue", title: "Lluvias fuertes", text: "La tierra se llena de agua (se satura) y cuesta ver y caminar" },
+  { icon: "risk", clip: "deslave", tone: "gold", title: "Deslaves", text: "La tierra de los cerros (laderas y cañadas) se puede caer" },
+  { icon: "wave", clip: "inundacion", tone: "green", title: "Inundaciones", text: "Los arroyos y los pasos bajo puentes se llenan rápido. Nunca los cruces" },
 ];
 
 // Consejos: qué hacer en cada momento
 export const tips = [
-  { id: "antes", icon: "home", tone: "gold", moment: "Antes de la lluvia", title: "Prepara tu casa", text: "Revisa coladeras, techos y cables sueltos. Guarda tus documentos en una bolsa que no deje pasar el agua y acuerda con tu familia cómo comunicarse" },
+  { id: "antes", icon: "home", tone: "gold", moment: "Antes de la lluvia", title: "Prepara tu casa", text: "Revisa coladeras, techos y cables sueltos. Guarda tus papeles en una bolsa contra agua y decide con tu familia cómo hablarse" },
   { id: "durante", icon: "wave", tone: "blue", moment: "Durante la tormenta", title: "Aléjate de las corrientes", text: "Quédate en un lugar seguro. No cruces arroyos ni calles inundadas, aunque el agua se vea baja" },
-  { id: "manejo", icon: "car", tone: "blue", moment: "Si vas manejando", title: "No cruces una calle inundada", text: "Baja la velocidad y busca otra ruta. Si el agua tapa el camino, detente en un lugar seguro y sigue las indicaciones oficiales" },
-  { id: "despues", icon: "shield", tone: "green", moment: "Después de la lluvia", title: "Revisa tu alrededor", text: "No te acerques a zonas dañadas ni toques cables caídos. Reporta los riesgos y sigue pendiente de los avisos oficiales" },
+  { id: "manejo", icon: "car", tone: "blue", moment: "Si vas manejando", title: "No cruces una calle inundada", text: "Ve más despacio y busca otro camino. Si el agua tapa la calle, para en un lugar seguro" },
+  { id: "despues", icon: "shield", tone: "green", moment: "Después de la lluvia", title: "Revisa tu alrededor", text: "No te acerques a lo que se dañó ni toques cables caídos. Avisa de los peligros y sigue los avisos" },
 ];
 
 // Redes sociales. Las que no tienen enlace todavía se muestran como "próximamente"

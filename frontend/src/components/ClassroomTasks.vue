@@ -4,6 +4,7 @@ import { ref, computed, onMounted } from "vue";
 import Icon from "./Icon.vue";
 import FormField from "./FormField.vue";
 import { api } from "../composables/api";
+import { COINS_PER_POINT } from "../avatar/rewards.js";
 
 const props = defineProps({ classroom: { type: Object, required: true } });
 const tasks = ref([]);
@@ -15,6 +16,7 @@ const picked = ref([]);
 const dueDate = ref("");
 const message = ref("");
 const today = new Date().toISOString().slice(0, 10);
+
 
 const available = computed(() => catalog.value.filter((a) => !tasks.value.some((t) => t.key === a.key)));
 const kinds = { lectura: "Lecturas", modulo: "Lecturas cortas", consejo: "Consejos", juego: "Juegos", externo: "Juegos de otros sitios" };
@@ -80,7 +82,7 @@ const dateText = (iso) => new Date(`${iso}T12:00:00`).toLocaleDateString("es-MX"
               <tr>
                 <th scope="col">Alumno</th>
                 <th v-for="task in table.tasks" :key="task.key" scope="col" class="center">{{ task.title }}</th>
-                <th scope="col" class="num">Puntos</th>
+                <th scope="col" class="num">Cimacoins ganadas</th>
               </tr>
             </thead>
             <tbody>
@@ -91,7 +93,7 @@ const dateText = (iso) => new Date(`${iso}T12:00:00`).toLocaleDateString("es-MX"
                   <span v-else class="icon-missing" aria-hidden="true">·</span>
                   <span class="sr-only">{{ row.done.includes(task.key) ? "Hecha" : "Pendiente" }}</span>
                 </td>
-                <td class="num"><b>{{ row.points }}</b></td>
+                <td class="num"><b>{{ row.coins_earned.toLocaleString("es-MX") }}</b></td>
               </tr>
             </tbody>
           </table>
@@ -106,7 +108,7 @@ const dateText = (iso) => new Date(`${iso}T12:00:00`).toLocaleDateString("es-MX"
       <ul v-else class="plain-list task-list">
         <li v-for="task in tasks" :key="task.key">
           <Icon name="task" :size="20" />
-          <span><b>{{ task.title }}</b> · {{ task.points }} puntos<span v-if="task.due_date"> · Para el {{ dateText(task.due_date) }}</span></span>
+          <span><b>{{ task.title }}</b> · {{ task.points * COINS_PER_POINT }} Cimacoins<span v-if="task.due_date"> · Para el {{ dateText(task.due_date) }}</span></span>
           <button class="text-link" type="button" @click="remove(task)">Quitar</button>
         </li>
       </ul>
@@ -138,7 +140,7 @@ const dateText = (iso) => new Date(`${iso}T12:00:00`).toLocaleDateString("es-MX"
         <legend>{{ group.label }}</legend>
         <label v-for="item in group.items" :key="item.key" class="consent-row">
           <input v-model="picked" type="checkbox" :value="item.key" />
-          <span>{{ item.title }} <span class="muted-text">· {{ item.points }} puntos</span></span>
+          <span>{{ item.title }} <span class="muted-text">· {{ item.points * COINS_PER_POINT }} Cimacoins</span></span>
         </label>
       </fieldset>
       <FormField v-slot="{ id }" label="Fecha límite" optional>

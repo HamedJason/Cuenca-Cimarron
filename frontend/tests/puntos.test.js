@@ -29,7 +29,7 @@ describe("Etiquetas de puntos", () => {
     student.value = { name: "Ana" };
     tasks.value = [{ key: "mochila" }];
     const wrapper = mount(PointsTag, { props: { activityKey: "mochila" } });
-    expect(wrapper.text()).toContain("+20 puntos");
+    expect(wrapper.text()).toContain("+200 Cimacoins");
     expect(wrapper.text()).toContain("Tarea");
     progress.value = { points: 20, completed: ["mochila"] };
     await flushPromises();
@@ -52,7 +52,7 @@ describe("Pregunta de una lectura", () => {
     const [url, options] = fetch.mock.calls[0];
     expect(url).toBe("/api/actividades/lectura-conozca/respuesta");
     expect(JSON.parse(options.body)).toEqual({ answer: 2 });
-    expect(wrapper.text()).toContain("Sumaste 10 puntos");
+    expect(wrapper.text()).toContain("Ganaste 100 Cimacoins");
     expect(progress.value).toEqual({ points: 10, completed: ["lectura-conozca"] });
   });
   it("si se equivoca deja intentar otra vez", async () => {
@@ -73,7 +73,7 @@ describe("cuenca-puntos.js", () => {
     delete window.CuencaPuntos;
     new Function(readFileSync("public/juegos/cuenca-puntos.js", "utf8"))();
   };
-  it("sin sesión anota el juego terminado y avisa de las Cimacoins solo la primera vez", async () => {
+  it("sin sesión anota el juego terminado e invita a entrar con su grupo solo la primera vez", async () => {
     localStorage.clear();
     document.body.innerHTML = "";
     vi.stubGlobal("fetch", vi.fn(() => Promise.resolve({ ok: false, status: 401, json: () => Promise.resolve({}) })));
@@ -82,7 +82,7 @@ describe("cuenca-puntos.js", () => {
     await flushPromises();
     expect(localStorage.getItem("cuenca.puntos.pendientes")).toBe(null);
     expect(JSON.parse(localStorage.getItem("cuenca.juegos.terminados"))).toEqual(["mochila"]);
-    expect(document.querySelector("[role=status]").textContent).toContain("Ganaste Cimacoins");
+    expect(document.querySelector("[role=status]").textContent).toContain("Entra con el código de tu grupo para ganar Cimacoins");
     document.body.innerHTML = "";
     load();
     window.CuencaPuntos.terminar("mochila");

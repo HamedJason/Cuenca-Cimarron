@@ -55,7 +55,6 @@ class TeacherController extends Controller
             'code' => $classroom->code,
             'link' => $classroom->code ? Settings::publicUrl().'/unirse/'.$classroom->code : null,
             'open' => $classroom->open,
-            'school_year' => $classroom->school_year,
             'archived' => $classroom->archived_at !== null,
             'students' => $classroom->students_count ?? $classroom->students()->count(),
         ];
@@ -118,7 +117,6 @@ class TeacherController extends Controller
         }
         $classroom = new Classroom(['name' => trim($data['name']), 'grade' => trim($data['grade'])]);
         $classroom->teacher_id = $teacher->id;
-        $classroom->school_year = Classroom::currentSchoolYear();
         // Dos grupos creados al mismo tiempo podrían sacar el mismo código: se reintenta.
         for ($try = 0; ; $try++) {
             try {

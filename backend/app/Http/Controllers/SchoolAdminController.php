@@ -7,6 +7,7 @@ use App\Models\School;
 use App\Models\Teacher;
 use App\Support\AccountTokens;
 use App\Support\Audit;
+use App\Support\DemoMode;
 use App\Support\Mailer;
 use App\Support\Settings;
 use Illuminate\Http\JsonResponse;
@@ -17,13 +18,22 @@ use Illuminate\Support\Facades\DB;
 // ver sus docentes y grupos, mandar enlaces nuevos, cambiar su correo y suspenderla.
 class SchoolAdminController extends Controller
 {
-    public function show(School $school): JsonResponse
+    // La cuenta de demostración solo puede ver y cambiar escuelas demo.
+    private static function guardDemo(Request $request, School $school): void
     {
+        if (DemoMode::isDemoUser($request->user()) && ! DemoMode::isDemoSchool($school)) {
+            abort(response()->json(['message' => 'La cuenta de demostración solo puede ver escuelas demo.'], 403));
+        }
+    }
+
+    public function show(Request $request, School $school): JsonResponse
+    {
+        self::guardDemo($request, $school);
         $teachers = Teacher::where('school_id', $school->id)->orderByDesc('active')->orderBy('name')->get();
         $classrooms = DB::table('classrooms')
             ->join('teachers', 'teachers.id', '=', 'classrooms.teacher_id')
             ->where('teachers.school_id', $school->id)
-            ->select('classrooms.id', 'classrooms.name', 'classrooms.grade', 'classrooms.code', 'classrooms.open', 'classrooms.archived_at', 'classrooms.school_year', 'teachers.name as teacher', 'teachers.id as teacher_id')
+            ->select('classrooms.id', 'classrooms.name', 'classrooms.grade', 'classrooms.code', 'classrooms.open', 'classrooms.archived_at', 'teachers.name as teacher', 'teachers.id as teacher_id')
             ->orderByRaw('classrooms.archived_at is not null')->orderBy('classrooms.name')->get();
         $students = DB::table('students')->whereIn('classroom_id', $classrooms->pluck('id'))->whereNull('anonymized_at')
             ->select('classroom_id', DB::raw('count(*) as total'))->groupBy('classroom_id')->pluck('total', 'classroom_id');
@@ -48,7 +58,6 @@ class SchoolAdminController extends Controller
                 'code' => $c->code,
                 'open' => (bool) $c->open,
                 'archived' => $c->archived_at !== null,
-                'school_year' => $c->school_year,
                 'teacher' => $c->teacher,
                 'students' => (int) ($students[$c->id] ?? 0),
             ]),
@@ -57,6 +66,7 @@ class SchoolAdminController extends Controller
 
     public function suspend(Request $request, School $school): JsonResponse
     {
+        self::guardDemo($request, $school);
         $data = $request->validate(['reason' => ['required', 'string', 'min:5', 'max:300']]);
         $school->status = 'suspended';
         $school->rejection_reason = $data['reason'];
@@ -70,6 +80,7 @@ class SchoolAdminController extends Controller
 
     public function reactivate(Request $request, School $school): JsonResponse
     {
+        self::guardDemo($request, $school);
         $school->status = 'approved';
         $school->rejection_reason = null;
         $school->reviewed_by = $request->user()->id;
@@ -83,6 +94,7 @@ class SchoolAdminController extends Controller
     // Enlace para que la escuela ponga una contraseña nueva. Se manda por correo y también se muestra.
     public function passwordLink(Request $request, School $school): JsonResponse
     {
+        self::guardDemo($request, $school);
         $user = $school->user;
         $token = AccountTokens::create($user, 'reset', 60 * 24);
         $link = Settings::publicUrl().'/escuelas/contrasena?token='.$token;
@@ -99,6 +111,7 @@ class SchoolAdminController extends Controller
 
     public function changeEmail(Request $request, School $school): JsonResponse
     {
+        self::guardDemo($request, $school);
         AuthController::normalizeEmail($request);
         $data = $request->validate(['email' => ['required', 'email', 'max:160', 'unique:users,email,'.$school->user_id]]);
         $user = $school->user;
@@ -113,6 +126,7 @@ class SchoolAdminController extends Controller
     // Enlace nuevo para un docente que perdió el suyo.
     public function teacherLink(Request $request, Teacher $teacher): JsonResponse
     {
+        self::guardDemo($request, $teacher->school);
         if (! $teacher->active) {
             return response()->json(['message' => 'Ese docente está dado de baja.'], 422);
         }
@@ -125,6 +139,7 @@ class SchoolAdminController extends Controller
     // y se los da por otro medio. Los anteriores dejan de servir.
     public function recoveryCodes(Request $request, School $school): JsonResponse
     {
+        self::guardDemo($request, $school);
         $codes = \App\Support\RecoveryCodes::generate($school->user);
         Audit::log('admin', $request->user()->id, 'codigos-escuela', 'school', $school->id);
 

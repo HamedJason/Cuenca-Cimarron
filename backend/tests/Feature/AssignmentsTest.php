@@ -83,9 +83,16 @@ class AssignmentsTest extends TestCase
         $this->assertSame(['lectura-conozca'], $ana['done']);
         $this->assertSame(1, $ana['tasks_done']);
         $this->assertSame(20, $ana['points']);
+        // Cimacoins ganadas: 20 puntos × 10, sin las 150 iniciales
+        $this->assertSame(200, $ana['coins_earned']);
+        $this->assertSame(0, collect($table['students'])->firstWhere('name', 'Beto')['coins_earned']);
+        // Los premios suman y gastar en la tienda no baja lo ganado
+        \App\Models\Student::where('name', 'Ana')->first()->forceFill(['wallet' => ['bonus' => 70, 'spent' => 500]])->save();
+        $again = $this->as('cc_docente', $this->teacher)->getJson("/api/docente/grupos/{$this->classroom['id']}/avance")->json();
+        $this->assertSame(270, collect($again['students'])->firstWhere('name', 'Ana')['coins_earned']);
         $csv = $this->as('cc_docente', $this->teacher)->get("/api/docente/grupos/{$this->classroom['id']}/avance.csv")->assertOk()->streamedContent();
-        $this->assertStringContainsString('Alumno,"Qué es El Niño","Consejos: antes de la lluvia","Tareas hechas",Puntos', $csv);
-        $this->assertStringContainsString('Ana,Sí,No,"1 de 2",20', $csv);
+        $this->assertStringContainsString('Alumno,"Qué es El Niño","Consejos: antes de la lluvia","Tareas hechas","Cimacoins ganadas"', $csv);
+        $this->assertStringContainsString('Ana,Sí,No,"1 de 2",270', $csv);
     }
 
     public function test_otro_docente_no_ve_ni_asigna(): void

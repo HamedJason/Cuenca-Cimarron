@@ -389,12 +389,11 @@ const siteGoals = computed(() => {
           <Icon name="star" :size="18" />Como docente tienes todas las piezas desbloqueadas. Arma tu cimarrón como quieras
         </p>
         <p v-else-if="isAccountWallet" class="av-account">
-          <Icon name="star" :size="18" />Tu cimarrón se guarda en tu grupo. Cada punto de tus actividades también te da
-          {{ wallet.perPoint }} Cimacoins ({{ progress.points }} puntos)
+          <Icon name="star" :size="18" />Tu cimarrón se guarda en tu grupo. Cada actividad que terminas te da Cimacoins
         </p>
         <p v-else class="av-account">
           Tu cimarrón se guarda en este navegador.
-          <RouterLink to="/unirse">Entra con el código de tu grupo</RouterLink> para ganar Cimacoins con tus puntos
+          <RouterLink to="/unirse">Entra con el código de tu grupo</RouterLink> para ganar Cimacoins con tus actividades
           y llevar tu cimarrón a cualquier equipo
         </p>
       </div>

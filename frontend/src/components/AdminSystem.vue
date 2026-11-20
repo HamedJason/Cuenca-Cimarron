@@ -1,6 +1,6 @@
 <script setup>
 // Estado del sitio y mantenimiento, para quien mantiene vivo el sistema.
-import { ref, computed, onMounted } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 import Icon from "./Icon.vue";
 import FormField from "./FormField.vue";
 import { api } from "../composables/api";
@@ -9,8 +9,8 @@ const data = ref(null);
 const error = ref("");
 const message = ref("");
 const busy = ref(false);
-const year = ref("");
-const confirmText = ref("");
+// La cuenta del modo demostración no puede cambiar la dirección ni apagar la demo
+const props = defineProps({ isDemo: Boolean });
 
 const n = (v) => Number(v ?? 0).toLocaleString("es-MX");
 const size = (bytes) => (bytes == null ? "—" : bytes > 1048576 ? `${(bytes / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`);
@@ -27,7 +27,44 @@ const countLabels = {
   sesiones_de_cuentas: "Sesiones abiertas de cuentas",
   bitacora: "Registros en la bitácora",
 };
-const years = computed(() => Object.entries(data.value?.school_years ?? {}).filter(([y]) => y !== data.value?.current_school_year));
+
+// Dirección del sitio (antes estaba en Ajustes): con ella se arman los enlaces de grupos y docentes
+const site = reactive({ public_url: "", domain: "", effective: "", errors: {}, message: "" });
+async function loadSite() {
+  if (props.isDemo) return;
+  const r = await api("/admin/ajustes");
+  Object.assign(site, { public_url: r.settings.public_url ?? "", domain: r.settings.domain ?? "", effective: r.settings.effective_url, errors: {}, message: "" });
+}
+async function saveSite() {
+  site.errors = {};
+  site.message = "";
+  try {
+    const r = await api("/admin/ajustes", { method: "PUT", body: { public_url: site.public_url, domain: site.domain } });
+    site.effective = r.settings.effective_url;
+    site.message = "Guardado";
+  } catch (e) {
+    site.errors = e.errors ?? {};
+    site.message = Object.keys(site.errors).length ? "Revisa los campos marcados" : e.message;
+  }
+}
+
+// Modo demostración: crea las cuentas demo y abre /testeo_20nov por 24 horas
+const demoConfirm = ref("");
+const demoAction = computed(() => (data.value?.demo?.on ? "apagar" : "encender"));
+async function toggleDemo() {
+  busy.value = true;
+  message.value = "";
+  try {
+    await api("/admin/sistema/demo", { method: "POST", body: { accion: demoAction.value, confirm: demoConfirm.value } });
+    message.value = demoAction.value === "encender" ? "Modo demostración encendido. Entra a /testeo_20nov" : "Modo demostración apagado. Se borró todo lo demo";
+    demoConfirm.value = "";
+    await load();
+  } catch (e) {
+    message.value = e.message;
+  } finally {
+    busy.value = false;
+  }
+}
 
 async function load() {
   error.value = "";
@@ -37,7 +74,10 @@ async function load() {
     error.value = e.message;
   }
 }
-onMounted(load);
+onMounted(() => {
+  load();
+  loadSite().catch(() => {});
+});
 
 async function cleanup() {
   busy.value = true;
@@ -48,21 +88,6 @@ async function cleanup() {
     await load();
   } catch (e) {
     message.value = e.message;
-  } finally {
-    busy.value = false;
-  }
-}
-async function closeYear() {
-  busy.value = true;
-  message.value = "";
-  try {
-    const r = await api("/admin/sistema/cerrar-ciclo", { method: "POST", body: { school_year: year.value, confirm: confirmText.value } });
-    message.value = `Ciclo ${year.value} cerrado: ${r.archived} grupos archivados`;
-    confirmText.value = "";
-    year.value = "";
-    await load();
-  } catch (e) {
-    message.value = e.errors?.confirm ? "Escribe CERRAR en mayúsculas para confirmar" : e.message;
   } finally {
     busy.value = false;
   }
@@ -104,7 +129,7 @@ async function closeYear() {
     <section class="form-card">
       <h2 class="form-title">Mantenimiento</h2>
       <p v-if="message" class="form-alert is-ok" role="status">{{ message }}</p>
-      <div class="maint-item">
+      <div v-if="!isDemo" class="maint-item">
         <div>
           <h3>Limpieza</h3>
           <p class="muted-text">Borra sesiones caducadas y enlaces viejos, y borra los nombres de alumnos de grupos archivados hace más de 60 días. El sitio ya lo hace solo de vez en cuando</p>
@@ -113,23 +138,38 @@ async function closeYear() {
       </div>
       <div class="maint-item">
         <div>
-          <h3>Cerrar ciclo escolar</h3>
-          <p class="muted-text">Archiva todos los grupos de un ciclo terminado. Ya nadie entra con sus códigos y los nombres de los alumnos se borran 60 días después. El ciclo actual es {{ data.current_school_year }}</p>
-          <p v-if="!years.length" class="small muted-text">No hay grupos activos de ciclos anteriores</p>
-          <form v-else class="inline-form" @submit.prevent="closeYear">
-            <FormField v-slot="{ id }" label="Ciclo">
-              <select :id="id" v-model="year">
-                <option value="" disabled>Elige uno</option>
-                <option v-for="[y, total] in years" :key="y" :value="y">{{ y }} ({{ total }} grupos)</option>
-              </select>
+          <h3>Modo demostración</h3>
+          <p v-if="data.demo.on" class="muted-text">
+            Encendido<template v-if="data.demo.until">. Se apaga solo el {{ date(data.demo.until) }}</template>. Cualquiera puede entrar a las cuentas demo desde
+            <RouterLink class="text-link" to="/testeo_20nov">/testeo_20nov</RouterLink>, pero no pueden ver ni tocar datos reales. Al apagarlo se borra todo lo demo
+          </p>
+          <p v-else class="muted-text">Apagado. Al encenderlo se crean cuentas y escuelas de ejemplo y se abre /testeo_20nov para la exposición. Se apaga solo a las 24 horas</p>
+          <p v-if="data.demo.forced" class="small muted-text">Está forzado por el servidor (DEMO_20NOV=true)</p>
+          <form v-if="!isDemo" class="inline-form" @submit.prevent="toggleDemo">
+            <FormField v-slot="{ id }" :label="`Escribe ${demoAction.toUpperCase()} para confirmar`">
+              <input :id="id" v-model.trim="demoConfirm" autocomplete="off" />
             </FormField>
-            <FormField v-slot="{ id }" label="Escribe CERRAR para confirmar">
-              <input :id="id" v-model.trim="confirmText" autocomplete="off" />
-            </FormField>
-            <button class="button primary" type="submit" :disabled="busy || !year || confirmText !== 'CERRAR'">Cerrar ciclo</button>
+            <button :class="['button', data.demo.on ? 'secondary' : 'primary']" type="submit" :disabled="busy || demoConfirm.toUpperCase() !== demoAction.toUpperCase()">
+              {{ data.demo.on ? "Apagar y borrar lo demo" : "Encender modo demostración" }}
+            </button>
           </form>
         </div>
       </div>
     </section>
+
+    <form v-if="!isDemo" class="form-card" novalidate @submit.prevent="saveSite">
+      <h2 class="form-title">Dirección del sitio</h2>
+      <FormField v-slot="{ id, describedby }" label="Dirección pública" optional hint="Con ella se arman los enlaces de los grupos y de los docentes. Se guardó sola al configurar el sitio" :error="site.errors.public_url">
+        <input :id="id" v-model.trim="site.public_url" type="url" maxlength="200" :aria-describedby="describedby" />
+      </FormField>
+      <FormField v-slot="{ id, describedby }" label="Dominio para el HTTPS propio" optional hint="Solo si el servidor usa el HTTPS de Caddy (HTTPS_CADDY=1). En el servidor de la facultad no hace falta" :error="site.errors.domain">
+        <input :id="id" v-model.trim="site.domain" maxlength="200" spellcheck="false" :aria-describedby="describedby" />
+      </FormField>
+      <p class="small muted-text">Los enlaces usan: <b>{{ site.effective }}</b></p>
+      <p v-if="site.message" :class="['form-alert', site.message === 'Guardado' ? 'is-ok' : 'is-error']" role="status">{{ site.message }}</p>
+      <div class="form-actions">
+        <button class="button primary" type="submit">Guardar</button>
+      </div>
+    </form>
   </template>
 </template>

@@ -24,7 +24,6 @@ class SystemAdminTest extends TestCase
         $teacher->save();
         $classroom = new Classroom(['name' => '2° A', 'grade' => '2°']);
         $classroom->teacher_id = $teacher->id;
-        $classroom->school_year = '2025-2026';
         $classroom->code = Classroom::newCode();
         $classroom->save();
         $student = new Student(['name' => 'Ana']);
@@ -51,7 +50,7 @@ class SystemAdminTest extends TestCase
         $this->actingAs($this->admin())->getJson('/api/admin/sistema')->assertOk()
             ->assertJsonPath('checks.0.key', 'database')->assertJsonPath('checks.0.ok', true)
             ->assertJsonPath('checks.1.key', 'backup')->assertJsonPath('checks.1.ok', false)
-            ->assertJsonStructure(['commit', 'counts' => ['escuelas', 'alumnos'], 'school_years', 'current_school_year']);
+            ->assertJsonStructure(['commit', 'counts' => ['escuelas', 'alumnos'], 'demo' => ['on', 'until']]);
     }
 
     public function test_detalle_de_escuela_y_ayuda_con_enlaces(): void
@@ -97,14 +96,11 @@ class SystemAdminTest extends TestCase
         $student()->getJson('/api/yo')->assertJsonPath('student.name', 'Ana');
     }
 
-    public function test_cerrar_ciclo_y_limpieza(): void
+    public function test_limpieza_y_sin_cierre_de_ciclo(): void
     {
-        [, , $classroom] = $this->setUpSchool();
+        $this->setUpSchool();
         $admin = $this->admin();
-        $this->actingAs($admin)->postJson('/api/admin/sistema/cerrar-ciclo', ['school_year' => '2025-2026', 'confirm' => 'si'])->assertUnprocessable();
-        $this->actingAs($admin)->postJson('/api/admin/sistema/cerrar-ciclo', ['school_year' => '2025-2026', 'confirm' => 'CERRAR'])->assertOk()->assertJsonPath('archived', 1);
-        $this->assertNotNull($classroom->fresh()->archived_at);
-        $this->assertNull($classroom->fresh()->code);
+        $this->actingAs($admin)->postJson('/api/admin/sistema/cerrar-ciclo', ['school_year' => '2025-2026', 'confirm' => 'CERRAR'])->assertNotFound();
         $this->actingAs($admin)->postJson('/api/admin/sistema/limpieza')->assertOk()->assertJsonStructure(['device_sessions_removed', 'students_anonymized']);
     }
 
@@ -120,5 +116,17 @@ class SystemAdminTest extends TestCase
         $this->actingAs($admin)->getJson('/api/admin/bitacora?accion=suspender-escuela')->assertOk()
             ->assertJsonCount(1, 'entries')->assertJsonPath('entries.0.subject', 'Primaria Benito Juárez')
             ->assertJsonPath('entries.0.details.motivo', 'Revisión');
+    }
+
+    public function test_bitacora_de_20_en_20(): void
+    {
+        $admin = $this->admin();
+        for ($i = 0; $i < 45; $i++) {
+            \App\Support\Audit::log('admin', $admin->id, 'limpieza');
+        }
+        $first = $this->actingAs($admin)->getJson('/api/admin/bitacora?por=20')->assertOk()->assertJsonCount(20, 'entries')->assertJsonPath('more', true);
+        $last = $first->json('entries.19.id');
+        $this->actingAs($admin)->getJson("/api/admin/bitacora?por=20&antes_de={$last}")->assertOk()->assertJsonCount(20, 'entries')->assertJsonPath('more', true);
+        $this->actingAs($admin)->getJson('/api/admin/bitacora?por=20&antes_de='.($last - 20))->assertOk()->assertJsonCount(5, 'entries')->assertJsonPath('more', false);
     }
 }

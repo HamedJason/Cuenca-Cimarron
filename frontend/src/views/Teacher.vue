@@ -96,7 +96,6 @@ async function logout() {
         <ul v-if="showArchived" class="plain-list">
           <li v-for="item in archived" :key="item.id">
             <RouterLink :to="{ query: { grupo: item.id } }" class="text-link">{{ item.name }}</RouterLink>
-            <span class="small muted-text">{{ item.school_year }}</span>
           </li>
         </ul>
       </section>

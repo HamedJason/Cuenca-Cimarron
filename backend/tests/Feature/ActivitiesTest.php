@@ -28,7 +28,6 @@ class ActivitiesTest extends TestCase
         $teacher->save();
         $classroom = new Classroom(['name' => '5° A', 'grade' => '5°']);
         $classroom->teacher_id = $teacher->id;
-        $classroom->school_year = Classroom::currentSchoolYear();
         $classroom->code = Classroom::newCode();
         $classroom->save();
         $this->student = new Student(['name' => 'Ana']);
@@ -222,24 +221,21 @@ class ActivitiesTest extends TestCase
         $this->asStudent()->postJson('/api/actividades/mochila/inicio')->assertOk();
         $this->travel(46)->seconds();
         $this->asStudent()->postJson('/api/actividades/mochila/terminar')->assertOk();
-        // 80 iniciales + 20 puntos × 5 + 40 por terminar
-        $claim()->assertOk()->assertJsonPath('new', true)->assertJsonPath('wallet.coins', 220);
-        $claim()->assertOk()->assertJsonPath('new', false)->assertJsonPath('wallet.coins', 220);
+        // 150 iniciales + 20 puntos × 10 + 40 por terminar
+        $claim()->assertOk()->assertJsonPath('new', true)->assertJsonPath('wallet.coins', 390);
+        $claim()->assertOk()->assertJsonPath('new', false)->assertJsonPath('wallet.coins', 390);
         // Abrir el juego no necesita nada
-        $this->asStudent()->postJson('/api/yo/cimacoins/premio', ['id' => 'juego-alerta-911'])->assertOk()->assertJsonPath('wallet.coins', 230);
+        $this->asStudent()->postJson('/api/yo/cimacoins/premio', ['id' => 'juego-alerta-911'])->assertOk()->assertJsonPath('wallet.coins', 400);
     }
 
-    public function test_visitante_revisa_respuesta_sin_guardar_nada(): void
+    public function test_visitante_no_gana_por_terminar_ni_puede_revisar_respuestas(): void
     {
-        $this->postJson('/api/actividades/codigo-120/revisar', ['answer' => 0])->assertUnprocessable()->assertJsonPath('correct', false);
-        $this->postJson('/api/actividades/codigo-120/revisar', ['answer' => 1])->assertOk()->assertJsonPath('correct', true);
-        $this->postJson('/api/actividades/codigo-120/revisar', ['answer' => 'x'])->assertUnprocessable();
-        // Solo juegos de otros sitios: lecturas y juegos propios no se revisan así
-        $this->postJson('/api/actividades/lectura-conozca/revisar', ['answer' => 0])->assertNotFound();
-        $this->postJson('/api/actividades/mochila/revisar', ['answer' => 0])->assertNotFound();
-        $this->postJson('/api/actividades/no-existe/revisar', ['answer' => 0])->assertNotFound();
+        // Sin sesión de alumno no hay Cimacoins, tampoco por terminar un juego
+        $this->postJson('/api/yo/cimacoins/premio', ['id' => 'termino-mochila'])->assertUnauthorized();
+        $this->postJson('/api/yo/cimacoins/premio', ['id' => 'termino-codigo-120'])->assertUnauthorized();
+        // Ni hay forma de revisar la respuesta de un juego sin sesión
+        $this->postJson('/api/actividades/codigo-120/revisar', ['answer' => 1])->assertNotFound();
         $this->assertSame(0, DB::table('completions')->count());
-        $this->assertSame(0, DB::table('activity_starts')->count());
     }
 
     public function test_cimacoins_solo_con_sesion(): void

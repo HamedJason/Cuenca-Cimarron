@@ -64,11 +64,11 @@ Para un servidor sin HTTPS, el compose trae el servicio `proxy` (Caddy), apagado
 
 1. Agregar `HTTPS_CADDY=1` al `.env`.
 2. Volver a correr `sh Cuenca-Cimarron/instalar.sh`.
-3. Escribir el dominio en el panel de administración (Ajustes, Dominio) o en `DOMINIO` dentro de `.env`.
+3. Escribir el dominio en el panel de administración (Sistema, Dirección del sitio) o en `DOMINIO` dentro de `.env`.
 
 Caddy escucha en los puertos 80 y 443 y pide el certificado a Let's Encrypt la primera vez que alguien entra con ese dominio. Solo lo pide para el dominio aprobado. El dominio debe apuntar al servidor y los puertos deben estar abiertos desde internet.
 
-La dirección que usan los enlaces que da el sitio (grupos, docentes, invitaciones) se guarda sola al crear la cuenta de administración, con la dirección desde la que se configuró. Se puede cambiar en el panel (Ajustes, Dirección pública).
+La dirección que usan los enlaces que da el sitio (grupos, docentes, invitaciones) se guarda sola al crear la cuenta de administración, con la dirección desde la que se configuró. Se puede cambiar en el panel (Sistema, Dirección del sitio).
 
 ## Si al descargar sale "denied" o "unauthorized"
 
@@ -123,7 +123,7 @@ Si una escuela pierde la contraseña y también los códigos, en el panel de adm
 
 En el panel, pestaña Cuentas, se invita a más personas. Hay dos tipos:
 
-- **Solo ver datos:** ve el panel de datos y la lista de escuelas. No puede aprobar escuelas, cambiar ajustes, descargar respaldos ni invitar a nadie.
+- **Solo ver datos:** ve el panel de datos y la lista de escuelas. No puede suspender escuelas, cambiar la dirección del sitio, descargar respaldos ni invitar a nadie.
 - **Administración completa:** puede hacer todo.
 
 El panel da un enlace para mandárselo por WhatsApp. Con él pone su contraseña y recibe sus códigos de recuperación. Siempre queda al menos una cuenta de administración.
@@ -132,8 +132,8 @@ El panel da un enlace para mandárselo por WhatsApp. Con él pone su contraseña
 
 La cuenta de administración tiene, además de lo de las escuelas y el panel de datos:
 
-- **Sistema:** revisa que la base, los respaldos, la dirección pública y el catálogo estén bien, y muestra cuánto hay en la base. Tiene botones para hacer limpieza y para cerrar un ciclo escolar (archiva todos los grupos de ese ciclo).
-- **Bitácora:** quién hizo qué y cuándo (aprobar, suspender, dar de alta docentes, cambiar ajustes, descargar respaldos).
+- **Sistema:** revisa que la base, los respaldos, la dirección pública y el catálogo estén bien, y muestra cuánto hay en la base. Tiene botones para hacer limpieza, la dirección del sitio y el modo demostración.
+- **Bitácora:** quién hizo qué y cuándo (registrar escuelas, suspender, dar de alta docentes, cambiar la dirección del sitio, descargar respaldos, encender la demo).
 - **Detalle de cada escuela:** sus docentes y grupos, un enlace nuevo para un docente que perdió el suyo, un enlace para que la escuela ponga contraseña nueva, códigos de recuperación nuevos, cambiar su correo y suspenderla. Mientras una escuela está suspendida, sus docentes y alumnos no pueden entrar. No se borra nada y se puede reactivar.
 
 ## Catálogo de escuelas

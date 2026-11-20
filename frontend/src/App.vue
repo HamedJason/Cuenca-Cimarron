@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, onMounted } from "vue";
+import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import { useRoute } from "vue-router";
 import Icon from "./components/Icon.vue";
 import Modal from "./components/Modal.vue";
@@ -8,6 +8,8 @@ import LessonModal from "./components/LessonModal.vue";
 import StudentCheck from "./components/StudentCheck.vue";
 import ExternalReturn from "./components/ExternalReturn.vue";
 import TasksFab from "./components/TasksFab.vue";
+import HeaderWave from "./components/HeaderWave.vue";
+import LocationAsk from "./components/LocationAsk.vue";
 import { loadStudent, student } from "./composables/useStudent";
 import { loadActivities, retryPending } from "./composables/useActivities";
 import { setupFinishRewards } from "./composables/useFinishRewards";
@@ -87,12 +89,24 @@ onMounted(() => {
   setTimeout(setupFinishRewards, 4000);
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
+  // Alto real del encabezado (con la línea de agua): lo usan los saltos a secciones para no quedar tapados
+  if (siteHeader.value && "ResizeObserver" in window) {
+    headerObserver = new ResizeObserver(() => {
+      const h = Math.round(siteHeader.value.getBoundingClientRect().height) + 12;
+      document.documentElement.style.setProperty("--header-h", `${h}px`);
+    });
+    headerObserver.observe(siteHeader.value);
+  }
 });
+const siteHeader = ref(null);
+let headerObserver = null;
+onBeforeUnmount(() => headerObserver?.disconnect());
 </script>
 <template>
   <SplashScreen />
+  <LocationAsk />
   <a class="skip-link" href="#main-content">Saltar al contenido</a>
-  <header :class="['site-header', { scrolled, 'menu-open': menuOpen }]">
+  <header ref="siteHeader" :class="['site-header', { scrolled, 'menu-open': menuOpen }]">
     <div class="wrap header-row">
       <RouterLink class="brand" to="/" aria-label="Cuenca Cimarrona, inicio"
         ><img
@@ -112,6 +126,9 @@ onMounted(() => {
         title="Tus Cimacoins"
         ><Icon name="coin" :size="20" /><span>{{ coins.toLocaleString("es-MX") }}</span></RouterLink
       >
+      <RouterLink to="/directorio" class="theme-toggle dir-toggle" aria-label="Directorio" title="Directorio"
+        ><Icon name="phone" :size="22"
+      /></RouterLink>
       <button
         :class="['theme-toggle', { 'is-dark': theme === 'dark' }]"
         type="button"
@@ -174,10 +191,7 @@ onMounted(() => {
       </nav>
     </div>
     <!-- Agua que corre por la cuenca: una línea de olas bajo el encabezado -->
-    <div class="header-wave-wrap" aria-hidden="true"><svg class="header-wave" viewBox="0 0 240 12" preserveAspectRatio="none">
-      <path class="hw-fill" d="M0 0V8c20-5 40-5 60 0s40 5 60 0 40-5 60 0 40 5 60 0V0Z" />
-      <path class="hw-front" d="M0 8c20-5 40-5 60 0s40 5 60 0 40-5 60 0 40 5 60 0" />
-    </svg></div>
+    <HeaderWave />
   </header>
   <div class="workspace">
     <main id="main-content" tabindex="-1">
@@ -254,6 +268,7 @@ onMounted(() => {
         </div>
       </div>
       <div class="footer-tools">
+        <RouterLink to="/directorio" class="footer-link">Directorio</RouterLink>
         <RouterLink to="/escuelas" class="footer-link">Escuelas</RouterLink>
         <RouterLink to="/privacidad" class="footer-link">Aviso de privacidad</RouterLink>
         <RouterLink to="/estilos" class="footer-link">Estilos</RouterLink>

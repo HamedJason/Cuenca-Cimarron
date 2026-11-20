@@ -78,9 +78,9 @@ class ClassroomsTest extends TestCase
         $this->asTeacher($cookie->getValue())->getJson('/api/docente')->assertOk()->assertJsonPath('teacher.school', 'Primaria Benito Juárez');
     }
 
-    public function test_escuela_pendiente_no_puede_dar_de_alta_docentes(): void
+    public function test_escuela_suspendida_no_puede_dar_de_alta_docentes(): void
     {
-        $this->actingAs($this->school('pending'))->postJson('/api/escuela/docentes', ['name' => 'Laura'])->assertForbidden();
+        $this->actingAs($this->school('suspended'))->postJson('/api/escuela/docentes', ['name' => 'Laura'])->assertForbidden();
     }
 
     public function test_dar_de_baja_docente_cierra_sus_sesiones(): void

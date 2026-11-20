@@ -6,7 +6,7 @@ Cómo entra cada persona al sitio, qué puede hacer y dónde está el código. E
 
 | Quién | Cómo entra | Qué puede hacer | Dónde |
 | --- | --- | --- | --- |
-| Administración (`admin`) | Correo y contraseña | Todo: aprobar escuelas, panel de datos, sistema, cuentas, bitácora, ajustes y respaldos | `/admin` |
+| Administración (`admin`) | Correo y contraseña | Todo: escuelas, panel de datos, sistema, cuentas, bitácora y respaldos | `/admin` |
 | Solo ver datos (`viewer`) | Correo y contraseña | Ver el panel de datos y la lista de escuelas. No cambia nada | `/admin` |
 | Escuela (`school`) | Correo y contraseña | Corregir sus datos, dar de alta docentes y ver sus grupos | `/escuelas` |
 | Docente | Enlace de un solo uso que le da su escuela | Crear grupos, asignar tareas, ver el avance y atender a sus alumnos | `/docente` |
@@ -29,7 +29,7 @@ Se decidió con el profe que el sitio no maneje correo. El correo de una cuenta 
 
 Solo funciona mientras no exista ninguna cuenta de administración. En el repositorio solo está la huella SHA-256 de la clave, en `backend/config/instalacion.php`. Para cambiar la clave se cambia esa huella.
 
-Al crear esta cuenta se guarda la dirección desde la que se configuró el sitio como "dirección pública". Con ella se arman los enlaces que da el sitio. Se cambia en `/admin`, pestaña Ajustes.
+Al crear esta cuenta se guarda la dirección desde la que se configuró el sitio como "dirección pública". Con ella se arman los enlaces que da el sitio. Se cambia en `/admin`, pestaña Sistema, sección Dirección del sitio.
 
 ### Más cuentas del equipo
 
@@ -45,14 +45,13 @@ En la misma pestaña se cambia el tipo de cuenta, se quita el acceso o se da un 
 2. Busca su escuela en el catálogo de la SEP (autocompletado por nombre, CCT o colonia) o la llena a mano.
 3. Pone el nombre del responsable, su correo y una contraseña, y acepta el aviso de privacidad.
 4. Guarda sus códigos de recuperación. No puede seguir hasta descargarlos, imprimirlos o copiarlos y marcar que los guardó.
-5. Queda "En revisión". Puede entrar a su cuenta pero no dar de alta docentes.
-6. La administración la aprueba o la rechaza con un motivo en `/admin`. Si la rechazan, corrige sus datos y vuelve a revisión.
+5. Queda registrada y tiene acceso de inmediato: ya puede dar de alta a sus docentes. No hay revisión.
 
-Estados de una escuela: `pending` (en revisión), `approved` (aprobada), `rejected` (rechazada) y `suspended` (suspendida). Mientras está suspendida, sus docentes y alumnos no pueden entrar. No se borra nada.
+Estados de una escuela: `approved` (registrada) y `suspended` (suspendida). Las que estaban en revisión pasaron a registradas y las rechazadas a suspendidas (migración del 20 de noviembre de 2026). Mientras está suspendida, sus docentes y alumnos no pueden entrar. No se borra nada.
 
 ### Docentes
 
-1. La escuela aprobada escribe el nombre del docente en su cuenta.
+1. La escuela escribe el nombre del docente en su cuenta.
 2. El sitio da un enlace `/docente/acceso/...` que sirve una vez y dura 14 días.
 3. Al abrirlo, el navegador del docente guarda la cookie `cc_docente` y ya queda dentro.
 
@@ -100,12 +99,11 @@ Nombres: de 2 a 30 letras, espacios y punto. No se aceptan nombres repetidos en 
 
 Pestañas de `/admin` para la administración:
 
-- **Escuelas.** Revisar, aprobar, rechazar y ver el detalle de cada escuela: docentes, grupos, enlace nuevo para un docente, enlace de contraseña o códigos nuevos para la escuela, cambiar su correo y suspenderla. Abajo está el catálogo de escuelas de la SEP con el botón para cargarlo desde datos.gob.mx.
+- **Escuelas.** Registradas y suspendidas: se ven las 5 más recientes y "Ver todas" abre la lista con buscador (nombre, CCT, colonia o correo) que carga de 20 en 20. "Ver en el mapa" abre la escuela en un mapa. El detalle de cada escuela muestra: docentes, grupos, enlace nuevo para un docente, enlace de contraseña o códigos nuevos para la escuela, cambiar su correo y suspenderla. Abajo está el catálogo de escuelas de la SEP con el botón para cargarlo desde datos.gob.mx.
 - **Panel de datos.** Escuelas, docentes, grupos, alumnos, alumnos activos de la semana, por municipio, colonias con más registros, por nivel, públicas y privadas, últimas 8 semanas, mapa y tabla descargable en CSV. Nunca muestra nombres de alumnos.
-- **Sistema.** Estado de la base, respaldos, dirección pública y catálogo. Limpieza a mano y cierre de ciclo escolar.
+- **Sistema.** Estado de la base, respaldos, dirección pública y catálogo. Limpieza a mano, dirección del sitio y modo demostración (ver `docs/demo-20nov.md`).
 - **Cuentas.** Invitar, cambiar tipo y quitar acceso.
 - **Bitácora.** Quién hizo qué y cuándo (tabla `audit_logs`).
-- **Ajustes.** Dirección pública.
 - **Respaldos.** Descargar la base en el momento y las copias diarias si existen.
 
 Las cuentas de solo lectura ven únicamente Panel de datos y Escuelas, sin botones para cambiar nada.
@@ -145,7 +143,7 @@ Rutas (`/api/yo/cimarron` y `/api/yo/cimacoins/...`), reglas y cómo agregar pie
 | Panel del docente | `backend/app/Http/Controllers/TeacherController.php` y `AssignmentController.php` |
 | Alumnos: entrar, regresar, `/api/yo` | `backend/app/Http/Controllers/StudentController.php` |
 | Cuentas del equipo e invitaciones | `backend/app/Http/Controllers/StaffController.php` |
-| Aprobar escuelas, ajustes y respaldos | `backend/app/Http/Controllers/AdminController.php` |
+| Lista de escuelas, dirección del sitio y respaldos | `backend/app/Http/Controllers/AdminController.php` |
 | Detalle de escuela para la administración | `backend/app/Http/Controllers/SchoolAdminController.php` |
 | Sistema y bitácora | `backend/app/Http/Controllers/SystemAdminController.php` |
 | Permisos por rol | `backend/app/Http/Middleware/EnsureRole.php` |

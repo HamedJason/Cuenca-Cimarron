@@ -7,6 +7,8 @@ import { api } from "../composables/api";
 import { labelOf, levels, sectors } from "../composables/useAccount";
 
 const data = ref(null);
+// Desde dónde nos visitan: zona aproximada que manda el navegador, sin coordenadas
+const zones = ref(null);
 const error = ref("");
 const mapEl = ref(null);
 let map;
@@ -16,13 +18,13 @@ const tiles = computed(() => {
   const t = data.value?.totals;
   if (!t) return [];
   return [
-    { label: "Escuelas registradas", value: t.schools, note: t.pending_schools ? `${n(t.pending_schools)} en revisión` : "" },
+    { label: "Escuelas registradas", value: t.schools, note: t.suspended_schools ? `${n(t.suspended_schools)} suspendidas` : "" },
     { label: "Docentes", value: t.teachers },
     { label: "Grupos activos", value: t.classrooms },
     { label: "Alumnos registrados", value: t.students },
     { label: "Alumnos activos esta semana", value: t.active_students },
     { label: "Actividades completadas", value: t.completions },
-    { label: "Puntos ganados", value: t.points },
+    { label: "Cimacoins ganadas", value: t.coins_earned },
   ];
 });
 
@@ -94,6 +96,7 @@ async function load() {
   error.value = "";
   try {
     data.value = await api("/admin/estadisticas");
+    zones.value = await api("/admin/zonas").catch(() => null);
     await nextTick();
     map?.remove();
     map = null;
@@ -130,7 +133,7 @@ onBeforeUnmount(() => map?.remove());
           <thead><tr><th>Municipio</th><th class="num">Escuelas</th><th class="num">Docentes</th><th class="num">Alumnos</th><th class="num">Actividades</th></tr></thead>
           <tbody>
             <tr v-for="row in data.municipalities" :key="row.name"><td>{{ row.name }}</td><td class="num">{{ n(row.schools) }}</td><td class="num">{{ n(row.teachers) }}</td><td class="num">{{ n(row.students) }}</td><td class="num">{{ n(row.completions) }}</td></tr>
-            <tr v-if="!data.municipalities.length"><td colspan="5" class="muted-text">Todavía no hay escuelas aprobadas</td></tr>
+            <tr v-if="!data.municipalities.length"><td colspan="5" class="muted-text">Todavía no hay escuelas registradas</td></tr>
           </tbody>
         </table>
       </div>
@@ -198,7 +201,7 @@ onBeforeUnmount(() => map?.remove());
     <section class="form-card">
       <h2 class="form-title">Escuelas en el mapa</h2>
       <div v-if="data.schools.some((s) => s.lat)" ref="mapEl" class="location-picker-canvas stats-map" role="region" aria-label="Mapa de escuelas registradas"></div>
-      <p v-else class="muted-text">Ninguna escuela aprobada marcó su ubicación</p>
+      <p v-else class="muted-text">Ninguna escuela registrada marcó su ubicación</p>
     </section>
 
     <section class="form-card">
@@ -218,10 +221,42 @@ onBeforeUnmount(() => map?.remove());
               <td>{{ s.municipality }}</td><td>{{ s.colonia }}</td><td>{{ levelName(s.level) }}</td>
               <td class="num">{{ n(s.teachers) }}</td><td class="num">{{ n(s.classrooms) }}</td><td class="num">{{ n(s.students) }}</td><td class="num">{{ n(s.completions) }}</td>
             </tr>
-            <tr v-if="!schoolRows.length"><td colspan="8" class="muted-text">Todavía no hay escuelas aprobadas</td></tr>
+            <tr v-if="!schoolRows.length"><td colspan="8" class="muted-text">Todavía no hay escuelas registradas</td></tr>
           </tbody>
         </table>
       </div>
+    </section>
+
+    <section v-if="zones" class="form-card">
+      <div class="panel-head">
+        <h2 class="form-title">¿Desde dónde nos visitan?</h2>
+        <span class="muted-text">{{ n(zones.total) }} visitantes dijeron su zona</span>
+      </div>
+      <div class="stats-pair">
+        <div>
+          <h3 class="zone-subtitle">Por municipio</h3>
+          <ul class="bar-list compact">
+            <li v-for="row in zones.municipios" :key="row.name" :title="`${row.name}: ${n(row.visits)}`">
+              <span class="bar-label">{{ row.name }}</span>
+              <span class="bar-track"><span class="bar-fill" :style="{ width: `${(row.visits / maxOf(zones.municipios, 'visits')) * 100}%` }"></span></span>
+              <span class="bar-value">{{ n(row.visits) }}</span>
+            </li>
+          </ul>
+          <p v-if="!zones.municipios.length" class="muted-text">Todavía nadie nos ha dicho su zona</p>
+        </div>
+        <div>
+          <h3 class="zone-subtitle">Tijuana, por delegación</h3>
+          <ul class="bar-list compact">
+            <li v-for="row in zones.tijuana" :key="row.name" :title="`${row.name}: ${n(row.visits)}`">
+              <span class="bar-label">{{ row.name }}</span>
+              <span class="bar-track"><span class="bar-fill" :style="{ width: `${(row.visits / maxOf(zones.tijuana, 'visits')) * 100}%` }"></span></span>
+              <span class="bar-value">{{ n(row.visits) }}</span>
+            </li>
+          </ul>
+          <p v-if="!zones.tijuana.length" class="muted-text">Sin datos de Tijuana todavía</p>
+        </div>
+      </div>
+      <p class="small muted-text">Solo guardamos el municipio y la zona aproximada (la delegación más cercana en Tijuana). Nunca la ubicación exacta</p>
     </section>
 
     <section class="form-card">

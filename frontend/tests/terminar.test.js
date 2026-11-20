@@ -1,12 +1,12 @@
-// Cimacoins por terminar cada juego: visitantes (juegos propios y de otros sitios) y alumnos.
+// Cimacoins por terminar cada juego: solo el alumno con sesión las gana. El visitante no.
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { mount, flushPromises } from "@vue/test-utils";
 import ActivityQuestion from "../src/components/ActivityQuestion.vue";
 import { student, progress, studentState } from "../src/composables/useStudent";
 import { activities } from "../src/composables/useActivities";
-import { coins, isClaimed, lastReward, updateWallet } from "../src/composables/useCimacoins";
-import { FINISHED_GAMES, claimLocalFinishes, claimStudentFinishes } from "../src/composables/useFinishRewards";
-import { siteRewards, OPEN_COINS, FINISH_COINS } from "../src/avatar/rewards.js";
+import { coins, earn, isClaimed, lastReward, updateWallet } from "../src/composables/useCimacoins";
+import { FINISHED_GAMES, claimStudentFinishes } from "../src/composables/useFinishRewards";
+import { siteRewards, OPEN_COINS, FINISH_COINS, STARTER_COINS } from "../src/avatar/rewards.js";
 
 const reply = (data, status = 200) =>
   Promise.resolve({ ok: status < 400, status, json: () => Promise.resolve(data) });
@@ -42,63 +42,21 @@ describe("Premios por terminar", () => {
   });
 });
 
-describe("Visitante con juegos propios", () => {
-  it("cobra una vez cada juego anotado como terminado e ignora claves sin premio", async () => {
-    vi.stubGlobal("fetch", vi.fn());
-    localStorage.setItem(FINISHED_GAMES, JSON.stringify(["memorama", "lectura-conozca", "no-existe"]));
-    await claimLocalFinishes();
-    expect(coins.value).toBe(80 + FINISH_COINS);
-    expect(isClaimed("termino-memorama")).toBe(true);
-    await claimLocalFinishes();
-    expect(coins.value).toBe(80 + FINISH_COINS);
-    expect(fetch).not.toHaveBeenCalled();
-  });
-  it("lo anotado en el navegador no se cobra en la cuenta de un alumno", async () => {
+describe("Visitante sin sesión", () => {
+  it("no gana Cimacoins por terminar juegos ni pide nada al servidor", async () => {
     const fetch = vi.fn();
     vi.stubGlobal("fetch", fetch);
-    student.value = { name: "Ana", wallet: { version: 1, extra: 80, perPoint: 5, owned: [], claimed: [], dailyClaims: {}, completed: [], daily: "", angelic: false } };
-    localStorage.setItem(FINISHED_GAMES, JSON.stringify(["memorama"]));
-    await claimLocalFinishes();
+    localStorage.setItem(FINISHED_GAMES, JSON.stringify(["memorama", "alto-al-fuego"]));
+    await claimStudentFinishes(["memorama", "codigo-120"]);
+    expect(await earn("termino-memorama")).toBe(false);
+    expect(coins.value).toBe(STARTER_COINS);
+    expect(isClaimed("termino-memorama")).toBe(false);
     expect(fetch).not.toHaveBeenCalled();
   });
-});
-
-describe("Visitante con juegos de otros sitios", () => {
-  it("contesta bien y gana las Cimacoins sin guardar puntos", async () => {
-    const fetch = vi.fn(() => reply({ correct: true }));
-    vi.stubGlobal("fetch", fetch);
-    const wrapper = mount(ActivityQuestion, { props: { activityKey: "codigo-120", startedAt: Date.now() - 4 * 60 * 1000 } });
-    expect(wrapper.text()).toContain(`Pregunta para ganar ${FINISH_COINS} Cimacoins`);
-    await wrapper.findAll("input[type=radio]")[1].setValue(true);
-    await wrapper.find("button").trigger("click");
-    await flushPromises();
-    const [url, options] = fetch.mock.calls[0];
-    expect(url).toBe("/api/actividades/codigo-120/revisar");
-    expect(JSON.parse(options.body)).toEqual({ answer: 1 });
-    expect(wrapper.text()).toContain(`Ganaste ${FINISH_COINS} Cimacoins`);
-    expect(coins.value).toBe(80 + FINISH_COINS);
-    expect(progress.value.points).toBe(0);
-  });
-  it("si se equivoca no gana nada y puede intentar otra vez", async () => {
-    vi.stubGlobal("fetch", vi.fn(() => reply({ correct: false, message: "Esa no es." }, 422)));
-    const wrapper = mount(ActivityQuestion, { props: { activityKey: "codigo-120", startedAt: Date.now() - 4 * 60 * 1000 } });
-    await wrapper.findAll("input[type=radio]")[0].setValue(true);
-    await wrapper.find("button").trigger("click");
-    await flushPromises();
-    expect(wrapper.text()).toContain("Esa no es");
-    expect(coins.value).toBe(80);
-    expect(wrapper.find("button").exists()).toBe(true);
-  });
-  it("si regresa antes del tiempo mínimo no pregunta al servidor", async () => {
-    const fetch = vi.fn();
-    vi.stubGlobal("fetch", fetch);
-    const wrapper = mount(ActivityQuestion, { props: { activityKey: "codigo-120", startedAt: Date.now() - 30 * 1000 } });
-    await wrapper.findAll("input[type=radio]")[1].setValue(true);
-    await wrapper.find("button").trigger("click");
-    await flushPromises();
-    expect(wrapper.text()).toContain("muy rápido");
-    expect(fetch).not.toHaveBeenCalled();
-    expect(coins.value).toBe(80);
+  it("no ve la pregunta de los juegos de otros sitios ni el aviso de Cimacoins", () => {
+    const html = mount(ActivityQuestion, { props: { activityKey: "codigo-120" } }).html();
+    expect(html).not.toContain("activity-question");
+    expect(html).not.toContain("Cimacoins");
   });
   it("las lecturas siguen sin pregunta para visitantes", () => {
     expect(mount(ActivityQuestion, { props: { activityKey: "lectura-conozca" } }).html()).not.toContain("activity-question");
@@ -113,5 +71,27 @@ describe("Alumno", () => {
     await claimStudentFinishes(["lectura-conozca", "memorama", "mochila"]);
     const bodies = fetch.mock.calls.map(([url, options]) => [url, JSON.parse(options.body)]);
     expect(bodies).toEqual([["/api/yo/cimacoins/premio", { id: "termino-mochila" }]]);
+  });
+  it("gana las Cimacoins de terminar un juego que ya tiene completo", async () => {
+    const base = { version: 1, extra: STARTER_COINS, perPoint: 10, owned: [], claimed: [], dailyClaims: {}, completed: [], daily: "", angelic: false };
+    student.value = { name: "Ana", wallet: base };
+    const fetch = vi.fn(() => reply({ new: true, wallet: { ...base, extra: STARTER_COINS + FINISH_COINS, claimed: ["termino-memorama"] } }));
+    vi.stubGlobal("fetch", fetch);
+    expect(coins.value).toBe(STARTER_COINS);
+    await claimStudentFinishes(["memorama"]);
+    expect(coins.value).toBe(STARTER_COINS + FINISH_COINS);
+    expect(isClaimed("termino-memorama")).toBe(true);
+  });
+  it("contesta la pregunta del juego de otro sitio y suma puntos", async () => {
+    student.value = { name: "Ana", wallet: { version: 1, extra: STARTER_COINS, perPoint: 10, owned: [], claimed: [], dailyClaims: {}, completed: [], daily: "", angelic: false } };
+    const fetch = vi.fn(() => reply({ points: 10, total: 10, new: true }));
+    vi.stubGlobal("fetch", fetch);
+    const wrapper = mount(ActivityQuestion, { props: { activityKey: "codigo-120" } });
+    expect(wrapper.text()).toContain("Pregunta para ganar 100 Cimacoins");
+    await wrapper.findAll("input[type=radio]")[1].setValue(true);
+    await wrapper.find("button").trigger("click");
+    await flushPromises();
+    expect(fetch.mock.calls[0][0]).toBe("/api/actividades/codigo-120/respuesta");
+    expect(wrapper.text()).toContain("Ganaste 100 Cimacoins");
   });
 });

@@ -243,6 +243,9 @@ Además de cambiar de color, todo lo que se puede tocar muestra un detalle al se
 - Los tres temas (Qué es El Niño, Plan familiar y Mochila) se abren en una ventana (`LessonModal.vue`), desde Información y desde "Prepárate antes de que llueva" en el inicio. Se abren con `openLesson("mochila")` o con `/informacion?tema=mochila`
 - El botón "Ver información" ocupa todo el ancho de la tarjeta
 - Las marcas del plan y de la mochila se guardan en el navegador con las mismas llaves que las páginas anteriores
+- El 911 de Información (`Llamada911.vue`) es una guía de 6 pasos con animación propia (`llamada-paso-1` a `6`), botones Anterior y Siguiente y puntos. Debajo: el juego "¿Es una emergencia?", "No cuelgues", "Aprende tu dirección" (solo se guarda en el navegador, llave `cuenca.miDireccion`) y la tarjeta al Directorio
+- "Si la familia se separa" (`FamiliaSeparada.vue`) va después del 911: una frase por tarjeta, con icono grande
+- **Directorio** (`/directorio`): todos los números del sitio. No va en el menú de arriba porque en tableta ya no cabe. Se entra desde la tarjeta del 911, desde "Ver todo el directorio" en el inicio y desde el pie. El Escuadrón Violeta va en morado (`.agency-violet`) con "Solo funciona en Tijuana"
 - Las direcciones viejas (`/pages/aprende.html`, `/pages/recursos.html`, `/#/plan`, `/#/mochila`, `/#/el-nino`) llevan a las nuevas
 
 ## Recursos de otros sitios
@@ -270,17 +273,18 @@ Se prueba en 320, 375, 414, 768, 1024 y 1440 px, sin scroll horizontal ni texto 
 - **Tableta (761 a 1040 px):** el menú va en una fila sin iconos; las tarjetas de tres van en una sola fila desde 700 px
 - **Computadora:** menú con iconos
 
-## Puntos para alumnos
+## Cimacoins para alumnos
 
-Cuando un alumno entra con el código de su grupo, el sitio marca lo que da puntos. Los visitantes sin cuenta no ven ninguna de estas etiquetas (`PointsTag.vue`).
+Cuando un alumno entra con el código de su grupo, el sitio marca lo que da Cimacoins. Es el único número que ve el alumno: no se habla de puntos. Los visitantes sin cuenta no ven ninguna de estas etiquetas (`PointsTag.vue`).
 
 | Etiqueta | Clase | Cuándo |
 | --- | --- | --- |
-| +10 puntos, con estrella | `.points-tag.is-points` | Ocre UABC con texto verde profundo. La actividad da puntos y no se ha completado |
+| +100 Cimacoins, con moneda | `.points-tag.is-points` | Ocre UABC con texto verde profundo. La actividad da Cimacoins y no se ha completado |
 | Completada, con palomita | `.points-tag.is-done` | Verde UABC con texto blanco |
 | Tarea | `.points-tag.is-task` | Borde verde profundo. El docente la asignó |
-| Para consultar | `.points-tag.is-consult` | Gris. Secciones que no dan puntos (emergencias, riesgos) |
+| Para consultar | `.points-tag.is-consult` | Gris. Secciones que no dan Cimacoins (emergencias, riesgos) |
 
 - La pregunta al final de una lectura o un consejo va en un recuadro ocre claro con borde punteado (`ActivityQuestion.vue`). Tres opciones grandes, fáciles de tocar
-- El botón flotante "Tareas" del alumno va abajo a la derecha, en lugar de "Aprende jugando" (`TasksFab.vue`)
+- El botón flotante "Tareas" del alumno va abajo a la derecha, en lugar de "Aprende jugando" (`TasksFab.vue`). Sin tareas muestra sus Cimacoins
+- El docente ve en su grupo el **Ranking del grupo**: un podio con los tres primeros lugares (oro, plata y bronce) y la lista del resto, por Cimacoins ganadas. Solo lo ve el docente
 

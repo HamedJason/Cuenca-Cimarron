@@ -37,15 +37,16 @@ sobre el mismo personaje.
 
 ### Premio por terminar un juego
 
-Abrir un juego da poco (`OPEN_COINS`); terminarlo da el premio grande (`FINISH_COINS`).
+Abrir un juego da poco (`OPEN_COINS`) y terminarlo da el premio grande (`FINISH_COINS`).
 Cada premio `termino-<id>` dice con `activity` qué actividad lo comprueba.
+Como todas las Cimacoins, es solo para el alumno con sesión.
 
 | | Juegos propios (aviso) | Juegos de otros sitios (externo) |
 | --- | --- | --- |
-| Visitante | `cuenca-puntos.js` anota el juego en `cuenca.juegos.terminados` al ganar y el sitio cobra el premio al volver | Al regresar a la pestaña se pregunta si terminó. Se revisa el tiempo mínimo en el navegador y la respuesta con `POST /api/actividades/{key}/revisar`, que no guarda nada |
-| Alumno | El servidor da los puntos y, con la actividad completa, el premio | Igual: pregunta, puntos y luego el premio |
+| Alumno | El juego avisa al servidor, que da los puntos y, con la actividad completa, el premio | Al regresar a la pestaña se pregunta si terminó. Con la respuesta bien da los puntos y luego el premio |
+| Visitante | No gana nada. `cuenca-puntos.js` le dice una vez por juego que entre con el código de su grupo | No se le pregunta nada |
 
-Para el alumno el servidor solo entrega `termino-<id>` si ya tiene esa actividad completa.
+El servidor solo entrega `termino-<id>` si el alumno ya tiene esa actividad completa.
 
 ### Quién tiene cimarrón y Cimacoins
 
@@ -64,12 +65,15 @@ alumno y `teacher` cuando en el equipo hay un docente con sesión. Sin alumno, `
 hacen nada y las monedas escondidas no se muestran. Las carteras que se guardaron en el navegador
 antes de este cambio ya no se usan.
 
-**Puntos y Cimacoins no son lo mismo.** Los puntos son el avance que ve el docente y nunca
-bajan. Las Cimacoins se gastan en la tienda. Cada punto que gana el alumno le da también
-10 Cimacoins, así que comprar no le quita puntos. Saldo = 150 + puntos × 10 + premios − gastado.
-El servidor manda `wallet.extra` (saldo sin contar los puntos) y la página calcula
-`extra + puntos × 10`, para que el saldo
-suba en cuanto el alumno contesta bien, sin volver a pedir nada.
+**Para el alumno solo existen las Cimacoins.** Por dentro cada actividad sigue guardando sus puntos
+(tabla `completions`, nunca bajan), pero en el sitio se muestran ya convertidos: una lectura corta dice
+"+100 Cimacoins". Saldo = 150 + puntos × 10 + premios − gastado. El servidor manda `wallet.extra` (saldo sin
+contar los puntos) y la página calcula `extra + puntos × 10`, para que el saldo suba en cuanto termina una actividad.
+
+**Cimacoins ganadas (lo que ve el docente).** Es la calificación de participación del grupo: puntos × 10 + premios.
+No cuenta las 150 iniciales (las tiene cualquiera que entra) y no baja cuando el alumno compra en la tienda.
+El docente la ve en la tabla de avance, en el CSV y en el **Ranking del grupo** (podio con los tres primeros lugares).
+El panel de administración muestra el total de Cimacoins ganadas.
 
 **Al entrar a un grupo** el alumno empieza con 150 Cimacoins más las de sus puntos. Con eso
 ya compra unas piezas, y cada lectura corta bien contestada le da 100 más, así que en una o
