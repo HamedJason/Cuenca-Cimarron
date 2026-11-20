@@ -7110,16 +7110,18 @@ html.splash-open {
   .splash {
     gap: 22px;
   }
-  /* En celular, los logos de tres en tres */
+  /* En celular, los logos se acomodan solos y centrados; ninguno puede ser más ancho que la pantalla */
   .splash-partners {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px 14px;
+    gap: 12px;
   }
   .splash-partners li {
-    height: 84px;
+    height: 72px;
+    min-width: 0;
+    max-width: 100%;
+    padding: 6px 8px;
   }
-  .splash-partners li img {
+  .splash-partners li img,
+  .splash-partners li.is-wide img {
     max-width: 100%;
   }
   .splash-lead {
@@ -7332,10 +7334,13 @@ html.splash-open {
   }
 }
 
-/* Siete logos: en computadora, un poco más bajos y juntos para que quepan en una fila.
-   El logo horizontal (Cruz Roja Rosarito) va más angosto para no bajarse solo a otra fila. */
+/* Siete logos: en computadora, un poco más bajos y juntos.
+   Los logos horizontales (Ayuntamiento, Protección Civil BC) tienen más ancho para que se lean. */
+.splash-partners li {
+  box-sizing: border-box;
+}
 .splash-partners li.is-wide img {
-  max-width: 140px;
+  max-width: 300px;
 }
 @media (min-width: 701px) {
   .splash-partners {
@@ -7343,12 +7348,6 @@ html.splash-open {
   }
   .splash-partners li {
     height: clamp(84px, 9vw, 112px);
-  }
-}
-/* En celular van de tres en tres: el séptimo queda al centro de su fila */
-@media (max-width: 700px) {
-  .splash-partners li:last-child:nth-child(3n + 1) {
-    grid-column: 2;
   }
 }
 
