@@ -21,6 +21,19 @@ class SchoolCatalogController extends Controller
     // Palabras que no ayudan a buscar: "escuela forjadores de baja california" busca forjadores, baja y california.
     private const STOPWORDS = ['de', 'del', 'la', 'las', 'el', 'los', 'y', 'e', 'en', 'a', 'escuela', 'esc'];
 
+    // Punto que la SEP pone cuando no sabe dónde está la escuela (el centro de Tijuana, en la Zona Río).
+    // Lo traen 1,728 de las 2,155 escuelas de Tijuana del catálogo 2026, así que no es su ubicación.
+    public const UNKNOWN_POINT = [32.497, -117.08];
+
+    public static function knownPoint(mixed $lat, mixed $lng): bool
+    {
+        if ($lat === null || $lng === null || $lat === '' || $lng === '') {
+            return false;
+        }
+
+        return ! (round((float) $lat, 4) === self::UNKNOWN_POINT[0] && round((float) $lng, 4) === self::UNKNOWN_POINT[1]);
+    }
+
     public static function searchKey(string ...$parts): string
     {
         return mb_substr(Str::of(implode(' ', $parts))->ascii()->lower()->squish()->toString(), 0, 300);
@@ -119,8 +132,8 @@ class SchoolCatalogController extends Controller
             'address' => $s['address'] ?? null,
             'postal_code' => $s['postal_code'] ?? null,
             'municipality' => $s['municipality'],
-            'lat' => $s['lat'] ?? null,
-            'lng' => $s['lng'] ?? null,
+            'lat' => self::knownPoint($s['lat'] ?? null, $s['lng'] ?? null) ? $s['lat'] : null,
+            'lng' => self::knownPoint($s['lat'] ?? null, $s['lng'] ?? null) ? $s['lng'] : null,
             'updated_at' => $now,
         ], $schools);
     }

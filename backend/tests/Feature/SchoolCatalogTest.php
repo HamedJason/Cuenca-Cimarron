@@ -64,6 +64,18 @@ class SchoolCatalogTest extends TestCase
             ->assertJsonPath('schools.1.name', 'Agustín Melgar');
     }
 
+    public function test_el_punto_de_la_sep_sin_ubicacion_no_se_usa(): void
+    {
+        $this->actingAs($this->admin())->postJson('/api/admin/catalogo-escuelas', ['schools' => [
+            $this->row(),
+            $this->row(['cct' => '02DPR0002B', 'name' => 'Benito Juárez', 'lat' => 32.527144, 'lng' => -117.020861]),
+        ]])->assertOk();
+        $this->getJson('/api/catalogo-escuelas?q=pipila')->assertOk()
+            ->assertJsonPath('schools.0.lat', null)->assertJsonPath('schools.0.lng', null);
+        $this->getJson('/api/catalogo-escuelas?q=benito')->assertOk()
+            ->assertJsonPath('schools.0.lat', 32.527144)->assertJsonPath('schools.0.lng', -117.020861);
+    }
+
     public function test_marca_las_escuelas_ya_registradas(): void
     {
         $this->actingAs($this->admin())->postJson('/api/admin/catalogo-escuelas', ['schools' => [$this->row()]])->assertOk();

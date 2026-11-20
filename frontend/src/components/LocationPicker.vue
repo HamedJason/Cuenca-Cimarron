@@ -1,7 +1,7 @@
 <script setup>
 // Mapa para marcar dónde está la escuela. Un toque en el mapa mueve el punto.
 import { ref, watch, onMounted, onBeforeUnmount } from "vue";
-// near: punto aproximado (la colonia) para acercar el mapa cuando todavía no hay ubicación
+// near: [lat, lng, zoom] aproximado (la calle o la colonia) para acercar el mapa cuando todavía no hay ubicación
 const props = defineProps({ lat: Number, lng: Number, readonly: Boolean, near: { type: Array, default: null } });
 const emit = defineEmits(["update"]);
 const el = ref(null);
@@ -31,8 +31,10 @@ onMounted(async () => {
     failed.value = true;
     return;
   }
-  const start = props.lat && props.lng ? [props.lat, props.lng] : center;
-  map = L.map(el.value, { scrollWheelZoom: false }).setView(start, props.lat ? 16 : 12);
+  // Si la dirección se encontró antes de que cargara el mapa, se empieza ahí
+  const near = !props.lat && props.near;
+  const start = props.lat && props.lng ? [props.lat, props.lng] : near ? near.slice(0, 2) : center;
+  map = L.map(el.value, { scrollWheelZoom: false }).setView(start, props.lat ? 16 : near ? (near[2] ?? 15) : 12);
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution:
@@ -60,7 +62,7 @@ watch(
 watch(
   () => props.near,
   (point) => {
-    if (map && point && !props.lat) map.setView(point, 15);
+    if (map && point && !props.lat) map.setView(point.slice(0, 2), point[2] ?? 15);
   },
 );
 onBeforeUnmount(() => map?.remove());

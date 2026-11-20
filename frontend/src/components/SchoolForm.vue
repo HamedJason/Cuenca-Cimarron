@@ -16,24 +16,65 @@ const props = defineProps({
 });
 const emit = defineEmits(["no-cct"]);
 
-// Sin ubicación: el mapa se acerca a la colonia usando escuelas del catálogo que están en ella
+// Sin ubicación marcada, el mapa se acerca a la dirección escrita para que la escuela toque su entrada.
+// La mayoría de las escuelas del catálogo de la SEP no trae su ubicación real, así que se busca así:
+// 1. Calle y colonia en OpenStreetMap  2. Solo la colonia  3. Escuelas del catálogo en esa misma colonia.
+// Nunca marca el punto sola: solo acerca el mapa. near = [lat, lng, zoom]
 const near = ref(null);
+const nearBy = ref("");
 const plain = (t) => String(t ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+const median = (list) => {
+  const sorted = [...list].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+};
+// Solo Tijuana y Playas de Rosarito
+const VIEWBOX = "-117.13,32.58,-116.55,32.05";
+const found = new Map();
+async function osm(q) {
+  if (found.has(q)) return found.get(q);
+  const url =
+    "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=mx&bounded=1&accept-language=es" +
+    `&viewbox=${VIEWBOX}&q=${encodeURIComponent(q)}`;
+  const response = await fetch(url, { headers: { Accept: "application/json" }, signal: AbortSignal.timeout(8000) });
+  if (!response.ok) return null;
+  const [hit] = await response.json();
+  const point = hit ? [Number(hit.lat), Number(hit.lon)] : null;
+  found.set(q, point);
+  return point;
+}
+async function fromCatalog(colonia) {
+  const same = (await searchCatalog(colonia)).filter((s) => s.lat && plain(s.colonia) === plain(colonia));
+  return same.length ? [median(same.map((s) => s.lat)), median(same.map((s) => s.lng))] : null;
+}
 let timer;
+let turn = 0;
 watch(
-  () => model.value.colonia,
-  (colonia) => {
+  () => [model.value.address, model.value.colonia],
+  ([address, colonia]) => {
     clearTimeout(timer);
+    const mine = ++turn;
     if (model.value.lat || plain(colonia).length < 3) return;
     timer = setTimeout(async () => {
-      try {
-        const found = (await searchCatalog(colonia)).filter((s) => s.lat && plain(s.colonia).includes(plain(colonia)));
-        if (!found.length) return;
-        near.value = [found.reduce((a, s) => a + s.lat, 0) / found.length, found.reduce((a, s) => a + s.lng, 0) / found.length];
-      } catch {
-        // Sin catálogo el mapa se queda en Tijuana
+      const tries = [
+        plain(address).length >= 3 && [() => osm(`${address}, ${colonia}, Baja California`), 17, "calle"],
+        [() => osm(`${colonia}, Baja California`), 15, "colonia"],
+        [() => fromCatalog(colonia), 15, "colonia"],
+      ].filter(Boolean);
+      for (const [find, zoom, by] of tries) {
+        try {
+          const point = await find();
+          if (mine !== turn || model.value.lat) return;
+          if (point) {
+            near.value = [...point, zoom];
+            nearBy.value = by;
+            return;
+          }
+        } catch {
+          // Sin internet o sin catálogo se prueba lo siguiente; al final el mapa se queda en Tijuana
+        }
       }
-    }, 600);
+    }, 900);
   },
   { immediate: true },
 );
@@ -106,7 +147,17 @@ function setLocation({ lat, lng }) {
     </FormField>
     <div class="field">
       <span class="field-label">Ubicación en el mapa <span class="field-optional">(opcional)</span></span>
-      <p class="field-hint">{{ model.lat ? "Ya está marcada. Si no es la entrada, toca el lugar correcto en el mapa" : "Toca el mapa donde está la entrada de la escuela" }}</p>
+      <p class="field-hint">
+        {{
+          model.lat
+            ? "Ya está marcada. Si no es la entrada, toca el lugar correcto en el mapa"
+            : nearBy === "calle"
+              ? "El mapa se acercó a la calle que escribiste. Toca la entrada de la escuela"
+              : nearBy === "colonia"
+                ? "El mapa se acercó a tu colonia. Busca la escuela y toca su entrada"
+                : "Toca el mapa donde está la entrada de la escuela"
+        }}
+      </p>
       <LocationPicker :lat="model.lat" :lng="model.lng" :near="near" @update="setLocation" />
       <p v-if="errors.lat || errors.lng" class="field-error" role="alert">{{ errors.lat || errors.lng }}</p>
     </div>
