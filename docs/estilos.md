@@ -15,7 +15,7 @@ La marca del proyecto es el cimarrón brigadista. Las reglas completas están en
 | `icono-180.png` | Ícono al guardar el sitio en iPhone |
 | `icono-96.webp` | Encabezado, junto al nombre (se ve a 44 px) |
 | `firma-horizontal-claro.webp`, `firma-horizontal-oscuro.webp` | Descargas de la página de estilos (firma con el nombre en Lilita One) |
-| `assets/images/logo_uabc-80.webp` | Escudo UABC del pie (6 KB en lugar de 83 KB) |
+| `assets/images/uabc-escudo-80.webp` | Escudo UABC del pie (6 KB en lugar de 83 KB) |
 | `mascota-240.webp`, `mascota-480.webp` | Cimarrón guía (`MascotGuide.vue`) |
 | `silueta.png` | Máscara de la silueta en marcas de agua |
 | `sello-480.webp` | Página de estilos |
