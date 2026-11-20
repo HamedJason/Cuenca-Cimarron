@@ -39,6 +39,14 @@ class SchoolAccountsTest extends TestCase
         return substr($mail->actionUrl, -64);
     }
 
+    public function test_la_huella_de_instalacion_es_la_nueva(): void
+    {
+        $huella = require base_path('config/instalacion.php');
+        $this->assertMatchesRegularExpression('/^[0-9a-f]{64}$/', $huella['clave_hash']);
+        $this->assertSame('d4570669b4d046465d354de3566479108b7e3307265bfea7ac18f83e9cf766b5', $huella['clave_hash']);
+        $this->assertNotSame('e00152516815bf08e08f807a0ce58e6ba52161411ae656e2cb89c0736a2ba290', $huella['clave_hash']);
+    }
+
     public function test_configurar_crea_el_primer_admin_una_sola_vez(): void
     {
         $this->getJson('/api/sesion')->assertOk()->assertJson(['user' => null, 'setup_needed' => true]);
