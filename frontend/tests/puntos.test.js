@@ -73,13 +73,21 @@ describe("cuenca-puntos.js", () => {
     delete window.CuencaPuntos;
     new Function(readFileSync("public/juegos/cuenca-puntos.js", "utf8"))();
   };
-  it("sin sesión no guarda nada ni avisa", async () => {
+  it("sin sesión anota el juego terminado y avisa de las Cimacoins solo la primera vez", async () => {
     localStorage.clear();
+    document.body.innerHTML = "";
     vi.stubGlobal("fetch", vi.fn(() => Promise.resolve({ ok: false, status: 401, json: () => Promise.resolve({}) })));
     load();
     window.CuencaPuntos.terminar("mochila");
     await flushPromises();
     expect(localStorage.getItem("cuenca.puntos.pendientes")).toBe(null);
+    expect(JSON.parse(localStorage.getItem("cuenca.juegos.terminados"))).toEqual(["mochila"]);
+    expect(document.querySelector("[role=status]").textContent).toContain("Ganaste Cimacoins");
+    document.body.innerHTML = "";
+    load();
+    window.CuencaPuntos.terminar("mochila");
+    await flushPromises();
+    expect(JSON.parse(localStorage.getItem("cuenca.juegos.terminados"))).toEqual(["mochila"]);
     expect(document.querySelector("[role=status]")).toBe(null);
   });
   it("sin internet guarda el aviso para reintentarlo", async () => {

@@ -909,103 +909,194 @@
   "visita-diaria": {
    "coins": 20,
    "daily": true,
-   "items": []
+   "items": [],
+   "activity": null
   },
   "juego-mision-tijuana": {
-   "coins": 40,
+   "coins": 10,
    "daily": false,
-   "items": []
+   "items": [],
+   "activity": null
   },
   "juego-alerta-911": {
-   "coins": 40,
+   "coins": 10,
    "daily": false,
-   "items": []
+   "items": [],
+   "activity": null
   },
   "juego-novela-visual": {
-   "coins": 40,
+   "coins": 10,
    "daily": false,
-   "items": []
+   "items": [],
+   "activity": null
   },
   "juego-cinco-segundos": {
-   "coins": 40,
+   "coins": 10,
    "daily": false,
-   "items": []
+   "items": [],
+   "activity": null
   },
   "juego-cien-estudiantes": {
-   "coins": 40,
+   "coins": 10,
    "daily": false,
-   "items": []
+   "items": [],
+   "activity": null
   },
   "juego-mochila": {
+   "coins": 10,
+   "daily": false,
+   "items": [],
+   "activity": null
+  },
+  "juego-memorama": {
+   "coins": 10,
+   "daily": false,
+   "items": [],
+   "activity": null
+  },
+  "juego-alto-al-fuego": {
+   "coins": 10,
+   "daily": false,
+   "items": [],
+   "activity": null
+  },
+  "juego-codigo-120": {
+   "coins": 10,
+   "daily": false,
+   "items": [],
+   "activity": null
+  },
+  "termino-mision-tijuana": {
    "coins": 40,
    "daily": false,
-   "items": []
+   "items": [],
+   "activity": "mision-tijuana"
+  },
+  "termino-alerta-911": {
+   "coins": 40,
+   "daily": false,
+   "items": [],
+   "activity": "alerta-911"
+  },
+  "termino-novela-visual": {
+   "coins": 40,
+   "daily": false,
+   "items": [],
+   "activity": "novela-visual"
+  },
+  "termino-cinco-segundos": {
+   "coins": 40,
+   "daily": false,
+   "items": [],
+   "activity": "cinco-segundos"
+  },
+  "termino-cien-estudiantes": {
+   "coins": 40,
+   "daily": false,
+   "items": [],
+   "activity": "cien-estudiantes"
+  },
+  "termino-mochila": {
+   "coins": 40,
+   "daily": false,
+   "items": [],
+   "activity": "mochila"
+  },
+  "termino-memorama": {
+   "coins": 40,
+   "daily": false,
+   "items": [],
+   "activity": "memorama"
+  },
+  "termino-alto-al-fuego": {
+   "coins": 40,
+   "daily": false,
+   "items": [],
+   "activity": "alto-al-fuego"
+  },
+  "termino-codigo-120": {
+   "coins": 40,
+   "daily": false,
+   "items": [],
+   "activity": "codigo-120"
   },
   "mochila-lista": {
    "coins": 100,
    "daily": false,
    "items": [
     "espalda/mochila"
-   ]
+   ],
+   "activity": null
   },
   "plan-listo": {
    "coins": 100,
    "daily": false,
    "items": [
     "cuello/medalla"
-   ]
+   ],
+   "activity": null
   },
   "botiquin-listo": {
    "coins": 60,
    "daily": false,
-   "items": []
+   "items": [],
+   "activity": null
   },
   "explorador": {
    "coins": 60,
    "daily": false,
    "items": [
     "marco/explorador"
-   ]
+   ],
+   "activity": null
   },
   "moneda-conozca": {
    "coins": 30,
    "daily": false,
-   "items": []
+   "items": [],
+   "activity": null
   },
   "moneda-planfamiliar": {
    "coins": 30,
    "daily": false,
-   "items": []
+   "items": [],
+   "activity": null
   },
   "moneda-mochila": {
    "coins": 30,
    "daily": false,
-   "items": []
+   "items": [],
+   "activity": null
   },
   "moneda-salud": {
    "coins": 30,
    "daily": false,
-   "items": []
+   "items": [],
+   "activity": null
   },
   "moneda-911": {
    "coins": 30,
    "daily": false,
-   "items": []
+   "items": [],
+   "activity": null
   },
   "moneda-consejos": {
    "coins": 30,
    "daily": false,
-   "items": []
+   "items": [],
+   "activity": null
   },
   "moneda-equipo": {
    "coins": 30,
    "daily": false,
-   "items": []
+   "items": [],
+   "activity": null
   },
   "moneda-familias": {
    "coins": 30,
    "daily": false,
-   "items": []
+   "items": [],
+   "activity": null
   }
  },
  "retos": {

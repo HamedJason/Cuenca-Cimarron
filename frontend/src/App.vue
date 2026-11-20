@@ -10,6 +10,7 @@ import ExternalReturn from "./components/ExternalReturn.vue";
 import TasksFab from "./components/TasksFab.vue";
 import { loadStudent, student } from "./composables/useStudent";
 import { loadActivities, retryPending } from "./composables/useActivities";
+import { setupFinishRewards } from "./composables/useFinishRewards";
 import CoinToast from "./components/CoinToast.vue";
 import { closeLesson } from "./composables/useLesson";
 import { coins, earn, visitPage } from "./composables/useCimacoins";
@@ -80,6 +81,8 @@ onMounted(() => {
   });
   // Se espera a que pase la pantalla de bienvenida para que se vea el aviso
   setTimeout(() => earn("visita-diaria"), 3500);
+  // Cimacoins por los juegos terminados (en otra pestaña o antes de entrar)
+  setTimeout(setupFinishRewards, 4000);
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
 });

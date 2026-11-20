@@ -339,6 +339,7 @@ async function submitGame() {
 const siteGoals = computed(() => {
   const groups = [
     { title: "Abre cada juego", ids: Object.keys(siteRewards).filter((id) => id.startsWith("juego-")), to: "/juegos" },
+    { title: "Termina cada juego", ids: Object.keys(siteRewards).filter((id) => id.startsWith("termino-")), to: "/juegos" },
     { title: "Completa las listas", ids: ["mochila-lista", "plan-listo", "botiquin-listo"], to: "/informacion" },
     { title: "Visita todas las secciones", ids: ["explorador"], to: "/" },
     { title: "Monedas escondidas", ids: Object.keys(siteRewards).filter((id) => id.startsWith("moneda-")), to: "/informacion" },

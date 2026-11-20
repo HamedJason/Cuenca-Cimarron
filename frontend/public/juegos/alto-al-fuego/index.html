@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Alto al Fuego — Misión Extintor: Simulador educativo interactivo de prevención y uso correcto de extintores para la comunidad universitaria de la UABC.">
+  <title>Alto al Fuego · Cuenca Cimarrona · UABC</title>
+
+  <!-- Fuentes institucionales oficiales: Barlow Condensed y DM Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Hoja de estilos con la identidad visual Cuenca Cimarrona UABC -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <!-- Contenedor elevado principal con borde superior institucional UABC -->
+  <main>
+    <!-- Identificador de campaña -->
+    <div class="brand">Cuenca Cimarrona · UABC</div>
+
+    <!-- Encabezado con título principal y mascota oficial Cimarroncito -->
+    <div class="hero">
+      <h1>Alto al Fuego</h1>
+      <img class="mascot" src="assets/cimarroncito.png" alt="Cimarroncito, mascota de Cuenca Cimarrona">
+    </div>
+
+    <!-- ============================================================
+         PANTALLA 1: INTRODUCCIÓN Y BIENVENIDA
+         ============================================================ -->
+    <section id="screen-intro" class="screen active" role="main" aria-label="Pantalla de inicio">
+      <div class="intro-content">
+        <p class="intro-lead">
+          <strong>Misión Extintor: Identifica, Elige y Apunta.</strong><br>
+          Aprende a controlar conatos de incendio en aulas, talleres y hogares protegiendo a la comunidad cimarrona mediante el método <strong>T.A.P.E.</strong>
+        </p>
+
+        <!-- Cuadrícula informativa de las 4 clases de fuego -->
+        <div class="intro-classes-grid" role="list" aria-label="Clases de fuego normalizadas">
+          <div class="stat-box warm" role="listitem">
+            <div>
+              <span class="chip-title">🔥 Clase A</span>
+              <small class="chip-desc">Sólidos: madera, papel, tela</small>
+            </div>
+            <span class="chip-badge">Agua / PQS</span>
+          </div>
+
+          <div class="stat-box cool" role="listitem">
+            <div>
+              <span class="chip-title">💧 Clase B</span>
+              <small class="chip-desc">Líquidos: gasolina, solventes</small>
+            </div>
+            <span class="chip-badge">PQS / CO₂</span>
+          </div>
+
+          <div class="stat-box cool" role="listitem">
+            <div>
+              <span class="chip-title">⚡ Clase C</span>
+              <small class="chip-desc">Equipos eléctricos energizados</small>
+            </div>
+            <span class="chip-badge">CO₂ (No agua)</span>
+          </div>
+
+          <div class="stat-box warm" role="listitem">
+            <div>
+              <span class="chip-title">🍳 Clase K</span>
+              <small class="chip-desc">Aceites y grasas de cocina</small>
+            </div>
+            <span class="chip-badge">Tipo K</span>
+          </div>
+        </div>
+
+        <!-- Botón de acción principal -->
+        <div class="actions">
+          <button id="btn-start" class="btn" aria-label="Iniciar la simulación educativa">
+            🚒 Iniciar Simulación
+          </button>
+        </div>
+
+        <!-- Caja de ayuda educativa -->
+        <div class="help">
+          <p><strong>¿Cómo jugar y combatir el fuego?</strong></p>
+          <p>1. <strong>Diagnostica:</strong> Identifica el material que arde para determinar la Clase de Fuego (A, B, C o K).</p>
+          <p>2. <strong>Selecciona:</strong> Elige el extintor adecuado en el gabinete evitando agentes peligrosos.</p>
+          <p>3. <strong>Aplica el método T.A.P.E.:</strong> <strong>T</strong>ira del seguro metálico, <strong>A</strong>punta a la base del fuego, <strong>P</strong>resiona la manija y <strong>E</strong>sparce en barrido continuo.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PANTALLA 2: ESCENARIO DE SIMULACIÓN Y COMBATE ACTIVO
+         ============================================================ -->
+    <section id="screen-scenario" class="screen" aria-label="Escenario de combate de conato" aria-live="polite">
+
+      <!-- Barra informativa del escenario -->
+      <div class="scenario-title-bar" id="scenario-title-bar">
+        <span class="scenario-badge" id="scenario-number">Escenario 1 / 4</span>
+        <span class="scenario-name" id="scenario-title-text">Cargando escenario...</span>
+      </div>
+
+      <!-- Contenedor de Métricas / HUD superior institucional -->
+      <div class="hud hud-grid" role="status" aria-label="Indicadores de combate">
+        <!-- Indicador de Fuego (Warm / Melocotón) -->
+        <div class="stat-box warm">
+          <div class="stat-col">
+            <span class="stat-label">🔥 Intensidad Fuego</span>
+            <div class="hud-bar-track">
+              <div class="hud-fire-bar" id="hud-fire"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Indicador de Carga (Cool / Menta) -->
+        <div class="stat-box cool">
+          <div class="stat-col">
+            <span class="stat-label">💨 Carga Extintor</span>
+            <div class="hud-bar-track">
+              <div class="hud-charge-bar" id="hud-charge"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cronómetro con número destacado -->
+        <div class="stat-box warm">
+          <span class="stat-label">⏱️ Tiempo</span>
+          <div class="hud-timer big-number" id="hud-timer">30</div>
+        </div>
+
+        <!-- Indicador en vivo de técnica T.A.P.E. -->
+        <div class="stat-box cool">
+          <span class="stat-label">T.A.P.E.</span>
+          <div class="tape-indicators" role="list" aria-label="Pasos de la técnica T.A.P.E.">
+            <div class="tape-badge" id="tape-T" role="listitem" title="T: Tirar del seguro">T</div>
+            <div class="tape-badge" id="tape-A" role="listitem" title="A: Apuntar a la base">A</div>
+            <div class="tape-badge" id="tape-P" role="listitem" title="P: Presionar la manija">P</div>
+            <div class="tape-badge" id="tape-E" role="listitem" title="E: Esparcir en barrido">E</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mensaje dinámico de estado en vivo -->
+      <div id="msg" aria-live="polite">Analiza la escena y ejecuta los pasos de seguridad</div>
+
+      <!-- Área principal del juego (Game Stage) -->
+      <div class="game-stage">
+        <div class="canvas-wrapper">
+          <canvas
+            id="game-canvas"
+            width="800"
+            height="500"
+            aria-label="Lienzo de simulación física del conato de incendio"
+            role="img"
+          ></canvas>
+
+          <!-- Alertas flotantes sobre el conato -->
+          <div class="aim-alert hidden" id="aim-alert" role="alert">⚠️ ¡Apunta a la BASE del fuego!</div>
+          <div class="sweep-tip hidden" id="sweep-tip" role="status">↔️ Haz un movimiento de barrido de lado a lado</div>
+        </div>
+
+        <!-- Panel interactivo de fases: diagnóstico, gabinete y seguro -->
+        <div class="phase-overlay" id="phase-overlay" aria-live="polite"></div>
+      </div>
+
+      <!-- Caja de ayuda en juego -->
+      <div class="help">
+        <p><strong>Recuerda:</strong> El fuego se apaga sofocando el combustible en la <strong>base</strong>, nunca en la punta de las llamas. Mueve el chorro de lado a lado para activar el bono de barrido (×2.0).</p>
+      </div>
+
+    </section>
+
+    <!-- ============================================================
+         PANTALLA 3: RESULTADOS Y EVALUACIÓN FINAL
+         ============================================================ -->
+    <section id="screen-result" class="screen" aria-label="Pantalla de resultados y evaluación" aria-live="polite">
+      <div class="result-container">
+
+        <!-- Encabezado con medalla y rango brigadista -->
+        <div class="result-header">
+          <div class="result-icon" id="result-icon">🏅</div>
+          <h2 id="result-grade">Brigadista Experto</h2>
+          <p id="result-message">Evaluación del simulador de prevención UABC</p>
+        </div>
+
+        <!-- Cuadrícula de métricas técnicas inyectadas dinámicamente -->
+        <div class="metrics-grid" id="metrics-grid" role="list" aria-label="Métricas de desempeño"></div>
+
+        <!-- Tabla de Referencia Rápida con diseño institucional -->
+        <div class="quick-ref">
+          <h3>📋 Tabla de Referencia Rápida UABC</h3>
+          <table class="ref-table" aria-label="Tabla institucional de extintores y clases de fuego">
+            <thead>
+              <tr>
+                <th scope="col">Clase</th>
+                <th scope="col">Material Combustible</th>
+                <th scope="col">Extintor Recomendado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>🔥 Clase A</strong></td>
+                <td>Sólidos: madera, papel, tela, cartón</td>
+                <td>Agua Presurizada / PQS</td>
+              </tr>
+              <tr>
+                <td><strong>💧 Clase B</strong></td>
+                <td>Líquidos y gases: thinner, gasolina, pinturas</td>
+                <td>PQS / CO₂</td>
+              </tr>
+              <tr>
+                <td><strong>⚡ Clase C</strong></td>
+                <td>Equipos eléctricos energizados: cómputo, tableros</td>
+                <td>CO₂ (Evitar agua)</td>
+              </tr>
+              <tr>
+                <td><strong>🍳 Clase K</strong></td>
+                <td>Aceites y grasas vegetales/animales de cocina</td>
+                <td>Tipo K (Acetato de Potasio)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Botones de acción institucional -->
+        <div class="actions result-actions">
+          <button id="btn-repeat" class="btn secondary" aria-label="Repetir escenario actual">
+            🔄 Repetir Escenario
+          </button>
+          <button id="btn-next" class="btn" aria-label="Avanzar al siguiente escenario">
+            ➡️ Siguiente Escenario
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal global para alertas de riesgo (ej. reacción violenta / electrocución) -->
+  <div class="modal-overlay hidden" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-body">
+    <div class="modal-box modal-content">
+      <h3 id="modal-title"></h3>
+      <div id="modal-body"></div>
+      <div class="modal-actions">
+        <button class="btn" id="modal-close" aria-label="Entendido y cerrar">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor flotante de toasts -->
+  <div id="toast-container" role="log" aria-live="polite"></div>
+
+  <!-- Pie de página institucional UABC -->
+  <footer>
+    <strong>Universidad Autónoma de Baja California · Cuenca Cimarrona</strong>
+  </footer>
+
+  <!-- Scripts del juego (orden: datos -> UI -> motor -> inicialización) -->
+  <script src="js/fireData.js"></script>
+  <script src="js/uiManager.js"></script>
+  <script src="js/gameEngine.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      UI.init();
+      const canvas = document.getElementById('game-canvas');
+      const engine = new GameEngine(canvas, null);
+      UI.engine = engine;
+    });
+  </script>
+
+</body>
+</html>

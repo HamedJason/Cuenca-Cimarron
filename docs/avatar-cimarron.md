@@ -26,13 +26,26 @@ sobre el mismo personaje.
 | --- | --- | --- |
 | Monedas iniciales | 80 | `STARTER_COINS` en `src/avatar/rewards.js` |
 | Visita del día | 20 al día | `App.vue` (a los 3.5 s, después de la bienvenida) |
-| Abrir cada juego la primera vez | 40 c/u | `useGamePlays.js` (`juego-<id>`) |
+| Abrir cada juego la primera vez | 10 c/u | `useGamePlays.js` (`juego-<id>`) |
+| Terminar cada juego | 40 c/u | `useFinishRewards.js` (`termino-<id>`), ver abajo |
 | Completar la mochila, el plan familiar o el botiquín | 100, 100 y 60 (la mochila y el plan dan además un cosmético) | `LessonModal.vue` |
 | Visitar todas las secciones | 60 y el marco Explorador | `visitPage()` en `App.vue` |
 | Monedas escondidas en los temas y páginas | 30 c/u | `<SecretCoin id="moneda-...">` |
 | Retos de memoria de señales | 85 a 220, y 150 el reto diario | `activities` en `src/avatar/economy.js` |
 | Secreto: Cimarrón Angelical | Todas sus piezas | Los 3 primeros retos dan fragmentos; con ellos se abre el destello del avatar |
 | **Solo alumnos**: puntos de actividades | 5 Cimacoins por punto | `COINS_PER_POINT` en `src/avatar/rewards.js` |
+
+### Premio por terminar un juego
+
+Abrir un juego da poco (`OPEN_COINS`); terminarlo da el premio grande (`FINISH_COINS`).
+Cada premio `termino-<id>` dice con `activity` qué actividad lo comprueba.
+
+| | Juegos propios (aviso) | Juegos de otros sitios (externo) |
+| --- | --- | --- |
+| Visitante | `cuenca-puntos.js` anota el juego en `cuenca.juegos.terminados` al ganar y el sitio cobra el premio al volver | Al regresar a la pestaña se pregunta si terminó. Se revisa el tiempo mínimo en el navegador y la respuesta con `POST /api/actividades/{key}/revisar`, que no guarda nada |
+| Alumno | El servidor da los puntos y, con la actividad completa, el premio | Igual: pregunta, puntos y luego el premio |
+
+Para el alumno el servidor solo entrega `termino-<id>` si ya tiene esa actividad completa.
 
 ### Dos carteras: visitante y alumno
 

@@ -11,9 +11,9 @@
 import { ref, computed } from "vue";
 import { api } from "./api";
 import { student, progress, studentState, loadStudent } from "./useStudent";
-import { STARTER_COINS, siteRewards, explorerPages } from "../avatar/rewards.js";
+import { STARTER_COINS, siteRewards, explorerPages, finishRewardId } from "../avatar/rewards.js";
 
-export { STARTER_COINS, siteRewards, explorerPages };
+export { STARTER_COINS, siteRewards, explorerPages, finishRewardId };
 export const WALLET_KEY = "cuenca-cimarrona.economia.v1";
 export const AVATAR_KEY = "cuenca-cimarrona.avatar.v1";
 

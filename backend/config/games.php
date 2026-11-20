@@ -9,5 +9,8 @@ return [
         'cinco-segundos',
         'cien-estudiantes',
         'mochila',
+        'memorama',
+        'alto-al-fuego',
+        'codigo-120',
     ],
 ];

@@ -105,6 +105,7 @@ Route::middleware('throttle:aula')->group(function (): void {
     Route::post('/regresar', [StudentController::class, 'comeBack']);
 
     Route::get('/actividades', [ActivityController::class, 'index']);
+    Route::post('/actividades/{key}/revisar', [ActivityController::class, 'check'])->where('key', '[a-z0-9-]{2,60}');
 
     Route::middleware('equipo:student,opcional')->group(function (): void {
         Route::get('/yo', [StudentController::class, 'me']);
