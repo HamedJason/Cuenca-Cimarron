@@ -214,10 +214,10 @@ onBeforeUnmount(() => headerObserver?.disconnect());
             >
             <img
               class="footer-uabc"
-              src="/assets/images/logo_uabc-80.webp"
+              src="/assets/images/uabc-escudo-80.webp"
               alt="Escudo UABC"
               width="40"
-              height="52"
+              height="55"
             />
           </div>
           <h2 class="footer-title">Síguenos</h2>

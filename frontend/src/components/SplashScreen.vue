@@ -10,7 +10,7 @@ const KEY = "cuenca.splash";
 const DURATION = 4200;
 
 const partners = [
-  { name: "Universidad Autónoma de Baja California", src: "/assets/images/aliados/uabc.webp", w: 263, h: 360 },
+  { name: "Universidad Autónoma de Baja California", src: "/assets/images/aliados/uabc-v2.webp", w: 264, h: 360 },
   { name: "Facultad de Ciencias Químicas e Ingeniería", src: "/assets/images/aliados/fcqi.webp", w: 166, h: 360 },
   { name: "Ayuntamiento de Tijuana", gov: true, src: "/assets/images/aliados/ayuntamiento-tijuana.webp", w: 360, h: 143, wide: true },
   { name: "Sistema Estatal de Protección Civil Baja California", gov: true, src: "/assets/images/aliados/proteccion-civil-bc.webp", w: 1154, h: 360, wide: true },
