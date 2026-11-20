@@ -654,6 +654,57 @@ export const games = [
     text: "Busca por la casa lo que necesitas para evacuar antes de que se acabe el tiempo, y luego compara con una mochila ya lista",
     href: "/juegos/reto-60-segundos/index.html",
   },
+  {
+    // Un solo HTML en public/juegos/memorama; avisa al terminar (cuenca-puntos.js)
+    id: "memorama",
+    icon: "kit",
+    meta: [
+      { icon: "people", text: "2 jugadores" },
+      { icon: "kit", text: "16 pares" },
+    ],
+    title: "Memorama de emergencia",
+    tag: "Juego de memoria",
+    tone: "blue",
+    image: "/assets/images/game-memorama.webp",
+    alt: "Tablero de memorama con cartas volteadas de objetos del botiquín y de la mochila de emergencia",
+    short: "Juega en pareja y encuentra los pares del botiquín y la mochila",
+    text: "Juega con alguien más: uno busca los pares del botiquín y el otro los de la mochila de emergencia. Gana quien complete primero sus 8 pares",
+    href: "/juegos/memorama/index.html",
+  },
+  {
+    // Repo Alto-al-Fuego copiado tal cual a public/juegos/alto-al-fuego; avisa al apagar el fuego
+    id: "alto-al-fuego",
+    icon: "flame",
+    meta: [
+      { icon: "flame", text: "Fuegos A, B, C y K" },
+      { icon: "check", text: "Método T.A.P.E." },
+    ],
+    title: "Alto al Fuego",
+    tag: "Simulador de extintor",
+    tone: "gold",
+    image: "/assets/images/game-alto-al-fuego.webp",
+    alt: "Pantalla de inicio de Alto al Fuego con Cimarroncito y las cuatro clases de fuego: A, B, C y K",
+    short: "Identifica el fuego, elige el extintor y apunta a la base",
+    text: "Reconoce qué tipo de fuego es, escoge el extintor correcto y apágalo con el método T.A.P.E.: tira, apunta, presiona y esparce",
+    href: "/juegos/alto-al-fuego/index.html",
+  },
+  {
+    // App de RCP solo con las manos y uso del DEA, de un estudiante de Medicina UABC, publicada en Vercel
+    id: "codigo-120",
+    icon: "heart",
+    meta: [
+      { icon: "signpost", text: "6 misiones" },
+      { icon: "heart", text: "RCP con las manos" },
+    ],
+    title: "Código 120: Guardianes de la Vida",
+    tag: "Primeros auxilios",
+    tone: "green",
+    image: "/assets/images/game-codigo-120.webp",
+    alt: "Portada de Código 120 con el título Conviértete en Guardián de la Vida",
+    short: "Aprende RCP solo con las manos y a usar un desfibrilador (DEA)",
+    text: "Alguien se desploma en el patio de tu escuela. En seis misiones aprendes a reconocer la emergencia, llamar al 911, dar RCP solo con las manos y usar un DEA",
+    href: "https://codigo-120.vercel.app/",
+  },
 ];
 
 // Equipo (/equipo): quién hizo la página y cada juego.
@@ -705,6 +756,22 @@ export const gameCredits = {
     "Christian David Delapena Jim",
     "Erick André Castillo Pastén",
     "Hugo Giovanni Chaparro Herrera",
+  ],
+  // El mismo equipo de Arma tu mochila
+  "alto-al-fuego": [
+    "Gael Alejandro González Martin del Campo",
+    "Christian David Delapena Jim",
+    "Erick André Castillo Pastén",
+    "Hugo Giovanni Chaparro Herrera",
+  ],
+  // Estudiante de Medicina de la UABC
+  "codigo-120": ["Isaac Rubio"],
+  memorama: [
+    "Cinthya Patricia Cervantes Quintero",
+    "Marco Alberto Espinoza Vasquez",
+    "Kimberly Azbelin Huizar Garin",
+    "Luz Ileana Macias Garcia",
+    "Luz Paola Pozos Santiago",
   ],
 };
 

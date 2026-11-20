@@ -18,7 +18,10 @@ export function buildCatalog() {
     items,
     kits: Object.fromEntries(kits.filter((kit) => kit.id !== secretKit.id).map((kit) => [kit.id, kit.state])),
     rewards: Object.fromEntries(
-      Object.entries(siteRewards).map(([id, r]) => [id, { coins: r.coins, daily: Boolean(r.daily), items: r.items ?? [] }]),
+      Object.entries(siteRewards).map(([id, r]) => [
+          id,
+          { coins: r.coins, daily: Boolean(r.daily), items: r.items ?? [], activity: r.activity ?? null },
+        ]),
     ),
     retos: Object.fromEntries(activities.map((a) => [a.id, { coins: a.coins, daily: a.id === "diario", clue: Boolean(a.clue) }])),
     secret: {

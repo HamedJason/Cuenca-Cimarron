@@ -431,4 +431,42 @@ return [
         'min_seconds' => 45,
         'route' => '/juegos?juego=mochila',
     ],
+    [
+        // Avisa desde su propio código al terminar la partida (public/juegos/memorama).
+        'key' => 'memorama',
+        'title' => 'Memorama de emergencia',
+        'kind' => 'juego',
+        'mode' => 'aviso',
+        'points' => 20,
+        'min_seconds' => 60,
+        'route' => '/juegos?juego=memorama',
+    ],
+    [
+        // Avisa desde su propio código al apagar el fuego (public/juegos/alto-al-fuego).
+        'key' => 'alto-al-fuego',
+        'title' => 'Alto al Fuego',
+        'kind' => 'juego',
+        'mode' => 'aviso',
+        'points' => 20,
+        'min_seconds' => 60,
+        'route' => '/juegos?juego=alto-al-fuego',
+    ],
+    [
+        'key' => 'codigo-120',
+        'title' => 'Código 120: Guardianes de la Vida',
+        'kind' => 'externo',
+        'mode' => 'externo',
+        'points' => 10,
+        'min_seconds' => 180,
+        'route' => '/juegos?juego=codigo-120',
+        'question' => [
+            'text' => 'Si alguien se desploma, no responde y no respira normal, ¿qué haces primero?',
+            'options' => [
+                'Darle agua y esperar a que despierte',
+                'Pedir ayuda, llamar al 911 y empezar la RCP',
+                'Moverlo a otro lugar antes de llamar',
+            ],
+            'answer' => 1,
+        ],
+    ],
 ];

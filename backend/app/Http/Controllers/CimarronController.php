@@ -53,13 +53,19 @@ class CimarronController extends Controller
         });
     }
 
-    // Premio del sitio: abrir un juego, moneda escondida, listas completas, visita del día...
+    // Premio del sitio: abrir o terminar un juego, moneda escondida, listas completas, visita del día...
     public function reward(Request $request): JsonResponse
     {
         $id = $request->validate(['id' => ['required', 'string', 'max:40']])['id'];
         $reward = config("avatar.rewards.{$id}");
         if (! is_array($reward)) {
             return response()->json(['message' => 'Ese premio no existe.'], 404);
+        }
+
+        // Premio por terminar un juego: solo si el alumno ya tiene esa actividad completa.
+        $activity = $reward['activity'] ?? null;
+        if (is_string($activity) && ! ActivityController::isCompleted($request->attributes->get('student')->id, $activity)) {
+            return response()->json(['message' => 'Primero termina el juego.'], 422);
         }
 
         return $this->mutate($request, function (array &$wallet) use ($id, $reward): array {

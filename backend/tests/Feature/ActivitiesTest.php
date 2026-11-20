@@ -215,6 +215,33 @@ class ActivitiesTest extends TestCase
         $this->assertContains('cabeza/halo', $this->student->fresh()->wallet['owned']);
     }
 
+    public function test_premio_por_terminar_solo_con_la_actividad_completa(): void
+    {
+        $claim = fn () => $this->asStudent()->postJson('/api/yo/cimacoins/premio', ['id' => 'termino-mochila']);
+        $claim()->assertUnprocessable();
+        $this->asStudent()->postJson('/api/actividades/mochila/inicio')->assertOk();
+        $this->travel(46)->seconds();
+        $this->asStudent()->postJson('/api/actividades/mochila/terminar')->assertOk();
+        // 80 iniciales + 20 puntos × 5 + 40 por terminar
+        $claim()->assertOk()->assertJsonPath('new', true)->assertJsonPath('wallet.coins', 220);
+        $claim()->assertOk()->assertJsonPath('new', false)->assertJsonPath('wallet.coins', 220);
+        // Abrir el juego no necesita nada
+        $this->asStudent()->postJson('/api/yo/cimacoins/premio', ['id' => 'juego-alerta-911'])->assertOk()->assertJsonPath('wallet.coins', 230);
+    }
+
+    public function test_visitante_revisa_respuesta_sin_guardar_nada(): void
+    {
+        $this->postJson('/api/actividades/codigo-120/revisar', ['answer' => 0])->assertUnprocessable()->assertJsonPath('correct', false);
+        $this->postJson('/api/actividades/codigo-120/revisar', ['answer' => 1])->assertOk()->assertJsonPath('correct', true);
+        $this->postJson('/api/actividades/codigo-120/revisar', ['answer' => 'x'])->assertUnprocessable();
+        // Solo juegos de otros sitios: lecturas y juegos propios no se revisan así
+        $this->postJson('/api/actividades/lectura-conozca/revisar', ['answer' => 0])->assertNotFound();
+        $this->postJson('/api/actividades/mochila/revisar', ['answer' => 0])->assertNotFound();
+        $this->postJson('/api/actividades/no-existe/revisar', ['answer' => 0])->assertNotFound();
+        $this->assertSame(0, DB::table('completions')->count());
+        $this->assertSame(0, DB::table('activity_starts')->count());
+    }
+
     public function test_cimacoins_solo_con_sesion(): void
     {
         $this->postJson('/api/yo/cimacoins/premio', ['id' => 'moneda-conozca'])->assertUnauthorized();
