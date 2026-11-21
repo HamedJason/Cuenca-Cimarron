@@ -82,9 +82,15 @@ watch(
         ],
         plain(address).length >= 3 && [
           () => osm(`${address}, ${where}`),
-          (hit) => (/\d/.test(address) && ["house", "building"].includes(hit.addresstype) ? ["pin", "osm-casa"] : [17, "calle"]),
+          (hit) =>
+            /\d/.test(address) && ["house", "building"].includes(hit.addresstype)
+              ? ["pin", "osm-casa"]
+              : hit.category === "highway"
+                ? [17, "calle"]
+                : null,
         ],
-        [() => osm(where), () => [15, "colonia"]],
+        // OpenStreetMap no tiene todas las colonias y a veces responde con una tienda del mismo nombre
+        [() => osm(where), (hit) => (["place", "boundary"].includes(hit.category) ? [15, "colonia"] : null)],
         [() => fromCatalog(colonia), () => [15, "colonia"]],
       ].filter(Boolean);
       for (const [find, use] of tries) {
