@@ -389,7 +389,7 @@
 
 /* Mapa para marcar la escuela */
 .location-picker-canvas {
-  height: 280px;
+  height: 340px;
   border: 2px solid var(--edge);
   border-radius: 16px;
   overflow: hidden;
@@ -401,6 +401,32 @@
   border-radius: 50%;
   background: var(--uabc-gold);
   border: 4px solid #003d24;
+}
+/* Escuelas cercanas: se tocan para poner ahí el punto */
+.school-dot {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #00723f;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 1px #003d24;
+  cursor: pointer;
+}
+.location-tools {
+  display: grid;
+  gap: 6px;
+  justify-items: start;
+  margin-bottom: 8px;
+}
+.location-picker .leaflet-control-layers {
+  font-size: 15px;
+  border-radius: 10px;
+}
+.location-picker .leaflet-control-layers label {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
 }
 
 /* Botones chicos dentro de tablas y listas */

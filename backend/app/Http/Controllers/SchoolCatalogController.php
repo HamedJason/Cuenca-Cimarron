@@ -76,12 +76,49 @@ class SchoolCatalogController extends Controller
             'sector' => $s->sector,
             'colonia' => $s->colonia,
             'address' => $s->address,
+            'postal_code' => $s->postal_code !== '00000' ? $s->postal_code : null,
             'municipality' => $s->municipality,
             'lat' => $s->lat !== null ? (float) $s->lat : null,
             'lng' => $s->lng !== null ? (float) $s->lng : null,
             'geo' => $s->lat !== null ? ($s->geo ?? 'sep') : null,
             'registered' => in_array($s->cct, $taken, true),
         ])])->header('Cache-Control', 'no-store');
+    }
+
+    // Escuelas del catálogo con punto para ayudar a marcar el mapa del registro:
+    // con lat y lng, las que están a menos de 1.5 km (la escuela toca la suya);
+    // con cp, las de ese código postal (el registro pone el punto al centro de ellas).
+    public function nearby(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'lat' => ['required_without:cp', 'numeric', 'between:31.5,33.5'],
+            'lng' => ['required_with:lat', 'numeric', 'between:-118,-115.5'],
+            'cp' => ['nullable', 'string', 'regex:/^\d{5}$/', 'not_in:00000'],
+        ]);
+        $query = DB::table('school_catalog')->whereNotNull('lat')->whereNotNull('lng');
+        if (isset($data['lat'])) {
+            $lat = (float) $data['lat'];
+            $lng = (float) $data['lng'];
+            $query->whereBetween('lat', [$lat - 0.014, $lat + 0.014])->whereBetween('lng', [$lng - 0.016, $lng + 0.016]);
+        } else {
+            $query->where('postal_code', $data['cp']);
+        }
+        $rows = $query->limit(300)->get(['cct', 'name', 'level', 'colonia', 'postal_code', 'lat', 'lng']);
+        if (isset($lat)) {
+            // Distancia aproximada en metros (a esta escala basta un plano)
+            $meters = fn ($s) => hypot(((float) $s->lat - $lat) * 111_000, ((float) $s->lng - $lng) * 94_000);
+            $rows = $rows->filter(fn ($s) => $meters($s) <= 1500)->sortBy($meters)->take(60);
+        }
+
+        return response()->json(['schools' => $rows->values()->map(fn ($s) => [
+            'cct' => $s->cct,
+            'name' => $s->name,
+            'level' => $s->level,
+            'colonia' => $s->colonia,
+            'postal_code' => $s->postal_code,
+            'lat' => (float) $s->lat,
+            'lng' => (float) $s->lng,
+        ])]);
     }
 
     public function status(): JsonResponse

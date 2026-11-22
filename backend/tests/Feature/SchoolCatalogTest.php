@@ -88,6 +88,26 @@ class SchoolCatalogTest extends TestCase
             ->assertJsonPath('schools.0.lat', 32.531)->assertJsonPath('schools.0.geo', 'inegi');
     }
 
+    public function test_escuelas_cercanas_y_por_codigo_postal(): void
+    {
+        \App\Http\Controllers\SchoolCatalogController::save(\App\Http\Controllers\SchoolCatalogController::rows([
+            $this->row(['lat' => 32.531, 'lng' => -117.012, 'geo' => 'inegi']),
+            // A unos 800 m
+            $this->row(['cct' => '02DPR0002B', 'name' => 'Benito Juárez', 'postal_code' => '22002', 'lat' => 32.538, 'lng' => -117.012]),
+            // A más de 5 km
+            $this->row(['cct' => '02DPR0003C', 'name' => 'Lejana', 'postal_code' => '22002', 'lat' => 32.48, 'lng' => -117.012]),
+            $this->row(['cct' => '02DPR0004D', 'name' => 'Sin punto', 'postal_code' => '22002', 'lat' => null, 'lng' => null]),
+        ]));
+        $this->getJson('/api/catalogo-escuelas/cerca?lat=32.5312&lng=-117.0121')->assertOk()
+            ->assertJsonCount(2, 'schools')
+            ->assertJsonPath('schools.0.cct', '02DPB0007N')->assertJsonPath('schools.1.cct', '02DPR0002B');
+        $this->getJson('/api/catalogo-escuelas/cerca?cp=22002')->assertOk()->assertJsonCount(2, 'schools');
+        $this->getJson('/api/catalogo-escuelas/cerca')->assertUnprocessable();
+        $this->getJson('/api/catalogo-escuelas/cerca?cp=00000')->assertUnprocessable();
+        // El código postal sale en la búsqueda
+        $this->getJson('/api/catalogo-escuelas?q=pipila')->assertOk()->assertJsonPath('schools.0.postal_code', '22001');
+    }
+
     public function test_marca_las_escuelas_ya_registradas(): void
     {
         $this->actingAs($this->admin())->postJson('/api/admin/catalogo-escuelas', ['schools' => [$this->row()]])->assertOk();

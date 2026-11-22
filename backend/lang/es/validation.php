@@ -48,6 +48,7 @@ return [
         'cct' => ['unique' => 'Esa escuela ya está registrada. Si eres de esa escuela, pide acceso a quien la registró o escríbenos.'],
         'email' => ['unique' => 'Ya hay una cuenta con ese correo. Entra con él o usa "Olvidé mi contraseña".'],
         'lat' => ['required' => 'Marca la escuela en el mapa.'],
+        'postal_code' => ['regex' => 'El código postal tiene 5 números.'],
         'lng' => ['required' => 'Marca la escuela en el mapa.'],
     ],
 
@@ -62,6 +63,7 @@ return [
         'sector' => 'si es pública o privada',
         'colonia' => 'la colonia',
         'address' => 'el domicilio',
+        'postal_code' => 'el código postal',
         'lat' => 'la ubicación',
         'lng' => 'la ubicación',
         'contact_name' => 'el nombre de la persona responsable',

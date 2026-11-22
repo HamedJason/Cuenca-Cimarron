@@ -52,6 +52,7 @@ class School extends Model
             'sector' => $this->sector,
             'colonia' => $this->colonia,
             'address' => $this->address,
+            'postal_code' => $this->postal_code,
             'lat' => $this->lat,
             'lng' => $this->lng,
             'contact_name' => $this->contact_name,

@@ -22,7 +22,7 @@ const searching = ref(false);
 const formKey = ref(0);
 function edit() {
   const { status, rejection_reason, id, ...data } = school.value;
-  draft.value = { ...data, cct: data.cct ?? "" };
+  draft.value = { ...data, cct: data.cct ?? "", postal_code: data.postal_code ?? "" };
   errors.value = {};
   editing.value = true;
 }
@@ -39,6 +39,7 @@ function pickFromCatalog(found) {
     sector: found.sector ?? draft.value.sector,
     colonia: found.colonia ?? draft.value.colonia,
     address: found.address ?? draft.value.address,
+    postal_code: found.postal_code ?? draft.value.postal_code,
     lat: found.lat ?? draft.value.lat,
     lng: found.lng ?? draft.value.lng,
   });

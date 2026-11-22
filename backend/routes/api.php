@@ -29,6 +29,7 @@ Route::middleware('throttle:publico')->group(function (): void {
     Route::post('/game-sessions', [GameSessionController::class, 'store']);
     Route::get('/version', [SystemController::class, 'version']);
     Route::get('/catalogo-escuelas', [SchoolCatalogController::class, 'search']);
+    Route::get('/catalogo-escuelas/cerca', [SchoolCatalogController::class, 'nearby']);
     Route::get('/respaldo', [AdminController::class, 'backupWithKey']);
 });
 

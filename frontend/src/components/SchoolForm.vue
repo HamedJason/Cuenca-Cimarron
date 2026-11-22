@@ -4,7 +4,7 @@ import { computed, ref, watch } from "vue";
 import FormField from "./FormField.vue";
 import LocationPicker from "./LocationPicker.vue";
 import { levels, shifts, sectors } from "../composables/useAccount";
-import { searchCatalog } from "../composables/useCatalog";
+import { searchCatalog, nearbyCatalog } from "../composables/useCatalog";
 const model = defineModel({ type: Object, required: true });
 // fromCatalog: los datos vienen del catálogo de la SEP y la CCT no se cambia.
 // noCct: la escuela marcó que no sabe su CCT (solo al registrarse a mano).
@@ -23,19 +23,28 @@ const emit = defineEmits(["no-cct"]);
 // y la escuela lo mueve a la entrada:
 // 1. La escuela por su nombre en OpenStreetMap
 // 2. La calle con número; si OpenStreetMap no tiene el número, un punto en esa calle
-// 3. La colonia, y si no, el centro de las escuelas del catálogo en esa colonia
+// 3. El centro de las escuelas del catálogo con el mismo código postal
+// 4. La colonia, y si no, el centro de las escuelas del catálogo en esa colonia
+// Con código postal, lo que OpenStreetMap encuentre a más de 3 km de su centro se descarta.
+// También se puede usar el GPS ("Estoy en la escuela") o tocar una de las escuelas cercanas del mapa.
 // pinBy: de dónde salió el punto puesto. near = [lat, lng, zoom] para acercar el mapa
 const pinBy = ref(model.value.lat ? props.geo || "guardada" : "");
+const pickedName = ref("");
 const near = ref(null);
 const autoPin = () => !model.value.lat || pinBy.value.startsWith("osm-");
-const plain = (t) => String(t ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+const plain = (t) => String(t ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
 const median = (list) => {
   const sorted = [...list].sort((a, b) => a - b);
   const mid = Math.floor(sorted.length / 2);
   return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 };
+const centerOf = (list) => [median(list.map((s) => s.lat)), median(list.map((s) => s.lng))];
+// Metros entre dos puntos [lat, lng] (a esta escala basta un plano)
+const meters = (a, b) => Math.hypot((a[0] - b[0]) * 111000, (a[1] - b[1]) * 94000);
+const validCp = (cp) => /^\d{5}$/.test(cp ?? "") && cp !== "00000";
 // Solo Tijuana y Playas de Rosarito
 const VIEWBOX = "-117.13,32.58,-116.55,32.05";
+const inArea = ([lat, lng]) => lat >= 32.05 && lat <= 32.58 && lng >= -117.13 && lng <= -116.55;
 const SCHOOL_TYPES = ["school", "kindergarten", "college", "university"];
 const found = new Map();
 let lastAsk = 0;
@@ -55,9 +64,20 @@ async function osm(q) {
   found.set(q, result);
   return result;
 }
-async function fromCatalog(colonia) {
-  const same = (await searchCatalog(colonia)).filter((s) => s.lat && plain(s.colonia) === plain(colonia));
-  return same.length ? { point: [median(same.map((s) => s.lat)), median(same.map((s) => s.lng))] } : null;
+// Centro de las escuelas del catálogo con ese código postal
+const cpCenters = new Map();
+async function cpCenter(cp) {
+  if (!validCp(cp)) return null;
+  if (!cpCenters.has(cp)) {
+    const list = await nearbyCatalog({ cp }).catch(() => []);
+    cpCenters.set(cp, list.length ? centerOf(list) : null);
+  }
+  return cpCenters.get(cp);
+}
+async function fromCatalog(colonia, cp) {
+  let same = (await searchCatalog(colonia)).filter((s) => s.lat && plain(s.colonia) === plain(colonia));
+  if (validCp(cp) && same.some((s) => s.postal_code === cp)) same = same.filter((s) => s.postal_code === cp);
+  return same.length ? { point: centerOf(same) } : null;
 }
 function putPin([lat, lng], by) {
   model.value.lat = Number(lat.toFixed(6));
@@ -67,31 +87,42 @@ function putPin([lat, lng], by) {
 let timer;
 let turn = 0;
 watch(
-  () => [model.value.name, model.value.address, model.value.colonia],
-  ([name, address, colonia]) => {
+  () => [model.value.name, model.value.address, model.value.colonia, model.value.postal_code],
+  ([name, address, colonia, cp]) => {
     clearTimeout(timer);
     const mine = ++turn;
-    if (!autoPin() || plain(colonia).length < 3) return;
+    if (!autoPin() || (plain(colonia).length < 3 && !validCp(cp))) return;
     timer = setTimeout(async () => {
-      const where = `${colonia}, Baja California`;
-      // [buscar, qué hacer con lo encontrado]: "pin" pone el punto; un número solo acerca el mapa
+      const zone = await cpCenter(cp).catch(() => null);
+      if (mine !== turn) return;
+      // Lo de OpenStreetMap solo vale si cae cerca del código postal
+      const close = (hit) => !zone || meters(hit.point, zone) <= 3000;
+      const hasColonia = plain(colonia).length >= 3;
+      const where = hasColonia ? `${colonia}, Baja California` : "Tijuana, Baja California";
+      // [buscar, qué hacer con lo encontrado]: "pin" pone el punto exacto; un número es el acercamiento del mapa
       const tries = [
         plain(name).length >= 3 && [
           () => osm(`${name}, ${where}`),
-          (hit) => (hit.category === "amenity" && SCHOOL_TYPES.includes(hit.type) ? ["pin", "osm-escuela"] : null),
+          (hit) => (hit.category === "amenity" && SCHOOL_TYPES.includes(hit.type) && close(hit) ? ["pin", "osm-escuela"] : null),
         ],
         plain(address).length >= 3 && [
           () => osm(`${address}, ${where}`),
           (hit) =>
-            /\d/.test(address) && ["house", "building"].includes(hit.addresstype)
-              ? ["pin", "osm-casa"]
-              : hit.category === "highway"
-                ? [17, "osm-calle"]
-                : null,
+            !close(hit)
+              ? null
+              : /\d/.test(address) && ["house", "building"].includes(hit.addresstype)
+                ? ["pin", "osm-casa"]
+                : hit.category === "highway"
+                  ? [17, "osm-calle"]
+                  : null,
         ],
-        // OpenStreetMap no tiene todas las colonias y a veces responde con una tienda del mismo nombre
-        [() => osm(where), (hit) => (["place", "boundary"].includes(hit.category) ? [16, "osm-colonia"] : null)],
-        [() => fromCatalog(colonia), () => [16, "osm-colonia"]],
+        zone && [() => ({ point: zone }), () => [16, "osm-cp"]],
+        hasColonia && [
+          () => osm(where),
+          // OpenStreetMap no tiene todas las colonias y a veces responde con una tienda del mismo nombre
+          (hit) => (["place", "boundary"].includes(hit.category) && close(hit) ? [16, "osm-colonia"] : null),
+        ],
+        hasColonia && [() => fromCatalog(colonia, cp), () => [16, "osm-colonia"]],
       ].filter(Boolean);
       for (const [find, use] of tries) {
         try {
@@ -110,12 +141,92 @@ watch(
   },
   { immediate: true },
 );
+
+// Escuelas cercanas al punto: las del catálogo (SEP e INEGI) y las que OpenStreetMap tiene dibujadas.
+// Se piden de nuevo solo si el punto se movió más de 700 m.
+const nearby = ref([]);
+let nearbyFrom = null;
+let nearbyTimer;
+async function osmSchools([lat, lng]) {
+  const query = `[out:json][timeout:10];nwr[amenity~"^(school|kindergarten|college|university)$"](around:1500,${lat},${lng});out center 60;`;
+  const response = await fetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`, {
+    signal: AbortSignal.timeout(10000),
+  });
+  if (!response.ok) return [];
+  const { elements = [] } = await response.json();
+  return elements
+    .map((e) => ({ lat: e.lat ?? e.center?.lat, lng: e.lon ?? e.center?.lon, name: e.tags?.name || "Escuela sin nombre en OpenStreetMap" }))
+    .filter((e) => e.lat && e.lng);
+}
+watch(
+  () => [model.value.lat, model.value.lng],
+  ([lat, lng]) => {
+    clearTimeout(nearbyTimer);
+    if (!lat || !lng || (nearbyFrom && meters(nearbyFrom, [lat, lng]) < 700)) return;
+    nearbyTimer = setTimeout(async () => {
+      const from = [lat, lng];
+      nearbyFrom = from;
+      // Las del catálogo salen luego luego; las de OpenStreetMap se agregan cuando llegan (su servicio a veces tarda)
+      const drawn = osmSchools(from).catch(() => []);
+      const catalog = await nearbyCatalog({ lat, lng }).catch(() => []);
+      if (nearbyFrom !== from) return;
+      const list = catalog.filter((s) => s.cct !== model.value.cct).map((s) => ({ lat: s.lat, lng: s.lng, name: s.name }));
+      nearby.value = list;
+      const extra = (await drawn).filter((school) => !list.some((s) => meters([s.lat, s.lng], [school.lat, school.lng]) < 40));
+      // Las de OpenStreetMap que ya están en el catálogo (a menos de 40 m) no se repiten
+      if (nearbyFrom === from && extra.length) nearby.value = [...list, ...extra];
+    }, 600);
+  },
+  { immediate: true },
+);
+
 // La escuela tocó o arrastró el punto: desde aquí ya no se mueve solo
 function setLocation({ lat, lng }) {
   model.value.lat = lat;
   model.value.lng = lng;
   pinBy.value = "tocado";
 }
+function pickNearby(school) {
+  setLocation(school);
+  pinBy.value = "cercana";
+  pickedName.value = school.name;
+}
+
+// "Estoy en la escuela": el GPS del teléfono pone el punto
+const locating = ref(false);
+const gpsNote = ref("");
+function useGps() {
+  gpsNote.value = "";
+  if (!navigator.geolocation) {
+    gpsNote.value = "Este navegador no puede dar tu ubicación. Marca la escuela en el mapa";
+    return;
+  }
+  locating.value = true;
+  navigator.geolocation.getCurrentPosition(
+    ({ coords }) => {
+      locating.value = false;
+      const point = [coords.latitude, coords.longitude];
+      if (!inArea(point)) {
+        gpsNote.value = "Tu ubicación queda fuera de Tijuana y Rosarito. Usa este botón cuando estés en la escuela";
+        return;
+      }
+      setLocation({ lat: Number(point[0].toFixed(6)), lng: Number(point[1].toFixed(6)) });
+      pinBy.value = "gps";
+      if (coords.accuracy > 150) {
+        gpsNote.value = `Tu teléfono dio una ubicación poco precisa (unos ${Math.round(coords.accuracy)} m). Revisa el punto`;
+      }
+    },
+    (error) => {
+      locating.value = false;
+      gpsNote.value =
+        error.code === error.PERMISSION_DENIED
+          ? "No diste permiso para usar tu ubicación. Marca la escuela en el mapa"
+          : "No se pudo obtener tu ubicación. Marca la escuela en el mapa";
+    },
+    { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
+  );
+}
+
 const pinHint = computed(
   () =>
     ({
@@ -125,7 +236,10 @@ const pinHint = computed(
       "osm-escuela": "Encontramos tu escuela en OpenStreetMap. Revisa que el punto esté en la entrada",
       "osm-casa": "Punto aproximado por la dirección. Revisa que esté en la escuela y muévelo si hace falta",
       "osm-calle": "Pusimos el punto en tu calle. Arrástralo o toca la entrada de la escuela",
+      "osm-cp": "Pusimos el punto en tu código postal. Arrástralo o toca la entrada de la escuela",
       "osm-colonia": "Pusimos el punto en tu colonia. Arrástralo o toca la entrada de la escuela",
+      gps: "Pusimos el punto donde estás. Si no es la entrada, arrástralo",
+      cercana: `Pusimos el punto en ${pickedName.value}. Si es otra escuela, toca la entrada de la tuya`,
     })[pinBy.value] ?? "Ya está marcada. Si no es la entrada, arrastra el punto o toca el lugar correcto",
 );
 </script>
@@ -191,12 +305,31 @@ const pinHint = computed(
     <FormField v-slot="{ id }" label="Calle y número" :error="errors.address">
       <input :id="id" v-model.trim="model.address" maxlength="200" autocomplete="street-address" required />
     </FormField>
+    <FormField v-slot="{ id, describedby }" label="Código postal" optional hint="Nos ayuda a poner el punto más cerca" :error="errors.postal_code">
+      <input
+        :id="id"
+        v-model.trim="model.postal_code"
+        :aria-describedby="describedby"
+        inputmode="numeric"
+        maxlength="5"
+        pattern="[0-9]{5}"
+        autocomplete="postal-code"
+        @input="model.postal_code = String(model.postal_code ?? '').replace(/\D/g, '')"
+      />
+    </FormField>
     <div class="field">
       <span class="field-label">Ubicación en el mapa</span>
       <p class="field-hint">
         {{ model.lat ? pinHint : "Toca el mapa donde está la entrada de la escuela. Al escribir la colonia ponemos un punto cerca" }}
       </p>
-      <LocationPicker :lat="model.lat" :lng="model.lng" :near="near" @update="setLocation" />
+      <div class="location-tools">
+        <button type="button" class="button secondary small-button" :disabled="locating" @click="useGps">
+          {{ locating ? "Buscando dónde estás…" : "Estoy en la escuela: usar mi ubicación" }}
+        </button>
+        <p v-if="gpsNote" class="field-hint" role="status">{{ gpsNote }}</p>
+      </div>
+      <LocationPicker :lat="model.lat" :lng="model.lng" :near="near" :nearby="nearby" @update="setLocation" @pick="pickNearby" />
+      <p v-if="nearby.length" class="field-hint">Los puntos verdes son escuelas cercanas. Si una es la tuya, tócala</p>
       <p v-if="errors.lat || errors.lng" class="field-error" role="alert">{{ errors.lat || errors.lng }}</p>
     </div>
   </fieldset>

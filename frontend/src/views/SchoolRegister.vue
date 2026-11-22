@@ -18,6 +18,7 @@ const school = ref({
   sector: "",
   colonia: "",
   address: "",
+  postal_code: "",
   lat: null,
   lng: null,
   contact_name: "",
@@ -42,6 +43,7 @@ function pick(found) {
     sector: found.sector ?? "",
     colonia: found.colonia ?? "",
     address: found.address ?? "",
+    postal_code: found.postal_code ?? "",
     lat: found.lat,
     lng: found.lng,
   });
@@ -51,7 +53,7 @@ function pick(found) {
 function manual() {
   picked.value = null;
   // Si venía de una escuela del catálogo, se limpian sus datos para escribir la propia
-  Object.assign(school.value, { name: "", cct: "", level: "", shift: "", sector: "", colonia: "", address: "", lat: null, lng: null });
+  Object.assign(school.value, { name: "", cct: "", level: "", shift: "", sector: "", colonia: "", address: "", postal_code: "", lat: null, lng: null });
   login.sin_cct = false;
   formKey.value++;
   mode.value = "manual";

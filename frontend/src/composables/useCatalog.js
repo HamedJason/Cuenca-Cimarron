@@ -93,3 +93,5 @@ export async function uploadCatalog(schools, onProgress = () => {}) {
 }
 
 export const searchCatalog = (q, signal) => api(`/catalogo-escuelas?q=${encodeURIComponent(q)}`, { signal }).then((d) => d.schools);
+// Escuelas del catálogo con punto: a menos de 1.5 km de { lat, lng }, o las de un código postal { cp }
+export const nearbyCatalog = (where) => api(`/catalogo-escuelas/cerca?${new URLSearchParams(where)}`).then((d) => d.schools);

@@ -26,6 +26,7 @@ class SchoolController extends Controller
             'sector' => ['required', Rule::in(School::SECTORS)],
             'colonia' => ['required', 'string', 'min:2', 'max:120'],
             'address' => ['required', 'string', 'min:4', 'max:200'],
+            'postal_code' => ['nullable', 'string', 'regex:/^\d{5}$/'],
             // El punto en el mapa es obligatorio: sin él no se sabe a qué escuela llegar en una emergencia
             'lat' => ['required', 'numeric', 'between:31.5,33.5'],
             'lng' => ['required', 'numeric', 'between:-118,-115.5'],

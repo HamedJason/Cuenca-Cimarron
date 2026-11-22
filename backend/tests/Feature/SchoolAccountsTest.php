@@ -123,6 +123,10 @@ class SchoolAccountsTest extends TestCase
         $this->postJson('/api/escuelas', $this->registration(['cct' => '', 'sin_cct' => true, 'lat' => null, 'lng' => null]))
             ->assertUnprocessable()->assertJsonValidationErrors(['lat', 'lng']);
         $this->assertDatabaseCount('schools', 0);
+        // El código postal es opcional, pero si se escribe lleva 5 números
+        $this->postJson('/api/escuelas', $this->registration(['postal_code' => '221']))->assertUnprocessable()->assertJsonValidationErrors('postal_code');
+        $this->postJson('/api/escuelas', $this->registration(['postal_code' => '22105']))->assertCreated()->assertJsonPath('user.school.postal_code', '22105');
+        $this->postJson('/api/salir')->assertOk();
         // Y en el panel tampoco se puede quitar
         $user = $this->school();
         $this->actingAs($user)->putJson('/api/escuela', [
