@@ -84,6 +84,6 @@ onBeforeUnmount(() => map?.remove());
 <template>
   <div class="location-picker">
     <div ref="el" class="location-picker-canvas" role="region" aria-label="Mapa para marcar la ubicación de la escuela"></div>
-    <p v-if="failed" class="field-hint">No se pudo cargar el mapa. Puedes registrarte sin marcar la ubicación</p>
+    <p v-if="failed" class="field-hint">No se pudo cargar el mapa. Recarga la página para marcar la ubicación</p>
   </div>
 </template>

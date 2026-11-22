@@ -26,8 +26,9 @@ class SchoolController extends Controller
             'sector' => ['required', Rule::in(School::SECTORS)],
             'colonia' => ['required', 'string', 'min:2', 'max:120'],
             'address' => ['required', 'string', 'min:4', 'max:200'],
-            'lat' => ['nullable', 'numeric', 'between:31.5,33.5'],
-            'lng' => ['nullable', 'numeric', 'between:-118,-115.5'],
+            // El punto en el mapa es obligatorio: sin él no se sabe a qué escuela llegar en una emergencia
+            'lat' => ['required', 'numeric', 'between:31.5,33.5'],
+            'lng' => ['required', 'numeric', 'between:-118,-115.5'],
             'contact_name' => ['required', 'string', 'min:3', 'max:120'],
         ];
     }
@@ -45,6 +46,13 @@ class SchoolController extends Controller
     {
         AuthController::normalizeEmail($request);
         $request->merge(['cct' => $request->filled('cct') ? strtoupper(trim((string) $request->input('cct'))) : null]);
+        // Si la CCT está en el catálogo con punto y no marcaron el mapa, se usa el punto del catálogo.
+        if ($request->input('cct') && (! $request->filled('lat') || ! $request->filled('lng'))) {
+            $found = DB::table('school_catalog')->where('cct', $request->input('cct'))->first(['lat', 'lng']);
+            if ($found && $found->lat !== null && $found->lng !== null) {
+                $request->merge(['lat' => (float) $found->lat, 'lng' => (float) $found->lng]);
+            }
+        }
         // La CCT se pide siempre. Solo puede quedar vacía si la escuela marca que no la sabe.
         $rules = self::schoolRules();
         $rules['cct'][] = Rule::requiredIf(! $request->boolean('sin_cct'));
@@ -56,14 +64,6 @@ class SchoolController extends Controller
             'families_informed' => ['accepted'],
         ]);
         $data = self::normalize($data);
-        // Si la CCT está en el catálogo de la SEP y no marcaron el mapa, se usa la ubicación del catálogo.
-        if (! empty($data['cct']) && (empty($data['lat']) || empty($data['lng']))) {
-            $found = DB::table('school_catalog')->where('cct', $data['cct'])->first(['lat', 'lng']);
-            if ($found && $found->lat !== null && $found->lng !== null) {
-                $data['lat'] = (float) $found->lat;
-                $data['lng'] = (float) $found->lng;
-            }
-        }
         $user = DB::transaction(function () use ($data): User {
             $user = User::create([
                 'name' => $data['contact_name'],
@@ -93,6 +93,13 @@ class SchoolController extends Controller
     {
         $school = $request->user()->school;
         $request->merge(['cct' => $request->filled('cct') ? strtoupper(trim((string) $request->input('cct'))) : null]);
+        // Si la CCT está en el catálogo con punto y no marcaron el mapa, se usa el punto del catálogo.
+        if ($request->input('cct') && (! $request->filled('lat') || ! $request->filled('lng'))) {
+            $found = DB::table('school_catalog')->where('cct', $request->input('cct'))->first(['lat', 'lng']);
+            if ($found && $found->lat !== null && $found->lng !== null) {
+                $request->merge(['lat' => (float) $found->lat, 'lng' => (float) $found->lng]);
+            }
+        }
         $data = self::normalize($request->validate(self::schoolRules($school->id)));
         $school->fill($data);
         $school->save();

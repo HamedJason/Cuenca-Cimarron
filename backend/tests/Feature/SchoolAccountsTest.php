@@ -105,15 +105,30 @@ class SchoolAccountsTest extends TestCase
     {
         \App\Http\Controllers\SchoolCatalogController::loadBundled();
         // Elegida del buscador pero sin tocar el mapa: la ubicación sale del catálogo
-        $this->postJson('/api/escuelas', $this->registration(['cct' => '02epr0409h', 'name' => 'Forjadores de Baja California', 'lat' => null, 'lng' => null]))
-            ->assertCreated()->assertJsonPath('user.school.cct', '02EPR0409H');
-        $school = \App\Models\School::where('cct', '02EPR0409H')->first();
-        $catalog = \Illuminate\Support\Facades\DB::table('school_catalog')->where('cct', '02EPR0409H')->first();
+        $this->postJson('/api/escuelas', $this->registration(['cct' => '02dcc0006j', 'name' => 'Margarita Maza de Juarez', 'lat' => null, 'lng' => null]))
+            ->assertCreated()->assertJsonPath('user.school.cct', '02DCC0006J');
+        $school = \App\Models\School::where('cct', '02DCC0006J')->first();
+        $catalog = \Illuminate\Support\Facades\DB::table('school_catalog')->where('cct', '02DCC0006J')->first();
+        $this->assertNotNull($catalog->lat);
         $this->assertEqualsWithDelta((float) $catalog->lat, $school->lat, 0.00001);
         $this->assertEqualsWithDelta((float) $catalog->lng, $school->lng, 0.00001);
         // En el panel de datos sale su municipio
         $school->forceFill(['status' => 'approved'])->save();
         $this->actingAs($this->admin())->getJson('/api/admin/estadisticas')->assertOk()->assertJsonPath('schools.0.municipality', 'Tijuana');
+    }
+
+    public function test_sin_punto_en_el_mapa_no_se_registra(): void
+    {
+        // Escrita a mano, sin CCT del catálogo: hay que marcarla en el mapa
+        $this->postJson('/api/escuelas', $this->registration(['cct' => '', 'sin_cct' => true, 'lat' => null, 'lng' => null]))
+            ->assertUnprocessable()->assertJsonValidationErrors(['lat', 'lng']);
+        $this->assertDatabaseCount('schools', 0);
+        // Y en el panel tampoco se puede quitar
+        $user = $this->school();
+        $this->actingAs($user)->putJson('/api/escuela', [
+            'name' => 'Primaria 1', 'level' => 'primaria', 'shift' => 'matutino', 'sector' => 'publica',
+            'colonia' => 'Centro', 'address' => 'Calle 1 100', 'contact_name' => 'Ana López', 'lat' => null, 'lng' => null,
+        ])->assertUnprocessable()->assertJsonValidationErrors(['lat', 'lng']);
     }
 
     public function test_sin_cct_el_municipio_sale_de_la_ubicacion(): void

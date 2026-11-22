@@ -18,15 +18,15 @@ const props = defineProps({
 });
 const emit = defineEmits(["no-cct"]);
 
-// El punto de la escuela en el mapa. Al elegirla del catálogo ya viene puesto (geo dice de dónde salió:
-// sep, inegi o aprox). Si no trae punto, se busca solo y se pone, y la escuela lo mueve si no es la entrada:
-// 1. La escuela por su nombre en OpenStreetMap: punto en la escuela
-// 2. La calle con número: punto si OpenStreetMap tiene ese número; si no, el mapa solo se acerca a la calle
-// 3. La colonia, y si no, las escuelas del catálogo en esa colonia: el mapa solo se acerca
-// pinBy: de dónde salió el punto puesto. near = [lat, lng, zoom] cuando solo se acerca el mapa
+// El punto de la escuela en el mapa es obligatorio. Al elegirla del catálogo ya viene puesto (geo dice de
+// dónde salió: sep, inegi o aprox). Si no trae punto, se busca y se pone solo, lo más cerca que se pueda,
+// y la escuela lo mueve a la entrada:
+// 1. La escuela por su nombre en OpenStreetMap
+// 2. La calle con número; si OpenStreetMap no tiene el número, un punto en esa calle
+// 3. La colonia, y si no, el centro de las escuelas del catálogo en esa colonia
+// pinBy: de dónde salió el punto puesto. near = [lat, lng, zoom] para acercar el mapa
 const pinBy = ref(model.value.lat ? props.geo || "guardada" : "");
 const near = ref(null);
-const nearBy = ref("");
 const autoPin = () => !model.value.lat || pinBy.value.startsWith("osm-");
 const plain = (t) => String(t ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
 const median = (list) => {
@@ -86,12 +86,12 @@ watch(
             /\d/.test(address) && ["house", "building"].includes(hit.addresstype)
               ? ["pin", "osm-casa"]
               : hit.category === "highway"
-                ? [17, "calle"]
+                ? [17, "osm-calle"]
                 : null,
         ],
         // OpenStreetMap no tiene todas las colonias y a veces responde con una tienda del mismo nombre
-        [() => osm(where), (hit) => (["place", "boundary"].includes(hit.category) ? [15, "colonia"] : null)],
-        [() => fromCatalog(colonia), () => [15, "colonia"]],
+        [() => osm(where), (hit) => (["place", "boundary"].includes(hit.category) ? [16, "osm-colonia"] : null)],
+        [() => fromCatalog(colonia), () => [16, "osm-colonia"]],
       ].filter(Boolean);
       for (const [find, use] of tries) {
         try {
@@ -99,17 +99,8 @@ watch(
           if (mine !== turn || !autoPin()) return;
           const action = hit && use(hit);
           if (!action) continue;
-          if (action[0] === "pin") {
-            putPin(hit.point, action[1]);
-          } else {
-            // Un punto puesto antes con otra dirección ya no sirve
-            if (pinBy.value.startsWith("osm-")) {
-              Object.assign(model.value, { lat: null, lng: null });
-              pinBy.value = "";
-            }
-            near.value = [...hit.point, action[0]];
-            nearBy.value = action[1];
-          }
+          if (action[0] !== "pin") near.value = [...hit.point, action[0]];
+          putPin(hit.point, action[1]);
           return;
         } catch {
           // Sin internet o sin catálogo se prueba lo siguiente; al final el mapa se queda en Tijuana
@@ -133,6 +124,8 @@ const pinHint = computed(
       aprox: "Punto aproximado: hay una escuela con el mismo nombre ahí. Revisa que sea la tuya y mueve el punto si hace falta",
       "osm-escuela": "Encontramos tu escuela en OpenStreetMap. Revisa que el punto esté en la entrada",
       "osm-casa": "Punto aproximado por la dirección. Revisa que esté en la escuela y muévelo si hace falta",
+      "osm-calle": "Pusimos el punto en tu calle. Arrástralo o toca la entrada de la escuela",
+      "osm-colonia": "Pusimos el punto en tu colonia. Arrástralo o toca la entrada de la escuela",
     })[pinBy.value] ?? "Ya está marcada. Si no es la entrada, arrastra el punto o toca el lugar correcto",
 );
 </script>
@@ -199,17 +192,9 @@ const pinHint = computed(
       <input :id="id" v-model.trim="model.address" maxlength="200" autocomplete="street-address" required />
     </FormField>
     <div class="field">
-      <span class="field-label">Ubicación en el mapa <span class="field-optional">(opcional)</span></span>
+      <span class="field-label">Ubicación en el mapa</span>
       <p class="field-hint">
-        {{
-          model.lat
-            ? pinHint
-            : nearBy === "calle"
-              ? "El mapa se acercó a la calle que escribiste. Toca la entrada de la escuela"
-              : nearBy === "colonia"
-                ? "El mapa se acercó a tu colonia. Busca la escuela y toca su entrada"
-                : "Toca el mapa donde está la entrada de la escuela"
-        }}
+        {{ model.lat ? pinHint : "Toca el mapa donde está la entrada de la escuela. Al escribir la colonia ponemos un punto cerca" }}
       </p>
       <LocationPicker :lat="model.lat" :lng="model.lng" :near="near" @update="setLocation" />
       <p v-if="errors.lat || errors.lng" class="field-error" role="alert">{{ errors.lat || errors.lng }}</p>

@@ -47,6 +47,8 @@ return [
     'custom' => [
         'cct' => ['unique' => 'Esa escuela ya está registrada. Si eres de esa escuela, pide acceso a quien la registró o escríbenos.'],
         'email' => ['unique' => 'Ya hay una cuenta con ese correo. Entra con él o usa "Olvidé mi contraseña".'],
+        'lat' => ['required' => 'Marca la escuela en el mapa.'],
+        'lng' => ['required' => 'Marca la escuela en el mapa.'],
     ],
 
     'attributes' => [
