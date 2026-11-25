@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>¿Llamo al 911? · Cuenca Cimarrona</title>
+<meta name="description" content="Juego para aprender cuándo y cómo llamar al 911">
+<link rel="icon" href="assets/icono-32.png">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/juego.css">
+</head>
+<body>
+<header class="barra">
+  <a class="volver" href="https://cuencacimarrona.tij.uabc.mx/juegos" aria-label="Volver a Juegos">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    <span>Juegos</span>
+  </a>
+  <p class="marca">Cuenca Cimarrona</p>
+  <button class="voz" id="voz" type="button" aria-pressed="true" aria-label="Voz encendida">
+    <svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 010 7M18.5 6a8.5 8.5 0 010 12"/></svg>
+    <svg class="off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9l5 6M22 9l-5 6"/></svg>
+  </button>
+</header>
+
+<main id="juego">
+
+  <!-- Inicio -->
+  <section class="pantalla inicio activa" data-pantalla="inicio" aria-labelledby="t-inicio">
+    <div class="presenta">
+      <div class="guia">
+        <p class="globo">¡Practica conmigo!</p>
+        <img src="assets/mascota-480.webp" width="240" height="234" alt="Cimarrón brigadista con casco verde y chaleco amarillo, señalando con la mano">
+      </div>
+      <div class="portada">
+        <h1 id="t-inicio">¿Llamo al <span>911</span>?</h1>
+        <p class="sub">Aprende cuándo llamar, qué decir y tus datos de héroe</p>
+        <button class="boton grande" id="empezar" type="button">¡A jugar!</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mapa de misiones -->
+  <section class="pantalla mapa-misiones" data-pantalla="mapa" aria-labelledby="t-mapa">
+    <div class="presenta">
+      <div class="guia chica">
+        <p class="globo">¡Elige una misión!</p>
+        <img src="assets/mascota-480.webp" width="240" height="234" alt="">
+      </div>
+      <div class="misiones-caja">
+        <h2 id="t-mapa">Tus misiones</h2>
+        <ol class="misiones" id="misiones"></ol>
+        <p class="medallas-cuenta" id="medallas-cuenta"></p>
+        <button class="boton claro" id="abrir-tarjeta" type="button"><span aria-hidden="true">🪪</span> Mi tarjeta de héroe</button>
+        <div class="reiniciar">
+          <button class="saltar" id="reiniciar" type="button"><span aria-hidden="true">🔄</span> Empezar de cero</button>
+          <div class="confirmar" id="confirmar" role="alertdialog" aria-labelledby="confirmar-t" hidden>
+            <p id="confirmar-t">¿Borrar todas las medallas para que juegue alguien más?</p>
+            <div class="acciones">
+              <button class="boton" id="confirmar-si" type="button">Sí, borrar</button>
+              <button class="boton claro" id="confirmar-no" type="button">No</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Misión 1: ¿Es emergencia? -->
+  <section class="pantalla nivel1" data-pantalla="emergencia" aria-labelledby="t-n1">
+    <div class="cabeza">
+      <h2 id="t-n1" class="etiqueta">🤔 ¿Es emergencia?</h2>
+      <div class="estrellas" id="estrellas" aria-label="Estrellas"></div>
+    </div>
+    <div class="avance" aria-hidden="true"><span id="avance1"></span></div>
+    <article class="tarjeta" id="tarjeta">
+      <figure class="escena" id="escena">
+        <img id="escena-img" alt="">
+        <span class="emoji" id="escena-emoji" aria-hidden="true"></span>
+      </figure>
+      <div class="frase">
+        <p id="frase"></p>
+        <button class="repetir" id="repetir" type="button" aria-label="Escuchar otra vez">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 010 7"/></svg>
+        </button>
+      </div>
+      <div class="decide" id="decide">
+        <button class="si" type="button" data-respuesta="si">
+          <span class="ico" aria-hidden="true">📞</span>¡Sí, llamo!
+        </button>
+        <button class="no" type="button" data-respuesta="no">
+          <span class="ico" aria-hidden="true">✋</span>No es emergencia
+        </button>
+      </div>
+      <div class="respuesta" id="respuesta" role="status" hidden>
+        <img class="mini-guia" src="assets/mascota-240.webp" width="88" height="86" alt="">
+        <div>
+          <p class="veredicto" id="veredicto"></p>
+          <p class="porque" id="porque"></p>
+        </div>
+        <button class="boton" id="siguiente" type="button">Siguiente</button>
+      </div>
+    </article>
+  </section>
+
+  <!-- Misión 2: Arma la dirección -->
+  <section class="pantalla dir" data-pantalla="direccion" aria-labelledby="t-dir">
+    <div class="cabeza">
+      <h2 id="t-dir" class="etiqueta">🏠 Arma la dirección</h2>
+      <span class="ronda" id="dir-ronda"></span>
+    </div>
+    <div class="casa-personaje" id="dir-casa"></div>
+    <div class="instruccion">
+      <p id="dir-instruccion"></p>
+      <button class="repetir" id="dir-repetir" type="button" aria-label="Escuchar otra vez">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 010 7"/></svg>
+      </button>
+    </div>
+    <div id="dir-armador"></div>
+    <p class="aviso" id="dir-aviso" role="status"></p>
+  </section>
+
+  <!-- Misión 4: el celular está bloqueado y hay que encontrar "Emergencia" (sin mascota) -->
+  <section class="pantalla bloqueado" data-pantalla="bloqueado" aria-labelledby="t-bloq">
+    <div class="cabeza">
+      <h2 id="t-bloq" class="etiqueta">📞 La llamada al 911</h2>
+    </div>
+    <div class="caso">
+      <span class="emoji" id="bloq-emoji" aria-hidden="true"></span>
+      <p id="bloq-texto"></p>
+    </div>
+    <p class="instruccion-sola" id="bloq-instruccion">El celular tiene contraseña y no te la sabes. ¿Cómo llamas?</p>
+    <div class="celular" id="celular">
+      <p class="cel-hora" id="cel-hora">10:24</p>
+      <p class="cel-fecha" id="cel-fecha">Lunes</p>
+      <div class="cel-candado" aria-hidden="true">🔒</div>
+      <p class="cel-pide">Escribe la contraseña</p>
+      <div class="cel-puntos" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      <div class="cel-teclas" id="cel-teclas">
+        <button type="button">1</button><button type="button">2</button><button type="button">3</button>
+        <button type="button">4</button><button type="button">5</button><button type="button">6</button>
+        <button type="button">7</button><button type="button">8</button><button type="button">9</button>
+        <span></span><button type="button">0</button><span></span>
+      </div>
+      <div class="cel-abajo">
+        <button type="button" class="cel-emergencia" id="cel-emergencia">Emergencia</button>
+        <button type="button" class="cel-cancelar" id="cel-cancelar">Cancelar</button>
+      </div>
+    </div>
+    <p class="aviso" id="bloq-aviso" role="status"></p>
+  </section>
+
+  <!-- Pausa de calma mientras contestan -->
+  <section class="pantalla respira" data-pantalla="respira" aria-labelledby="t-respira">
+    <h2 id="t-respira">Mientras contestan…</h2>
+    <div class="burbuja-aire" id="burbuja-aire" aria-hidden="true"></div>
+    <p class="respira-texto" id="respira-texto" aria-live="polite">Inhala…</p>
+    <p class="respira-por">Respirar hondo te ayuda a hablar claro</p>
+  </section>
+
+  <!-- Misión 4a: Marca el 911 (sin mascota: aquí manda la emergencia) -->
+  <section class="pantalla nivel2" data-pantalla="marcar" aria-labelledby="t-n2">
+    <div class="cabeza">
+      <h2 id="t-n2" class="etiqueta">📞 La llamada al 911</h2>
+    </div>
+    <div class="caso">
+      <span class="emoji" id="caso-emoji" aria-hidden="true"></span>
+      <p id="caso-texto"></p>
+    </div>
+    <p class="llamada-emergencia">🆘 Llamada de emergencia</p>
+    <div id="marcar-teclado"></div>
+  </section>
+
+  <!-- Misión 4b: La llamada (sin mascota) -->
+  <section class="pantalla nivel3" data-pantalla="llamada" aria-labelledby="t-n3">
+    <div class="cabeza">
+      <h2 id="t-n3" class="etiqueta" data-personaje></h2>
+      <span class="reloj" id="reloj" aria-label="Tiempo de llamada">00:00</span>
+    </div>
+    <div class="operadora">
+      <span class="avatar" aria-hidden="true">🎧</span>
+      <div>
+        <p class="quien">Operadora del 911</p>
+        <p class="pregunta" id="pregunta"></p>
+      </div>
+      <button class="repetir claro" id="repetir-op" type="button" aria-label="Escuchar otra vez">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 010 7"/></svg>
+      </button>
+    </div>
+    <div class="pasos" id="pasos" aria-hidden="true"></div>
+    <p class="tu-turno" id="tu-turno"></p>
+    <div class="opciones" id="opciones"></div>
+    <div id="llamada-armador"></div>
+    <div class="espera" id="espera" hidden>
+      <p class="espera-t">Espera en la línea…</p>
+      <button type="button" class="colgar" id="colgar" aria-label="Colgar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.6 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.4 11.4 0 00.6 3.6 1 1 0 01-.25 1z"/></svg>
+      </button>
+      <p class="colgar-etiqueta">Colgar</p>
+    </div>
+    <p class="aviso" id="aviso" role="status"></p>
+  </section>
+
+  <!-- Llega la ayuda -->
+  <section class="pantalla llega" data-pantalla="llega" aria-labelledby="t-llega">
+    <div class="calle" aria-hidden="true">
+      <span class="casa">🏠</span>
+      <span class="ambulancia">🚑</span>
+    </div>
+    <h2 id="t-llega">¡La ayuda llegó!</h2>
+    <p id="llega-texto"></p>
+    <button class="boton grande" id="llega-seguir" type="button">Seguir</button>
+  </section>
+
+  <!-- Misión 1: Mi historieta del 911 (ordenar, globos y colorear) -->
+  <section class="pantalla historieta" data-pantalla="historieta" aria-labelledby="t-hist">
+    <div class="cabeza">
+      <h2 id="t-hist" class="etiqueta">🎨 Mi historieta</h2>
+      <ol class="hist-pasos" id="hist-pasos" aria-label="Pasos">
+        <li>Ordena</li><li>Globos</li><li>Colorea</li>
+      </ol>
+    </div>
+    <div class="instruccion">
+      <p id="hist-instruccion"></p>
+      <button class="repetir claro" id="hist-repetir" type="button" aria-label="Escuchar otra vez">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 010 7"/></svg>
+      </button>
+    </div>
+    <div id="hist-area"></div>
+    <p class="aviso" id="hist-aviso" role="status"></p>
+  </section>
+
+  <!-- La historieta terminada: imprimir, guardar y medalla -->
+  <section class="pantalla historieta-lista" data-pantalla="historieta-lista" aria-labelledby="t-hist-lista">
+    <div class="tarjeta-intro">
+      <h2 id="t-hist-lista">¡Tu historieta está lista!</h2>
+      <p>Imprímela o guárdala para contársela a tu familia.</p>
+      <div class="acciones">
+        <button class="boton grande" id="hist-imprimir" type="button"><span aria-hidden="true">🖨️</span> Imprimir</button>
+        <a class="boton claro" id="hist-guardar" download="mi-historieta-911.png" href="#"><span aria-hidden="true">💾</span> Guardar imagen</a>
+      </div>
+    </div>
+    <article class="hoja-historieta">
+      <img id="hist-resultado" alt="Mi historieta del 911">
+    </article>
+    <div class="acciones hist-fin">
+      <button class="boton claro" id="hist-volver" type="button"><span aria-hidden="true">🖍️</span> Seguir coloreando</button>
+      <button class="boton grande" id="hist-medalla" type="button"><span aria-hidden="true">🏅</span> Recoger mi medalla</button>
+    </div>
+  </section>
+
+  <!-- Medalla de misión -->
+  <section class="pantalla logro" data-pantalla="logro" aria-labelledby="t-logro">
+    <div class="presenta">
+      <div class="guia">
+        <p class="globo">¡Muy bien!</p>
+        <img src="assets/mascota-480.webp" width="240" height="234" alt="Cimarrón brigadista celebrando">
+      </div>
+      <div class="premio">
+        <div class="medalla" aria-hidden="true"><span id="logro-emoji"></span></div>
+        <p class="gana">Ganaste la medalla</p>
+        <h2 id="t-logro"></h2>
+        <p class="resultado" id="logro-resultado"></p>
+        <div class="sabias">
+          <p class="sabias-t"><span aria-hidden="true">💡</span> ¿Sabías que…?</p>
+          <p id="logro-dato"></p>
+        </div>
+        <button class="boton grande" id="logro-seguir" type="button">Seguir</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ahora tú: el niño dice SUS datos en voz alta a un adulto. Nada se escribe ni se guarda -->
+  <section class="pantalla ahora-tu" data-pantalla="ahora-tu" aria-labelledby="t-ahora">
+    <div class="presenta">
+      <div class="guia">
+        <p class="globo">¡Tú puedes!</p>
+        <img src="assets/mascota-480.webp" width="240" height="234" alt="">
+      </div>
+      <div class="premio">
+        <h2 id="t-ahora"></h2>
+        <p class="pide" id="ahora-pide"></p>
+        <ul class="lista-decir" id="ahora-lista"></ul>
+        <p class="para-adulto"><span aria-hidden="true">🧑‍🏫</span> Adulto: escucha y toca un botón</p>
+        <div class="acciones">
+          <button class="boton grande" id="ahora-bien" type="button"><span aria-hidden="true">✅</span> ¡La dijo bien!</button>
+          <button class="boton claro" id="ahora-practicar" type="button"><span aria-hidden="true">🔁</span> Hay que practicar</button>
+        </div>
+        <p class="ayuda" id="ahora-ayuda" role="status" hidden></p>
+        <button class="saltar" id="ahora-saltar" type="button">Ahora no</button>
+        <p class="privado"><span aria-hidden="true">🔒</span> El juego no escribe ni guarda tus datos</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Héroe del 911: todas las misiones -->
+  <section class="pantalla final" data-pantalla="final" aria-labelledby="t-final">
+    <div class="presenta">
+      <div class="guia">
+        <p class="globo">¡Lo lograste!</p>
+        <img src="assets/mascota-480.webp" width="240" height="234" alt="Cimarrón brigadista celebrando">
+      </div>
+      <div class="premio">
+        <div class="medalla grande" aria-hidden="true"><span>911</span></div>
+        <h2 id="t-final">Héroe del 911</h2>
+        <p class="resultado" id="final-cuantas">Ganaste todas las medallas</p>
+        <ul class="recuerda">
+          <li><span aria-hidden="true">📍</span>Di dónde estás</li>
+          <li><span aria-hidden="true">🗣️</span>Di qué pasa</li>
+          <li><span aria-hidden="true">📵</span>No cuelgues</li>
+        </ul>
+        <div class="acciones">
+          <button class="boton grande" id="final-tarjeta" type="button"><span aria-hidden="true">🪪</span> Mi tarjeta de héroe</button>
+          <button class="boton claro" id="final-mapa" type="button">Ver mis misiones</button>
+        </div>
+      </div>
+    </div>
+    <p class="adultos">Para adultos: las llamadas falsas al 911 retrasan la ayuda para quien la necesita. Practiquen juntos la dirección y el teléfono de casa.</p>
+  </section>
+
+  <!-- Tarjeta de héroe: se imprime en blanco y se llena a mano en casa -->
+  <section class="pantalla tarjeta-pantalla" data-pantalla="tarjeta" aria-labelledby="t-tarjeta">
+    <div class="tarjeta-intro">
+      <h2 id="t-tarjeta">Mi tarjeta de héroe</h2>
+      <p>Imprímela y llénala <strong>a mano, en casa, con tu familia</strong>. Guárdala en tu mochila y repásala.</p>
+      <div class="acciones">
+        <button class="boton grande" id="imprimir" type="button"><span aria-hidden="true">🖨️</span> Imprimir</button>
+        <button class="boton claro" id="tarjeta-volver" type="button">Volver</button>
+      </div>
+    </div>
+    <article class="credencial" id="credencial" aria-label="Tarjeta para imprimir">
+      <header>
+        <img src="assets/mascota-240.webp" width="70" height="68" alt="">
+        <div>
+          <p class="cred-titulo">Mi tarjeta de héroe</p>
+          <p class="cred-911">En una emergencia llamo al <b>911</b></p>
+        </div>
+      </header>
+      <dl>
+        <div><dt>Me llamo</dt><dd></dd></div>
+        <div class="corto"><dt>Tengo</dt><dd></dd><span>años</span></div>
+        <div><dt>Calle</dt><dd></dd></div>
+        <div class="corto"><dt>Número</dt><dd></dd></div>
+        <div><dt>Colonia</dt><dd></dd></div>
+        <div><dt>Cerca de mi casa hay</dt><dd></dd></div>
+        <div><dt>Mi adulto se llama</dt><dd></dd></div>
+        <div><dt>Su teléfono</dt><dd class="cajitas"><span></span><span></span><span></span><i></i><span></span><span></span><span></span><i></i><span></span><span></span><span></span><span></span></dd></div>
+      </dl>
+      <footer>
+        <p>Di dónde estás &nbsp;·&nbsp; Di qué pasa &nbsp;·&nbsp; No cuelgues</p>
+        <p class="cred-regla">Mis datos solo se los digo al 911, a mi maestra o a un adulto de confianza</p>
+      </footer>
+    </article>
+  </section>
+
+</main>
+
+<script src="js/historieta-imagenes.js"></script>
+<script src="js/escenas.js"></script>
+<script src="js/juego.js"></script>
+</body>
+</html>
