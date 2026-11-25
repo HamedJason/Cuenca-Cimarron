@@ -1,0 +1,725 @@
+/* ¿Llamo al 911? Colores y letras de Cuenca Cimarrona (docs/estilos.md). Solo modo claro, como los otros juegos propios */
+@font-face { font-family: "Baloo 2"; font-weight: 700; font-display: swap; src: url("../assets/baloo-2-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Baloo 2"; font-weight: 800; font-display: swap; src: url("../assets/baloo-2-latin-800-normal.woff2") format("woff2"); }
+
+:root {
+  color-scheme: light;
+  --verde: #00723f;
+  --ocre: #dd971a;
+  --profundo: #003d24;
+  --ocre-texto: #8a5a00;
+  --verde-claro: #e6f4ec;
+  --ocre-claro: #fff1d6;
+  --tinta: #1c2621;
+  --suave: #4a5650;
+  --rojo: #b3121f;
+  --rojo-claro: #ffebee;
+  --papel: #ffffff;
+  --borde: 3px solid var(--profundo);
+  --sombra: 0 5px 0 var(--profundo);
+  --juego: "Baloo 2", "DM Sans", system-ui, sans-serif;
+  --titulo: "Barlow Condensed", Impact, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--verde-claro); }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "DM Sans", system-ui, sans-serif;
+  color: var(--tinta);
+  line-height: 1.4;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(221, 151, 26, 0.16) 0 90px, transparent 91px),
+    radial-gradient(circle at 88% 82%, rgba(0, 114, 63, 0.1) 0 140px, transparent 141px),
+    var(--verde-claro);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+button:disabled { cursor: default; }
+:focus-visible { outline: 4px solid var(--ocre); outline-offset: 3px; }
+[hidden] { display: none !important; }
+
+/* ---------- Barra ---------- */
+.barra {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 10px;
+  background: var(--verde); color: #fff;
+  border-bottom: 4px solid var(--profundo);
+}
+.marca { margin: 0; font-family: var(--titulo); font-weight: 800; font-size: 1.3rem; letter-spacing: 0.02em; }
+.volver, .voz {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: #fff; text-decoration: none; font-weight: 700;
+  background: rgba(255, 255, 255, 0.14); border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px; padding: 6px 14px 6px 10px; min-height: 44px;
+}
+.voz { padding: 6px; width: 44px; justify-content: center; }
+.volver svg, .voz svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.voz .off, .voz.apagada .on { display: none; }
+.voz.apagada .off { display: block; }
+
+/* ---------- Pantallas ---------- */
+main { width: min(100% - 24px, 880px); margin: 18px auto 32px; }
+.pantalla { display: none; }
+.pantalla.activa { display: block; animation: entra 0.35s ease-out; }
+@keyframes entra { from { opacity: 0; transform: translateY(12px); } }
+
+h1, h2 { font-family: var(--titulo); font-weight: 800; color: var(--profundo); margin: 0; line-height: 0.95; }
+h1:focus, h2:focus { outline: none; }
+
+.boton {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--juego); font-weight: 800; font-size: 1.2rem; text-decoration: none;
+  background: var(--verde); color: #fff;
+  border: var(--borde); border-radius: 16px; box-shadow: var(--sombra);
+  padding: 10px 22px; min-height: 52px;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.boton:hover { transform: translateY(-2px); box-shadow: 0 7px 0 var(--profundo); }
+.boton:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--profundo); }
+.boton.grande { font-size: 1.6rem; padding: 12px 34px; min-height: 64px; }
+.boton.claro { background: var(--papel); color: var(--profundo); }
+
+.cabeza { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.etiqueta {
+  font-family: var(--juego); font-size: 1.15rem; font-weight: 800; line-height: 1.2;
+  background: var(--ocre-claro); color: var(--ocre-texto);
+  border: 2px solid var(--ocre); border-radius: 999px; padding: 4px 16px;
+}
+
+/* ---------- Mascota (siempre a la izquierda, nunca volteada) ---------- */
+.presenta { display: flex; align-items: center; gap: 18px; }
+.guia { flex: none; width: 240px; display: flex; flex-direction: column; align-items: center; animation: flota 3s ease-in-out infinite; }
+.guia img { width: 100%; height: auto; display: block; filter: drop-shadow(0 8px 10px rgba(0, 61, 36, 0.22)); }
+.globo {
+  font-family: var(--juego); font-weight: 800; font-size: 1.25rem; color: var(--profundo);
+  background: var(--papel); border: var(--borde); border-radius: 18px;
+  padding: 6px 16px; margin: 0 0 10px; position: relative; white-space: nowrap;
+}
+.globo::after {
+  content: ""; position: absolute; left: 50%; bottom: -11px; width: 16px; height: 16px;
+  background: var(--papel); border-right: var(--borde); border-bottom: var(--borde);
+  transform: translateX(-50%) rotate(45deg);
+}
+@keyframes flota { 50% { transform: translateY(-5px); } }
+
+/* ---------- Inicio ---------- */
+.portada, .premio {
+  flex: 1; background: var(--papel); border: var(--borde); border-radius: 28px; box-shadow: var(--sombra);
+  padding: 26px 24px; text-align: center;
+}
+.portada h1 { font-size: clamp(3rem, 9vw, 4.6rem); text-transform: uppercase; }
+.portada h1 span { color: var(--rojo); }
+.sub { font-size: 1.15rem; color: var(--suave); margin: 10px 0 18px; }
+.mapa { list-style: none; padding: 0; margin: 0 0 22px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.mapa li {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  font-family: var(--juego); font-weight: 700; font-size: 1rem; line-height: 1.15; color: var(--profundo);
+  background: var(--verde-claro); border: 2px solid var(--verde); border-radius: 18px; padding: 14px 6px 10px;
+}
+.mapa .ico { font-size: 2.2rem; line-height: 1; }
+.mapa .n {
+  position: absolute; top: -12px; left: -6px; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--ocre); color: var(--profundo); border: 2px solid var(--profundo);
+  display: grid; place-items: center; font-weight: 800;
+}
+
+/* ---------- Nivel 1 ---------- */
+.estrellas { display: flex; gap: 2px; font-size: 1.6rem; line-height: 1; }
+.estrella { color: #cfd8d2; transition: transform 0.25s, color 0.25s; }
+.estrella.llena { color: var(--ocre); transform: scale(1.15); text-shadow: 0 2px 0 var(--ocre-texto); }
+.avance { height: 10px; background: var(--papel); border: 2px solid var(--profundo); border-radius: 999px; overflow: hidden; margin-bottom: 14px; }
+.avance span { display: block; height: 100%; width: 0; background: var(--verde); transition: width 0.4s; }
+
+.tarjeta {
+  background: var(--papel); border: var(--borde); border-radius: 28px; box-shadow: var(--sombra);
+  padding: 16px; transition: border-color 0.2s;
+}
+.tarjeta.acierto { border-color: var(--verde); }
+.tarjeta.fallo { border-color: var(--ocre); }
+.escena {
+  /* Siempre 16:10 (como las ilustraciones) para que nunca se recorten: se achica a lo ancho si falta alto */
+  margin: 0 auto; width: min(100%, calc(clamp(150px, 36vh, 380px) * 1.6)); aspect-ratio: 16 / 10; border-radius: 20px; overflow: hidden;
+  background: var(--ocre-claro); border: 2px solid var(--profundo);
+  display: grid; place-items: center;
+}
+.escena img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.escena .emoji { font-size: clamp(4rem, min(16vw, 17vh), 8.5rem); line-height: 1; letter-spacing: 0.05em; }
+.frase { display: flex; align-items: center; gap: 10px; margin: 14px 4px; }
+.frase p { margin: 0; flex: 1; font-family: var(--juego); font-weight: 800; font-size: clamp(1.4rem, 4.5vw, 2rem); line-height: 1.15; color: var(--profundo); }
+.repetir {
+  flex: none; width: 52px; height: 52px; border-radius: 50%;
+  background: var(--verde-claro); border: 2px solid var(--verde); display: grid; place-items: center;
+}
+.repetir svg { width: 28px; height: 28px; fill: none; stroke: var(--verde); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.repetir.claro { background: var(--papel); }
+
+.decide { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.decide button {
+  min-height: 110px; border-radius: 22px; border: var(--borde); box-shadow: var(--sombra);
+  font-family: var(--juego); font-weight: 800; font-size: clamp(1.15rem, 3.6vw, 1.5rem); line-height: 1.1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.decide .ico { font-size: 2.6rem; line-height: 1; }
+.decide .si { background: var(--rojo-claro); color: var(--rojo); }
+.decide .no { background: var(--verde-claro); color: var(--verde); }
+.decide button:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 8px 0 var(--profundo); }
+.decide button:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 1px 0 var(--profundo); }
+
+.respuesta {
+  display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 4px 14px;
+  border-radius: 20px; padding: 12px 14px; border: 3px solid;
+  animation: entra 0.3s ease-out;
+}
+.respuesta.es-bien { background: var(--verde-claro); border-color: var(--verde); }
+.respuesta.es-casi { background: var(--ocre-claro); border-color: var(--ocre); }
+.mini-guia { width: 88px; height: auto; }
+.veredicto { margin: 0; font-family: var(--juego); font-weight: 800; font-size: 1.45rem; line-height: 1.15; color: var(--profundo); }
+.porque { margin: 2px 0 0; font-size: 1.1rem; color: var(--tinta); }
+.respuesta .boton { grid-column: 1 / -1; justify-self: end; margin-top: 8px; }
+
+/* ---------- Nivel 2 ---------- */
+.caso {
+  display: flex; align-items: center; gap: 14px; background: var(--rojo-claro);
+  border: 3px solid var(--rojo); border-radius: 20px; padding: 10px 16px; margin-bottom: 16px;
+}
+.caso .emoji { font-size: 2.8rem; line-height: 1; }
+.caso p { margin: 0; font-family: var(--juego); font-weight: 800; font-size: 1.35rem; line-height: 1.15; color: var(--rojo); }
+.telefono {
+  width: min(100%, 360px); margin: 0 auto; background: #20302a; border: 4px solid var(--profundo);
+  border-radius: 40px; padding: 22px 20px 26px; box-shadow: var(--sombra);
+}
+.pantallita {
+  display: block; height: 70px; border-radius: 16px; background: #eaf7ef; color: var(--profundo);
+  font-family: var(--titulo); font-weight: 800; font-size: 3.2rem; text-align: center; line-height: 70px; letter-spacing: 0.08em;
+}
+.pista { margin: 10px 0 14px; text-align: center; color: #fff; font-family: var(--juego); font-weight: 700; font-size: 1.2rem; min-height: 1.6em; }
+.pista.error { color: #ffd27a; }
+.teclado { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; justify-items: center; }
+.teclado button {
+  width: 74px; height: 74px; border-radius: 50%; border: 3px solid #0e1a15;
+  background: #f4f7f5; color: var(--profundo); font-family: var(--titulo); font-weight: 800; font-size: 2.2rem;
+  box-shadow: 0 4px 0 #0e1a15; transition: transform 0.08s, box-shadow 0.08s;
+}
+.teclado button:active { transform: translateY(3px); box-shadow: 0 1px 0 #0e1a15; }
+.teclado .borrar { background: transparent; color: #fff; border-color: transparent; box-shadow: none; font-size: 1.8rem; }
+.teclado .llamar { background: #8fa39a; display: grid; place-items: center; }
+.teclado .llamar svg { width: 34px; height: 34px; fill: #fff; }
+.teclado .llamar.listo { background: #1fa45a; animation: late 0.9s ease-in-out infinite; }
+.teclado .llamar.sonando { background: #1fa45a; animation: suena 0.25s linear infinite; }
+.tiembla { animation: tiembla 0.35s; }
+@keyframes late { 50% { transform: scale(1.12); box-shadow: 0 0 0 10px rgba(31, 164, 90, 0.3), 0 4px 0 #0e1a15; } }
+@keyframes suena { 25% { transform: rotate(-12deg); } 75% { transform: rotate(12deg); } }
+@keyframes tiembla { 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
+
+/* ---------- Nivel 3 ---------- */
+.reloj {
+  font-family: var(--titulo); font-weight: 800; font-size: 1.4rem; color: #fff;
+  background: #1fa45a; border: 2px solid var(--profundo); border-radius: 999px; padding: 2px 14px;
+}
+.reloj::before { content: "● "; color: #c9ffdc; }
+.operadora {
+  display: flex; align-items: center; gap: 14px; background: #eaf2ff;
+  border: 3px solid #0b4fa8; border-radius: 24px; padding: 14px 16px; box-shadow: 0 5px 0 #0b4fa8;
+}
+.operadora .avatar {
+  flex: none; width: 66px; height: 66px; border-radius: 50%; background: #fff; border: 3px solid #0b4fa8;
+  display: grid; place-items: center; font-size: 2.2rem;
+}
+.operadora > div { flex: 1; }
+.quien { margin: 0; color: #0b4fa8; font-weight: 700; font-size: 0.95rem; }
+.pregunta { margin: 2px 0 0; font-family: var(--juego); font-weight: 800; font-size: clamp(1.3rem, 4.2vw, 1.8rem); line-height: 1.15; color: #08356f; }
+.operadora .repetir { border-color: #0b4fa8; }
+.operadora .repetir svg { stroke: #0b4fa8; }
+.pasos { display: flex; justify-content: center; gap: 8px; margin: 16px 0 6px; }
+.pasos span { width: 40px; height: 10px; border-radius: 999px; background: #cfd8d2; border: 2px solid var(--profundo); }
+.pasos span.ahora { background: var(--ocre); }
+.pasos span.hecho { background: var(--verde); }
+.tu-turno { margin: 8px 0; font-family: var(--juego); font-weight: 700; color: var(--suave); font-size: 1.1rem; }
+.opciones { display: grid; gap: 10px; }
+.opcion {
+  display: flex; align-items: center; gap: 14px; text-align: left;
+  background: var(--papel); border: var(--borde); border-radius: 20px; box-shadow: var(--sombra);
+  padding: 10px 16px; min-height: 76px; transition: transform 0.1s, box-shadow 0.1s, background 0.2s;
+}
+.opcion .ico { font-size: 2.4rem; line-height: 1; flex: none; }
+.opcion .txt { font-family: var(--juego); font-weight: 700; font-size: clamp(1.1rem, 3.6vw, 1.35rem); line-height: 1.2; color: var(--profundo); }
+.opcion:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 7px 0 var(--profundo); }
+.opcion.correcta { background: var(--verde-claro); border-color: var(--verde); }
+.opcion.incorrecta { background: #f2f2f2; opacity: 0.55; box-shadow: none; text-decoration: line-through; }
+.aviso { min-height: 2em; margin: 12px 0 0; text-align: center; font-family: var(--juego); font-weight: 800; font-size: 1.25rem; }
+.aviso.es-bien { color: var(--verde); }
+.aviso.es-casi { color: var(--ocre-texto); }
+
+/* ---------- Llega la ayuda ---------- */
+.llega { text-align: center; }
+.llega.activa { background: var(--papel); border: var(--borde); border-radius: 28px; box-shadow: var(--sombra); padding: 20px 20px 28px; }
+.calle {
+  position: relative; height: 150px; border-radius: 20px; overflow: hidden; margin-bottom: 16px;
+  background: linear-gradient(#cfeaff 0 62%, #4a5650 62% 100%);
+}
+.calle::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 24px; height: 5px;
+  background: repeating-linear-gradient(90deg, #fff 0 30px, transparent 30px 56px);
+}
+.calle .casa { position: absolute; right: 8%; bottom: 46px; font-size: 5rem; line-height: 1; }
+.calle .ambulancia { position: absolute; bottom: 30px; font-size: 4.4rem; line-height: 1; transform: scaleX(-1); animation: llega 2.4s ease-out forwards; }
+@keyframes llega { from { left: -30%; } to { left: 58%; } }
+.llega h2 { font-size: clamp(2.6rem, 8vw, 3.6rem); text-transform: uppercase; }
+.llega p { font-size: 1.2rem; color: var(--suave); margin: 8px 0 20px; }
+
+/* ---------- Final ---------- */
+.medalla {
+  width: 130px; height: 130px; margin: 0 auto 12px; border-radius: 50%;
+  background: var(--ocre); border: 5px solid var(--profundo); box-shadow: inset 0 0 0 8px #f5c25c, var(--sombra);
+  display: grid; place-items: center; position: relative; animation: gira 0.8s ease-out;
+}
+.medalla span { font-family: var(--titulo); font-weight: 800; font-size: 2.6rem; color: var(--profundo); }
+@keyframes gira { from { transform: scale(0.3) rotate(-30deg); opacity: 0; } }
+.premio h2 { font-size: clamp(2.4rem, 7vw, 3.2rem); text-transform: uppercase; }
+.resultado { font-family: var(--juego); font-weight: 800; font-size: 1.35rem; color: var(--ocre-texto); margin: 6px 0 14px; }
+.recuerda { list-style: none; padding: 0; margin: 0 0 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.recuerda li {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  font-family: var(--juego); font-weight: 700; line-height: 1.15; color: var(--profundo);
+  background: var(--verde-claro); border-radius: 16px; padding: 10px 4px;
+}
+.recuerda span { font-size: 2rem; }
+.acciones { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.adultos { margin: 22px auto 0; max-width: 640px; text-align: center; color: var(--suave); font-size: 0.95rem; }
+
+/* ---------- Celular ---------- */
+@media (max-width: 640px) {
+  .presenta { flex-direction: column; align-items: stretch; gap: 8px; }
+  .guia { width: auto; flex-direction: row-reverse; justify-content: flex-end; align-items: flex-end; gap: 6px; }
+  .guia img { width: 120px; }
+  .globo { margin: 0 0 40px; }
+  .globo::after { left: -10px; bottom: 12px; transform: rotate(135deg); }
+  .portada, .premio { padding: 20px 14px; }
+  .tarjeta { padding: 12px; border-radius: 22px; }
+  .decide button { min-height: 96px; }
+  .estrellas { font-size: 1.3rem; }
+  .teclado button { width: 66px; height: 66px; }
+  .respuesta { grid-template-columns: 1fr; }
+  .mini-guia { display: none; }
+}
+@media (max-width: 360px) {
+  .mapa li { font-size: 0.85rem; }
+  .recuerda li { font-size: 0.85rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .calle .ambulancia { left: 58%; }
+}
+
+/* =====================================================================
+   Misiones, personajes, "Ahora tú" y tarjeta de héroe
+   ===================================================================== */
+
+/* ---------- Mapa de misiones ---------- */
+.guia.chica { width: 200px; }
+.misiones-caja {
+  flex: 1; background: var(--papel); border: var(--borde); border-radius: 28px; box-shadow: var(--sombra);
+  padding: 22px 20px; text-align: center;
+}
+.misiones-caja h2 { font-size: clamp(2.2rem, 6vw, 2.8rem); text-transform: uppercase; margin-bottom: 14px; }
+.misiones { list-style: none; padding: 0; margin: 0 0 14px; display: grid; gap: 10px; }
+.mision {
+  width: 100%; display: flex; align-items: center; gap: 12px; text-align: left;
+  background: var(--verde-claro); border: var(--borde); border-radius: 20px; box-shadow: var(--sombra);
+  padding: 10px 14px; min-height: 76px; transition: transform 0.1s, box-shadow 0.1s;
+}
+.mision:hover { transform: translateY(-2px); box-shadow: 0 7px 0 var(--profundo); }
+.mision:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--profundo); }
+.mision .n {
+  flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--ocre); color: var(--profundo); border: 2px solid var(--profundo); font-weight: 800;
+}
+.mision .ico { font-size: 2.3rem; line-height: 1; flex: none; }
+.mision .txt { flex: 1; display: flex; flex-direction: column; }
+.mision b { font-family: var(--juego); font-weight: 800; font-size: 1.35rem; line-height: 1.1; color: var(--profundo); }
+.mision small { color: var(--suave); font-size: 0.95rem; }
+.mision .estado { font-size: 1.8rem; color: var(--verde); }
+.mision.ganada { background: var(--ocre-claro); }
+.mision.ganada small { color: var(--ocre-texto); font-weight: 700; }
+.medallas-cuenta { font-family: var(--juego); font-weight: 800; font-size: 1.2rem; color: var(--ocre-texto); margin: 0 0 14px; }
+
+.ronda {
+  font-family: var(--juego); font-weight: 800; color: var(--profundo);
+  background: var(--papel); border: 2px solid var(--profundo); border-radius: 999px; padding: 2px 14px;
+}
+.instruccion { display: flex; align-items: center; gap: 10px; margin: 14px 2px 10px; }
+.instruccion p { margin: 0; flex: 1; font-family: var(--juego); font-weight: 800; font-size: clamp(1.2rem, 4vw, 1.6rem); line-height: 1.15; color: var(--profundo); }
+
+/* ---------- Casa del personaje: las pistas de la dirección ---------- */
+.casa-escena {
+  position: relative; display: grid; grid-template-columns: 1fr 1.2fr 1fr; grid-template-rows: auto 1fr auto;
+  gap: 6px 10px; align-items: end; justify-items: center;
+  background: linear-gradient(#d9f0ff 0 72%, #b9d9a0 72% 100%);
+  border: var(--borde); border-radius: 24px; box-shadow: var(--sombra); padding: 12px 14px 14px; min-height: 230px; overflow: hidden;
+}
+.letrero-colonia {
+  grid-column: 1 / -1; justify-self: stretch; text-align: center;
+  font-family: var(--titulo); font-weight: 800; font-size: 1.35rem; color: #fff; letter-spacing: 0.02em;
+  background: #0b4fa8; border: 3px solid #08356f; border-radius: 10px; padding: 2px 10px;
+}
+.letrero-calle { grid-row: 2; grid-column: 1; align-self: end; display: flex; flex-direction: column; align-items: center; }
+.letrero-calle span {
+  font-family: var(--juego); font-weight: 800; font-size: 1rem; line-height: 1.1; text-align: center; color: #fff;
+  background: #1b7f45; border: 3px solid #fff; outline: 3px solid #0f4f2a; border-radius: 6px; padding: 4px 8px;
+}
+.letrero-calle::after { content: ""; width: 6px; height: 54px; background: #5f6b66; }
+.casa-dibujo { grid-row: 2; grid-column: 2; position: relative; line-height: 1; }
+.casa-emoji { font-size: 6.5rem; display: block; }
+.placa {
+  position: absolute; right: -6px; top: 34%;
+  font-family: var(--titulo); font-weight: 800; font-size: 1.4rem; color: var(--profundo);
+  background: #fff; border: 3px solid var(--profundo); border-radius: 8px; padding: 0 8px; min-width: 36px; text-align: center;
+}
+.cerca-item { grid-row: 2; grid-column: 3; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.cerca-emoji { font-size: 4rem; line-height: 1; }
+.cerca-item small {
+  font-weight: 700; font-size: 0.85rem; line-height: 1.1; text-align: center; color: var(--profundo);
+  background: rgba(255, 255, 255, 0.9); border-radius: 8px; padding: 2px 6px;
+}
+.nino { grid-row: 3; grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; }
+.nino-cara { font-size: 2.2rem; line-height: 1; }
+.nino b { font-family: var(--juego); font-weight: 800; font-size: 1.2rem; color: var(--profundo); background: #fff; border: 2px solid var(--profundo); border-radius: 999px; padding: 0 12px; }
+.casa-escena.tapada > :not(.tapa) { filter: blur(10px); opacity: 0.5; }
+.tapa {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  font-family: var(--juego); color: var(--profundo);
+}
+.tapa span { font-size: 4rem; line-height: 1; }
+.tapa b { font-size: 1.6rem; background: var(--ocre-claro); border: 3px solid var(--ocre); border-radius: 999px; padding: 0 16px; }
+
+/* ---------- Armador ---------- */
+.ranuras { list-style: none; padding: 0; margin: 0 0 12px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.ranura {
+  display: flex; align-items: center; gap: 10px; min-height: 66px;
+  background: var(--papel); border: 3px dashed #9fb3a8; border-radius: 16px; padding: 6px 12px;
+}
+.ranura .r-ico { font-size: 1.8rem; flex: none; }
+.r-cuerpo { display: flex; flex-direction: column; min-width: 0; }
+.r-cuerpo small { color: var(--suave); font-weight: 700; font-size: 0.85rem; }
+.r-valor { font-family: var(--juego); font-weight: 800; font-size: 1.15rem; line-height: 1.15; color: var(--profundo); overflow-wrap: anywhere; }
+.ranura.vacia .r-valor { color: #9fb3a8; }
+.ranura.toca { border-color: var(--ocre); border-style: solid; background: var(--ocre-claro); animation: late-suave 1.2s ease-in-out infinite; }
+.ranura.puesta { border-style: solid; border-color: var(--verde); background: var(--verde-claro); }
+.ranura.recien { animation: entra 0.3s ease-out; }
+@keyframes late-suave { 50% { transform: scale(1.03); } }
+.piezas { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.pieza {
+  font-family: var(--juego); font-weight: 800; font-size: clamp(1rem, 3.4vw, 1.2rem); line-height: 1.15; color: var(--profundo);
+  background: var(--papel); border: var(--borde); border-radius: 14px; box-shadow: 0 4px 0 var(--profundo);
+  padding: 10px 14px; min-height: 52px; transition: transform 0.1s, box-shadow 0.1s;
+}
+.pieza:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 0 var(--profundo); }
+.pieza:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--profundo); }
+.pieza.usada { visibility: hidden; }
+
+/* ---------- Número de mamá ---------- */
+.contacto {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+  background: var(--papel); border: var(--borde); border-radius: 24px; box-shadow: var(--sombra); padding: 12px 16px;
+}
+.contacto-cara { flex: none; width: 74px; height: 74px; border-radius: 50%; background: var(--ocre-claro); border: 3px solid var(--ocre); display: grid; place-items: center; font-size: 2.8rem; }
+.contacto-info { flex: 1; min-width: 0; }
+.contacto-nombre { margin: 0; font-family: var(--juego); font-weight: 800; font-size: 1.5rem; line-height: 1.1; color: var(--profundo); }
+.contacto-de { margin: 0 0 4px; color: var(--suave); }
+.contacto-num { margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.contacto-num span {
+  font-family: var(--titulo); font-weight: 800; font-size: clamp(1.8rem, 7vw, 2.4rem); letter-spacing: 0.06em; color: var(--profundo);
+  background: var(--verde-claro); border: 2px solid var(--verde); border-radius: 10px; padding: 0 10px;
+}
+.contacto-num .oculto { font-family: var(--juego); font-size: 1.4rem; letter-spacing: 0; background: var(--ocre-claro); border-color: var(--ocre); }
+.contacto-cuenta { margin: 6px 0 0; font-family: var(--juego); font-weight: 800; color: var(--ocre-texto); font-size: 1.1rem; }
+.pantallita.largo { font-size: clamp(1.9rem, 8vw, 2.4rem); letter-spacing: 0.04em; }
+.tel-ayuda { display: flex; justify-content: center; margin-top: 14px; }
+
+/* ---------- Llamada: ver mi casa ---------- */
+.ver-casa { margin: 0 0 10px; min-height: 44px; font-size: 1rem; padding: 6px 16px; }
+.mini-casa { margin-bottom: 12px; }
+.mini-casa .casa-escena { min-height: 0; }
+.mini-casa .casa-emoji { font-size: 4.5rem; }
+
+/* ---------- Medalla de misión ---------- */
+.medalla #logro-emoji { font-family: inherit; font-size: 3.4rem; }
+.medalla.grande { width: 150px; height: 150px; }
+.gana { margin: 4px 0 0; color: var(--suave); font-weight: 700; }
+.premio #t-logro { font-size: clamp(2.2rem, 6.5vw, 3rem); }
+.sabias { text-align: left; background: #eaf2ff; border: 3px solid #0b4fa8; border-radius: 18px; padding: 10px 14px; margin: 0 0 18px; }
+.sabias p { margin: 0; font-size: 1.1rem; color: #08356f; }
+.sabias .sabias-t { font-family: var(--juego); font-weight: 800; font-size: 1.15rem; margin-bottom: 2px; }
+
+/* ---------- Ahora tú ---------- */
+.ahora-tu h2 { font-size: clamp(2.6rem, 8vw, 3.4rem); text-transform: uppercase; }
+.pide { font-family: var(--juego); font-weight: 800; font-size: clamp(1.3rem, 4.5vw, 1.7rem); line-height: 1.15; color: var(--profundo); margin: 8px 0 12px; }
+.lista-decir { list-style: none; padding: 0; margin: 0 0 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+.lista-decir li {
+  font-family: var(--juego); font-weight: 700; font-size: 1.15rem; color: var(--profundo);
+  background: var(--ocre-claro); border: 2px solid var(--ocre); border-radius: 14px; padding: 8px 10px;
+}
+.para-adulto { margin: 0 0 10px; color: var(--suave); font-weight: 700; }
+.ayuda { margin: 14px 0 0; font-family: var(--juego); font-weight: 700; font-size: 1.15rem; color: var(--ocre-texto); background: var(--ocre-claro); border-radius: 14px; padding: 8px 12px; }
+.saltar { margin-top: 14px; background: none; border: 0; color: var(--suave); text-decoration: underline; font-weight: 700; min-height: 44px; padding: 6px 12px; }
+.privado { margin: 6px 0 0; font-size: 0.9rem; color: var(--suave); }
+
+/* ---------- Tarjeta de héroe ---------- */
+.tarjeta-intro { text-align: center; margin-bottom: 18px; }
+.tarjeta-intro h2 { font-size: clamp(2.4rem, 7vw, 3.2rem); text-transform: uppercase; }
+.tarjeta-intro p { font-size: 1.15rem; margin: 8px 0 14px; }
+.credencial {
+  width: min(100%, 560px); margin: 0 auto; background: #fff; border: 4px solid var(--profundo); border-radius: 22px;
+  box-shadow: var(--sombra); overflow: hidden; color: var(--tinta);
+}
+.credencial header { display: flex; align-items: center; gap: 12px; background: var(--verde); color: #fff; padding: 10px 16px; }
+.credencial header img { width: 70px; height: auto; background: #fff; border-radius: 50%; }
+.cred-titulo { margin: 0; font-family: var(--titulo); font-weight: 800; font-size: 1.8rem; text-transform: uppercase; line-height: 1; }
+.cred-911 { margin: 2px 0 0; font-weight: 700; }
+.cred-911 b { background: #fff; color: var(--rojo); border-radius: 6px; padding: 0 6px; }
+.credencial dl { margin: 0; padding: 12px 16px 4px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; }
+.credencial dl > div { grid-column: 1 / -1; display: flex; align-items: flex-end; gap: 8px; min-height: 40px; }
+.credencial dl > div.corto { grid-column: auto; }
+.credencial dt { font-weight: 700; white-space: nowrap; }
+.credencial dd { margin: 0; flex: 1; border-bottom: 2px solid var(--tinta); min-height: 28px; }
+.credencial dd.cajitas { border: 0; display: flex; align-items: center; gap: 3px; flex-wrap: wrap; }
+.cajitas span { width: 24px; height: 30px; border: 2px solid var(--tinta); border-radius: 4px; }
+.cajitas i { width: 6px; }
+.credencial footer { border-top: 2px dashed #9fb3a8; padding: 8px 16px 12px; font-size: 0.95rem; }
+.credencial footer p { margin: 2px 0; }
+.cred-regla { color: var(--suave); }
+
+@media (max-width: 640px) {
+  .guia.chica { width: auto; }
+  .casa-emoji { font-size: 5rem; }
+  .cerca-emoji { font-size: 3rem; }
+  .letrero-calle span { font-size: 0.85rem; }
+  .ranuras { gap: 6px; }
+  .ranura { padding: 4px 8px; gap: 6px; }
+  .ranura .r-ico { font-size: 1.3rem; }
+  .r-valor { font-size: 1rem; }
+  .casa-escena { min-height: 0; padding: 10px; }
+  .instruccion { margin: 10px 2px 8px; }
+  .ranura { min-height: 54px; }
+  .contacto-cara { width: 58px; height: 58px; font-size: 2.2rem; }
+  .credencial dl { grid-template-columns: 1fr; }
+  .credencial dl > div.corto { grid-column: 1 / -1; }
+  .cajitas span { width: 20px; height: 26px; }
+}
+
+/* Al imprimir solo sale la tarjeta */
+@media print {
+  @page { margin: 12mm; }
+  html, body { background: #fff !important; }
+  .barra, .pantalla:not(.tarjeta-pantalla), .tarjeta-intro { display: none !important; }
+  main { margin: 0; width: 100%; }
+  .tarjeta-pantalla { display: block !important; animation: none !important; }
+  .credencial { box-shadow: none; width: 100%; max-width: 160mm; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ranura.toca, .ranura.recien { animation: none !important; }
+}
+
+/* ---------- Empezar de cero ---------- */
+.reiniciar { margin-top: 8px; }
+.confirmar { margin-top: 10px; background: var(--ocre-claro); border: 3px solid var(--ocre); border-radius: 18px; padding: 12px 14px; }
+.confirmar p { margin: 0 0 10px; font-family: var(--juego); font-weight: 800; font-size: 1.15rem; color: var(--profundo); }
+
+/* ---------- Celular bloqueado ---------- */
+.instruccion-sola { margin: 0 2px 12px; font-family: var(--juego); font-weight: 800; font-size: clamp(1.2rem, 4vw, 1.5rem); line-height: 1.15; color: var(--profundo); text-align: center; }
+.celular {
+  width: min(100%, 330px); margin: 0 auto; color: #fff; text-align: center;
+  background: linear-gradient(160deg, #24456b, #3c2f63 60%, #1d3b52);
+  border: 6px solid #0e1a15; border-radius: 40px; box-shadow: var(--sombra); padding: 22px 20px 18px;
+}
+.cel-hora { margin: 0; font-family: var(--titulo); font-weight: 700; font-size: 3.4rem; line-height: 1; }
+.cel-fecha { margin: 2px 0 10px; opacity: 0.85; }
+.cel-candado { font-size: 1.6rem; }
+.cel-pide { margin: 2px 0 8px; font-size: 0.95rem; opacity: 0.9; }
+.cel-puntos { display: flex; justify-content: center; gap: 12px; margin-bottom: 12px; }
+.cel-puntos span { width: 13px; height: 13px; border-radius: 50%; border: 2px solid #fff; }
+.cel-puntos span.lleno { background: #fff; }
+.cel-teclas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; justify-items: center; }
+.cel-teclas button {
+  width: 60px; height: 60px; border-radius: 50%; border: 0; color: #fff;
+  background: rgba(255, 255, 255, 0.18); font-size: 1.6rem; font-weight: 500;
+}
+.cel-teclas button:active { background: rgba(255, 255, 255, 0.4); }
+.cel-abajo { display: flex; justify-content: space-between; margin-top: 14px; }
+.cel-abajo button { background: none; border: 0; color: #fff; font-size: 1rem; font-weight: 700; padding: 8px 6px; min-height: 44px; }
+.cel-emergencia.brilla { color: #ffd27a; text-decoration: underline; animation: late 0.9s ease-in-out infinite; }
+.llamada-emergencia { margin: -4px 0 12px; text-align: center; font-family: var(--juego); font-weight: 800; font-size: 1.15rem; color: var(--rojo); }
+
+/* ---------- Pausa de calma ---------- */
+.respira.activa { text-align: center; background: var(--papel); border: var(--borde); border-radius: 28px; box-shadow: var(--sombra); padding: 24px 20px 30px; }
+.respira h2 { font-size: clamp(2rem, 6vw, 2.6rem); text-transform: uppercase; }
+.burbuja-aire {
+  width: 180px; height: 180px; margin: 26px auto 18px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffffff, #bfe6d0 60%, #7cc49c);
+  border: 4px solid var(--verde); transform: scale(0.55); transition: transform 2.1s ease-in-out;
+}
+.burbuja-aire.inhala { transform: scale(1); }
+.burbuja-aire.exhala { transform: scale(0.55); }
+.respira-texto { margin: 0; font-family: var(--juego); font-weight: 800; font-size: 2.4rem; color: var(--verde); }
+.respira-por { margin: 6px 0 0; color: var(--suave); font-size: 1.1rem; }
+
+/* ---------- Regla de oro: colgar ---------- */
+.espera { text-align: center; margin-top: 10px; }
+.espera-t { margin: 0 0 10px; font-family: var(--juego); font-weight: 700; color: var(--suave); font-size: 1.1rem; }
+.colgar {
+  width: 92px; height: 92px; border-radius: 50%; border: 4px solid #5a0a10;
+  background: #d6283a; box-shadow: 0 5px 0 #5a0a10; display: inline-grid; place-items: center;
+  animation: parpadea 1.1s ease-in-out infinite;
+}
+.colgar svg { width: 44px; height: 44px; fill: #fff; transform: rotate(135deg); }
+.colgar-etiqueta { margin: 6px 0 0; font-weight: 700; color: var(--rojo); }
+.espera.permiso .colgar { animation: late 0.8s ease-in-out infinite; box-shadow: 0 0 0 10px rgba(214, 40, 58, 0.25), 0 5px 0 #5a0a10; }
+.espera.permiso .espera-t { color: var(--verde); }
+@keyframes parpadea { 50% { opacity: 0.55; } }
+
+@media (max-width: 640px) {
+  .cel-teclas { gap: 6px; }
+  .cel-teclas button { width: 48px; height: 48px; font-size: 1.35rem; }
+  .celular { padding: 14px 16px 10px; border-radius: 32px; }
+  .cel-hora { font-size: 2.4rem; }
+  .cel-fecha { margin-bottom: 4px; }
+  .cel-pide { margin-bottom: 4px; }
+  .cel-puntos { margin-bottom: 8px; }
+  .cel-abajo { margin-top: 6px; }
+  .bloqueado .caso { padding: 8px 12px; margin-bottom: 10px; }
+  .bloqueado .caso p { font-size: 1.1rem; }
+  .bloqueado .caso .emoji { font-size: 2rem; }
+  .instruccion-sola { font-size: 1.1rem; margin-bottom: 8px; }
+  .burbuja-aire { width: 150px; height: 150px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .burbuja-aire { transition: none; }
+}
+
+/* ---------- Mi historieta del 911 ---------- */
+.hist-pasos { display: flex; gap: 6px; list-style: none; margin: 0; padding: 0; counter-reset: paso; }
+.hist-pasos li { counter-increment: paso; font-family: var(--juego); font-weight: 800; font-size: 0.95rem; color: var(--suave); background: var(--papel); border: 2px solid #9fb3a8; border-radius: 999px; padding: 2px 12px 2px 6px; }
+.hist-pasos li::before { content: counter(paso); display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 6px; border-radius: 50%; background: #d7e3dc; color: var(--profundo); font-size: 0.85rem; }
+.hist-pasos li.ahora { border-color: var(--profundo); color: var(--profundo); background: var(--ocre-claro); }
+.hist-pasos li.ahora::before { background: var(--ocre); }
+.hist-pasos li.hecho { border-color: var(--verde); color: var(--verde); }
+.hist-pasos li.hecho::before { content: "✓"; background: var(--verde); color: #fff; }
+
+.vineta { position: relative; margin: 0; aspect-ratio: 1; background: #fff; border: var(--borde); border-radius: 10px; overflow: hidden; }
+.vineta img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.vineta-falta { display: grid; place-content: center; justify-items: center; gap: 6px; padding: 10px; text-align: center; background: repeating-linear-gradient(45deg, #fff 0 14px, #f4f8f5 14px 28px); }
+.vineta-emoji { font-size: clamp(2.4rem, 9vw, 4.5rem); line-height: 1; }
+.vineta-falta small { font-family: var(--juego); font-weight: 700; color: var(--profundo); line-height: 1.15; }
+
+.hist-ranuras { list-style: none; margin: 0 0 14px; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.hist-ranura { position: relative; aspect-ratio: 1; border: 3px dashed #9fb3a8; border-radius: 12px; background: rgba(255, 255, 255, 0.6); }
+.hist-ranura.toca { border-color: var(--ocre); background: var(--ocre-claro); animation: late-suave 1.2s ease-in-out infinite; }
+.hist-ranura.puesta { border: 0; background: none; animation: entra 0.3s ease-out; }
+.hist-num { position: absolute; z-index: 2; top: 6px; left: 6px; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--ocre); color: var(--profundo); border: 2px solid var(--profundo); font-family: var(--juego); font-weight: 800; font-size: 1.15rem; }
+.hist-ranura:not(.puesta) .hist-num { top: 50%; left: 50%; transform: translate(-50%, -50%); width: 52px; height: 52px; font-size: 1.6rem; }
+.hist-bandeja { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.hist-carta { padding: 0; border: 0; background: none; border-radius: 12px; box-shadow: var(--sombra); transition: transform 0.12s; }
+.hist-carta:hover:not(:disabled) { transform: translateY(-3px); }
+.hist-carta .vineta { pointer-events: none; }
+.hist-carta.usada { visibility: hidden; }
+
+.globo-hist { position: absolute; top: 4%; right: 4%; max-width: 58%; margin: 0; padding: 8px 14px; background: #fff; border: 3px solid var(--profundo); border-radius: 18px; font-family: var(--juego); font-weight: 800; font-size: clamp(0.95rem, 3.4vw, 1.3rem); line-height: 1.15; color: var(--profundo); text-align: center; }
+.globo-hist::after { content: ""; position: absolute; bottom: -14px; left: 58%; border: 12px solid transparent; border-top-color: var(--profundo); border-bottom: 0; }
+.globo-hist.vacio { min-width: 90px; color: var(--suave); background: var(--ocre-claro); }
+.globo-hist.puesto { animation: gira 0.4s ease-out; }
+.hist-globos { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px; align-items: center; }
+
+.hist-mesa { display: grid; grid-template-columns: 96px minmax(0, min(560px, 62vh)) 112px; justify-content: center; gap: 12px; align-items: start; }
+.hist-pestanas, .hist-paleta { display: grid; gap: 8px; }
+.hist-paleta { grid-template-columns: repeat(2, 1fr); }
+.hist-pestana { position: relative; padding: 0; border: 3px solid #9fb3a8; border-radius: 10px; background: #fff; overflow: hidden; aspect-ratio: 1; }
+.hist-pestana img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.hist-pestana .hist-num { width: 26px; height: 26px; font-size: 0.95rem; top: 3px; left: 3px; }
+.hist-pestana.activa { border-color: var(--ocre); box-shadow: 0 0 0 3px var(--ocre); }
+.hist-hoja { background: #fff; border: var(--borde); border-radius: 10px; overflow: hidden; box-shadow: var(--sombra); }
+.hist-lienzo { display: block; width: 100%; height: auto; aspect-ratio: 1; cursor: crosshair; touch-action: manipulation; }
+.hist-color { width: 100%; aspect-ratio: 1; border-radius: 50%; border: 3px solid var(--profundo); font-size: 1.3rem; padding: 0; }
+.hist-color.activa { box-shadow: 0 0 0 4px var(--papel), 0 0 0 7px var(--ocre); transform: scale(1.06); }
+.hist-herramientas { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 14px; }
+
+.historieta-lista .tarjeta-intro { text-align: center; }
+.hoja-historieta { max-width: 640px; margin: 14px auto; background: #fff; border: var(--borde); border-radius: 12px; overflow: hidden; box-shadow: var(--sombra); }
+.hoja-historieta img { display: block; width: 100%; height: auto; }
+.hist-fin { margin-top: 6px; }
+a.boton { text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+
+@media (max-width: 640px) {
+  .hist-ranuras { gap: 6px; margin-bottom: 10px; }
+  .hist-ranura:not(.puesta) .hist-num { width: 36px; height: 36px; font-size: 1.2rem; }
+  .hist-ranura .hist-num { width: 24px; height: 24px; font-size: 0.85rem; top: 3px; left: 3px; }
+  .hist-bandeja { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .hist-globos { grid-template-columns: 1fr; gap: 10px; }
+  .hist-globos .vineta { max-width: 340px; width: 100%; margin: 0 auto; }
+  .hist-mesa { grid-template-columns: 1fr; gap: 8px; }
+  .hist-pestanas { grid-template-columns: repeat(4, 1fr); order: 0; }
+  .hist-pestanas .hist-pestana { max-width: 72px; }
+  .hist-hoja { order: 1; }
+  .hist-paleta { order: 2; grid-template-columns: repeat(6, 1fr); }
+  .hist-color { max-width: 48px; justify-self: center; }
+  .hist-pasos li { font-size: 0.8rem; padding: 1px 8px 1px 4px; }
+}
+
+/* Imprimir la historieta (en vez de la tarjeta) */
+@media print {
+  body.imprime-historieta .tarjeta-pantalla { display: none !important; }
+  body.imprime-historieta .historieta-lista { display: block !important; animation: none !important; }
+  body.imprime-historieta .historieta-lista > :not(.hoja-historieta) { display: none !important; }
+  body.imprime-historieta .hoja-historieta { max-width: 180mm; border: 0; box-shadow: none; margin: 0 auto; }
+}
+
+/* Colorear: pintar con el dedo y acercar/alejar */
+.hist-hoja { position: relative; touch-action: none; }
+.hist-lienzo { transform-origin: 0 0; touch-action: none; will-change: transform; }
+.hist-hoja.moviendo .hist-lienzo { cursor: grab; }
+.hist-zoom { position: absolute; right: 8px; bottom: 8px; display: flex; gap: 6px; }
+.hist-zoom button { width: 46px; height: 46px; border-radius: 50%; border: 3px solid var(--profundo); background: rgba(255, 255, 255, 0.95); font-size: 1.25rem; line-height: 1; padding: 0; box-shadow: 0 3px 0 var(--profundo); }
+.hist-zoom button:disabled { opacity: 0.4; }
+.hist-zoom button.activa { background: var(--ocre); }
+@media (max-width: 640px) { .hist-zoom button { width: 40px; height: 40px; font-size: 1.1rem; } }
+.globo-hist.largo { max-width: 66%; font-size: clamp(0.78rem, 2.4vw, 1.02rem); padding: 6px 10px; }
+.globo-antes { top: auto; right: auto; bottom: 5%; left: 4%; max-width: 52%; background: #e3f0ff; font-weight: 700; font-size: clamp(0.78rem, 2.4vw, 1rem); }
+.globo-antes::after { display: none; }
+
+/* Botón Emergencia de la pantalla bloqueada: siempre resaltado para que el niño sepa dónde tocar */
+.cel-abajo .cel-emergencia {
+  position: relative;
+  background: #e53935;
+  color: #fff;
+  border-radius: 999px;
+  padding: 8px 16px;
+  animation: emergencia-late 1.4s ease-in-out infinite;
+}
+.cel-abajo .cel-emergencia::before {
+  content: "👇";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  font-size: 2rem;
+  line-height: 1;
+  pointer-events: none;
+  animation: dedo-baja 0.8s ease-in-out infinite alternate;
+}
+.cel-abajo .cel-emergencia.brilla { background: #ffb300; color: var(--profundo); text-decoration: none; animation: emergencia-late 0.8s ease-in-out infinite; }
+@keyframes emergencia-late {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.8); }
+  50% { transform: scale(1.08); }
+  70% { box-shadow: 0 0 0 16px rgba(255, 82, 82, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 82, 82, 0); }
+}
+@keyframes dedo-baja { from { transform: translate(-50%, -10px); } to { transform: translate(-50%, 0); } }
+@media (prefers-reduced-motion: reduce) {
+  .cel-abajo .cel-emergencia, .cel-abajo .cel-emergencia::before { animation: none; }
+  .cel-abajo .cel-emergencia::before { transform: translate(-50%, -4px); }
+}
+.mini-casa-titulo { margin: 0 0 6px; font-family: var(--juego); font-weight: 800; color: var(--profundo); }
+.mini-casa { margin-bottom: 10px; }
