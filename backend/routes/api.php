@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CimarronController;
 use App\Http\Controllers\DemoController;
 use App\Http\Controllers\GameSessionController;
+use App\Http\Controllers\OpinionController;
 use App\Http\Controllers\SchoolAdminController;
 use App\Http\Controllers\SchoolCatalogController;
 use App\Http\Controllers\SchoolController;
@@ -31,6 +32,9 @@ Route::middleware('throttle:publico')->group(function (): void {
     Route::get('/catalogo-escuelas', [SchoolCatalogController::class, 'search']);
     Route::get('/catalogo-escuelas/cerca', [SchoolCatalogController::class, 'nearby']);
     Route::get('/respaldo', [AdminController::class, 'backupWithKey']);
+    // Comunidad Cimarrona: opiniones anónimas, sin sesión ni cookie (OpinionController).
+    Route::get('/opiniones', [OpinionController::class, 'index']);
+    Route::post('/opiniones', [OpinionController::class, 'store']);
 });
 
 // Zona aproximada del visitante: el navegador la manda una sola vez, con límite por minuto.
@@ -99,6 +103,9 @@ Route::middleware(['web', 'throttle:cuentas'])->group(function (): void {
         Route::get('/respaldos', [AdminController::class, 'savedBackups']);
         Route::get('/respaldos/{file}', [AdminController::class, 'downloadSaved']);
         Route::post('/respaldo/clave', [AdminController::class, 'backupKey']);
+        Route::get('/opiniones', [OpinionController::class, 'adminIndex']);
+        Route::post('/opiniones/{opinion}/ocultar', [OpinionController::class, 'hide'])->whereNumber('opinion');
+        Route::post('/opiniones/{opinion}/mostrar', [OpinionController::class, 'show'])->whereNumber('opinion');
     });
 
     Route::middleware('rol:admin')->prefix('admin')->group(function (): void {

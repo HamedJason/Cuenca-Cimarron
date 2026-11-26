@@ -5147,9 +5147,9 @@ a.game-card:active,
   }
 }
 
-/* ===== Tableta y laptop (761 a 1299 px) ===== */
-/* El menú cabe en una fila sin los iconos */
-@media (min-width: 761px) and (max-width: 1299px) {
+/* ===== Tableta y computadora (761 px o más) ===== */
+/* El menú cabe en una fila sin los iconos (con Comunidad ya no caben ni en pantallas anchas) */
+@media (min-width: 761px) {
   .site-nav .nav-icon {
     display: none;
   }
@@ -9992,6 +9992,13 @@ details.call-more {
 }
 @media (max-width: 1000px) {
   .demo-dock {
+    display: none;
+  }
+}
+
+/* Con Comunidad en el menú, de 761 a 1000 px las redes no caben en el encabezado (siguen en el pie) */
+@media (min-width: 761px) and (max-width: 1000px) {
+  .site-header .header-social {
     display: none;
   }
 }

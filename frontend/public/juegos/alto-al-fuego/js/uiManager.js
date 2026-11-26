@@ -931,7 +931,9 @@ const UI = {
     UI.showScreen('#screen-result');
 
     // Avisa a Cuenca Cimarrona que se apagó el fuego, para sumar puntos (cuenca-puntos.js)
+    // Si no se apagó también terminó la partida: se pide la opinión sin sumar puntos
     if (resultado === 'victory' && window.CuencaPuntos) window.CuencaPuntos.terminar('alto-al-fuego');
+    else if (window.CuencaPuntos && window.CuencaPuntos.opinar) window.CuencaPuntos.opinar();
   },
 
   // ----------------------------------------------------------

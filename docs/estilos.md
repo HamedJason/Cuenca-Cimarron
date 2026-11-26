@@ -158,7 +158,7 @@ Tres columnas en computadora; en celular, una debajo de otra.
 Las redes están en `socials`, dentro de `frontend/src/data.js`. Una red sin enlace se ve como "próximamente" en el pie y no aparece en ningún otro lugar.
 
 - **Encabezado:** iconos de Instagram, Facebook, TikTok y YouTube a la derecha del menú, separados por una línea. En celular están dentro del menú, en una fila que dice "Síguenos"
-- Para que el encabezado quepa en una sola fila con las cuatro redes y la media luna: de 761 a 1100 px el menú va sin iconos; de 761 a 960 px el encabezado muestra solo el icono del cimarrón, sin el nombre; y hasta 420 px el botón de menú va solo con su icono (conserva "Menú" para lectores de pantalla)
+- Para que el encabezado quepa en una sola fila con las cuatro redes y la media luna, desde que se agregó Comunidad el menú va sin iconos en tableta y computadora (761 px o más). De 761 a 1000 px las redes salen del encabezado y quedan en el pie. De 761 a 1080 px el encabezado muestra solo el icono del cimarrón, sin el nombre. Hasta 420 px el botón de menú va solo con su icono (conserva "Menú" para lectores de pantalla)
 - **Inicio, "Síguenos en redes":** antes de "Quiénes somos". El cimarrón presenta botones grandes para cada red
 - **Videos:** se agregan en `videos`, dentro de `data.js` (YouTube o TikTok, con su número de video y título). Mientras la lista esté vacía se ve "Muy pronto, videos aquí". Cada video muestra primero una portada con botón de play y solo carga el reproductor al tocarlo: así la página no se hace lenta y YouTube (en modo sin cookies) o TikTok no rastrean a quien no lo reproduce
 - No hay botón flotante de redes: ya está "Aprende jugando" y competirían entre sí y con el 911

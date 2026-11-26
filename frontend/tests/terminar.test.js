@@ -6,6 +6,7 @@ import { student, progress, studentState } from "../src/composables/useStudent";
 import { activities } from "../src/composables/useActivities";
 import { coins, earn, isClaimed, lastReward, updateWallet } from "../src/composables/useCimacoins";
 import { FINISHED_GAMES, claimStudentFinishes } from "../src/composables/useFinishRewards";
+import { releaseGate } from "../src/composables/useOpinion";
 import { siteRewards, OPEN_COINS, FINISH_COINS, STARTER_COINS } from "../src/avatar/rewards.js";
 
 const reply = (data, status = 200) =>
@@ -92,6 +93,8 @@ describe("Alumno", () => {
     await wrapper.find("button").trigger("click");
     await flushPromises();
     expect(fetch.mock.calls[0][0]).toBe("/api/actividades/codigo-120/respuesta");
+    releaseGate();
+    await flushPromises();
     expect(wrapper.text()).toContain("Ganaste 100 Cimacoins");
   });
 });

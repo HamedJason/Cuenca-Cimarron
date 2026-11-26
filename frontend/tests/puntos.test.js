@@ -6,6 +6,7 @@ import ActivityQuestion from "../src/components/ActivityQuestion.vue";
 import { student, progress } from "../src/composables/useStudent";
 import { activities } from "../src/composables/useActivities";
 import { tasks } from "../src/composables/useTasks";
+import { gate, releaseGate } from "../src/composables/useOpinion";
 
 const catalog = [
   { key: "lectura-conozca", title: "Qué es El Niño", kind: "lectura", mode: "pregunta", points: 10, route: "/informacion?tema=conozca", question: { text: "¿Qué es El Niño?", options: ["A", "B", "C"] } },
@@ -52,6 +53,11 @@ describe("Pregunta de una lectura", () => {
     const [url, options] = fetch.mock.calls[0];
     expect(url).toBe("/api/actividades/lectura-conozca/respuesta");
     expect(JSON.parse(options.body)).toEqual({ answer: 2 });
+    // Primero la opinión obligatoria y después el resultado
+    expect(gate.value).not.toBe(null);
+    expect(wrapper.text()).not.toContain("Ganaste 100 Cimacoins");
+    releaseGate();
+    await flushPromises();
     expect(wrapper.text()).toContain("Ganaste 100 Cimacoins");
     expect(progress.value).toEqual({ points: 10, completed: ["lectura-conozca"] });
   });
@@ -78,6 +84,8 @@ describe("cuenca-puntos.js", () => {
     document.body.innerHTML = "";
     vi.stubGlobal("fetch", vi.fn(() => Promise.resolve({ ok: false, status: 401, json: () => Promise.resolve({}) })));
     load();
+    // Ya opinó en la última hora: no sale la ventana de opinión
+    localStorage.setItem("cuenca.opinion.enviada", String(Date.now()));
     window.CuencaPuntos.terminar("mochila");
     await flushPromises();
     expect(localStorage.getItem("cuenca.puntos.pendientes")).toBe(null);

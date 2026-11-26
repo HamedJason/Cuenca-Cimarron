@@ -15,6 +15,9 @@ import { loadStudent, student } from "./composables/useStudent";
 import { loadActivities, retryPending } from "./composables/useActivities";
 import { setupFinishRewards } from "./composables/useFinishRewards";
 import CoinToast from "./components/CoinToast.vue";
+import OpinionToast from "./components/OpinionToast.vue";
+import OpinionGate from "./components/OpinionGate.vue";
+import { retryPendingOpinion } from "./composables/useOpinion";
 import { closeLesson } from "./composables/useLesson";
 import { coins, earn, visitPage, earnsCoins, canCustomize } from "./composables/useCimacoins";
 import { storageAvailable } from "./composables/useProgress";
@@ -38,6 +41,7 @@ const allNavigation = [
   { to: "/juegos", label: "Juegos", icon: "gamepad" },
   { to: "/informacion", label: "Información", icon: "book" },
   { to: "/consejos", label: "Consejos", icon: "shield" },
+  { to: "/comunidad", label: "Comunidad", icon: "heart" },
   { to: "/equipo", label: "Equipo", icon: "people" },
   // En escritorio se entra con el saldo del encabezado; en el menú del celular, con este enlace
   { to: "/mi-cimarron", label: "Mi cimarrón", icon: "coin", mobileOnly: true },
@@ -88,6 +92,8 @@ onMounted(() => {
   setTimeout(() => earn("visita-diaria"), 3500);
   // Cimacoins por los juegos terminados (en otra pestaña o antes de entrar)
   setTimeout(setupFinishRewards, 4000);
+  // Opinión que no salió por falta de internet
+  setTimeout(retryPendingOpinion, 5000);
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
   // Alto real del encabezado (con la línea de agua): lo usan los saltos a secciones para no quedar tapados
@@ -271,6 +277,7 @@ onBeforeUnmount(() => headerObserver?.disconnect());
       </div>
       <div class="footer-tools">
         <RouterLink to="/directorio" class="footer-link">Directorio</RouterLink>
+        <RouterLink to="/comunidad" class="footer-link">Comunidad Cimarrona</RouterLink>
         <RouterLink to="/escuelas" class="footer-link">Escuelas</RouterLink>
         <RouterLink to="/privacidad" class="footer-link">Aviso de privacidad</RouterLink>
         <RouterLink to="/estilos" class="footer-link">Estilos</RouterLink>
@@ -334,4 +341,6 @@ onBeforeUnmount(() => headerObserver?.disconnect());
   <ExternalReturn />
   <TasksFab />
   <CoinToast />
+  <OpinionToast />
+  <OpinionGate />
 </template>

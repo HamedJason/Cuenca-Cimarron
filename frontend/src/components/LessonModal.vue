@@ -8,6 +8,7 @@ import PointsTag from "./PointsTag.vue";
 import ActivityQuestion from "./ActivityQuestion.vue";
 import SecretCoin from "./SecretCoin.vue";
 import { earn } from "../composables/useCimacoins";
+import { requireOpinion } from "../composables/useOpinion";
 import { activeLesson, closeLesson, openLesson } from "../composables/useLesson";
 import { savedList } from "../composables/storage";
 import {
@@ -49,9 +50,15 @@ const kitComplete = computed(() => kitDone.value.length === kitIds.length);
 const planComplete = computed(() => planDone.value.length === planIds.length);
 
 // Cimacoins por terminar cada lista (se entregan una sola vez)
-watch(kitComplete, (done) => done && earn("mochila-lista"), { immediate: true });
-watch(planComplete, (done) => done && earn("plan-listo"), { immediate: true });
-watch(aidComplete, (done) => done && earn("botiquin-listo"), { immediate: true });
+// Al completar una lista en este momento (no al abrir una ya completa) primero se pide la opinión.
+const onComplete = (reward) => async (done, before) => {
+  if (!done) return;
+  if (before === false) await requireOpinion();
+  earn(reward);
+};
+watch(kitComplete, onComplete("mochila-lista"), { immediate: true });
+watch(planComplete, onComplete("plan-listo"), { immediate: true });
+watch(aidComplete, onComplete("botiquin-listo"), { immediate: true });
 
 const lesson = activeLesson;
 // Cada tema empieza desde arriba: la ventana se regresa al inicio al cerrarla

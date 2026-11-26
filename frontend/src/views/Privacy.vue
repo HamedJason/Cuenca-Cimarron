@@ -33,6 +33,13 @@
         <li>No guardamos tu ubicación exacta ni tu dirección IP, y la zona no se une con tu nombre, tu grupo ni tu escuela</li>
       </ul>
 
+      <h2 id="opiniones">Opiniones en Comunidad Cimarrona</h2>
+      <ul>
+        <li>Guardamos las estrellas, el comentario si lo escribes y la hora redondeada a 10 minutos</li>
+        <li>No guardamos tu nombre, tu grupo, tu escuela ni tu dirección IP. Para frenar mensajes repetidos usamos una huella cifrada de tu equipo que se borra sola a los 10 minutos</li>
+        <li>Los comentarios con groserías o enlaces no se publican, pero sus estrellas sí cuentan. La administración puede ocultar cualquier comentario</li>
+      </ul>
+
       <h2>Quién ve los datos</h2>
       <p>La escuela ve a sus docentes y sus grupos. Cada docente ve solo sus grupos. La administración del sitio ve los datos de las escuelas para ayudarlas y cifras generales sin nombres de alumnos. No vendemos ni compartimos datos con nadie.</p>
 

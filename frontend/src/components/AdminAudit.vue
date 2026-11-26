@@ -37,6 +37,8 @@ const labels = {
   "cerrar-ciclo": "Cerró un ciclo escolar",
   "encender-demo": "Encendió el modo demostración",
   "apagar-demo": "Apagó el modo demostración",
+  "ocultar-opinion": "Ocultó un comentario de Comunidad Cimarrona",
+  "mostrar-opinion": "Volvió a mostrar un comentario de Comunidad Cimarrona",
 };
 const entries = ref([]);
 const actions = ref([]);

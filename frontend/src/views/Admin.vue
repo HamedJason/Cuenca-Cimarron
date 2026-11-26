@@ -10,6 +10,7 @@ const AdminCatalog = defineAsyncComponent(() => import("../components/AdminCatal
 const AdminStaff = defineAsyncComponent(() => import("../components/AdminStaff.vue"));
 const AdminSystem = defineAsyncComponent(() => import("../components/AdminSystem.vue"));
 const AdminAudit = defineAsyncComponent(() => import("../components/AdminAudit.vue"));
+const AdminOpinions = defineAsyncComponent(() => import("../components/AdminOpinions.vue"));
 const AdminSchoolsAll = defineAsyncComponent(() => import("../components/AdminSchoolsAll.vue"));
 const SchoolMapModal = defineAsyncComponent(() => import("../components/SchoolMapModal.vue"));
 loadAccount();
@@ -27,6 +28,7 @@ const tabs = computed(() =>
         ...(isDemo.value
           ? []
           : [
+              { id: "opiniones", label: "Opiniones" },
               { id: "cuentas", label: "Cuentas" },
               { id: "bitacora", label: "Bitácora" },
               { id: "respaldos", label: "Respaldos" },
@@ -156,6 +158,8 @@ watch(
       <AdminStaff v-else-if="tab === 'cuentas' && isAdmin && !isDemo" />
 
       <AdminSystem v-else-if="tab === 'sistema' && isAdmin" :is-demo="isDemo" />
+
+      <AdminOpinions v-else-if="tab === 'opiniones' && isAdmin && !isDemo" />
 
       <AdminAudit v-else-if="tab === 'bitacora' && isAdmin && !isDemo" />
 

@@ -6,6 +6,7 @@ import { ref, computed, useId } from "vue";
 import Icon from "./Icon.vue";
 import { student } from "../composables/useStudent";
 import { activityByKey, isDone, answerActivity } from "../composables/useActivities";
+import { requireOpinion } from "../composables/useOpinion";
 
 const props = defineProps({ activityKey: { type: String, required: true }, compact: Boolean });
 const emit = defineEmits(["done"]);
@@ -21,6 +22,8 @@ async function send() {
   state.value = "sending";
   const result = await answerActivity(props.activityKey, choice.value);
   if (result.ok) {
+    // Terminó la actividad: primero da su opinión y después ve el resultado.
+    await requireOpinion();
     state.value = "done";
     earned.value = result.points ?? 0;
     emit("done", result);
