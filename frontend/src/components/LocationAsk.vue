@@ -3,10 +3,13 @@
 // Se pregunta una sola vez (la respuesta, también "Ahora no", se recuerda en este navegador).
 // Con "Sí" se pide la ubicación al navegador, se convierte aquí en una zona aproximada
 // (zonas.js) y al servidor solo va { municipio, zona, fecha }. Las coordenadas no se guardan.
+// El municipio también se guarda en este navegador para mostrar el sitio de ese lugar (useMunicipio).
+// Si ya hay un municipio guardado (elegido en la barra o con ?municipio=) no se pregunta.
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import Icon from "./Icon.vue";
 import { zonaDe, OUTSIDE, ZONE_KEY } from "../zonas";
+import { fijarMunicipio, municipio } from "../composables/useMunicipio";
 
 const route = useRoute();
 const show = ref(false);
@@ -15,6 +18,7 @@ const place = ref("");
 let timer = 0;
 
 function answered() {
+  if (municipio.value) return true;
   try {
     return Boolean(localStorage.getItem(ZONE_KEY));
   } catch {
@@ -54,6 +58,7 @@ function yes() {
       const result = zonaDe(position.coords.latitude, position.coords.longitude);
       send(result);
       remember("listo");
+      if (result.municipio !== OUTSIDE) fijarMunicipio(result.municipio);
       place.value = result.municipio === OUTSIDE ? "fuera de Baja California" : result.municipio === "Tijuana" ? `Tijuana, ${result.zona}` : result.municipio;
       state.value = "thanks";
       setTimeout(() => (show.value = false), 4000);

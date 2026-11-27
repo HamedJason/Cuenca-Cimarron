@@ -6748,12 +6748,14 @@ button.prep-card {
   width: 30px;
   height: 30px;
 }
-.map-pin.is-central {
+.map-pin.is-central,
+.map-pin.is-shelter {
   background: var(--uabc-green);
   border-color: var(--edge);
   box-shadow: 0 3px 0 var(--shadow);
 }
-.map-pin.is-central::after {
+.map-pin.is-central::after,
+.map-pin.is-shelter::after {
   border-top-color: var(--edge);
 }
 .map-pop {
@@ -9811,6 +9813,62 @@ details.call-more {
   margin-top: auto;
   align-self: flex-start;
 }
+/* Mapa del refugio elegido: llena el espacio libre de la tarjeta en compu y mide 220px en celular.
+   Todo el mapa es un enlace a "Cómo llegar", no se arrastra para no atrapar el scroll */
+.shelter-map {
+  position: relative;
+  display: block;
+  flex: 1 1 220px;
+  min-height: 220px;
+  margin: 14px 0 16px;
+  border: 3px solid var(--uabc-green);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: var(--green-tint);
+  box-shadow: 0 4px 0 var(--shadow);
+  transition: box-shadow 0.15s, translate 0.15s;
+}
+.shelter-map:hover {
+  box-shadow: 0 6px 0 var(--shadow);
+  translate: 0 -2px;
+}
+.shelter-map:focus-visible {
+  outline: 3px solid var(--uabc-gold);
+  outline-offset: 3px;
+}
+.shelter-map-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.shelter-map-note {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 16px;
+  text-align: center;
+  color: var(--title);
+  font-weight: 700;
+}
+.shelter-map .leaflet-control-attribution {
+  font-size: 11px;
+}
+@media (max-width: 760px) {
+  .shelter-map {
+    flex: none;
+    height: 220px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shelter-map,
+  .shelter-map:hover {
+    transition: none;
+    translate: none;
+  }
+}
 
 /* Inicio: franja animada de cada consejo (antes, durante y después), a todo lo ancho de la tarjeta */
 .advice-card.has-strip {
@@ -10001,4 +10059,238 @@ details.call-more {
   .site-header .header-social {
     display: none;
   }
+}
+
+/* Municipio en el encabezado (MunicipioSelect.vue): píldora junto a la media luna y el directorio */
+.muni {
+  order: 2;
+  position: relative;
+  flex: none;
+}
+.muni-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 44px;
+  max-width: 170px;
+  padding: 0 14px 0 10px;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--title);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+.muni-chip svg {
+  flex: none;
+  color: var(--uabc-green);
+}
+.muni-chip-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.muni-chip[aria-expanded="true"] {
+  border-color: var(--uabc-green);
+  background: var(--green-tint);
+}
+@media (hover: hover) {
+  .muni-chip:hover {
+    border-color: var(--edge);
+    background: var(--green-tint);
+  }
+}
+.muni-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 70;
+  display: grid;
+  gap: 10px;
+  width: 260px;
+  padding: 14px;
+  border: 3px solid var(--edge);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: 0 5px 0 var(--shadow);
+  color: var(--ink);
+}
+.muni-panel-title {
+  margin: 0;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--title);
+}
+.muni-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.muni-option {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--title);
+  font: inherit;
+  font-weight: 700;
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+}
+.muni-option.on {
+  border-color: var(--uabc-green);
+  background: var(--uabc-green);
+  color: #fff;
+}
+@media (hover: hover) {
+  .muni-option:not(.on):hover {
+    border-color: var(--edge);
+    background: var(--green-tint);
+  }
+}
+/* Con el municipio en el encabezado las redes caben solo en pantallas anchas (siguen en el pie).
+   En tableta chica (o con saldo de Cimacoins) el municipio se queda solo con el ícono */
+@media (min-width: 761px) and (max-width: 1240px) {
+  .site-header .header-social {
+    display: none;
+  }
+}
+@media (min-width: 761px) and (max-width: 1340px) {
+  .header-row:has(.coin-chip) .header-social {
+    display: none;
+  }
+}
+@media (min-width: 761px) and (max-width: 870px) {
+  .muni-chip {
+    width: 44px;
+    padding: 0;
+    justify-content: center;
+  }
+  .muni-chip-name {
+    display: none;
+  }
+}
+@media (min-width: 871px) and (max-width: 980px) {
+  .header-row:has(.coin-chip) .muni-chip {
+    width: 44px;
+    padding: 0;
+    justify-content: center;
+  }
+  .header-row:has(.coin-chip) .muni-chip-name {
+    display: none;
+  }
+}
+.muni-detect {
+  width: 100%;
+  min-height: 44px;
+}
+.muni-note {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+/* En celular el municipio ocupa el lugar del nombre: queda el icono del cimarrón
+   (el enlace conserva "Cuenca Cimarrona, inicio" para lectores de pantalla) */
+@media (max-width: 660px) {
+  .site-header .brand .wordmark {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .muni {
+    order: 1;
+    margin-left: auto;
+  }
+  .coin-chip + .muni,
+  .muni + .dir-toggle {
+    margin-left: 0;
+  }
+  .muni-panel {
+    position: fixed;
+    top: var(--header-h, 72px);
+    left: 12px;
+    right: 12px;
+    width: auto;
+  }
+}
+@media (max-width: 420px) {
+  .muni-chip {
+    max-width: 112px;
+    height: 40px;
+    padding: 0 10px 0 8px;
+    gap: 4px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 340px) {
+  .muni-chip {
+    width: 40px;
+    padding: 0;
+    justify-content: center;
+  }
+  .muni-chip .muni-chip-name {
+    display: none;
+  }
+}
+
+/* Aviso cuando todavía no tenemos un número del municipio */
+.muni-missing {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--muted);
+}
+.tijuana-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--gold-tint);
+  color: var(--gold-text);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+/* Tipo de cada número del municipio: oficina, ambulancia, citas */
+.call-type {
+  margin-left: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+.agency-head .muni-missing {
+  grid-column: 1 / -1;
+}
+.dir-big-calls {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 8px;
+  justify-items: stretch;
+}
+.dir-big-calls .agency-call {
+  justify-self: start;
+}
+.dir-big-call:has(.call-type) {
+  flex-wrap: wrap;
+  row-gap: 0;
+  padding: 8px 12px;
+}
+.dir-big-call .call-type {
+  flex-basis: 100%;
+  margin-left: 0;
+  text-align: center;
 }

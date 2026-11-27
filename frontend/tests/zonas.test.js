@@ -6,6 +6,7 @@ vi.mock("vue-router", () => ({ useRoute: () => ({ path: "/" }) }));
 
 const { zonaDe, delegaciones, OUTSIDE, ZONE_KEY } = await import("../src/zonas.js");
 const { default: LocationAsk } = await import("../src/components/LocationAsk.vue");
+const { borrarMunicipio, municipio, MUNICIPIO_KEY } = await import("../src/composables/useMunicipio.js");
 
 describe("zonaDe", () => {
   it("en Tijuana da la delegación más cercana", () => {
@@ -28,6 +29,7 @@ describe("Aviso de la primera visita", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     localStorage.clear();
+    borrarMunicipio();
   });
   afterEach(() => {
     vi.useRealTimers();
@@ -65,6 +67,17 @@ describe("Aviso de la primera visita", () => {
     expect(options.body).not.toContain("32.5");
     expect(wrapper.text()).toContain("Nos visitas desde Tijuana, Playas");
     expect(localStorage.getItem(ZONE_KEY)).toBe("listo");
+    expect(municipio.value).toBe("tijuana");
+    expect(localStorage.getItem(MUNICIPIO_KEY)).toBe("tijuana");
+  });
+
+  it("si ya hay municipio guardado no pregunta", async () => {
+    localStorage.setItem(MUNICIPIO_KEY, "mexicali");
+    municipio.value = "mexicali";
+    const wrapper = mount(LocationAsk);
+    vi.advanceTimersByTime(7000);
+    await flushPromises();
+    expect(wrapper.find(".zone-ask").exists()).toBe(false);
   });
 
   it("si niegan el permiso el sitio sigue y no manda nada", async () => {

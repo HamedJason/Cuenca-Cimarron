@@ -11,6 +11,7 @@ import TasksFab from "./components/TasksFab.vue";
 import DemoDock from "./components/DemoDock.vue";
 import HeaderWave from "./components/HeaderWave.vue";
 import LocationAsk from "./components/LocationAsk.vue";
+import MunicipioSelect from "./components/MunicipioSelect.vue";
 import { loadStudent, student } from "./composables/useStudent";
 import { loadActivities, retryPending } from "./composables/useActivities";
 import { setupFinishRewards } from "./composables/useFinishRewards";
@@ -134,6 +135,7 @@ onBeforeUnmount(() => headerObserver?.disconnect());
         title="Tus Cimacoins"
         ><Icon name="coin" :size="20" /><span>{{ coins.toLocaleString("es-MX") }}</span></RouterLink
       >
+      <MunicipioSelect />
       <RouterLink to="/directorio" class="theme-toggle dir-toggle" aria-label="Directorio" title="Directorio"
         ><Icon name="phone" :size="22"
       /></RouterLink>
