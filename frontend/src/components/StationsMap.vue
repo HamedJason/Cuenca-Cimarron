@@ -154,7 +154,7 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <div class="stations-map">
-    <div ref="el" class="stations-map-canvas" role="region" aria-label="Mapa de bomberos, policía y Cruz Roja de Tijuana y Rosarito"></div>
+    <div ref="el" class="stations-map-canvas" role="region" aria-label="Mapa de bomberos, policía y Cruz Roja"></div>
     <p v-if="!ready && !failed" class="stations-map-note" role="status">Cargando el mapa…</p>
     <p v-if="failed" class="stations-map-note">No se pudo cargar el mapa. La lista de abajo tiene todos los lugares</p>
   </div>

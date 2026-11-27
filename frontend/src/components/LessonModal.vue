@@ -11,6 +11,7 @@ import { earn } from "../composables/useCimacoins";
 import { requireOpinion } from "../composables/useOpinion";
 import { activeLesson, closeLesson, openLesson } from "../composables/useLesson";
 import { savedList } from "../composables/storage";
+import { municipioActual } from "../composables/useMunicipio";
 import {
   familyPlan,
   firstAidGroups,
@@ -115,6 +116,7 @@ function goTo(id) {
         </section>
         <section class="lesson-part" aria-labelledby="leccion-tijuana">
           <h3 id="leccion-tijuana">¿Qué significa para Tijuana?</h3>
+          <p v-if="municipioActual.id !== 'tijuana'"><span class="tijuana-badge">Información de Tijuana</span></p>
           <div class="lesson-cards">
             <article
               v-for="(card, i) in ninoOutlook.cards"

@@ -9,6 +9,10 @@ import Llamada911 from "../components/Llamada911.vue";
 import FamiliaSeparada from "../components/FamiliaSeparada.vue";
 import { openLesson } from "../composables/useLesson";
 import { lessons, risks } from "../data";
+import { computed } from "vue";
+import { textos } from "../municipios";
+import { municipioActual as muni } from "../composables/useMunicipio";
+const text = computed(() => textos(muni.value));
 
 // Información: los temas abren su ventana en lugar de otra página.
 // /informacion?tema=mochila abre directo esa ventana (enlaces viejos y compartidos).
@@ -50,7 +54,7 @@ watch(() => route.query.ver, scrollFromQuery);
     <header class="gm-hero info-hero">
       <div class="gm-hero-copy">
         <span class="gm-kicker"><Icon name="book" :size="20" /> Lo esencial</span>
-        <h1>El Niño en Tijuana</h1>
+        <h1>{{ text.elNino }}</h1>
         <p>Qué es, qué riesgos trae a tu colonia y cómo prepararte en familia</p>
         <ul class="gm-chips">
           <li><Icon name="book" :size="18" /> {{ lessons.length }} temas</li>
@@ -116,16 +120,17 @@ watch(() => route.query.ver, scrollFromQuery);
       <div class="section-head">
         <div>
           <h2 id="titulo-riesgos" class="section-title">
-            Qué puede pasar en Tijuana
+            {{ text.riesgos }}
           </h2>
           <PointsTag />
         </div>
         <a
+          v-if="muni.proteccionCivilUrl"
           class="button secondary"
-          href="https://proteccioncivil.tijuana.gob.mx/"
+          :href="muni.proteccionCivilUrl"
           target="_blank"
           rel="noopener"
-          ><Icon name="external" :size="18" /> Protección Civil Tijuana</a
+          ><Icon name="external" :size="18" /> Protección Civil {{ muni.nombre }}</a
         >
       </div>
       <div class="advice-grid">

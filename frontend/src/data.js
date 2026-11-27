@@ -217,6 +217,25 @@ export const emergency = {
     // Bomberos de Rosarito no publica teléfonos por estación: se pide por el 911.
     // También tiene una estación en la colonia Morelos, sin ubicación publicada.
     { id: "rosarito-bomberos-centro", city: "Rosarito", name: "Bomberos Rosarito, Estación Centro", area: "Zona Centro, Rosarito", address: "Calle Mar del Norte, junto a la Cruz Roja", lat: 32.342011, lng: -117.056078 },
+    // Otros municipios, sin ubicación en el mapa (salen en la lista con "Cómo llegar" por dirección).
+    // Mexicali: anexo municipal de 2024 con el directorio de estaciones (págs. 12 y 13)
+    // https://www.mexicali.gob.mx/transparencia/administracion/licitaciones/2024/pdf/CONTRATOFUMIGACION6982150.pdf
+    // Ensenada y Tecate: guía de Educación BC 2025. San Felipe: directorio general del Ayuntamiento.
+    // Son teléfonos publicados, no se llamó a ninguno. En una emergencia se marca al 911.
+    { id: "mexicali-central", city: "Mexicali", name: "Central de Bomberos", address: "Blvd. Lázaro Cárdenas 1601", phone: "686 561 8212" },
+    { id: "mexicali-1", city: "Mexicali", name: "Estación 1", area: "Parque Vicente Guerrero", address: "Alfonso Esquer Sandez s/n", phone: "686 554 6450" },
+    { id: "mexicali-2", city: "Mexicali", name: "Estación 2", area: "Pueblo Nuevo", address: "Tuxtla Gutiérrez y Querétaro", phone: "686 554 1188" },
+    { id: "mexicali-3", city: "Mexicali", name: "Estación 3", area: "González Ortega", address: "Calzada Robledo s/n", phone: "686 563 5944" },
+    { id: "mexicali-4", city: "Mexicali", name: "Estación 4", area: "Independencia", address: "Calzada Independencia y Río Mocorito", phone: "686 566 1555" },
+    { id: "mexicali-5", city: "Mexicali", name: "Estación 5", area: "Col. Baja California", address: "Michoacán y Bahía de los Ángeles", phone: "686 553 2877" },
+    { id: "mexicali-14", city: "Mexicali", name: "Estación 14", area: "Santa Isabel", address: "Prolongación Blvd. Lázaro Cárdenas, col. Los Milagros", phone: "686 563 8300" },
+    { id: "mexicali-23", city: "Mexicali", name: "Estación 23", area: "Quintas del Rey", address: "Av. Torino y Puente la Reyna", phone: "686 837 9122" },
+    { id: "mexicali-24", city: "Mexicali", name: "Estación 24", area: "Zona noroeste", address: "Imperio Germánico y Frontera Norte, col. Imperial", phone: "686 516 7954" },
+    { id: "ensenada-centro", city: "Ensenada", name: "Estación Centro", area: "Zona Centro", address: "Álvaro Obregón 263", phone: "646 178 2222" },
+    { id: "ensenada-5", city: "Ensenada", name: "Estación 5", phone: "646 155 9398" },
+    { id: "ensenada-san-vicente", city: "Ensenada", name: "Base San Vicente", area: "San Vicente", phone: "646 108 5737" },
+    { id: "tecate-central", city: "Tecate", name: "Central de Bomberos", phone: "665 654 1711" },
+    { id: "san-felipe-bomberos", city: "San Felipe", name: "Bomberos San Felipe", area: "Zona Centro", address: "Av. Mar Blanco 759", phone: "686 577 1182" },
   ],
   // Policía municipal: domicilios, teléfonos y ubicaciones de la página
   // "Ubica tu Delegación" de la SSPCM (revisada el 15 de noviembre de 2026).
@@ -274,32 +293,59 @@ export const emergency = {
     },
   ],
   sheltersUrl: "https://proteccioncivil.tijuana.gob.mx/refugios.aspx",
+  // lat/lng: los de Google Maps para cada lugar (o su dirección) y OpenStreetMap
+  // para CREA, Salvatierra y Unidad Deportiva Tijuana (revisados el 26 de noviembre de 2026).
+  // mapUrl: el enlace propio del lugar en Google Maps, si se tiene; si no, se busca por nombre.
   shelters: [
     {
       name: "Unidad Deportiva Reforma",
       address: "Segunda Sur 701, Del Río, Otay Centenario",
+      lat: 32.5274663,
+      lng: -116.9928726,
     },
     {
       name: "Unidad Deportiva Independencia",
       address: "Av. Matamoros 1750, Independencia",
+      lat: 32.5258402,
+      lng: -117.0433286,
     },
-    { name: "Unidad Deportiva CREA", address: "Cañón Aviación s/n, Centro" },
+    {
+      name: "Unidad Deportiva CREA",
+      address: "Cañón Aviación s/n, Centro",
+      lat: 32.5273247,
+      lng: -117.0121252,
+    },
     {
       name: "Unidad Deportiva Salvatierra",
       address: "Padre Salvatierra 1642, Salvatierra",
+      lat: 32.4862517,
+      lng: -117.0694877,
     },
     {
       name: "Unidad Deportiva Tijuana",
       address:
         "Av. Ermita, Prol. Paseo de los Héroes 13990, Alfonso Corona del Rosal",
+      lat: 32.5134533,
+      lng: -116.9728638,
     },
     {
       name: "Unidad Deportiva Mariano Matamoros",
       address: "Mariano Matamoros, Centro",
+      lat: 32.4906806,
+      lng: -116.8822708,
     },
     {
       name: "Albergue de Migrantes Tijuana",
       address: "Blvd. Cuauhtémoc Sur 3170, Chula Vista",
+      lat: 32.5137999,
+      lng: -117.0215194,
+    },
+    {
+      name: "Albergue Mariano Matamoros (DIF BC)",
+      address: "Aurora Austral, C.P. 22234, Bugambilias",
+      lat: 32.4656572,
+      lng: -116.8872061,
+      mapUrl: "https://maps.app.goo.gl/HC36p38VdyGNGhjf9",
     },
   ],
   riskMapUrl:
@@ -525,8 +571,16 @@ export const familySeparation = [
 // Escuadrón Violeta de Tijuana (SSPCM): atiende violencia contra mujeres, niñas y niños.
 // Número tomado de Diario Tijuana (16 de abril de 2025), que cita a la SSPCM.
 // No se encontró en un sitio oficial del Ayuntamiento: confirmar con la SSPCM y cambiarlo aquí si hace falta.
-// La Línea Violeta estatal (SSCBC) es 686 837 3700 ext. 11017, de 7:00 a 23:00 (seguridadbc.gob.mx).
 export const VIOLET_SQUAD_PHONE = "664 680 3187";
+
+// Línea Violeta de la Secretaría de Seguridad Ciudadana del Estado: violencia de género, en todo
+// Baja California, de 7 a 23 h. Es estatal y no es el Escuadrón Violeta municipal de Tijuana.
+export const VIOLET_LINE = {
+  number: "686 837 3700",
+  ext: "11017",
+  hours: "de 7 a 23 h",
+  source: "https://seguridadbc.gob.mx/PrevencionDelito/EV.php",
+};
 
 // Otros números de ayuda, además del 911 y de las dependencias de arriba.
 // 088 y 089: Uno TV con datos del SESNSP. Línea de la Vida: CONASAMA, Secretaría de Salud.
@@ -557,17 +611,18 @@ export const helpLines = [
     theme: "redcross",
     what: "Apoyo emocional gratis, las 24 horas: crisis, ansiedad, tristeza que no se va, ideas de hacerte daño o problemas con alcohol y drogas",
   },
-  // 075: línea de intervención en crisis del municipio, las 24 horas. Puede mandar a la UMAS
-  // (Unidad Municipal de Apoyo Social) (Zeta, enero de 2025;
-  // El Imparcial, noviembre de 2025). En algunos celulares no entra: entonces se marca al 911.
+  // 075: línea estatal de intervención en crisis del Instituto de Psiquiatría del Estado (IPEBC),
+  // gratis y las 24 horas en todo Baja California. Ficha de trámites del Estado actualizada el
+  // 4 de noviembre de 2026: https://retys.bajacalifornia.gob.mx/Portal/TyS/528?temaId=19
+  // En algunos celulares no entra: entonces se marca al 911.
   {
     id: "075",
     name: "Línea de intervención en crisis",
     number: "075",
-    note: "Solo en Tijuana",
+    note: "En todo Baja California",
     icon: "heart",
     theme: "redcross",
-    what: "Psicólogos del municipio te escuchan las 24 horas. Si hace falta, mandan a la UMAS a ayudarte. Si no entra la llamada, marca al 911",
+    what: "Psicólogos del Instituto de Psiquiatría del Estado te escuchan gratis las 24 horas. Si no entra la llamada, marca al 911",
   },
   {
     id: "mujeres",

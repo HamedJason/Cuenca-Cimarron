@@ -6,9 +6,16 @@ import { ref, computed, watch } from "vue";
 import { RouterLink } from "vue-router";
 import Modal from "../components/Modal.vue";
 import StationsMap from "../components/StationsMap.vue";
+import ShelterMap from "../components/ShelterMap.vue";
 import MascotGuide from "../components/MascotGuide.vue";
 import FollowSection from "../components/FollowSection.vue";
 import { emergency, games, advice } from "../data";
+import { esTijuana, estacionesDe, telefono, textos } from "../municipios";
+import { municipioActual as muni } from "../composables/useMunicipio";
+// Lo que cambia según el municipio elegido (useMunicipio). Sin elegir, es Tijuana.
+// Refugios, mapa de riesgo y el aviso del gobierno son de Tijuana y solo salen ahí.
+const tijuana = computed(() => esTijuana(muni.value));
+const text = computed(() => textos(muni.value));
 import { rand } from "../composables/useCanvasScene";
 import { openLesson } from "../composables/useLesson";
 import { useGamePlays } from "../composables/useGamePlays";
@@ -45,7 +52,7 @@ const shareState = ref("");
 async function shareSite() {
   const data = {
     title: "Cuenca Cimarrona",
-    text: "Prepárate para las lluvias de El Niño en Tijuana",
+    text: text.value.compartir,
     url: window.location.origin,
   };
   try {
@@ -63,6 +70,23 @@ async function shareSite() {
 // Foto del equipo: cuando exista, poner aquí la ruta (por ejemplo /assets/images/equipo.webp).
 const teamPhoto = ref("");
 const telHref = (number) => `tel:${number.replace(/\s/g, "")}`;
+// Protección Civil y Bomberos son del municipio. El 089 es nacional.
+// Muchos son números de oficina: cada tarjeta dice de qué es y recuerda el 911.
+// Si Protección Civil y Bomberos comparten oficina, sale una sola tarjeta.
+const phones = computed(() =>
+  emergency.phones
+    .map((item) => {
+      const key = { civil: "proteccionCivil", fire: "bomberos" }[item.theme];
+      if (!key) return item;
+      const found = telefono(muni.value, key);
+      if (key === "bomberos" && found.conjunto) return null;
+      const label = item.theme === "civil" ? "Protección Civil" : "Bomberos";
+      const name = found.conjunto ? `${found.nombre} ${muni.value.nombre}` : tijuana.value ? item.name : `${label} ${muni.value.nombre}`;
+      const note = found.falta ? found.aviso : `${found.tipo ?? "Oficina"}. En emergencia llama al 911`;
+      return { ...item, name, numbers: found.numeros, missing: note };
+    })
+    .filter(Boolean),
+);
 const raindrops = Array.from({ length: 14 }, () => ({
   left: `${rand(45, 99).toFixed(1)}%`,
   delay: `${rand(0, 1.6).toFixed(2)}s`,
@@ -75,10 +99,15 @@ const titleRain = Array.from({ length: 130 }, () => ({
   duration: `${rand(0.7, 1.1).toFixed(2)}s`,
   opacity: rand(0.7, 1).toFixed(2),
 }));
-// Refugios: se elige uno en la lista y se muestra su tarjeta, sin recorrer los siete.
+// Refugios: se elige uno en la lista y se muestra su tarjeta, sin recorrer toda la lista.
+// En Tijuana son los de Protección Civil (con mapa). En otros municipios, los que se usaron en
+// octubre de 2026 (sin coordenadas: solo dirección y "Cómo llegar").
+const CENAPRED_REFUGIOS = "https://preparados.gob.mx/apps/RefugiosTemporales/consulta.php";
+const shelterList = computed(() => (tijuana.value ? emergency.shelters : (muni.value.refugios ?? [])));
 const shelterIndex = ref(0);
-const shelter = computed(() => emergency.shelters[shelterIndex.value]);
-const area = (address) => address.split(",").pop().trim();
+watch(() => muni.value.id, () => (shelterIndex.value = 0));
+const shelter = computed(() => shelterList.value[shelterIndex.value] ?? null);
+const area = (address) => (address || "").split(",").pop().trim();
 // El mapa de riesgo se abre en una ventana dentro del sitio.
 const showMap = ref(false);
 const mapLoaded = ref(false);
@@ -86,18 +115,21 @@ function openMap() {
   mapLoaded.value = false;
   showMap.value = true;
 }
+// Si el lugar trae su propio enlace de Google Maps se usa ese, si no se busca por nombre y dirección.
 const mapHref = (shelter) =>
+  shelter.mapUrl ||
   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-    `${shelter.name}, ${shelter.address}, Tijuana, B.C.`,
+    [shelter.name, shelter.address, `${muni.value.sep}, B.C.`].filter(Boolean).join(", "),
   )}`;
 // Ayuda cerca de ti: bomberos y polic\u00eda en una ventana con mapa, filtro y buscador.
 // Con "Usar mi ubicaci\u00f3n" la lista se ordena de la m\u00e1s cercana a la m\u00e1s lejana;
 // la ubicaci\u00f3n solo se usa en este navegador, no se guarda ni se env\u00eda.
-const places = [
-  ...emergency.fireStations.map((item) => ({ ...item, kind: "fire" })),
-  ...emergency.policeStations.map((item) => ({ ...item, kind: "police" })),
-  ...emergency.redCrossStations.map((item) => ({ ...item, kind: "redcross" })),
-];
+// Solo las del municipio elegido (las que no traen city son de Tijuana)
+const places = computed(() => [
+  ...estacionesDe(muni.value, emergency.fireStations).map((item) => ({ ...item, kind: "fire" })),
+  ...estacionesDe(muni.value, emergency.policeStations).map((item) => ({ ...item, kind: "police" })),
+  ...estacionesDe(muni.value, emergency.redCrossStations).map((item) => ({ ...item, kind: "redcross" })),
+]);
 const kindLabel = { fire: "Bomberos", police: "Policía", redcross: "Cruz Roja" };
 const kindIcon = { fire: "flame", police: "shield", redcross: "medical" };
 // Sin teléfono propio: las estaciones de bomberos de Tijuana se atienden por la
@@ -131,7 +163,7 @@ const formatKm = (km) =>
   km < 1 ? `a ${Math.round(km * 10) * 100} m` : `a ${km.toFixed(1)} km`;
 const stations = computed(() => {
   const query = plain(stationQuery.value.trim());
-  let list = places.filter(
+  let list = places.value.filter(
     (item) =>
       (stationKind.value === "all" || item.kind === stationKind.value) &&
       (!query || plain(`${item.name} ${item.area} ${item.address}`).includes(query)),
@@ -144,6 +176,8 @@ const stations = computed(() => {
   return list;
 });
 const centralPhone = emergency.fireStations[0].phone;
+// En municipios sin ubicaciones en el mapa solo se muestra la lista
+const hasPoints = computed(() => stations.value.some((item) => item.lat));
 function openStations(kind = "all") {
   stationQuery.value = "";
   stationKind.value = kind;
@@ -175,7 +209,9 @@ const stationMapHref = (item) =>
   `https://www.google.com/maps/search/?api=1&query=${
     item.lat
       ? `${item.lat},${item.lng}`
-      : encodeURIComponent(`${item.address}, ${item.area}, Tijuana, B.C.`)
+      : encodeURIComponent(
+          [item.address ? "" : item.name, item.address, item.area, `${item.city ?? "Tijuana"}, B.C.`].filter(Boolean).join(", "),
+        )
   }`;
 </script>
 <template>
@@ -183,7 +219,7 @@ const stationMapHref = (item) =>
     <section class="purpose-hero cc-watermark" aria-labelledby="titulo-proposito">
       <div class="wrap purpose-row">
         <div class="purpose-text">
-          <h1 id="titulo-proposito">Tijuana se prepara para El Niño</h1>
+          <h1 id="titulo-proposito">{{ text.titulo }}</h1>
           <p class="purpose-lead">
             Información clara, juegos y un plan para que tu familia sepa qué hacer
             antes, durante y después de las lluvias
@@ -239,7 +275,7 @@ const stationMapHref = (item) =>
     <section class="band band-green" aria-labelledby="titulo-911">
       <div class="wrap hero-911">
         <div class="hero-911-text">
-          <p class="hero-place">Tijuana, Baja California</p>
+          <p class="hero-place">{{ text.lugar }}</p>
           <h2 id="titulo-911" class="hero-911-title">¿Es una emergencia?</h2>
           <p class="hero-lead">
             Llama al 911: contestan policía, ambulancia y bomberos
@@ -263,12 +299,16 @@ const stationMapHref = (item) =>
         /></span>
         <div class="fire-text">
           <h2 id="titulo-bomberos">¿Qué ayuda tienes cerca?</h2>
-          <p>
-            Bomberos, policía y Cruz Roja de Tijuana y Rosarito: la más cercana a
+          <p v-if="places.length">
+            Bomberos, policía y Cruz Roja de {{ muni.nombre }}: la más cercana a
             tu colonia, su teléfono y cómo llegar
           </p>
+          <p v-else>
+            Aún no tenemos las estaciones de {{ muni.nombre }}, en emergencia
+            llama al <a href="tel:911">911</a>
+          </p>
         </div>
-        <button class="button primary cta" type="button" @click="openStations()">
+        <button v-if="places.length" class="button primary cta" type="button" @click="openStations()">
           <Icon name="pin" :size="20" /> Ver ayuda cerca de ti
         </button>
       </div>
@@ -287,7 +327,7 @@ const stationMapHref = (item) =>
         ></span>
       </div>
       <div class="wrap alert-row">
-        <div>
+        <div v-if="tijuana">
           <h2 id="titulo-alerta">
             Tijuana se está preparando para El Niño
           </h2>
@@ -298,15 +338,20 @@ const stationMapHref = (item) =>
             Aviso del gobierno de Tijuana, 5 de noviembre de 2026
           </p>
         </div>
+        <div v-else>
+          <h2 id="titulo-alerta">Prepárate para El Niño en {{ muni.nombre }}</h2>
+          <p>Antes de salir revisa los avisos del clima</p>
+        </div>
         <div class="alert-actions">
           <a
+            v-if="tijuana"
             class="button dark cta"
             :href="emergency.notices[0].url"
             target="_blank"
             rel="noopener"
             >Ver avisos oficiales</a
           ><a
-            class="text-link on-gold"
+            :class="tijuana ? 'text-link on-gold' : 'button dark cta'"
             :href="emergency.notices[2].url"
             target="_blank"
             rel="noopener"
@@ -330,7 +375,7 @@ const stationMapHref = (item) =>
         </p>
         <div class="phone-grid">
           <div
-            v-for="item in emergency.phones"
+            v-for="item in phones"
             :key="item.name"
             :class="['phone-card', `theme-${item.theme}`]"
           >
@@ -349,6 +394,7 @@ const stationMapHref = (item) =>
               :aria-label="`Llamar a ${item.name}, ${number}`"
               >{{ number }}</a
             >
+            <small v-if="item.missing" class="muni-missing">{{ item.missing }}</small>
           </div>
         </div>
         <RouterLink class="kreyol-link" to="/migrantes?lang=ht" lang="ht"
@@ -357,27 +403,35 @@ const stationMapHref = (item) =>
         /></RouterLink>
       </section>
 
-      <div class="split">
+      <div :class="{ split: tijuana || muni.atlas }">
         <section class="shelters" aria-labelledby="titulo-refugios">
           <h2 id="titulo-refugios" class="section-title">
             Refugios temporales
           </h2>
-          <p class="section-note">
+          <p v-if="tijuana" class="section-note">
             Para entrar a un refugio, llama a tu delegación; si hay peligro, al
             911
           </p>
-          <div class="shelter-picker">
+          <p v-else-if="shelterList.length" class="section-note">
+            Se usaron como refugio en octubre de 2026. Antes de ir llama al
+            <a href="tel:911">911</a> para saber si está abierto
+          </p>
+          <p v-else class="section-note">
+            Aún no tenemos los refugios de {{ muni.nombre }}. Si tienes que salir
+            de tu casa por la lluvia, llama al <a href="tel:911">911</a>
+          </p>
+          <div v-if="shelter" class="shelter-picker">
             <label for="refugio" class="field-label"
-              >Elige uno de los {{ emergency.shelters.length }} refugios</label
+              >Elige uno de los {{ shelterList.length }} refugios</label
             >
             <div class="select-wrap">
               <select id="refugio" v-model="shelterIndex" class="select">
                 <option
-                  v-for="(item, i) in emergency.shelters"
+                  v-for="(item, i) in shelterList"
                   :key="item.name"
                   :value="i"
                 >
-                  {{ item.name }} · {{ area(item.address) }}
+                  {{ item.name }}{{ area(item.address) ? ` · ${area(item.address)}` : "" }}
                 </option>
               </select>
               <Icon name="chevron" :size="22" class="select-chevron" />
@@ -388,7 +442,7 @@ const stationMapHref = (item) =>
               /></span>
               <span class="shelter-info"
                 ><strong>{{ shelter.name }}</strong
-                ><span>{{ shelter.address }}</span></span
+                ><span>{{ shelter.address || "Dirección no publicada" }}</span></span
               >
               <a
                 class="pill"
@@ -400,16 +454,29 @@ const stationMapHref = (item) =>
               >
             </div>
           </div>
+          <ShelterMap v-if="shelter?.lat" :shelter="shelter" :href="mapHref(shelter)" />
           <a
+            v-if="tijuana"
             class="text-link"
             :href="emergency.sheltersUrl"
             target="_blank"
             rel="noopener"
             >Lista oficial de refugios</a
           >
+          <a
+            v-else-if="shelterList.length"
+            class="text-link"
+            :href="CENAPRED_REFUGIOS"
+            target="_blank"
+            rel="noopener"
+            >Buscador de refugios de CENAPRED</a
+          >
+          <p v-if="!tijuana && !muni.atlas" class="section-note">
+            Todavía no tenemos un mapa de riesgo de {{ muni.nombre }} que se pueda abrir en el celular
+          </p>
         </section>
 
-        <section class="risk-card" aria-labelledby="titulo-riesgo">
+        <section v-if="tijuana" class="risk-card" aria-labelledby="titulo-riesgo">
           <AnimClip name="colonia-riesgo" class="risk-card-clip" />
           <h2 id="titulo-riesgo">¿Tu colonia es zona de riesgo?</h2>
           <p>Búscala en el mapa de inundaciones y deslaves del municipio</p>
@@ -421,6 +488,19 @@ const stationMapHref = (item) =>
             :href="emergency.riskAtlasPdf"
             target="_blank"
             rel="noopener"
+            >Atlas completo en PDF</a
+          >
+        </section>
+        <section v-else-if="muni.atlas" class="risk-card" aria-labelledby="titulo-riesgo">
+          <h2 id="titulo-riesgo">¿Tu colonia es zona de riesgo?</h2>
+          <p>
+            {{ muni.atlas.label
+            }}<template v-if="muni.atlas.nota">. {{ muni.atlas.nota }}</template>
+          </p>
+          <a class="button primary cta" :href="muni.atlas.url" target="_blank" rel="noopener"
+            ><Icon name="map" :size="20" /> Abrir el mapa de riesgo</a
+          >
+          <a v-if="muni.atlas.pdf" class="text-link" :href="muni.atlas.pdf" target="_blank" rel="noopener"
             >Atlas completo en PDF</a
           >
         </section>
@@ -635,7 +715,7 @@ const stationMapHref = (item) =>
           </h2>
           <p>
             Cuenca Cimarrona es un proyecto de la UABC. Queremos que las
-            familias de Tijuana sepan qué hacer antes, durante y después de las
+            {{ text.familias }} sepan qué hacer antes, durante y después de las
             lluvias. Todo es gratis
           </p>
           <h3>Cada quien aprende distinto</h3>
@@ -704,13 +784,13 @@ const stationMapHref = (item) =>
         nadie
       </p>
       <StationsMap
-        v-if="showStations"
+        v-if="showStations && hasPoints"
         :stations="stations"
         :central-phone="centralPhone"
         :map-href="stationMapHref"
         :here="here"
       />
-      <p class="station-map-hint">Toca un punto para ver su teléfono y cómo llegar</p>
+      <p v-if="hasPoints" class="station-map-hint">Toca un punto para ver su teléfono y cómo llegar</p>
       <label for="buscar-estacion" class="field-label"
         >Busca por colonia, delegación o número de estación</label
       >
@@ -719,7 +799,7 @@ const stationMapHref = (item) =>
         v-model="stationQuery"
         class="station-search"
         type="search"
-        placeholder="Por ejemplo: La Mesa, Playas, Otay, Rosarito, 8"
+        :placeholder="tijuana ? 'Por ejemplo: La Mesa, Playas, Otay, 8' : 'Por ejemplo: Centro'"
         autocomplete="off"
       />
       <p v-if="!stations.length" class="station-empty" role="status">
@@ -804,7 +884,7 @@ const stationMapHref = (item) =>
           </span>
         </li>
       </ul>
-      <div class="note place-note">
+      <div v-if="tijuana" class="note place-note">
         <Icon name="info" />
         <p>
           <strong>Casetas y módulos de policía:</strong> no aparecen aquí porque
@@ -813,7 +893,7 @@ const stationMapHref = (item) =>
           son las sedes de la policía municipal en cada zona
         </p>
       </div>
-      <div class="note place-note">
+      <div v-if="tijuana" class="note place-note">
         <Icon name="medical" />
         <p>
           <strong>Ambulancia de la Cruz Roja:</strong> pídela al 911, es gratis.
@@ -822,7 +902,7 @@ const stationMapHref = (item) =>
           {{ emergency.redCrossBases }}, sin dirección publicada
         </p>
       </div>
-      <div class="place-links">
+      <div v-if="tijuana" class="place-links">
         <a
           class="text-link"
           :href="emergency.fireStationsUrl"
