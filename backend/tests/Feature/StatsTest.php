@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Http\Controllers\StatsController;
 use App\Models\Classroom;
 use App\Models\Student;
 use App\Models\Teacher;
@@ -13,6 +14,15 @@ use Tests\TestCase;
 class StatsTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_el_municipio_por_ubicacion_usa_los_siete(): void
+    {
+        $this->assertSame('Tijuana', StatsController::municipalityNear(32.52, -117.03));
+        $this->assertSame('Playas de Rosarito', StatsController::municipalityNear(32.35, -117.05));
+        $this->assertSame('San Quintín', StatsController::municipalityNear(30.55, -115.94));
+        $this->assertSame('San Felipe', StatsController::municipalityNear(31.03, -114.84));
+        $this->assertSame('Sin dato', StatsController::municipalityNear(null, null));
+    }
 
     public function test_estadisticas_solo_con_cifras_y_solo_para_admin(): void
     {

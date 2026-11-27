@@ -1,5 +1,5 @@
 <script setup>
-// Carga o actualiza el catálogo de escuelas de Tijuana y Rosarito desde datos.gob.mx.
+// Carga o actualiza el catálogo de escuelas de los 7 municipios de Baja California desde datos.gob.mx.
 import { ref, onMounted } from "vue";
 import Icon from "./Icon.vue";
 import { api } from "../composables/api";
@@ -35,7 +35,7 @@ const date = (iso) => new Date(iso).toLocaleDateString("es-MX", { dateStyle: "lo
   <section class="form-card">
     <h2 class="form-title">Catálogo de escuelas</h2>
     <p class="muted-text">
-      Las escuelas de Tijuana y Rosarito del Catálogo de Centros de Trabajo de la SEP {{ SEP_CATALOG.year }} (datos.gob.mx). Con él cada escuela se busca y se elige al registrarse. Conviene actualizarlo una vez al año
+      Las escuelas de los 7 municipios de Baja California del Catálogo de Centros de Trabajo de la SEP {{ SEP_CATALOG.year }} (datos.gob.mx). Con él cada escuela se busca y se elige al registrarse. Conviene actualizarlo una vez al año
     </p>
     <p v-if="status">
       <b>{{ status.total.toLocaleString("es-MX") }}</b> escuelas

@@ -11,7 +11,8 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 // Catálogo oficial de escuelas para buscar la propia al registrarse.
-// Viene incluido en database/data (Tijuana y Playas de Rosarito, SEP 2026) y se carga solo al arrancar.
+// Viene incluido en database/data (los 7 municipios de Baja California, SEP 2026) y se carga solo al arrancar.
+// Los municipios válidos salen de config/zonas.php (catalogo).
 // Los puntos de las escuelas que la SEP no ubicó vienen del DENUE del INEGI (05/2026), cruzados por
 // nombre, colonia y calle con infra/ubicar-escuelas-denue.py. El campo geo dice de dónde salió cada punto.
 // si la tabla está vacía (php artisan escuelas:catalogo). El administrador también puede actualizarlo
@@ -27,7 +28,33 @@ class SchoolCatalogController extends Controller
     // Lo traen 1,728 de las 2,155 escuelas de Tijuana del catálogo 2026, así que no es su ubicación.
     public const UNKNOWN_POINT = [32.497, -117.08];
 
+    // Los mismos puntos de "sin ubicación" en otros municipios del catálogo 2026 (Mexicali 487 escuelas,
+    // Ensenada 121 y Tecate 8). infra/ubicar-escuelas-denue.py los detecta igual.
+    public const UNKNOWN_POINTS = [self::UNKNOWN_POINT, [32.632, -115.47], [31.805, -116.6], [32.565, -116.63]];
+
     public const GEO_SOURCES = ['sep', 'inegi', 'aprox'];
+
+    // Puntos válidos en Baja California, de San Quintín a la frontera y del Pacífico a San Felipe.
+    public const LAT_RULE = 'between:28,33.5';
+
+    public const LNG_RULE = 'between:-118,-114';
+
+    // Nombres de los municipios como vienen en el catálogo de la SEP
+    public static function municipalities(): array
+    {
+        return array_values(config('zonas.catalogo'));
+    }
+
+    // Acepta el nombre de la SEP ("Playas de Rosarito") o el de las zonas ("Rosarito")
+    public static function municipalityName(?string $value): ?string
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+        $map = config('zonas.catalogo');
+
+        return $map[$value] ?? (in_array($value, $map, true) ? $value : null);
+    }
 
     public static function knownPoint(mixed $lat, mixed $lng): bool
     {
@@ -35,7 +62,13 @@ class SchoolCatalogController extends Controller
             return false;
         }
 
-        return ! (round((float) $lat, 4) === self::UNKNOWN_POINT[0] && round((float) $lng, 4) === self::UNKNOWN_POINT[1]);
+        foreach (self::UNKNOWN_POINTS as [$y, $x]) {
+            if (round((float) $lat, 4) === $y && round((float) $lng, 4) === $x) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public static function searchKey(string ...$parts): string
@@ -45,8 +78,14 @@ class SchoolCatalogController extends Controller
 
     public function search(Request $request): JsonResponse
     {
-        $data = $request->validate(['q' => ['required', 'string', 'min:2', 'max:80']]);
+        $data = $request->validate([
+            'q' => ['required', 'string', 'min:2', 'max:80'],
+            'municipio' => ['nullable', 'string', 'max:60'],
+        ]);
         $query = DB::table('school_catalog');
+        if ($municipality = self::municipalityName($data['municipio'] ?? null)) {
+            $query->where('municipality', $municipality);
+        }
         $q = trim($data['q']);
         if (preg_match('/^\d{2}[A-Za-z]{3}\d{4}[A-Za-z]$/', $q)) {
             $query->where('cct', strtoupper($q));
@@ -91,11 +130,15 @@ class SchoolCatalogController extends Controller
     public function nearby(Request $request): JsonResponse
     {
         $data = $request->validate([
-            'lat' => ['required_without:cp', 'numeric', 'between:31.5,33.5'],
-            'lng' => ['required_with:lat', 'numeric', 'between:-118,-115.5'],
+            'lat' => ['required_without:cp', 'numeric', self::LAT_RULE],
+            'lng' => ['required_with:lat', 'numeric', self::LNG_RULE],
             'cp' => ['nullable', 'string', 'regex:/^\d{5}$/', 'not_in:00000'],
+            'municipio' => ['nullable', 'string', 'max:60'],
         ]);
         $query = DB::table('school_catalog')->whereNotNull('lat')->whereNotNull('lng');
+        if ($municipality = self::municipalityName($data['municipio'] ?? null)) {
+            $query->where('municipality', $municipality);
+        }
         if (isset($data['lat'])) {
             $lat = (float) $data['lat'];
             $lng = (float) $data['lng'];
@@ -144,9 +187,9 @@ class SchoolCatalogController extends Controller
             'schools.*.colonia' => ['nullable', 'string', 'max:160'],
             'schools.*.address' => ['nullable', 'string', 'max:220'],
             'schools.*.postal_code' => ['nullable', 'string', 'regex:/^\d{5}$/'],
-            'schools.*.municipality' => ['required', Rule::in(['Tijuana', 'Playas de Rosarito'])],
-            'schools.*.lat' => ['nullable', 'numeric', 'between:31.5,33.5'],
-            'schools.*.lng' => ['nullable', 'numeric', 'between:-118,-115.5'],
+            'schools.*.municipality' => ['required', Rule::in(self::municipalities())],
+            'schools.*.lat' => ['nullable', 'numeric', self::LAT_RULE],
+            'schools.*.lng' => ['nullable', 'numeric', self::LNG_RULE],
         ]);
         $rows = self::rows($data['schools']);
         self::save($rows);
@@ -208,7 +251,7 @@ class SchoolCatalogController extends Controller
         $valid = array_values(array_filter($schools, fn ($s) => is_array($s)
             && preg_match(SchoolController::CCT_PATTERN, (string) ($s['cct'] ?? ''))
             && is_string($s['name'] ?? null)
-            && in_array($s['municipality'] ?? null, ['Tijuana', 'Playas de Rosarito'], true)
+            && in_array($s['municipality'] ?? null, self::municipalities(), true)
             && in_array($s['level'] ?? null, [...School::LEVELS, null], true)
             && in_array($s['shift'] ?? null, [...School::SHIFTS, null], true)
             && in_array($s['sector'] ?? null, [...School::SECTORS, null], true)));

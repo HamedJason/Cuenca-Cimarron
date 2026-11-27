@@ -5,6 +5,8 @@ import FormField from "./FormField.vue";
 import LocationPicker from "./LocationPicker.vue";
 import { levels, shifts, sectors } from "../composables/useAccount";
 import { searchCatalog, nearbyCatalog } from "../composables/useCatalog";
+import { municipios, buscarMunicipio } from "../municipios";
+import { municipioActual } from "../composables/useMunicipio";
 const model = defineModel({ type: Object, required: true });
 // fromCatalog: los datos vienen del catálogo de la SEP y la CCT no se cambia.
 // noCct: la escuela marcó que no sabe su CCT (solo al registrarse a mano).
@@ -15,6 +17,8 @@ const props = defineProps({
   askNoCct: { type: Boolean, default: true },
   // De dónde salió el punto de una escuela del catálogo: sep, inegi o aprox
   geo: { type: String, default: "" },
+  // Municipio de la escuela del catálogo (nombre de la SEP), si se eligió de ahí
+  municipality: { type: String, default: "" },
 });
 const emit = defineEmits(["no-cct"]);
 
@@ -42,40 +46,53 @@ const centerOf = (list) => [median(list.map((s) => s.lat)), median(list.map((s) 
 // Metros entre dos puntos [lat, lng] (a esta escala basta un plano)
 const meters = (a, b) => Math.hypot((a[0] - b[0]) * 111000, (a[1] - b[1]) * 94000);
 const validCp = (cp) => /^\d{5}$/.test(cp ?? "") && cp !== "00000";
-// Solo Tijuana y Playas de Rosarito
-const VIEWBOX = "-117.13,32.58,-116.55,32.05";
-const inArea = ([lat, lng]) => lat >= 32.05 && lat <= 32.58 && lng >= -117.13 && lng <= -116.55;
+// Municipio donde está la escuela. Acota la búsqueda de direcciones y del catálogo a ese municipio.
+// Empieza con el de la escuela del catálogo o con el que la persona eligió en el sitio.
+const muniId = ref(buscarMunicipio(props.municipality)?.id ?? municipioActual.value.id);
+const muni = computed(() => buscarMunicipio(muniId.value) ?? municipioActual.value);
+// Caja aproximada del municipio para OpenStreetMap: oeste, norte, este, sur
+const viewbox = computed(() => muni.value.caja.join(","));
+const inArea = ([lat, lng]) => {
+  const [west, north, east, south] = muni.value.caja;
+  return lat >= south && lat <= north && lng >= west && lng <= east;
+};
+// Sin punto, el mapa empieza en el municipio (el mapa por sí solo empieza en Tijuana)
+if (!model.value.lat && muni.value.id !== "tijuana") near.value = [...muni.value.centro, 12];
 const SCHOOL_TYPES = ["school", "kindergarten", "college", "university"];
 const found = new Map();
 let lastAsk = 0;
 // OpenStreetMap pide no más de una búsqueda por segundo
 async function osm(q) {
-  if (found.has(q)) return found.get(q);
+  const box = viewbox.value;
+  const key = `${box}|${q}`;
+  if (found.has(key)) return found.get(key);
   const wait = lastAsk + 1100 - Date.now();
   if (wait > 0) await new Promise((done) => setTimeout(done, wait));
   lastAsk = Date.now();
   const url =
     "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=mx&bounded=1&accept-language=es" +
-    `&viewbox=${VIEWBOX}&q=${encodeURIComponent(q)}`;
+    `&viewbox=${box}&q=${encodeURIComponent(q)}`;
   const response = await fetch(url, { headers: { Accept: "application/json" }, signal: AbortSignal.timeout(8000) });
   if (!response.ok) return null;
   const [hit] = await response.json();
   const result = hit ? { point: [Number(hit.lat), Number(hit.lon)], category: hit.category, type: hit.type, addresstype: hit.addresstype } : null;
-  found.set(q, result);
+  found.set(key, result);
   return result;
 }
 // Centro de las escuelas del catálogo con ese código postal
 const cpCenters = new Map();
 async function cpCenter(cp) {
   if (!validCp(cp)) return null;
-  if (!cpCenters.has(cp)) {
-    const list = await nearbyCatalog({ cp }).catch(() => []);
-    cpCenters.set(cp, list.length ? centerOf(list) : null);
+  const sep = muni.value.sep;
+  const key = `${sep}|${cp}`;
+  if (!cpCenters.has(key)) {
+    const list = await nearbyCatalog({ cp, municipio: sep }).catch(() => []);
+    cpCenters.set(key, list.length ? centerOf(list) : null);
   }
-  return cpCenters.get(cp);
+  return cpCenters.get(key);
 }
 async function fromCatalog(colonia, cp) {
-  let same = (await searchCatalog(colonia)).filter((s) => s.lat && plain(s.colonia) === plain(colonia));
+  let same = (await searchCatalog(colonia, undefined, muni.value.sep)).filter((s) => s.lat && plain(s.colonia) === plain(colonia));
   if (validCp(cp) && same.some((s) => s.postal_code === cp)) same = same.filter((s) => s.postal_code === cp);
   return same.length ? { point: centerOf(same) } : null;
 }
@@ -87,7 +104,7 @@ function putPin([lat, lng], by) {
 let timer;
 let turn = 0;
 watch(
-  () => [model.value.name, model.value.address, model.value.colonia, model.value.postal_code],
+  () => [model.value.name, model.value.address, model.value.colonia, model.value.postal_code, muniId.value],
   ([name, address, colonia, cp]) => {
     clearTimeout(timer);
     const mine = ++turn;
@@ -98,7 +115,7 @@ watch(
       // Lo de OpenStreetMap solo vale si cae cerca del código postal
       const close = (hit) => !zone || meters(hit.point, zone) <= 3000;
       const hasColonia = plain(colonia).length >= 3;
-      const where = hasColonia ? `${colonia}, Baja California` : "Tijuana, Baja California";
+      const where = hasColonia ? `${colonia}, ${muni.value.sep}, Baja California` : `${muni.value.sep}, Baja California`;
       // [buscar, qué hacer con lo encontrado]: "pin" pone el punto exacto; un número es el acercamiento del mapa
       const tries = [
         plain(name).length >= 3 && [
@@ -134,7 +151,7 @@ watch(
           putPin(hit.point, action[1]);
           return;
         } catch {
-          // Sin internet o sin catálogo se prueba lo siguiente; al final el mapa se queda en Tijuana
+          // Sin internet o sin catálogo se prueba lo siguiente. Al final el mapa se queda en el municipio
         }
       }
     }, 900);
@@ -207,7 +224,7 @@ function useGps() {
       locating.value = false;
       const point = [coords.latitude, coords.longitude];
       if (!inArea(point)) {
-        gpsNote.value = "Tu ubicación queda fuera de Tijuana y Rosarito. Usa este botón cuando estés en la escuela";
+        gpsNote.value = `Tu ubicación queda fuera de ${muni.value.sep}. Revisa el municipio o usa este botón cuando estés en la escuela`;
         return;
       }
       setLocation({ lat: Number(point[0].toFixed(6)), lng: Number(point[1].toFixed(6)) });
@@ -226,6 +243,11 @@ function useGps() {
     { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
   );
 }
+
+// Al cambiar de municipio sin punto puesto, el mapa se va a ese municipio
+watch(muniId, () => {
+  if (!model.value.lat) near.value = [...muni.value.centro, 12];
+});
 
 const pinHint = computed(
   () =>
@@ -299,6 +321,11 @@ const pinHint = computed(
   </fieldset>
   <fieldset class="form-group">
     <legend>Dónde está</legend>
+    <FormField v-slot="{ id, describedby }" label="Municipio" hint="Buscamos la dirección solo en este municipio">
+      <select :id="id" v-model="muniId" :aria-describedby="describedby">
+        <option v-for="m in municipios" :key="m.id" :value="m.id">{{ m.sep }}</option>
+      </select>
+    </FormField>
     <FormField v-slot="{ id }" label="Colonia" :error="errors.colonia">
       <input :id="id" v-model.trim="model.colonia" maxlength="120" required />
     </FormField>

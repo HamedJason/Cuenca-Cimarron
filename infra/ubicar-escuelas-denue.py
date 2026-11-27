@@ -1,18 +1,21 @@
 """Pone a las escuelas del catálogo el punto del DENUE del INEGI cuando la SEP no las ubica.
 
-La SEP marca en el centro de Tijuana (32.497, -117.08) las escuelas sin ubicación. Este script cruza cada
-una con el DENUE (sector 61, Tijuana y Playas de Rosarito) por nombre, colonia, calle y nivel, y guarda
+La SEP marca las escuelas sin ubicación con un mismo punto en cada municipio (en Tijuana 32.497, -117.08,
+en Mexicali y Ensenada otro). Se toma como "sin ubicación" el punto redondeado que comparten 8 escuelas o
+más del mismo municipio. Este script cruza cada una con el DENUE (sector 61, los 7 municipios de Baja California)
+por nombre, colonia, calle y nivel, y guarda
 el punto en backend/database/data/catalogo-escuelas-2026.json.gz con geo = inegi (nombre y dirección
-coinciden) o aprox (solo coincide el nombre, que es único en la ciudad). Las que la SEP sí ubica quedan
-con geo = sep.
+coinciden) o aprox (solo coincide el nombre, que es único en el municipio). Las que la SEP sí ubica
+quedan con geo = sep.
 
 Uso (desde la raíz del repositorio):
   1. Descarga el CSV de "Servicios educativos" en https://www.inegi.org.mx/app/descarga/ (DENUE)
   2. python3 infra/ubicar-escuelas-denue.py ruta/a/denue_inegi_61_.csv          (solo muestra cuántas)
      python3 infra/ubicar-escuelas-denue.py ruta/a/denue_inegi_61_.csv write    (guarda el catálogo)
 
-Corre sobre el catálogo original de la SEP (lat y lng sin tocar), por eso guarda la copia en
-infra/catalogo-escuelas-sep-2026.json.gz la primera vez.
+Corre sobre el catálogo original de la SEP (lat y lng sin tocar) que está en
+infra/catalogo-escuelas-sep-2026.json.gz: los 7 municipios tal como los da datos.gob.mx
+(recurso c086fc57-fb58-49b8-aeeb-c0a017372f40, convertidos con mapSepRecord de useCatalog.js).
 """
 import csv
 import json,gzip,os,re,unicodedata,math,collections,sys
@@ -23,8 +26,10 @@ if not os.path.exists(ORIGINAL):
     open(ORIGINAL,'wb').write(open(BUNDLED,'rb').read())
 cat=json.load(gzip.open(ORIGINAL))
 SKIP=('611621','611691','611631','611421','611411','611431','611698','611699')  # deporte, clases particulares, idiomas, computación, etc.
+# Clave del INEGI de cada municipio con su nombre en el catálogo de la SEP
+MUNS={'001':'Ensenada','002':'Mexicali','003':'Tecate','004':'Tijuana','005':'Playas de Rosarito','006':'San Quintín','007':'San Felipe'}
 den=[r for r in csv.DictReader(open(sys.argv[1],encoding='latin1',newline=''))
-     if r['cve_ent']=='02' and r['cve_mun'] in('004','005') and not r['codigo_act'].startswith(SKIP)]
+     if r['cve_ent']=='02' and r['cve_mun'] in MUNS and not r['codigo_act'].startswith(SKIP)]
 MODE=sys.argv[2] if len(sys.argv)>2 else ''
 def norm(t):
     t=unicodedata.normalize('NFD',str(t or '')).encode('ascii','ignore').decode().lower()
@@ -47,7 +52,7 @@ D=[]
 for r in den:
     D.append(dict(name=r['nom_estab'],nt=set(toks(r['nom_estab']))|set(toks(r['raz_social'])) if False else set(toks(r['nom_estab'])),
       st=atoks(r['nom_vial']),col=atoks(r['nomb_asent']),num=r['numero_ext'].strip(),lvl=lvl_den(r['codigo_act']),
-      pub=r['codigo_act'][-1]=='2',lat=float(r['latitud']),lng=float(r['longitud']),mun=r['municipio']))
+      pub=r['codigo_act'][-1]=='2',lat=float(r['latitud']),lng=float(r['longitud']),mun=MUNS[r['cve_mun']]))
 def sim(a,b):
     if not a or not b: return 0
     return len(a&b)/min(len(a),len(b)) if min(len(a),len(b)) else 0
@@ -61,7 +66,7 @@ res=[]
 for s in cat:
     nt=set(toks(s['name'])); st=atoks(re.sub(r'\d+','',s.get('address') or '')); col=atoks(s.get('colonia') or '')
     num=(re.findall(r'\d+',s.get('address') or '') or [''])[-1]
-    mun='Tijuana' if s['municipality']=='Tijuana' else 'Playas de Rosarito'
+    mun=s['municipality']
     best=[]
     for d in D:
         if d['mun']!=mun: continue
@@ -92,9 +97,15 @@ for s in cat:
         twins=sum(1 for x in cat if x is not s and set(toks(x['name']))==nt and x['municipality']==s['municipality'])
         if not same and twins==0: conf='nombre'
     res.append((s,d if conf else None,conf,b,second))
-PH=(32.497,-117.08)
-ph=[r for r in res if (r[0]['lat'],r[0]['lng'])==PH]
-real=[r for r in res if (r[0]['lat'],r[0]['lng'])!=PH]
+# Puntos que la SEP usa para "sin ubicación": redondeados a 3 decimales o menos y compartidos por
+# 8 escuelas o más del mismo municipio. Un edificio con varios turnos comparte punto, pero con más decimales
+REP=collections.Counter((s['municipality'],s['lat'],s['lng']) for s in cat if s.get('lat') is not None and s.get('lng') is not None)
+short=lambda x: abs(round(x,3)-x)<1e-9
+PHS={k for k,n in REP.items() if n>=8 and short(k[1]) and short(k[2])}
+def unknown(s): return s.get('lat') is None or s.get('lng') is None or (s['municipality'],s['lat'],s['lng']) in PHS
+print('puntos sin ubicacion',sorted(PHS))
+ph=[r for r in res if unknown(r[0])]
+real=[r for r in res if not unknown(r[0])]
 print('sin ubicacion',len(ph),collections.Counter(r[2] for r in ph))
 print('con ubicacion SEP',len(real),collections.Counter(r[2] for r in real))
 # validacion: distancia vs SEP real coords
@@ -116,12 +127,13 @@ if MODE=='write':
     out=[]; c=collections.Counter()
     for r in res:
         s=dict(r[0]); conf=r[2]
-        if (s['lat'],s['lng'])!=PH and s.get('lat') is not None: s['geo']='sep'
+        if not unknown(s): s['geo']='sep'
         elif conf in('alta','direccion'): s['lat'],s['lng'],s['geo']=round(r[1]['lat'],6),round(r[1]['lng'],6),'inegi'
         elif conf=='nombre': s['lat'],s['lng'],s['geo']=round(r[1]['lat'],6),round(r[1]['lng'],6),'aprox'
         else: s['lat']=s['lng']=s['geo']=None
         c[s['geo']]+=1; out.append(s)
     print(c)
+    print(collections.Counter((s['municipality'],s['geo']) for s in out))
     data=json.dumps(out,ensure_ascii=False,separators=(',',':')).encode()
     import gzip as g
     with open(BUNDLED,'wb') as f:

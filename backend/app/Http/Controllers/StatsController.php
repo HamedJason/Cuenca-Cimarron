@@ -28,6 +28,8 @@ class StatsController extends Controller
         'Tecate' => [32.5725, -116.6266],
         'Ensenada' => [31.8667, -116.5964],
         'Mexicali' => [32.6245, -115.4523],
+        'San Quintín' => [30.5603, -115.9386],
+        'San Felipe' => [31.0256, -114.837],
     ];
 
     public static function municipalityNear(mixed $lat, mixed $lng): string

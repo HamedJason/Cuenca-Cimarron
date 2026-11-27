@@ -29,4 +29,4 @@ Artisan::command('escuelas:catalogo {--si-vacio : Solo si está vacío o si camb
         return;
     }
     $this->info("Escuelas en el catálogo: {$total}");
-})->purpose('Carga el catálogo de escuelas de Tijuana y Rosarito que viene en database/data');
+})->purpose('Carga el catálogo de escuelas de Baja California que viene en database/data');

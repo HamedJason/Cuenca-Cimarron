@@ -28,8 +28,8 @@ class SchoolController extends Controller
             'address' => ['required', 'string', 'min:4', 'max:200'],
             'postal_code' => ['nullable', 'string', 'regex:/^\d{5}$/'],
             // El punto en el mapa es obligatorio: sin él no se sabe a qué escuela llegar en una emergencia
-            'lat' => ['required', 'numeric', 'between:31.5,33.5'],
-            'lng' => ['required', 'numeric', 'between:-118,-115.5'],
+            'lat' => ['required', 'numeric', SchoolCatalogController::LAT_RULE],
+            'lng' => ['required', 'numeric', SchoolCatalogController::LNG_RULE],
             'contact_name' => ['required', 'string', 'min:3', 'max:120'],
         ];
     }

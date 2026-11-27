@@ -91,7 +91,7 @@ docker compose -f compose.servidor.yaml up -d --remove-orphans
 docker compose -f compose.servidor.yaml ps
 ```
 
-Cada vez que arranca el backend corren solos las migraciones de la base, el catálogo de actividades y el catálogo de escuelas de Tijuana y Rosarito (2,352 escuelas de la SEP). El archivo de escuelas va dentro de la imagen (`backend/database/data`), así que llega con Watchtower sin tocar nada en el servidor. Se carga si la tabla está vacía o si el archivo cambió. Solo agrega o actualiza escuelas del catálogo: no borra nada ni toca las escuelas registradas, y reiniciar no duplica nada. Si hiciera falta correrlos a mano (el último fuerza la carga del catálogo):
+Cada vez que arranca el backend corren solos las migraciones de la base, el catálogo de actividades y el catálogo de escuelas de los 7 municipios de Baja California (5,074 escuelas de la SEP). El archivo de escuelas va dentro de la imagen (`backend/database/data`), así que llega con Watchtower sin tocar nada en el servidor. Se carga si la tabla está vacía o si el archivo cambió. Solo agrega o actualiza escuelas del catálogo: no borra nada ni toca las escuelas registradas, y reiniciar no duplica nada. Si hiciera falta correrlos a mano (el último fuerza la carga del catálogo):
 
 ```bash
 docker compose -f compose.servidor.yaml exec backend php artisan migrate --force

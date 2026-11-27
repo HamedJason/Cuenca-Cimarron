@@ -102,7 +102,7 @@ async function submit() {
           </div>
         </div>
         <button v-else class="text-link" type="button" @click="mode = 'buscar'">Buscar mi escuela en el catálogo</button>
-        <SchoolForm :key="formKey" v-model="school" :errors="errors" :from-catalog="Boolean(picked)" :geo="picked?.geo ?? ''" :no-cct="login.sin_cct" @no-cct="login.sin_cct = $event" />
+        <SchoolForm :key="formKey" v-model="school" :errors="errors" :from-catalog="Boolean(picked)" :geo="picked?.geo ?? ''" :municipality="picked?.municipality ?? ''" :no-cct="login.sin_cct" @no-cct="login.sin_cct = $event" />
       </template>
       <template v-if="mode !== 'buscar'">
       <fieldset class="form-group">

@@ -10,4 +10,15 @@ return [
         'Zona Centro', 'Los Pinos', 'Playas', 'Cerro Colorado', 'La Presa', 'San Antonio de los Buenos',
         'Mesa de Otay', 'Centenario', 'Presa Rural', 'Natura',
     ],
+    // Nombre de cada municipio en el catálogo de escuelas de la SEP (igual que frontend/src/municipios.js).
+    // El catálogo incluido trae solo Tijuana y Playas de Rosarito, los demás quedan listos para cuando lleguen.
+    'catalogo' => [
+        'Tijuana' => 'Tijuana',
+        'Rosarito' => 'Playas de Rosarito',
+        'Tecate' => 'Tecate',
+        'Ensenada' => 'Ensenada',
+        'Mexicali' => 'Mexicali',
+        'San Quintín' => 'San Quintín',
+        'San Felipe' => 'San Felipe',
+    ],
 ];

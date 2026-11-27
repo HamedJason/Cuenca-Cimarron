@@ -138,7 +138,7 @@ La cuenta de administración tiene, además de lo de las escuelas y el panel de 
 
 ## Catálogo de escuelas
 
-Para que cada escuela se busque y se elija al registrarse, en el panel de administración (pestaña Escuelas) está el botón "Cargar desde datos.gob.mx". Trae las escuelas de Tijuana y Playas de Rosarito del Catálogo de Centros de Trabajo de la SEP y las guarda en la base. Conviene actualizarlo una vez al año. Para usar el catálogo de otro año se cambia `SEP_CATALOG` en `frontend/src/composables/useCatalog.js`.
+Para que cada escuela se busque y se elija al registrarse, en el panel de administración (pestaña Escuelas) está el botón "Cargar desde datos.gob.mx". Trae las escuelas de los 7 municipios de Baja California del Catálogo de Centros de Trabajo de la SEP y las guarda en la base. Conviene actualizarlo una vez al año. Para usar el catálogo de otro año se cambia `SEP_CATALOG` en `frontend/src/composables/useCatalog.js`.
 
 ## Respaldo de la base de datos
 

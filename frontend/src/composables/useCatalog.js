@@ -6,7 +6,8 @@ import { api } from "./api";
 export const SEP_CATALOG = {
   year: 2026,
   resourceId: "c086fc57-fb58-49b8-aeeb-c0a017372f40",
-  municipalities: ["Tijuana", "Playas de Rosarito"],
+  // Los 7 municipios de Baja California, con su nombre en la SEP (igual que backend/config/zonas.php)
+  municipalities: ["Tijuana", "Playas de Rosarito", "Tecate", "Ensenada", "Mexicali", "San Quintín", "San Felipe"],
   types: ["escuela", "plantel (media superior)"],
 };
 
@@ -54,8 +55,9 @@ export function mapSepRecord(raw) {
     address: street ? `${street}${number > 0 ? ` ${number}` : ""}`.slice(0, 220) : null,
     postal_code: cp ? cp.padStart(5, "0").slice(-5) : null,
     municipality: clean(r.inmueble_c_nom_mun),
-    lat: lat >= 31.5 && lat <= 33.5 ? lat : null,
-    lng: lng >= -118 && lng <= -115.5 ? lng : null,
+    // Baja California completa, de San Quintín a la frontera y del Pacífico a San Felipe
+    lat: lat >= 28 && lat <= 33.5 ? lat : null,
+    lng: lng >= -118 && lng <= -114 ? lng : null,
   };
 }
 
@@ -92,6 +94,10 @@ export async function uploadCatalog(schools, onProgress = () => {}) {
   return total;
 }
 
-export const searchCatalog = (q, signal) => api(`/catalogo-escuelas?q=${encodeURIComponent(q)}`, { signal }).then((d) => d.schools);
-// Escuelas del catálogo con punto: a menos de 1.5 km de { lat, lng }, o las de un código postal { cp }
-export const nearbyCatalog = (where) => api(`/catalogo-escuelas/cerca?${new URLSearchParams(where)}`).then((d) => d.schools);
+// municipio (opcional) es el nombre de la SEP, por ejemplo "Playas de Rosarito": acota la búsqueda a ese municipio
+export const searchCatalog = (q, signal, municipio = "") =>
+  api(`/catalogo-escuelas?${new URLSearchParams({ q, ...(municipio ? { municipio } : {}) })}`, { signal }).then((d) => d.schools);
+// Escuelas del catálogo con punto: a menos de 1.5 km de { lat, lng }, o las de un código postal { cp }.
+// Con { municipio } solo las de ese municipio.
+const filled = (where) => Object.fromEntries(Object.entries(where).filter(([, v]) => v !== "" && v != null));
+export const nearbyCatalog = (where) => api(`/catalogo-escuelas/cerca?${new URLSearchParams(filled(where))}`).then((d) => d.schools);

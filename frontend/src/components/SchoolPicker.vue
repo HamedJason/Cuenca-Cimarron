@@ -5,6 +5,7 @@ import { ref, computed, watch, useId } from "vue";
 import Icon from "./Icon.vue";
 import { searchCatalog } from "../composables/useCatalog";
 import { labelOf, levels, shifts } from "../composables/useAccount";
+import { municipios } from "../municipios";
 
 const emit = defineEmits(["pick", "manual"]);
 const id = useId();
@@ -14,11 +15,13 @@ const state = ref("idle");
 const open = ref(false);
 const active = ref(-1);
 const cache = new Map();
+// Municipio para acotar la búsqueda (nombre de la SEP). Vacío busca en todos.
+const municipality = ref("");
 let timer;
 let controller;
 
 async function search(text) {
-  const key = text.toLowerCase();
+  const key = `${municipality.value}|${text.toLowerCase()}`;
   if (cache.has(key)) {
     results.value = cache.get(key);
     state.value = "ready";
@@ -28,7 +31,7 @@ async function search(text) {
   controller = new AbortController();
   state.value = "loading";
   try {
-    const found = await searchCatalog(text, controller.signal);
+    const found = await searchCatalog(text, controller.signal, municipality.value);
     cache.set(key, found);
     if (text === q.value.trim()) {
       results.value = found;
@@ -38,7 +41,7 @@ async function search(text) {
     if (error?.name !== "AbortError" && text === q.value.trim()) state.value = "error";
   }
 }
-watch(q, (value) => {
+watch([q, municipality], ([value]) => {
   clearTimeout(timer);
   const text = value.trim();
   active.value = -1;
@@ -49,7 +52,7 @@ watch(q, (value) => {
     return;
   }
   // Una pausa muy corta para no preguntar en cada letra cuando se escribe rápido.
-  timer = setTimeout(() => search(text), cache.has(text.toLowerCase()) ? 0 : 120);
+  timer = setTimeout(() => search(text), cache.has(`${municipality.value}|${text.toLowerCase()}`) ? 0 : 120);
 });
 
 function choose(school) {
@@ -114,6 +117,13 @@ const status = computed(() => {
   <section class="form-group school-picker">
     <h2 class="form-title">Busca tu escuela</h2>
     <div class="field">
+      <label :for="`${id}-municipio`">Municipio</label>
+      <select :id="`${id}-municipio`" v-model="municipality">
+        <option value="">Todos los municipios</option>
+        <option v-for="m in municipios" :key="m.id" :value="m.sep">{{ m.sep }}</option>
+      </select>
+    </div>
+    <div class="field">
       <label :for="`${id}-input`">Nombre, CCT o colonia</label>
       <div class="combo">
         <Icon name="search" :size="20" class="combo-icon" />
@@ -154,7 +164,7 @@ const status = computed(() => {
           </li>
         </ul>
       </div>
-      <p :id="`${id}-hint`" class="field-hint">Escuelas de Tijuana y Rosarito del catálogo de la SEP. Usa las flechas y Enter para elegir</p>
+      <p :id="`${id}-hint`" class="field-hint">Escuelas de Baja California del catálogo de la SEP. Usa las flechas y Enter para elegir</p>
       <p class="sr-only" role="status" aria-live="polite">{{ status }}</p>
       <p v-if="state === 'error' || (state === 'ready' && !results.length)" class="small muted-text">{{ status }}</p>
     </div>
