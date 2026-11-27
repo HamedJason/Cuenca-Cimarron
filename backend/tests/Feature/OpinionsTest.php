@@ -105,6 +105,23 @@ class OpinionsTest extends TestCase
         $this->getJson("/api/opiniones?antes_de={$last}")->assertOk()->assertJsonCount(2, 'opinions')->assertJsonPath('more', false);
     }
 
+    public function test_muestra_como_maximo_30_comentarios(): void
+    {
+        for ($i = 1; $i <= 35; $i++) {
+            DB::table('opinions')->insert(['rating' => 5, 'comment' => "Comentario {$i}", 'origin' => 'comunidad', 'created_at' => now()]);
+        }
+        $ids = [];
+        $before = 0;
+        do {
+            $page = $this->getJson('/api/opiniones'.($before ? "?antes_de={$before}" : ''))->assertOk()->json();
+            $ids = [...$ids, ...array_column($page['opinions'], 'id')];
+            $before = $ids ? end($ids) : 0;
+        } while ($page['more'] && count($ids) < 100);
+        $this->assertCount(30, $ids);
+        $this->assertSame('Comentario 35', DB::table('opinions')->where('id', $ids[0])->value('comment'));
+        $this->getJson("/api/opiniones?antes_de={$before}")->assertOk()->assertJsonCount(0, 'opinions')->assertJsonPath('more', false);
+    }
+
     public function test_solo_la_administracion_modera(): void
     {
         $this->send(['comment' => 'No me gustó el color'])->assertCreated();

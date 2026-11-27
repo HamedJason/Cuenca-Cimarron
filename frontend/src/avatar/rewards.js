@@ -24,6 +24,8 @@ export const siteRewards = {
   "juego-memorama": { coins: OPEN_COINS, label: "Abriste el Memorama de emergencia" },
   "juego-alto-al-fuego": { coins: OPEN_COINS, label: "Abriste Alto al Fuego" },
   "juego-codigo-120": { coins: OPEN_COINS, label: "Abriste Código 120" },
+  "juego-llamada-911": { coins: OPEN_COINS, label: "Abriste ¿Llamo al 911?" },
+  "juego-triage-nocturno": { coins: OPEN_COINS, label: "Abriste Triage Nocturno" },
   // Terminar cada juego vale más que abrirlo. activity: la actividad que lo comprueba.
   // Juegos propios: el juego avisa al ganar. Juegos de otros sitios: pregunta al regresar.
   // Con alumno, el servidor solo lo entrega si ya tiene esa actividad completa.
@@ -36,6 +38,8 @@ export const siteRewards = {
   "termino-memorama": { coins: FINISH_COINS, activity: "memorama", label: "Terminaste el Memorama de emergencia" },
   "termino-alto-al-fuego": { coins: FINISH_COINS, activity: "alto-al-fuego", label: "Terminaste Alto al Fuego" },
   "termino-codigo-120": { coins: FINISH_COINS, activity: "codigo-120", label: "Terminaste Código 120" },
+  "termino-llamada-911": { coins: FINISH_COINS, activity: "llamada-911", label: "Terminaste ¿Llamo al 911?" },
+  "termino-triage-nocturno": { coins: FINISH_COINS, activity: "triage-nocturno", label: "Terminaste Triage Nocturno" },
   "mochila-lista": { coins: 100, items: ["espalda/mochila"], label: "Mochila de emergencia lista" },
   "plan-listo": { coins: 100, items: ["cuello/medalla"], label: "Plan familiar completo" },
   "botiquin-listo": { coins: 60, label: "Botiquín completo" },

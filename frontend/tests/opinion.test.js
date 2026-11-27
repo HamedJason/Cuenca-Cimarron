@@ -16,15 +16,15 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllGlobals());
 
 describe("Formulario de opinión", () => {
-  it("pide las estrellas antes de mandar", async () => {
+  it("pide la calificación antes de mandar", async () => {
     const fetch = vi.fn();
     vi.stubGlobal("fetch", fetch);
     const wrapper = mount(OpinionForm);
     await wrapper.find("form").trigger("submit");
-    expect(wrapper.text()).toContain("Toca las estrellas para calificar");
+    expect(wrapper.text()).toContain("Toca los cimarrones para calificar");
     expect(fetch).not.toHaveBeenCalled();
   });
-  it("manda estrellas, comentario y un número del dispositivo, sin nombre", async () => {
+  it("manda calificación, comentario y un número del dispositivo, sin nombre", async () => {
     const fetch = vi.fn(() => reply({ saved: true, summary: { count: 1, average: 4, stars: {} } }, 201));
     vi.stubGlobal("fetch", fetch);
     const wrapper = mount(OpinionForm);
@@ -93,7 +93,7 @@ describe("Juegos propios", () => {
     await flushPromises();
     expect(document.querySelector("[role=status]")).toBe(null);
     box.querySelector("form").dispatchEvent(new Event("submit", { cancelable: true }));
-    expect(box.querySelector(".cc-op-error").textContent).toContain("Toca las estrellas");
+    expect(box.querySelector(".cc-op-error").textContent).toContain("Toca los cimarrones");
     box.querySelectorAll(".cc-op-star")[2].click();
     box.querySelector("form").dispatchEvent(new Event("submit", { cancelable: true }));
     await flushPromises();

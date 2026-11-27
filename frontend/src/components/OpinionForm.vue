@@ -1,8 +1,9 @@
 <script setup>
-// Formulario de Comunidad Cimarrona: estrellas obligatorias y comentario opcional.
+// Formulario de Comunidad Cimarrona: de 1 a 5 cimarrones (obligatorio) y comentario opcional.
 // Se usa en la página y en la ventana que sale al terminar una actividad.
 import { ref, computed, useId } from "vue";
 import Icon from "./Icon.vue";
+import CimarronHead from "./CimarronHead.vue";
 import { sendOpinion, MAX_COMMENT } from "../composables/useOpinion";
 
 const props = defineProps({
@@ -26,7 +27,7 @@ const left = computed(() => MAX_COMMENT - comment.value.length);
 
 async function submit() {
   if (!rating.value) {
-    starsError.value = "Toca las estrellas para calificar";
+    starsError.value = "Toca los cimarrones para calificar";
     return;
   }
   starsError.value = "";
@@ -55,7 +56,7 @@ async function submit() {
 <template>
   <form class="opinion-form" novalidate @submit.prevent="submit">
     <fieldset class="opinion-stars-field">
-      <legend class="opinion-legend">¿Cuántas estrellas le das a Cuenca Cimarrona?</legend>
+      <legend class="opinion-legend">¿Cuántos cimarrones le das a Cuenca Cimarrona?</legend>
       <div class="opinion-stars" @mouseleave="hover = 0">
         <label
           v-for="n in 5"
@@ -63,12 +64,12 @@ async function submit() {
           :class="['opinion-star', { on: n <= shown }]"
           @mouseenter="hover = n"
         >
-          <input v-model="rating" type="radio" :name="`${id}-estrellas`" :value="n" class="sr-only" @change="starsError = ''" />
-          <Icon name="star" :size="40" />
-          <span class="sr-only">{{ n }} {{ n === 1 ? "estrella" : "estrellas" }}: {{ labels[n - 1] }}</span>
+          <input v-model="rating" type="radio" :name="`${id}-cimarrones`" :value="n" class="sr-only" @change="starsError = ''" />
+          <CimarronHead :fill="n <= shown ? 1 : 0" :size="44" />
+          <span class="sr-only">{{ n }} de 5: {{ labels[n - 1] }}</span>
         </label>
       </div>
-      <p class="opinion-star-label" aria-hidden="true">{{ shown ? labels[shown - 1] : "Toca una estrella" }}</p>
+      <p class="opinion-star-label" aria-hidden="true">{{ shown ? labels[shown - 1] : "Toca un cimarrón" }}</p>
       <p v-if="starsError" class="field-error" role="alert">{{ starsError }}</p>
     </fieldset>
 
@@ -92,7 +93,7 @@ async function submit() {
 
     <p v-if="state === 'error'" class="form-alert is-error" role="alert"><Icon name="info" :size="20" />{{ message }}</p>
     <button class="button primary opinion-submit" type="submit" :disabled="state === 'sending'">
-      <Icon name="star" :size="20" />{{ state === "sending" ? "Mandando…" : submitLabel }}
+      <CimarronHead :fill="1" :size="26" />{{ state === "sending" ? "Mandando…" : submitLabel }}
     </button>
     <p class="small muted-text opinion-anon">Es anónimo: no guardamos tu nombre, tu escuela ni tu IP</p>
   </form>

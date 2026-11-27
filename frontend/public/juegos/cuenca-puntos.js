@@ -114,8 +114,8 @@
     ".cc-op-legend{font-weight:700;margin:8px 0 6px!important}" +
     ".cc-op-stars{display:flex;gap:4px;flex-wrap:wrap}" +
     ".cc-op-star{width:52px;height:52px;display:grid;place-items:center;border:0;border-radius:14px;background:transparent;color:#b9a98a;cursor:pointer;padding:0}" +
-    ".cc-op-star svg{width:40px;height:40px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round}" +
-    ".cc-op-star.on svg{fill:#dd971a;stroke:#8a5a00}" +
+    ".cc-op-star svg{width:44px;height:44px;fill:none;stroke-linecap:round;stroke-linejoin:round}" +
+    ".cc-op-star .lleno,.cc-op-star.on .vacio{display:none}.cc-op-star.on .lleno{display:inline}" +
     ".cc-op-star:focus-visible{outline:3px solid #003d24;outline-offset:2px}" +
     ".cc-op-label{min-height:22px;font-weight:700;color:#8a5a00;margin:4px 0 12px!important}" +
     ".cc-op label{display:block;font-weight:700;margin-bottom:6px}.cc-op label span{font-weight:400;color:#4a5650}" +
@@ -128,8 +128,26 @@
     ".cc-op-send:disabled{opacity:.7;cursor:wait}" +
     ".cc-op-send:focus-visible{outline:3px solid #003d24;outline-offset:3px}" +
     ".cc-op-anon{font-size:15px;color:#4a5650;margin-top:10px!important;text-align:center}" +
-    "@media (max-width:420px){.cc-op{padding:10px}.cc-op-card{padding:18px;max-height:calc(100dvh - 20px)}.cc-op h2{font-size:28px}.cc-op-star{width:48px;height:48px}.cc-op-star svg{width:36px;height:36px}}";
-  var ESTRELLA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8Z"/></svg>';
+    "@media (max-width:420px){.cc-op{padding:10px}.cc-op-card{padding:18px;max-height:calc(100dvh - 20px)}.cc-op h2{font-size:28px}.cc-op-star{width:50px;height:50px}.cc-op-star svg{width:40px;height:40px}}";
+  // Cabeza de cimarrón vacía y llena, la misma de src/components/CimarronHead.vue
+  var CUERNOS = ["M8.6 7.2C7 4.6 2.6 5 2.4 8.8c-.2 3.4 3.6 4.2 4.6 1.9.8-1.8-1.1-3-2.2-1.6", "M15.4 7.2C17 4.6 21.4 5 21.6 8.8c.2 3.4-3.6 4.2-4.6 1.9-.8-1.8 1.1-3 2.2-1.6"];
+  var CARA = "M8 8.4c0-2.6 8-2.6 8 0l-.7 7c-.4 3.4-1.6 5-3.3 5s-2.9-1.6-3.3-5Z";
+  var CASCO = "M7.5 8.8c0-5 9-5 9 0Z";
+  var SONRISA = "M10.6 16.6c.8.8 2 .8 2.8 0";
+  function trazo(d, color, ancho, relleno) {
+    return '<path d="' + d + '" stroke="' + color + '" stroke-width="' + ancho + '"' + (relleno ? ' fill="' + relleno + '"' : "") + "/>";
+  }
+  var CABEZA =
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><g class="vacio">' +
+    trazo(CUERNOS[0], "#7c8a82", 1.5) + trazo(CUERNOS[1], "#7c8a82", 1.5) + trazo(CARA, "#7c8a82", 1.5) +
+    trazo(CASCO, "#7c8a82", 1.5) + trazo(SONRISA, "#7c8a82", 1.5) +
+    '<circle cx="10.4" cy="11.6" r=".55" stroke="#7c8a82" stroke-width="1.5"/><circle cx="13.6" cy="11.6" r=".55" stroke="#7c8a82" stroke-width="1.5"/>' +
+    '</g><g class="lleno">' +
+    trazo(CUERNOS[0], "#5c3a10", 3.6) + trazo(CUERNOS[1], "#5c3a10", 3.6) + trazo(CUERNOS[0], "#dd971a", 2) + trazo(CUERNOS[1], "#dd971a", 2) +
+    trazo(CARA, "#5c3a10", 1.3, "#f3c98b") + trazo(CASCO, "#5c3a10", 1.2, "#00723f") +
+    '<circle cx="10.4" cy="11.6" r=".85" fill="#3b2314"/><circle cx="13.6" cy="11.6" r=".85" fill="#3b2314"/>' +
+    trazo(SONRISA, "#5c3a10", 1.2) +
+    "</g></svg>";
   var NOMBRES = ["No me gustó", "Le falta", "Está bien", "Me gustó", "¡Me encantó!"];
 
   function opinar() {
@@ -146,16 +164,16 @@
     for (var n = 1; n <= 5; n++) {
       estrellas +=
         '<button type="button" class="cc-op-star" role="radio" aria-checked="false" data-n="' + n + '" aria-label="' +
-        n + (n === 1 ? " estrella: " : " estrellas: ") + NOMBRES[n - 1] + '">' + ESTRELLA + "</button>";
+        n + " de 5: " + NOMBRES[n - 1] + '">' + CABEZA + "</button>";
     }
     caja.innerHTML =
       "<style>" + ESTILO_OPINION + "</style>" +
       '<form class="cc-op-card" novalidate>' +
       '<div class="cc-op-head"><img src="/brand/cuenca/mascota-240.webp" alt="" width="88" height="86">' +
       '<div><h2 id="cc-op-titulo">¡Terminaste!</h2><p>Antes de ver tu resultado, cuéntanos qué te pareció</p></div></div>' +
-      '<p class="cc-op-legend" id="cc-op-leyenda">¿Cuántas estrellas le das a Cuenca Cimarrona?</p>' +
+      '<p class="cc-op-legend" id="cc-op-leyenda">¿Cuántos cimarrones le das a Cuenca Cimarrona?</p>' +
       '<div class="cc-op-stars" role="radiogroup" aria-labelledby="cc-op-leyenda">' + estrellas + "</div>" +
-      '<p class="cc-op-label" aria-hidden="true">Toca una estrella</p>' +
+      '<p class="cc-op-label" aria-hidden="true">Toca un cimarrón</p>' +
       '<label for="cc-op-comentario">Platícanos qué te gustó o qué cambiarías<span> (opcional)</span></label>' +
       '<textarea id="cc-op-comentario" maxlength="500" rows="3"></textarea>' +
       '<p class="cc-op-hint">No pongas tu nombre. Te quedan <b>500</b> letras</p>' +
@@ -175,7 +193,7 @@
         botones[i].classList.toggle("on", i < hasta);
         botones[i].setAttribute("aria-checked", String(i + 1 === calificacion));
       }
-      etiqueta.textContent = hasta ? NOMBRES[hasta - 1] : "Toca una estrella";
+      etiqueta.textContent = hasta ? NOMBRES[hasta - 1] : "Toca un cimarrón";
     }
     function elegir() {
       calificacion = Number(this.getAttribute("data-n"));
@@ -234,7 +252,7 @@
     caja.querySelector("form").addEventListener("submit", function (e) {
       e.preventDefault();
       if (!calificacion) {
-        fallo("Toca las estrellas para calificar");
+        fallo("Toca los cimarrones para calificar");
         botones[0].focus();
         return;
       }
@@ -314,6 +332,9 @@
   // El memorama y Alto al Fuego avisan desde su propio código al terminar la partida.
   if (ruta.indexOf("/juegos/memorama/") === 0) iniciar("memorama");
   if (ruta.indexOf("/juegos/alto-al-fuego/") === 0) iniciar("alto-al-fuego");
+
+  // ¿Llamo al 911? avisa desde su propio código al ganar las 4 medallas.
+  if (ruta.indexOf("/juegos/llamada-911/") === 0) iniciar("llamada-911");
 
   // La novela visual avisa desde Ren'Py al llegar a cualquiera de sus finales (script.rpy).
   if (ruta.indexOf("/juegos/novela-visual/") === 0) iniciar("novela-visual");

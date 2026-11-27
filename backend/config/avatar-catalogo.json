@@ -966,6 +966,18 @@
    "items": [],
    "activity": null
   },
+  "juego-llamada-911": {
+   "coins": 10,
+   "daily": false,
+   "items": [],
+   "activity": null
+  },
+  "juego-triage-nocturno": {
+   "coins": 10,
+   "daily": false,
+   "items": [],
+   "activity": null
+  },
   "termino-mision-tijuana": {
    "coins": 40,
    "daily": false,
@@ -1019,6 +1031,18 @@
    "daily": false,
    "items": [],
    "activity": "codigo-120"
+  },
+  "termino-llamada-911": {
+   "coins": 40,
+   "daily": false,
+   "items": [],
+   "activity": "llamada-911"
+  },
+  "termino-triage-nocturno": {
+   "coins": 40,
+   "daily": false,
+   "items": [],
+   "activity": "triage-nocturno"
   },
   "mochila-lista": {
    "coins": 100,

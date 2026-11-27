@@ -12,5 +12,7 @@ return [
         'memorama',
         'alto-al-fuego',
         'codigo-120',
+        'llamada-911',
+        'triage-nocturno',
     ],
 ];

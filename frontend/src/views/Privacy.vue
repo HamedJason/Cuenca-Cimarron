@@ -35,9 +35,9 @@
 
       <h2 id="opiniones">Opiniones en Comunidad Cimarrona</h2>
       <ul>
-        <li>Guardamos las estrellas, el comentario si lo escribes y la hora redondeada a 10 minutos</li>
+        <li>Guardamos la calificación (de 1 a 5 cimarrones), el comentario si lo escribes y la hora redondeada a 10 minutos</li>
         <li>No guardamos tu nombre, tu grupo, tu escuela ni tu dirección IP. Para frenar mensajes repetidos usamos una huella cifrada de tu equipo que se borra sola a los 10 minutos</li>
-        <li>Los comentarios con groserías o enlaces no se publican, pero sus estrellas sí cuentan. La administración puede ocultar cualquier comentario</li>
+        <li>Los comentarios con groserías o enlaces no se publican, pero su calificación sí cuenta. La administración puede ocultar cualquier comentario</li>
       </ul>
 
       <h2>Quién ve los datos</h2>

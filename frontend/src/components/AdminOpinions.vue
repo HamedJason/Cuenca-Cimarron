@@ -3,6 +3,7 @@
 // Ocultar no borra la calificación, que sigue contando en el promedio.
 import { ref, watch } from "vue";
 import Icon from "./Icon.vue";
+import CimarronRating from "./CimarronRating.vue";
 import { api } from "../composables/api";
 import { relativeDate } from "../composables/useOpinion";
 
@@ -64,9 +65,7 @@ async function toggle(item) {
     <p v-else-if="!items.length" class="muted-text">No hay comentarios en esta lista</p>
     <ul v-else class="review-list admin-opinions">
       <li v-for="item in items" :key="item.id" :class="['admin-opinion', { 'is-hidden': item.hidden_reason }]">
-        <span class="community-card-stars" :aria-label="`${item.rating} de 5 estrellas`">
-          <Icon v-for="n in 5" :key="n" name="star" :size="18" :class="{ on: n <= item.rating }" />
-        </span>
+        <CimarronRating :value="item.rating" :size="24" />
         <p>{{ item.comment }}</p>
         <p class="small muted-text">
           {{ relativeDate(item.created_at) }} · {{ item.origin === "actividad" ? "al terminar una actividad" : "en la página" }}<template v-if="item.hidden_reason"> · {{ reasons[item.hidden_reason] }}</template>

@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\RateLimiter;
 class OpinionController extends Controller
 {
     public const POR_PAGINA = 10;
+    // La página muestra como máximo las 30 opiniones más recientes.
+    public const MAXIMO_VISIBLE = 30;
     // Un dispositivo manda una opinión cada 10 minutos.
     public const ESPERA_SEGUNDOS = 600;
     // Una escuela entera sale con la misma IP: el límite por IP es alto y solo frena abusos.
@@ -24,21 +26,25 @@ class OpinionController extends Controller
     public function index(Request $request): JsonResponse
     {
         $before = (int) $request->query('antes_de', 0);
-        $query = DB::table('opinions')->whereNull('hidden_reason')->whereNotNull('comment')->orderByDesc('id');
+        $visible = fn () => DB::table('opinions')->whereNull('hidden_reason')->whereNotNull('comment');
+        $query = $visible()->orderByDesc('id');
+        $left = self::MAXIMO_VISIBLE;
         if ($before > 0) {
             $query->where('id', '<', $before);
+            $left -= $visible()->where('id', '>=', $before)->count();
         }
-        $rows = $query->limit(self::POR_PAGINA + 1)->get(['id', 'rating', 'comment', 'created_at']);
+        $take = max(0, min(self::POR_PAGINA, $left));
+        $rows = $take ? $query->limit($take + 1)->get(['id', 'rating', 'comment', 'created_at']) : collect();
 
         return response()->json([
             'summary' => $this->summary(),
-            'opinions' => $rows->take(self::POR_PAGINA)->map(fn ($row) => [
+            'opinions' => $rows->take($take)->map(fn ($row) => [
                 'id' => $row->id,
                 'rating' => (int) $row->rating,
                 'comment' => $row->comment,
                 'created_at' => Carbon::parse($row->created_at)->toIso8601String(),
             ])->values(),
-            'more' => $rows->count() > self::POR_PAGINA,
+            'more' => $rows->count() > $take && $left > $take,
         ])->header('Cache-Control', 'no-store');
     }
 
@@ -52,8 +58,8 @@ class OpinionController extends Controller
             // Campo trampa: la gente no lo ve, los robots lo llenan.
             'sitio' => ['nullable', 'string', 'max:200'],
         ], [
-            'rating.required' => 'Elige de 1 a 5 estrellas',
-            'rating.between' => 'Elige de 1 a 5 estrellas',
+            'rating.required' => 'Elige de 1 a 5 cimarrones',
+            'rating.between' => 'Elige de 1 a 5 cimarrones',
             'comment.max' => 'El comentario puede tener hasta 500 letras',
         ]);
         if (filled($data['sitio'] ?? null)) {

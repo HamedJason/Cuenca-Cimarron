@@ -1,13 +1,15 @@
 # Comunidad Cimarrona
 
-Sección para que cualquier persona califique el sitio con estrellas y deje un comentario corto. Está en `/comunidad` (menú principal y pie de página). Todo es anónimo.
+Sección para que cualquier persona califique el sitio de 1 a 5 cimarrones y deje un comentario corto. Está en `/comunidad` (menú principal y pie de página). Todo es anónimo.
 
 ## Qué ve la gente
 
-- Botón grande "Dar mi opinión" que abre el formulario: de 1 a 5 estrellas (obligatorio) y "Platícanos qué te gustó o qué cambiarías" (opcional, hasta 500 letras)
-- Resumen: promedio, número de opiniones y barras por estrellas
-- Comentarios de otras personas con sus estrellas y la fecha relativa ("hace 3 horas", "ayer"), sin nombres. Salen de 10 en 10 con el botón "Ver más"
-- Solo se listan las opiniones con comentario visible. Las que solo traen estrellas cuentan en el promedio
+- Botón grande "Dar mi opinión" que abre el formulario: de 1 a 5 cimarrones (obligatorio) y "Platícanos qué te gustó o qué cambiarías" (opcional, hasta 500 letras)
+- La calificación se marca con cabezas de cimarrón que se llenan (`CimarronHead.vue` y `CimarronRating.vue`). En el promedio la última puede quedar llena a medias. Para lectores de pantalla dice "4 de 5"
+- Resumen: promedio, número de opiniones y barras por calificación
+- Comentarios de otras personas con su calificación y la fecha relativa ("hace 3 horas", "ayer"), sin nombres
+- Se muestran como máximo los 30 comentarios más recientes. Llegan de 10 en 10 solos al bajar por la página, sin botón. El servidor tampoco entrega más de 30
+- Solo se listan las opiniones con comentario visible. Las que solo traen calificación cuentan en el promedio
 
 ## Aviso de los 5 minutos
 
@@ -27,7 +29,7 @@ Al terminar, primero sale una ventana con el mismo formulario y después el resu
 | Lecturas cortas, temas de Información y consejos (pregunta final) | `ActivityQuestion.vue`: el "¡Correcto!" sale después de opinar |
 | Juegos de otros sitios (pregunta al regresar) | Igual, por `ExternalReturn.vue` |
 | Listas de mochila, plan familiar y botiquín completas | `LessonModal.vue`, al marcar la última casilla (no al abrir una lista ya completa) |
-| Misión Tijuana, Arma tu mochila, Memorama, Alto al Fuego y la novela visual | `public/juegos/cuenca-puntos.js`, en `CuencaPuntos.terminar()`. Tapa la pantalla final hasta mandar. Alto al Fuego también la pide si no se apagó el fuego (`CuencaPuntos.opinar()`) |
+| Misión Tijuana, Arma tu mochila, Memorama, Alto al Fuego, ¿Llamo al 911? y la novela visual | `public/juegos/cuenca-puntos.js`, en `CuencaPuntos.terminar()`. Tapa la pantalla final hasta mandar. Alto al Fuego también la pide si no se apagó el fuego y ¿Llamo al 911? al ganar cada medalla (`CuencaPuntos.opinar()`) |
 
 Reglas para no molestar:
 
@@ -39,7 +41,7 @@ La ventana de Vue es `OpinionGate.vue` y se controla con `requireOpinion()` de `
 
 ## Anonimato
 
-La tabla `opinions` solo tiene estrellas, comentario, origen (`comunidad` o `actividad`, sin decir cuál), si está oculto y la fecha.
+La tabla `opinions` solo tiene la calificación, comentario, origen (`comunidad` o `actividad`, sin decir cuál), si está oculto y la fecha.
 
 - No se guarda IP, usuario, alumno, docente ni escuela. La ruta no usa sesión ni cookie
 - La hora se guarda redondeada a 10 minutos, para que no se pueda cruzar con el avance de un alumno
@@ -53,7 +55,7 @@ La tabla `opinions` solo tiene estrellas, comentario, origen (`comunidad` o `act
 - Las dos huellas viven solo en la caché y se borran solas a los 10 minutos
 - Campo trampa oculto (`sitio`): si llega lleno, se responde que sí se guardó pero no se guarda nada
 - Comentarios de 500 letras como máximo
-- Filtro simple de groserías en español (`App\Support\Groserias`): quita acentos, cambia números por letras (p3nd3jo), junta letras repetidas (puuuto) y compara palabras completas. También detecta enlaces. El comentario se guarda oculto y las estrellas sí cuentan. La lista evita palabras con doble sentido común (pito, cono, perra) para no ocultar comentarios normales
+- Filtro simple de groserías en español (`App\Support\Groserias`): quita acentos, cambia números por letras (p3nd3jo), junta letras repetidas (puuuto) y compara palabras completas. También detecta enlaces. El comentario se guarda oculto y la calificación sí cuenta. La lista evita palabras con doble sentido común (pito, cono, perra) para no ocultar comentarios normales
 
 ## Moderación
 
@@ -61,14 +63,14 @@ En `/admin`, pestaña **Opiniones**, solo para la cuenta de administración (no 
 
 - Muestra todas las opiniones con comentario o solo las ocultas, con el motivo: filtro o administración
 - "Ocultar" quita el comentario de la página. "Volver a mostrar" lo regresa, también los que ocultó el filtro
-- Ocultar no borra la opinión ni sus estrellas
+- Ocultar no borra la opinión ni su calificación
 - Cada cambio queda en la Bitácora
 
 ## API
 
 | Ruta | Para qué |
 | --- | --- |
-| `GET /api/opiniones?antes_de=ID` | Resumen y 10 comentarios visibles |
+| `GET /api/opiniones?antes_de=ID` | Resumen y 10 comentarios visibles, hasta 30 en total |
 | `POST /api/opiniones` | `rating`, `comment`, `device`, `origin`, `sitio` |
 | `GET /api/admin/opiniones?filtro=ocultas` | Lista para moderar |
 | `POST /api/admin/opiniones/{id}/ocultar` y `/mostrar` | Moderación |

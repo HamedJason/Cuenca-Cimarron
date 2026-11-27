@@ -196,6 +196,8 @@
       else despuesDeMision();
     };
     mostrar("logro");
+    // Cada misión termina con su medalla: Cuenca Cimarrona pide la opinión (una vez por hora)
+    if (window.CuencaPuntos && window.CuencaPuntos.opinar) window.CuencaPuntos.opinar();
     sonido.fiesta();
     hablar("¡Ganaste la medalla " + m.medalla + "! ¿Sabías que? " + m.dato);
   }

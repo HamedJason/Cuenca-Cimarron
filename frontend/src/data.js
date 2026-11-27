@@ -765,6 +765,40 @@ export const games = [
     text: "Alguien se desploma en el patio de tu escuela. En seis misiones aprendes a reconocer la emergencia, llamar al 911, dar RCP solo con las manos y usar un DEA",
     href: "https://codigo-120.vercel.app/",
   },
+  {
+    // Rama juego-llamada-911, copiado a public/juegos/llamada-911; avisa al ganar las 4 medallas
+    id: "llamada-911",
+    icon: "phone",
+    meta: [
+      { icon: "signpost", text: "4 misiones" },
+      { icon: "phone", text: "Qué decir al 911" },
+    ],
+    title: "¿Llamo al 911?",
+    tag: "Misiones del 911",
+    tone: "gold",
+    image: "/assets/images/game-llamada-911.webp",
+    alt: "Pantalla de inicio de ¿Llamo al 911? con el cimarrón brigadista",
+    short: "Aprende cuándo llamar al 911, qué decir y cómo dar tu dirección",
+    text: "Arma tu historieta del 911, distingue qué sí es una emergencia, aprende las partes de una dirección y practica una llamada con la operadora",
+    href: "/juegos/llamada-911/index.html",
+  },
+  {
+    // Simulador de otro equipo publicado en Netlify
+    id: "triage-nocturno",
+    icon: "medical",
+    meta: [
+      { icon: "signpost", text: "10 niveles" },
+      { icon: "medical", text: "Triage START" },
+    ],
+    title: "Triage Nocturno",
+    tag: "Simulador de brigada",
+    tone: "blue",
+    image: "/assets/images/game-triage-nocturno.webp",
+    alt: "Pantalla de inicio de Triage Nocturno con una ambulancia y una patrulla en una calle de noche",
+    short: "Eres brigadista: decide a quién atender primero en un choque de madrugada",
+    text: "Revisa a cada herido, da los primeros auxilios que salvan vidas y ponle la etiqueta de color correcta. Son 10 niveles y cada uno es más difícil",
+    href: "https://stunning-unicorn-d394b4.netlify.app/",
+  },
 ];
 
 // Equipo (/equipo): quién hizo la página y cada juego.
@@ -826,6 +860,7 @@ export const gameCredits = {
   ],
   // Estudiante de Medicina de la UABC
   "codigo-120": ["Isaac Rubio"],
+  "llamada-911": ["Fernando Onit Sibaja Gomez"],
   memorama: [
     "Cinthya Patricia Cervantes Quintero",
     "Marco Alberto Espinoza Vasquez",

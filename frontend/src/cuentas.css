@@ -1738,11 +1738,14 @@
 .opinion-star.on {
   color: var(--gold-text);
 }
-.opinion-star.on svg,
-.community-average-stars .on,
-.community-card-stars .on {
-  fill: var(--uabc-gold);
-  color: var(--gold-text);
+/* Cabezas de cimarrón: vacías con el color del contorno, llenas con sus propios colores */
+.cimarron-rating {
+  display: inline-flex;
+  gap: 2px;
+  color: var(--control-line);
+}
+.cimarron-head {
+  flex: none;
 }
 .opinion-star:has(input:focus-visible) {
   outline: 3px solid var(--edge);
@@ -1816,12 +1819,6 @@
   line-height: 0.95;
   color: var(--title);
 }
-.community-average-stars,
-.community-card-stars {
-  display: inline-flex;
-  gap: 2px;
-  color: var(--control-line);
-}
 .community-bars {
   display: grid;
   gap: 8px;
@@ -1882,8 +1879,12 @@
 .community-card p {
   overflow-wrap: anywhere;
 }
-.community-more {
-  min-width: 200px;
+.community-sentinel {
+  min-height: 48px;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-weight: 700;
 }
 
 /* Ventana obligatoria al terminar una actividad */
@@ -2024,12 +2025,12 @@
 }
 @media (max-width: 360px) {
   .opinion-star {
-    width: 46px;
-    height: 46px;
+    width: 50px;
+    height: 50px;
   }
   .opinion-star svg {
-    width: 34px;
-    height: 34px;
+    width: 40px;
+    height: 40px;
   }
 }
 .admin-opinion {

@@ -469,4 +469,32 @@ return [
             'answer' => 1,
         ],
     ],
+    [
+        // Avisa desde su propio código al ganar las 4 medallas (public/juegos/llamada-911).
+        'key' => 'llamada-911',
+        'title' => '¿Llamo al 911?',
+        'kind' => 'juego',
+        'mode' => 'aviso',
+        'points' => 20,
+        'min_seconds' => 180,
+        'route' => '/juegos?juego=llamada-911',
+    ],
+    [
+        'key' => 'triage-nocturno',
+        'title' => 'Triage Nocturno',
+        'kind' => 'externo',
+        'mode' => 'externo',
+        'points' => 10,
+        'min_seconds' => 180,
+        'route' => '/juegos?juego=triage-nocturno',
+        'question' => [
+            'text' => 'En el triage, ¿qué etiqueta lleva una persona herida que puede caminar sola?',
+            'options' => [
+                'Roja, porque hay que atenderla primero',
+                'Verde, porque puede esperar un poco',
+                'Negra, porque ya no se puede ayudar',
+            ],
+            'answer' => 1,
+        ],
+    ],
 ];
