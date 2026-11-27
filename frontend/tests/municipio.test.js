@@ -162,6 +162,18 @@ describe("Datos por municipio", () => {
       "Lluvias fuertes", "Deslaves", "Inundaciones", "Sismos", "Vientos de Santa Ana", "Incendios forestales",
     ]);
   });
+  it("cada riesgo tiene su animación y los archivos existen", async () => {
+    const fs = await import("node:fs");
+    const tipos = new Set();
+    for (const m of municipios) for (const r of riesgosDe(m)) {
+      expect(r.clip).toBeTruthy();
+      tipos.add(r.clip);
+    }
+    for (const clip of tipos) for (const ext of ["mp4", "webm", "webp"]) {
+      expect(fs.existsSync(`public/assets/animaciones/riesgo-${clip}.${ext}`)).toBe(true);
+    }
+    expect([...tipos].sort()).toEqual(["calor", "deslave", "frio", "incendio", "inundacion", "lluvia", "sequia", "sismo", "tolvanera", "tsunami", "viento"]);
+  });
   it("ningún riesgo trae una temporada inventada y cada animación sale una sola vez", () => {
     // Donde la fuente no da temporada, el campo no existe
     const sinTemporada = {
