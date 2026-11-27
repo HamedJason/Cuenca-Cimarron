@@ -6,7 +6,7 @@
 // No se llamó a ninguno. Muchos son de oficina y no de despacho: por eso cada número lleva su tipo
 // y junto a él siempre se recuerda el 911. Los que faltan se quedan en null y no se inventan.
 // Mientras falten, el sitio muestra el 911 con un aviso.
-import { agencies, emergency, VIOLET_SQUAD_PHONE } from "./data";
+import { agencies, emergency, risks, VIOLET_SQUAD_PHONE } from "./data";
 
 const agency = (id) => agencies.find((item) => item.id === id);
 const phoneOf = (theme) => emergency.phones.find((item) => item.theme === theme);
@@ -54,6 +54,12 @@ export const municipios = [
       agua: { numeros: agency("cespt").phones, tipo: "Reportes", nombre: "CESPT", whatsapp: "664 370 1531", fuente: null },
       violeta: { numeros: [VIOLET_SQUAD_PHONE], fuente: null },
     }),
+    // Riesgos naturales (consulta del 27/11/2026). Sin temporada cuando la fuente no la da.
+    riesgos: [
+      {"tipo":  "sismo", "titulo":  "Sismos", "texto":  "La tierra puede temblar en cualquier momento y sin aviso", "zonas":  "Todo el municipio. Se sienten más en los suelos de Centro, La Mesa y Otay-Centenario", "icono":  "hill", "tono":  "gold", "clip":  null, "fuente":  "https://implan.tijuana.gob.mx/pdf/atlas/ATLASV2024.pdf"},
+      {"tipo":  "santa-ana", "titulo":  "Vientos de Santa Ana", "texto":  "Viento caliente y seco que sopla fuerte y hace que el fuego crezca rápido", "zonas":  "Zona urbana", "temporada":  "Otoño e invierno", "icono":  "cloud", "tono":  "blue", "clip":  null, "fuente":  "https://implan.tijuana.gob.mx/pdf/atlas/ATLASV2024.pdf"},
+      {"tipo":  "incendio", "titulo":  "Incendios forestales", "texto":  "El fuego puede quemar cerros y llegar a las casas que están cerca", "zonas":  "San Antonio de los Buenos, Playas de Tijuana y Presa Este", "temporada":  "Más de junio a agosto y otra vez de octubre a noviembre", "icono":  "flame", "tono":  "gold", "clip":  null, "fuente":  "https://transparencia.tijuana.gob.mx/Archivos/Hipervinculos/317-20247159217836-120242129.pdf"},
+    ],
     enlaces: [
       { label: "Directorio oficial del Ayuntamiento", href: "https://www.tijuana.gob.mx/emergencias/" },
       { label: "Seguridad Pública y denuncia anónima", href: "https://policia.tijuana.gob.mx/contacto.aspx" },
@@ -135,6 +141,13 @@ export const municipios = [
       { name: "Centro Comunitario Primo Tapia", address: "Cipriano Portugal, Primo Tapia" },
       { name: "Centro Comunitario Tonantzin", address: "Calle 5001, Ampliación Constitución" },
     ],
+    // Riesgos naturales (consulta del 27/11/2026). Sin temporada cuando la fuente no la da.
+    riesgos: [
+      {"tipo":  "inundacion", "titulo":  "Inundaciones", "texto":  "El agua de la lluvia y de los arroyos puede llenar calles y casas muy rápido", "zonas":  "Huahuatay, Constitución, Lucio Blanco, Rancho Chula Vista y el arroyo Morales", "temporada":  "Lluvias de invierno", "icono":  "wave", "tono":  "green", "clip":  "inundacion", "fuente":  "https://implanplayasderosarito.gob.mx/atlas-de-riesgos-naturales-2015/", "antiguedad":  "Atlas de 2015"},
+      {"tipo":  "deslave", "titulo":  "Deslizamientos", "texto":  "Con lluvias fuertes la tierra de los cerros se puede caer", "zonas":  "Colonia Ramos y los cañones Morales y Cordero", "temporada":  "Con lluvias intensas", "icono":  "risk", "tono":  "gold", "clip":  "deslave", "fuente":  "https://implanplayasderosarito.gob.mx/atlas-de-riesgos-naturales-2015/", "antiguedad":  "Atlas de 2015"},
+      {"tipo":  "santa-ana", "titulo":  "Vientos de Santa Ana", "texto":  "Viento caliente y seco que sopla fuerte y hace que el fuego crezca rápido", "zonas":  "Costa, pasos y cañones", "temporada":  "De septiembre a diciembre", "icono":  "cloud", "tono":  "blue", "clip":  null, "fuente":  "https://implanplayasderosarito.gob.mx/atlas-de-riesgos-naturales-2015/", "antiguedad":  "Atlas de 2015"},
+      {"tipo":  "tsunami", "titulo":  "Tsunami (zonas susceptibles)", "texto":  "Después de un sismo muy fuerte el mar puede subir con olas grandes en estas zonas de la costa", "zonas":  "Desembocaduras de La Misión, El Descanso, El Morro y Rosarito, y Punta La Paloma", "icono":  "wave", "tono":  "blue", "clip":  null, "fuente":  "https://implanplayasderosarito.gob.mx/atlas-de-riesgos-naturales-2015/", "antiguedad":  "Atlas de 2015"},
+    ],
     enlaces: [{ label: "Ayuntamiento de Rosarito", href: "https://www.rosarito.gob.mx/" }],
   },
   {
@@ -198,6 +211,13 @@ export const municipios = [
       { name: "Salón Ejidal DIF Tecate", address: "Carretera Tecate-Ensenada, Nueva Colonia Hindú" },
       { name: "Centro Comunitario DIF Tecate, La Rumorosa", address: "Carretera Mexicali-Tijuana, poblado La Rumorosa" },
       { name: "DIF Municipal Tecate", address: "Calle Profesor José Gutiérrez Durán, fracc. La Hacienda" },
+    ],
+    // Riesgos naturales (consulta del 27/11/2026). Sin temporada cuando la fuente no la da.
+    riesgos: [
+      {"tipo":  "inundacion", "titulo":  "Inundaciones", "texto":  "El agua de la lluvia y de los arroyos puede llenar calles y casas muy rápido", "zonas":  "Jardines del Río, el borde del río entre La Coyotera y El Descanso, El Tepeyac, Obrera y Las Torres", "temporada":  "Temporada de lluvias", "icono":  "wave", "tono":  "green", "clip":  "inundacion", "fuente":  "https://tecate.gob.mx/noticias/455"},
+      {"tipo":  "deslave", "titulo":  "Deslizamientos y derrumbes", "texto":  "Con lluvias fuertes la tierra de los cerros se puede caer", "zonas":  "Ampliación Valle de las Palmas, Benito Juárez, Luis Donaldo Colosio, Lomas de Santa Anita, San Pablo y las carreteras Tecate-Ensenada y La Rumorosa", "temporada":  "Con lluvias intensas", "icono":  "risk", "tono":  "gold", "clip":  "deslave", "fuente":  "https://rmgir.proyectomesoamerica.org/AtlasMunPDF/2024/02003_TECATE_2024.rar"},
+      {"tipo":  "frio", "titulo":  "Frío extremo y heladas", "texto":  "Hace mucho frío, puede haber hielo y los caminos se ponen resbalosos", "zonas":  "La Rumorosa, Luis Echeverría, El Hongo, El Cóndor y la carretera libre Tecate-La Rumorosa", "temporada":  "Invierno, de diciembre a febrero", "icono":  "snow", "tono":  "blue", "clip":  null, "fuente":  "https://rmgir.proyectomesoamerica.org/AtlasMunPDF/2024/02003_TECATE_2024.rar"},
+      {"tipo":  "incendio", "titulo":  "Incendios forestales", "texto":  "El fuego puede quemar cerros y llegar a las casas que están cerca", "zonas":  "Rancherías, zonas urbanas y áreas cerca de caminos", "temporada":  "En el estado, de mayo a noviembre", "icono":  "flame", "tono":  "gold", "clip":  null, "fuente":  "https://rmgir.proyectomesoamerica.org/AtlasMunPDF/2024/02003_TECATE_2024.rar"},
     ],
     enlaces: [{ label: "Ayuntamiento de Tecate", href: "https://tecate.gob.mx/" }],
   },
@@ -264,6 +284,14 @@ export const municipios = [
       { name: "CDC DIF Floresta", address: "Av. Floresta 330, col. Obrera" },
       { name: "CDC DIF Maneadero", address: "El Maneadero Parte Baja, Rodolfo Sánchez Taboada, C.P. 22790" },
       { name: "Gimnasio de la Colonia Hidalgo, CART Ensenada", address: "Av. Diamante 2004, col. Hidalgo" },
+    ],
+    // Riesgos naturales (consulta del 27/11/2026). Sin temporada cuando la fuente no la da.
+    riesgos: [
+      {"tipo":  "inundacion", "titulo":  "Inundaciones por lluvia y arroyos", "texto":  "El agua de la lluvia y de los arroyos puede llenar calles y casas muy rápido", "zonas":  "Arroyos Guadalupe, El Gallo, Valle Dorado y Maneadero, Las Flores, San Francisquito y la parte baja de Márquez de León", "temporada":  "Lluvias de noviembre a marzo", "icono":  "wave", "tono":  "green", "clip":  "inundacion", "fuente":  "https://imipens.org/situ/"},
+      {"tipo":  "incendio", "titulo":  "Incendios forestales", "texto":  "El fuego puede quemar cerros y llegar a las casas que están cerca", "zonas":  "Sierra de Juárez, Sierra de San Pedro Mártir, Ejido Carmen Serdán y carretera Ensenada-Ojos Negros", "temporada":  "Verano y otoño", "icono":  "flame", "tono":  "gold", "clip":  null, "fuente":  "https://www.ensenada.gob.mx/?p=28398"},
+      {"tipo":  "santa-ana", "titulo":  "Vientos de Santa Ana", "texto":  "Viento caliente y seco que sopla fuerte y hace que el fuego crezca rápido", "zonas":  "Zona urbana y valles", "temporada":  "Octubre y noviembre, y otra vez en marzo y abril", "icono":  "cloud", "tono":  "blue", "clip":  null, "fuente":  "https://www.ensenada.gob.mx/?p=22170"},
+      {"tipo":  "sismo", "titulo":  "Sismos", "texto":  "La tierra puede temblar en cualquier momento y sin aviso", "zonas":  "Todo el municipio", "temporada":  "En cualquier momento", "icono":  "hill", "tono":  "gold", "clip":  null, "fuente":  "https://www.ensenada.gob.mx/?p=22881"},
+      {"tipo":  "tsunami", "titulo":  "Tsunami de origen lejano", "texto":  "Después de un sismo muy fuerte el mar puede subir con olas grandes en estas zonas de la costa", "zonas":  "Bahía de Todos Santos, La Salina, Baja Mar, San Diego, Punta Santo Tomás, Bocana de Santo Tomás y Puerto San Isidro", "icono":  "wave", "tono":  "blue", "clip":  null, "fuente":  "https://imipens.org/situ/"},
     ],
     enlaces: [
       { label: "Ayuntamiento de Ensenada", href: "https://www.ensenada.gob.mx/" },
@@ -344,6 +372,13 @@ export const municipios = [
       { name: "CDHI Carranza", address: "Calle Hipólito Rentería entre General Gil Dardo Magaña y Av. Valentín Gómez, Valle de Mexicali" },
       { name: "Salón Ejidal del Ejido Nayarit", address: "Blvd. Lázaro Cárdenas frente al parque del Ejido Nayarit, Valle de Mexicali" },
     ],
+    // Riesgos naturales (consulta del 27/11/2026). Sin temporada cuando la fuente no la da.
+    riesgos: [
+      {"tipo":  "calor", "titulo":  "Calor extremo", "texto":  "Hace tanto calor que puede hacer daño a la salud", "zonas":  "Ciudad y valle, sobre todo la periferia y las zonas nuevas", "temporada":  "Verano, sobre todo julio y agosto", "icono":  "sun", "tono":  "gold", "clip":  null, "fuente":  "https://www.mexicali.gob.mx/transparencia/administracion/atlas/pdf/2.pdf", "antiguedad":  "Atlas de 2011"},
+      {"tipo":  "sismo", "titulo":  "Sismos", "texto":  "La tierra puede temblar en cualquier momento y sin aviso", "zonas":  "Ciudad y valle. Las localidades más vulnerables son Guadalupe Victoria, Oviedo Mota, Hermosillo, Delta, Ciudad Coahuila y Benito Juárez", "icono":  "hill", "tono":  "gold", "clip":  null, "fuente":  "https://www.mexicali.gob.mx/transparencia/administracion/atlas/pdf/1.pdf", "antiguedad":  "Atlas de 2011"},
+      {"tipo":  "inundacion", "titulo":  "Inundaciones", "texto":  "El agua de la lluvia y de los arroyos puede llenar calles y casas muy rápido", "zonas":  "Cerca de los ríos Nuevo, Colorado y Hardy y de los canales de riego, al sur y oriente del valle", "temporada":  "De julio a septiembre y de noviembre a abril", "icono":  "wave", "tono":  "green", "clip":  "inundacion", "fuente":  "https://www.mexicali.gob.mx/transparencia/administracion/atlas/pdf/2.pdf", "antiguedad":  "Atlas de 2011"},
+      {"tipo":  "tolvanera", "titulo":  "Vientos fuertes y tolvaneras", "texto":  "El viento fuerte levanta polvo y tierra, y cuesta ver y respirar", "zonas":  "Ciudad y valle", "temporada":  "Sobre todo invierno y primavera, y en verano por tormentas", "icono":  "cloud", "tono":  "blue", "clip":  null, "fuente":  "https://www.mexicali.gob.mx/transparencia/administracion/atlas/pdf/2.pdf", "antiguedad":  "Atlas de 2011"},
+    ],
     enlaces: [{ label: "Ayuntamiento de Mexicali", href: "https://www.mexicali.gob.mx/portalmexicali" }],
   },
   {
@@ -420,6 +455,13 @@ export const municipios = [
       { name: "Salón Ejidal Tierra y Libertad", address: "Poblado Bahía de los Ángeles" },
       { name: "Delegación El Mármol, Escuela Primaria Revolución", address: "Cataviña" },
     ],
+    // Riesgos naturales (consulta del 27/11/2026). Sin temporada cuando la fuente no la da.
+    riesgos: [
+      {"tipo":  "inundacion", "titulo":  "Inundaciones", "texto":  "El agua de la lluvia y de los arroyos puede llenar calles y casas muy rápido", "zonas":  "Costa de San Quintín y Bahía de los Ángeles, y los arroyos Santo Domingo y San Simón", "temporada":  "Invierno por tormentas, también con ciclones", "icono":  "wave", "tono":  "green", "clip":  "inundacion", "fuente":  "https://rmgir.proyectomesoamerica.org/AtlasMunPDF/2011/02001_ENSENADA_2011.PDF", "antiguedad":  "Dato histórico de 2012"},
+      {"tipo":  "sequia", "titulo":  "Sequía", "texto":  "Pasa mucho tiempo sin llover y falta agua para el campo", "zonas":  "Zonas agrícolas de Camalú, Vicente Guerrero y San Quintín", "icono":  "leaf", "tono":  "gold", "clip":  null, "fuente":  "https://rmgir.proyectomesoamerica.org/AtlasMunPDF/2011/02001_ENSENADA_2011.PDF", "antiguedad":  "Dato histórico de 2012"},
+      {"tipo":  "sismo", "titulo":  "Sismos", "texto":  "La tierra puede temblar en cualquier momento y sin aviso", "zonas":  "Alrededores de Bahía de los Ángeles", "icono":  "hill", "tono":  "gold", "clip":  null, "fuente":  "https://rmgir.proyectomesoamerica.org/AtlasMunPDF/2011/02001_ENSENADA_2011.PDF", "antiguedad":  "Dato histórico de 2012"},
+      {"tipo":  "tsunami", "titulo":  "Tsunami", "texto":  "Después de un sismo muy fuerte el mar puede subir con olas grandes en estas zonas de la costa", "zonas":  "Costa de Vicente Guerrero a San Quintín y Bahía de los Ángeles", "icono":  "wave", "tono":  "blue", "clip":  null, "fuente":  "https://rmgir.proyectomesoamerica.org/AtlasMunPDF/2011/02001_ENSENADA_2011.PDF", "antiguedad":  "Dato histórico de 2012"},
+    ],
     enlaces: [{ label: "Ayuntamiento de San Quintín", href: "https://www.sanquintin.gob.mx/" }],
   },
   {
@@ -487,6 +529,13 @@ export const municipios = [
       { name: "COBACH Plantel San Felipe", address: "Calle de los Pinos 601" },
       { name: "Escuela Primaria Jaime Nuño", address: "Calle Acapulco 69" },
     ],
+    // Riesgos naturales (consulta del 27/11/2026). Sin temporada cuando la fuente no la da.
+    riesgos: [
+      {"tipo":  "calor", "titulo":  "Calor extremo", "texto":  "Hace tanto calor que puede hacer daño a la salud", "zonas":  "Puerto y costa del Golfo de California", "temporada":  "Verano, julio es el mes más caliente", "icono":  "sun", "tono":  "gold", "clip":  null, "fuente":  "https://transparencia.sanfelipe.gob.mx/wp-content/uploads/2022/09/Atlas-de-riesgo.pdf", "antiguedad":  "Atlas de Mexicali de 2011"},
+      {"tipo":  "sismo", "titulo":  "Sismos", "texto":  "La tierra puede temblar en cualquier momento y sin aviso", "zonas":  "Área urbana del puerto, con viviendas más vulnerables al noreste", "icono":  "hill", "tono":  "gold", "clip":  null, "fuente":  "https://transparencia.sanfelipe.gob.mx/wp-content/uploads/2022/09/Atlas-de-riesgo.pdf", "antiguedad":  "Atlas de Mexicali de 2011"},
+      {"tipo":  "tsunami", "titulo":  "Tsunami (escenario de peligro)", "texto":  "Después de un sismo muy fuerte el mar puede subir con olas grandes en estas zonas de la costa", "zonas":  "Campo Jalisco, Cantú Cove, colonia Francisco Villa, Punta Estrella, Villas de Cortez y La Ponderosa", "icono":  "wave", "tono":  "blue", "clip":  null, "fuente":  "https://transparencia.sanfelipe.gob.mx/wp-content/uploads/2022/09/Atlas-de-riesgo.pdf", "antiguedad":  "Atlas de Mexicali de 2011"},
+      {"tipo":  "inundacion", "titulo":  "Inundaciones por crecida de arroyos", "texto":  "El agua de la lluvia y de los arroyos puede llenar calles y casas muy rápido", "zonas":  "Arroyos del puerto", "temporada":  "En tormentas", "icono":  "wave", "tono":  "green", "clip":  "inundacion", "fuente":  "https://transparencia.sanfelipe.gob.mx/wp-content/uploads/2022/09/Atlas-de-riesgo.pdf", "antiguedad":  "Atlas de Mexicali de 2011"},
+    ],
     enlaces: [{ label: "Ayuntamiento de San Felipe", href: "https://sanfelipe.gob.mx/" }],
   },
 ];
@@ -531,6 +580,37 @@ export function llamadas(dato) {
     numero,
     tipo: [dato.tipos?.[i] ?? dato.tipo, dato.porConfirmar ? "por confirmar" : ""].filter(Boolean).join(", "),
   }));
+}
+
+// Riesgos naturales del municipio. Tijuana conserva sus tres tarjetas de siempre (data.js, risks)
+// con sus zonas del atlas 2024, y suma las de su lista. La temporada solo sale si la fuente la da.
+const ATLAS_TIJUANA = "https://implan.tijuana.gob.mx/pdf/atlas/ATLASV2024.pdf";
+const TIJUANA_BASE = {
+  lluvia: {},
+  deslave: {
+    zonas: "Sobre todo las delegaciones San Antonio de los Buenos y Sánchez Taboada",
+    temporada: "Con las lluvias",
+    fuente: ATLAS_TIJUANA,
+  },
+  inundacion: {
+    zonas: "Cuencas Los Laureles, México Lindo, Nido de las Águilas, Las Torres y el tributario Alamar",
+    temporada: "Temporada de lluvias, con vigilancia de noviembre a marzo",
+    fuente: "https://proteccioncivil.tijuana.gob.mx/pdf/progespecificos/PMC-RiesgosHidrometeorologicos_11-2026.pdf",
+  },
+};
+export function riesgosDe(m) {
+  const propios = m?.riesgos ?? [];
+  if (!esTijuana(m)) return propios;
+  const base = risks.map((item) => ({
+    tipo: item.clip,
+    titulo: item.title,
+    texto: item.text,
+    icono: item.icon,
+    tono: item.tone,
+    clip: item.clip,
+    ...TIJUANA_BASE[item.clip],
+  }));
+  return [...base, ...propios];
 }
 
 // Estaciones de data.js del municipio. Las que no traen city son de Tijuana.

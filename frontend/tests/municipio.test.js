@@ -2,7 +2,7 @@
 // Si falta un número del municipio se muestra el 911 con un aviso, nunca el número de Tijuana.
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mount } from "@vue/test-utils";
-import { buscarMunicipio, estacionesDe, faltantes, llamadas, municipios, telefono, textos } from "../src/municipios.js";
+import { buscarMunicipio, estacionesDe, faltantes, llamadas, municipios, riesgosDe, telefono, textos } from "../src/municipios.js";
 import { emergency, helpLines } from "../src/data.js";
 import {
   MUNICIPIO_KEY,
@@ -149,6 +149,38 @@ describe("Datos por municipio", () => {
     for (const st of emergency.fireStations.filter((s) => s.city && s.city !== "Rosarito")) {
       expect(st.phone).toBeTruthy();
       expect(st.lat).toBeUndefined();
+    }
+  });
+  it("riesgos por municipio: Mexicali empieza con calor extremo y San Felipe no tiene deslaves", () => {
+    expect(riesgosDe(buscarMunicipio("mexicali"))[0]).toMatchObject({ tipo: "calor", titulo: "Calor extremo", antiguedad: "Atlas de 2011" });
+    expect(riesgosDe(buscarMunicipio("san-felipe"))[0].tipo).toBe("calor");
+    expect(riesgosDe(buscarMunicipio("san-felipe")).some((r) => r.tipo === "deslave")).toBe(false);
+    expect(riesgosDe(buscarMunicipio("tecate")).map((r) => r.tipo)).toContain("frio");
+    expect(riesgosDe(buscarMunicipio("san-quintin")).every((r) => r.antiguedad === "Dato histórico de 2012")).toBe(true);
+    // Tijuana conserva sus tres tarjetas y suma sismos, Santa Ana e incendios
+    expect(riesgosDe(buscarMunicipio("tijuana")).map((r) => r.titulo)).toEqual([
+      "Lluvias fuertes", "Deslaves", "Inundaciones", "Sismos", "Vientos de Santa Ana", "Incendios forestales",
+    ]);
+  });
+  it("ningún riesgo trae una temporada inventada y cada animación sale una sola vez", () => {
+    // Donde la fuente no da temporada, el campo no existe
+    const sinTemporada = {
+      mexicali: ["Sismos"],
+      "san-quintin": ["Sequía", "Sismos", "Tsunami"],
+      "san-felipe": ["Sismos", "Tsunami (escenario de peligro)"],
+      rosarito: ["Tsunami (zonas susceptibles)"],
+      ensenada: ["Tsunami de origen lejano"],
+      tijuana: ["Lluvias fuertes", "Sismos"],
+    };
+    for (const m of municipios) {
+      const lista = riesgosDe(m);
+      for (const r of lista) {
+        if (sinTemporada[m.id]?.includes(r.titulo)) expect(r.temporada).toBeUndefined();
+        if (r.temporada) expect(r.temporada).not.toMatch(/no encontrado/i);
+        if (m.id !== "tijuana" || r.zonas) expect(r.fuente).toMatch(/^https:\/\//);
+      }
+      const clips = lista.map((r) => r.clip).filter(Boolean);
+      expect(new Set(clips).size).toBe(clips.length);
     }
   });
   it("los títulos usan el nombre del municipio", () => {

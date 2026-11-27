@@ -8,11 +8,13 @@ import RiskClip from "../components/RiskClip.vue";
 import Llamada911 from "../components/Llamada911.vue";
 import FamiliaSeparada from "../components/FamiliaSeparada.vue";
 import { openLesson } from "../composables/useLesson";
-import { lessons, risks } from "../data";
+import { lessons } from "../data";
 import { computed } from "vue";
-import { textos } from "../municipios";
+import { riesgosDe, textos } from "../municipios";
 import { municipioActual as muni } from "../composables/useMunicipio";
 const text = computed(() => textos(muni.value));
+// Riesgos del municipio elegido (municipios.js). Los que no tienen animación llevan un ícono fijo
+const risks = computed(() => riesgosDe(muni.value));
 
 // Información: los temas abren su ventana en lugar de otra página.
 // /informacion?tema=mochila abre directo esa ventana (enlaces viejos y compartidos).
@@ -136,17 +138,25 @@ watch(() => route.query.ver, scrollFromQuery);
       <div class="advice-grid">
         <article
           v-for="risk in risks"
-          :key="risk.title"
-          :class="['advice-card', 'info-card', `tone-${risk.tone}`, { 'risk-clip-card': risk.clip }]"
+          :key="risk.titulo"
+          :class="['advice-card', 'info-card', `tone-${risk.tono}`, { 'risk-clip-card': risk.clip }]"
         >
           <RiskClip v-if="risk.clip" :name="risk.clip" />
           <span v-else class="advice-icon" aria-hidden="true"
-            ><Icon :name="risk.icon" :size="32"
+            ><Icon :name="risk.icono" :size="32"
           /></span>
-          <strong>{{ risk.title }}</strong>
-          <span>{{ risk.text }}</span>
+          <strong>{{ risk.titulo }}</strong>
+          <span>{{ risk.texto }}</span>
+          <span v-if="risk.zonas" class="risk-detail"><b>Dónde:</b> {{ risk.zonas }}</span>
+          <span v-if="risk.temporada" class="risk-detail"><b>Cuándo:</b> {{ risk.temporada }}</span>
+          <a v-if="risk.fuente" class="risk-source" :href="risk.fuente" target="_blank" rel="noopener"
+            ><Icon name="external" :size="14" /> {{ risk.antiguedad ? `Fuente: ${risk.antiguedad}` : "Fuente" }}</a
+          >
         </article>
       </div>
+      <p v-if="risks.some((risk) => risk.zonas)" class="section-note risk-note">
+        Las zonas vienen de los atlas de riesgo y de Protección Civil. No quiere decir que toda la colonia esté en riesgo
+      </p>
     </section>
 
     <section aria-labelledby="titulo-lecturas" class="section-space">
