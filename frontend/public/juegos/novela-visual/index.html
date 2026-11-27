@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en-us">
+<html lang="es">
 
 <head>
   <meta charset="utf-8">
@@ -178,6 +178,41 @@
         object-fit: contain;
     }
 
+    /* Aviso para celular en vertical: la novela es 16:9 y en vertical queda en una franja diminuta */
+    #girar {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: #0b3d2b;
+      color: #fff;
+      font-family: "DM Sans", system-ui, sans-serif;
+      text-align: center;
+      padding: 24px 24px calc(24px + env(safe-area-inset-bottom, 0px));
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+    @media (orientation: portrait) and (pointer: coarse) {
+      #girar:not(.cerrado) { display: flex; }
+    }
+    #girar svg { width: 96px; height: 96px; animation: girar-cel 2.4s ease-in-out infinite; }
+    @keyframes girar-cel { 0%, 25% { transform: rotate(0); } 55%, 100% { transform: rotate(-90deg); } }
+    @media (prefers-reduced-motion: reduce) { #girar svg { animation: none; transform: rotate(-90deg); } }
+    #girar h2 { margin: 0; font-size: 1.6rem; line-height: 1.1; }
+    #girar p { margin: 0; max-width: 300px; color: #d7ecdf; line-height: 1.4; }
+    #girar button {
+      font: inherit;
+      font-weight: 700;
+      min-height: 48px;
+      padding: 12px 26px;
+      border-radius: 999px;
+      border: 0;
+      cursor: pointer;
+    }
+    #girar .girar-si { background: #d9951a; color: #0b3d2b; }
+    #girar .girar-no { background: transparent; color: #fff; text-decoration: underline; min-height: 44px; }
   </style>
 
 </head>
@@ -215,6 +250,35 @@
     </form>
   </div>
 
+  <div id="girar" role="dialog" aria-modal="true" aria-labelledby="girar-titulo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+      <rect x="6" y="2" width="12" height="20" rx="2.5" />
+      <path d="M10.5 18.5h3" />
+    </svg>
+    <h2 id="girar-titulo">Gira tu celular</h2>
+    <p>La historia se ve mejor con el celular acostado: los textos y botones se ven más grandes.</p>
+    <button type="button" class="girar-si" id="girar-si">Pantalla completa</button>
+    <button type="button" class="girar-no" id="girar-no">Seguir así</button>
+  </div>
+  <script>
+    (function () {
+      var aviso = document.getElementById("girar");
+      function cerrar() { aviso.classList.add("cerrado"); }
+      document.getElementById("girar-no").addEventListener("click", cerrar);
+      document.getElementById("girar-si").addEventListener("click", function () {
+        var el = document.documentElement;
+        var pedir = el.requestFullscreen || el.webkitRequestFullscreen;
+        // En Android se puede pedir pantalla completa y fijar la orientación; en iPhone no existe y solo se cierra el aviso
+        if (pedir) {
+          Promise.resolve(pedir.call(el)).then(function () {
+            if (screen.orientation && screen.orientation.lock) return screen.orientation.lock("landscape");
+          }).catch(function () {}).then(cerrar);
+        } else {
+          cerrar();
+        }
+      });
+    })();
+  </script>
   <script>
       // The URL to game.zip, relative to the URL of this file.
       window.gameZipURL = 'game.zip';

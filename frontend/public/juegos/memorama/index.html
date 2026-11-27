@@ -19,12 +19,13 @@ h1{font-family:"Barlow Condensed",Impact,sans-serif;font-size:3rem;line-height:.
 h1::after{content:"";display:block;width:70px;height:5px;background:var(--gold);border-radius:4px;margin:10px 0 0}
 .mascot{height:140px;width:auto;display:block;flex:none;filter:drop-shadow(0 8px 10px rgba(11,61,43,.25))}
 .players{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.player{border:3px solid transparent;border-radius:18px;padding:10px 14px;transition:border-color .2s,transform .2s}
+.player{border:3px solid transparent;border-radius:18px;padding:10px 14px;transition:border-color .2s,transform .2s;display:grid;grid-template-columns:1fr auto;grid-template-areas:"name score" "kit score";column-gap:8px}
+.player b{grid-area:name}.player small{grid-area:kit;line-height:1.25}
 .player.p1{background:var(--peach);border-color:var(--peachb);color:var(--brown)}
 .player.p2{background:var(--mint);border-color:var(--mintb);color:var(--green)}
 .player b{display:block;font-size:1rem;font-weight:700}
 .player small{color:var(--muted);font-size:.8rem}
-.player .score{font-family:"Barlow Condensed",sans-serif;font-size:2.2rem;font-weight:800;float:right;margin-top:-40px}
+.player .score{font-family:"Barlow Condensed",sans-serif;font-size:2.2rem;font-weight:800;line-height:1;grid-area:score;align-self:center}
 .player.active.p1{border-color:var(--gold);transform:translateY(-2px)}
 .player.active.p2{border-color:var(--green);transform:translateY(-2px)}
 #msg{min-height:2.2em;text-align:center;margin:12px 0 8px;font-size:1rem;color:var(--ink)}
@@ -49,7 +50,7 @@ footer{margin-top:auto;padding:6px 14px 18px;text-align:center;font-size:.8rem;c
 footer strong{color:var(--ink);display:block;font-size:.85rem}
 @media (prefers-reduced-motion:reduce){.inner{transition:none}}
 @media (min-width:700px){.front{font-size:.82rem}.front .e{font-size:2.2rem}}
-@media (max-width:600px){main{padding:14px 12px 18px;border-radius:22px}.brand{font-size:1.2rem}h1{font-size:1.9rem}.mascot{height:84px}.hero{gap:8px}.front{font-size:.48rem;border-width:2px;border-radius:8px}.front .e{font-size:1.1rem}.face{padding:1px;border-radius:8px}.back{border-width:1px}.grid{gap:4px}.player .score{font-size:1.8rem;margin-top:-34px}}
+@media (max-width:600px){main{padding:14px 12px 18px;border-radius:22px}.brand{font-size:1.2rem}h1{font-size:1.9rem}.mascot{height:84px}.hero{gap:8px}.grid{grid-template-columns:repeat(4,1fr);gap:8px}.front{font-size:.66rem;line-height:1.15;border-width:2px;border-radius:10px;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:anywhere}.front .e{font-size:1.9rem}.face{padding:4px;border-radius:10px}.player{padding:8px 10px}.player .score{font-size:1.8rem}}
 </style>
 </head>
 <body>
@@ -131,7 +132,7 @@ function flip(i){
         say("¡Par de "+KIT[turn]+"! "+NAMES[turn]+" sigue jugando.");
       },500);
     }else{
-      back("Ese par es de la "+(a.cat===1?"mochila":"botiquín")+", no cuenta para ti.");
+      back("Ese par es "+(a.cat===1?"de la mochila":"del botiquín")+", no cuenta para ti.");
     }
   }else back("No coinciden.");
 }

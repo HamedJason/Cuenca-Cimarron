@@ -235,7 +235,7 @@ const Game = {
             <button id="take-backpack" class="take-backpack" type="button">
               <img src="assets/cuenca-backpack.svg" alt="" width="112" height="112" />
               <strong>Tomar mochila</strong>
-              <small>Kit de 72 horas Â· listo para salir</small>
+              <small>Kit de 72 horas · listo para salir</small>
             </button>
           </div>
         </div>

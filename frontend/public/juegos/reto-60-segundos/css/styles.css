@@ -1042,3 +1042,26 @@ h1 { max-width: 70%; color: #003d24; font-size: clamp(2.2rem, 5vw, 4rem); text-t
   .start-mascot { opacity: 0.22; right: 2%; }
   h1, .lede { max-width: 100%; }
 }
+
+/* En celular y tablet vertical la casa ocupa toda la pantalla y el cajón abierto quedaba arriba,
+   fuera de la vista, mientras el tiempo corría. Se vuelve una hoja fija en la parte de abajo. */
+@media (max-width: 860px) {
+  .drawer-sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 45;
+    place-items: end center;
+    padding: 0;
+  }
+  .drawer-sheet .modal__dialog {
+    width: 100%;
+    max-height: 78vh;
+    max-height: 78dvh;
+    overflow: auto;
+    overscroll-behavior: contain;
+    border-radius: 22px 22px 0 0;
+    border-bottom: 0;
+    padding: 18px 16px calc(18px + env(safe-area-inset-bottom, 0px));
+  }
+  .drawer-sheet .icon-btn { min-width: 44px; min-height: 44px; }
+}

@@ -76,7 +76,7 @@ const UI = {
       .join("");
     backpackHint.textContent = packedIds.length
       ? "Suelta más insumos o sal ahora"
-      : "Arrastra insumos aquí";
+      : "Toca o arrastra insumos aquí";
   },
 
   toast(message) {

@@ -421,6 +421,8 @@ h1::after {
 .sweep-tip.hidden {
   opacity: 0;
   pointer-events: none;
+  /* fadeInUp con fill-mode "both" dejaba la opacidad en 1 y el aviso seguía visible */
+  animation: none;
 }
 
 @keyframes fadeInUp {
@@ -1064,4 +1066,41 @@ footer strong {
     font-size: 1.1rem;
     padding: 8px 22px;
   }
+}
+
+/* En pantallas angostas el panel de fases no cabe encima del lienzo (que mide ~190 px de alto
+   en celular): se acomoda debajo, en el flujo normal, para que todas las opciones se vean y se toquen. */
+@media (max-width: 720px) {
+  .game-stage { padding: 8px; }
+  .phase-overlay {
+    position: static;
+    margin-top: 10px;
+    border-radius: 14px;
+    border: 3px solid var(--line);
+    border-top: 4px solid var(--gold);
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .phase-overlay.hidden { display: none; }
+  .ext-cabinet { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .ext-card { width: auto; }
+  .aim-alert,
+  .sweep-tip {
+    white-space: normal;
+    width: max-content;
+    max-width: 92%;
+    text-align: center;
+    top: 8px;
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .hud-grid { gap: 8px; }
+  .hud-grid > * { min-width: 0; }
+  .stat-box { padding: 8px 10px; gap: 6px; }
+  .stat-box { flex-wrap: wrap; }
+  .tape-indicators { gap: 4px; padding: 4px; }
+  .tape-badge { width: 26px; height: 26px; font-size: 0.95rem; }
 }
