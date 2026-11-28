@@ -6,6 +6,7 @@ use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CimarronController;
 use App\Http\Controllers\DemoController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\GameSessionController;
 use App\Http\Controllers\OpinionController;
 use App\Http\Controllers\SchoolAdminController;
@@ -104,6 +105,8 @@ Route::middleware(['web', 'throttle:cuentas'])->group(function (): void {
         Route::get('/respaldos/{file}', [AdminController::class, 'downloadSaved']);
         Route::post('/respaldo/clave', [AdminController::class, 'backupKey']);
         Route::get('/opiniones', [OpinionController::class, 'adminIndex']);
+        // Descarga de datos en CSV (solo administración, cada descarga queda en la bitácora)
+        Route::get('/exportar/{tipo}', [ExportController::class, 'download'])->where('tipo', '[a-z]+');
         Route::post('/opiniones/{opinion}/ocultar', [OpinionController::class, 'hide'])->whereNumber('opinion');
         Route::post('/opiniones/{opinion}/mostrar', [OpinionController::class, 'show'])->whereNumber('opinion');
     });

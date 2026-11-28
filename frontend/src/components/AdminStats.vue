@@ -7,6 +7,8 @@ import { api } from "../composables/api";
 import { labelOf, levels, sectors } from "../composables/useAccount";
 import { municipios } from "../municipios";
 
+// Solo la administración (no las cuentas de solo lectura ni la demo) descarga datos
+defineProps({ canExport: Boolean });
 const data = ref(null);
 // Municipio para limitar todo el panel (nombre de la SEP). Vacío muestra todo
 const municipio = ref("");
@@ -74,6 +76,28 @@ function downloadCsv() {
   link.click();
   URL.revokeObjectURL(link.href);
 }
+
+// Descargar datos: archivos CSV para Excel con el municipio elegido arriba y un rango de fechas.
+// Solo cifras, sin nombres de alumnos, códigos ni correos. Cada descarga queda en la bitácora.
+const desde = ref("");
+const hasta = ref("");
+const exports = [
+  { id: "escuelas", label: "Escuelas", text: "Una fila por escuela: municipio, nivel, colonia, estado, docentes, grupos, alumnos, actividades y Cimacoins" },
+  { id: "municipios", label: "Resumen por municipio", text: "Escuelas, docentes, grupos, alumnos, actividades y Cimacoins de cada municipio" },
+  { id: "actividades", label: "Actividades", text: "Cuántas veces se completó cada lectura o juego, por municipio" },
+  { id: "semanas", label: "Crecimiento por semana", text: "Escuelas nuevas, alumnos nuevos y actividades completadas. Sin fechas, las últimas 12 semanas" },
+  { id: "visitas", label: "Visitas por zona", text: "Personas que dijeron desde qué municipio y zona nos visitan" },
+  { id: "opiniones", label: "Opiniones", text: "Calificación y comentario de la Comunidad Cimarrona. Son anónimas y no tienen municipio" },
+];
+const badDates = computed(() => desde.value && hasta.value && hasta.value < desde.value);
+const exportHref = (id) => {
+  const params = new URLSearchParams();
+  if (municipio.value) params.set("municipio", municipio.value);
+  if (desde.value) params.set("desde", desde.value);
+  if (hasta.value) params.set("hasta", hasta.value);
+  const q = params.toString();
+  return `/api/admin/exportar/${id}${q ? `?${q}` : ""}`;
+};
 
 const escape = (text) => String(text).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 async function drawMap() {
@@ -235,6 +259,31 @@ onBeforeUnmount(() => map?.remove());
           </tbody>
         </table>
       </div>
+    </section>
+
+    <section v-if="canExport" class="form-card" aria-labelledby="titulo-descargar">
+      <h2 id="titulo-descargar" class="form-title">Descargar datos</h2>
+      <p class="small muted-text">
+        Archivos CSV que se abren en Excel o en Google Sheets. Usan el municipio de arriba{{ municipio ? ` (${municipio})` : "" }} y las fechas que elijas.
+        Las actividades y Cimacoins cuentan solo esas fechas. Solo cifras, sin nombres de alumnos, códigos ni correos
+      </p>
+      <div class="field-row export-dates">
+        <div class="field">
+          <label for="exportar-desde">Desde</label>
+          <input id="exportar-desde" v-model="desde" type="date" />
+        </div>
+        <div class="field">
+          <label for="exportar-hasta">Hasta</label>
+          <input id="exportar-hasta" v-model="hasta" type="date" :min="desde || undefined" />
+        </div>
+      </div>
+      <p v-if="badDates" class="form-alert is-error" role="alert">La fecha final tiene que ser después de la inicial</p>
+      <ul class="export-list">
+        <li v-for="item in exports" :key="item.id">
+          <span><strong>{{ item.label }}</strong><span class="small muted-text">{{ item.text }}</span></span>
+          <a v-if="!badDates" class="button secondary small-button" :href="exportHref(item.id)" :download="`${item.id}.csv`"><Icon name="download" :size="18" />Descargar</a>
+        </li>
+      </ul>
     </section>
 
     <section v-if="zones" class="form-card">

@@ -164,7 +164,7 @@ watch(
 
       <AdminCatalog v-if="tab === 'escuelas'" :can-edit="isAdmin" />
 
-      <AdminStats v-else-if="tab === 'estadisticas'" />
+      <AdminStats v-else-if="tab === 'estadisticas'" :can-export="isAdmin && !isDemo" />
 
       <AdminStaff v-else-if="tab === 'cuentas' && isAdmin && !isDemo" />
 

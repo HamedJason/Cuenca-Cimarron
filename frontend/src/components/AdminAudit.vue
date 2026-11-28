@@ -33,6 +33,7 @@ const labels = {
   "cambiar-rol": "Cambió el tipo de una cuenta",
   "quitar-cuenta": "Quitó una cuenta",
   "actualizar-catalogo-escuelas": "Actualizó el catálogo de escuelas",
+  "exportar-datos": "Descargó datos del panel",
   limpieza: "Hizo limpieza",
   "cerrar-ciclo": "Cerró un ciclo escolar",
   "encender-demo": "Encendió el modo demostración",
