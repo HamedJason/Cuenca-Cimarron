@@ -12,6 +12,7 @@ use App\Http\Controllers\OpinionController;
 use App\Http\Controllers\SchoolAdminController;
 use App\Http\Controllers\SchoolCatalogController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\SchoolDashboardController;
 use App\Http\Controllers\SchoolTeachersController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StatsController;
@@ -76,6 +77,11 @@ Route::middleware(['web', 'throttle:cuentas'])->group(function (): void {
         Route::post('/docentes/{teacher}/baja', [SchoolTeachersController::class, 'deactivate']);
         Route::post('/docentes/{teacher}/alta', [SchoolTeachersController::class, 'reactivate']);
         Route::get('/grupos', [SchoolTeachersController::class, 'classrooms']);
+        // Panel de la escuela: resumen, docentes, grupos, actividades y descargas, solo de su escuela
+        Route::get('/panel', [SchoolDashboardController::class, 'index']);
+        Route::get('/grupos/{classroom}/avance', [SchoolDashboardController::class, 'progress']);
+        Route::get('/grupos/{classroom}/avance.csv', [SchoolDashboardController::class, 'progressCsv']);
+        Route::get('/exportar/{tipo}', [SchoolDashboardController::class, 'export'])->where('tipo', '[a-z]+');
     });
 
     // Consulta de datos: administración completa y cuentas de solo lectura.

@@ -6,7 +6,6 @@ import CopyLink from "./CopyLink.vue";
 import { api } from "../composables/api";
 
 const teachers = ref([]);
-const classrooms = ref([]);
 const state = ref("loading");
 const name = ref("");
 const error = ref("");
@@ -15,9 +14,8 @@ const links = ref({});
 
 async function load() {
   try {
-    const [t, c] = await Promise.all([api("/escuela/docentes"), api("/escuela/grupos")]);
+    const t = await api("/escuela/docentes");
     teachers.value = t.teachers;
-    classrooms.value = c.classrooms;
     state.value = "ready";
   } catch (e) {
     state.value = e.message;
@@ -92,23 +90,5 @@ function confirmDown(teacher) {
     </ul>
   </section>
 
-  <section v-if="classrooms.length" class="form-card">
-    <h2 class="form-title">Grupos de la escuela</h2>
-    <div class="table-wrap">
-      <table class="data-table">
-        <thead>
-          <tr><th>Grupo</th><th>Docente</th><th class="num">Alumnos</th><th>Código</th></tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in classrooms" :key="item.id">
-            <td>{{ item.name }} <span class="muted-text small">{{ item.grade }}</span></td>
-            <td>{{ item.teacher }}</td>
-            <td class="num">{{ item.students }}</td>
-            <td><code>{{ item.code }}</code> <span v-if="!item.open" class="small muted-text">cerrado</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-  <p class="small muted-text"><Icon name="info" :size="18" /> Cada docente arma sus grupos y ve el avance de sus alumnos desde su enlace</p>
+  <p class="small muted-text"><Icon name="info" :size="18" /> Cada docente arma sus grupos desde su enlace. Sus grupos y el avance de sus alumnos salen arriba, en "Así va tu escuela"</p>
 </template>

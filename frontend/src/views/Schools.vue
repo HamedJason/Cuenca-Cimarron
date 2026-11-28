@@ -5,6 +5,7 @@ import Icon from "../components/Icon.vue";
 import FormField from "../components/FormField.vue";
 import SchoolPanel from "../components/SchoolPanel.vue";
 import SchoolTeachers from "../components/SchoolTeachers.vue";
+import SchoolDashboard from "../components/SchoolDashboard.vue";
 import { api } from "../composables/api";
 import { account, accountState, loadAccount, setAccount, logout } from "../composables/useAccount";
 
@@ -47,7 +48,10 @@ async function submit() {
 
     <template v-else-if="account?.role === 'school'">
       <SchoolPanel :is-new="isNew">
-        <SchoolTeachers v-if="account.school.status !== 'suspended'" />
+        <template v-if="account.school.status !== 'suspended'">
+          <SchoolDashboard />
+          <SchoolTeachers />
+        </template>
       </SchoolPanel>
     </template>
 
