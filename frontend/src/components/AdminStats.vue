@@ -6,6 +6,8 @@ import Icon from "./Icon.vue";
 import { api } from "../composables/api";
 import { labelOf, levels, sectors } from "../composables/useAccount";
 import { municipios } from "../municipios";
+import DateFilter from "./DateFilter.vue";
+import { useDateRange } from "../composables/dateRange";
 
 // Solo la administración (no las cuentas de solo lectura ni la demo) descarga datos
 defineProps({ canExport: Boolean });
@@ -79,8 +81,9 @@ function downloadCsv() {
 
 // Descargar datos: archivos CSV para Excel con el municipio elegido arriba y un rango de fechas.
 // Solo cifras, sin nombres de alumnos, códigos ni correos. Cada descarga queda en la bitácora.
-const desde = ref("");
-const hasta = ref("");
+// El mismo rango de fechas filtra el panel en pantalla y las descargas
+const range = useDateRange();
+const { desde, hasta } = range;
 const exports = [
   { id: "escuelas", label: "Escuelas", text: "Una fila por escuela: municipio, nivel, colonia, estado, docentes, grupos, alumnos, actividades y Cimacoins" },
   { id: "municipios", label: "Resumen por municipio", text: "Escuelas, docentes, grupos, alumnos, actividades y Cimacoins de cada municipio" },
@@ -89,7 +92,21 @@ const exports = [
   { id: "visitas", label: "Visitas por zona", text: "Personas que dijeron desde qué municipio y zona nos visitan" },
   { id: "opiniones", label: "Opiniones", text: "Calificación y comentario de la Comunidad Cimarrona. Son anónimas y no tienen municipio" },
 ];
-const badDates = computed(() => desde.value && hasta.value && hasta.value < desde.value);
+const badDates = range.bad;
+// Escuelas sin actividad: sin docentes, sin alumnos o sin actividades en los últimos 30 días
+const DAY = 86400000;
+const idle = computed(() =>
+  (data.value?.schools ?? [])
+    .map((s) => {
+      const reasons = [];
+      if (!s.teachers) reasons.push("Sin docentes");
+      else if (!s.students) reasons.push("Sin alumnos");
+      if (!s.last_activity) reasons.push("Nunca ha completado actividades");
+      else if (Date.now() - new Date(`${s.last_activity}T12:00:00`).getTime() > 30 * DAY) reasons.push(`Sin actividades desde el ${new Date(`${s.last_activity}T12:00:00`).toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric" })}`);
+      return { ...s, reasons };
+    })
+    .filter((s) => s.reasons.length),
+);
 const exportHref = (id) => {
   const params = new URLSearchParams();
   if (municipio.value) params.set("municipio", municipio.value);
@@ -122,7 +139,8 @@ async function drawMap() {
 async function load() {
   error.value = "";
   try {
-    data.value = await api(`/admin/estadisticas${municipio.value ? `?${new URLSearchParams({ municipio: municipio.value })}` : ""}`);
+    const q = range.params({ municipio: municipio.value });
+    data.value = await api(`/admin/estadisticas${q ? `?${q}` : ""}`);
     zones.value = await api("/admin/zonas").catch(() => null);
     await nextTick();
     map?.remove();
@@ -151,6 +169,7 @@ onBeforeUnmount(() => map?.remove());
           <option v-for="m in municipios" :key="m.id" :value="m.sep">{{ m.sep }}</option>
         </select>
       </div>
+      <DateFilter :range="range" @change="load" />
       <div class="stat-tiles">
         <div v-for="tile in tiles" :key="tile.label" class="stat-tile">
           <strong>{{ n(tile.value) }}</strong>
@@ -218,7 +237,7 @@ onBeforeUnmount(() => map?.remove());
 
     <section class="form-card">
       <div class="panel-head">
-        <h2 class="form-title">Últimas 8 semanas</h2>
+        <h2 class="form-title">{{ data.desde || data.hasta ? "Por semana" : "Últimas 8 semanas" }}</h2>
         <div class="chip-filter" role="group" aria-label="Qué mostrar">
           <button v-for="m in weekMetrics" :key="m.id" type="button" :class="['filter-chip', { active: weekMetric === m.id }]" :aria-pressed="weekMetric === m.id" @click="weekMetric = m.id">{{ m.label }}</button>
         </div>
@@ -261,23 +280,31 @@ onBeforeUnmount(() => map?.remove());
       </div>
     </section>
 
+    <section class="form-card" aria-labelledby="titulo-sin-actividad">
+      <h2 id="titulo-sin-actividad" class="form-title">Escuelas sin actividad</h2>
+      <p class="small muted-text">Registradas que no tienen docentes, no tienen alumnos o no tienen actividades en los últimos 30 días{{ municipio ? `, en ${municipio}` : "" }}</p>
+      <p v-if="!idle.length" class="muted-text">Todas las escuelas tienen actividad reciente</p>
+      <div v-else class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Escuela</th><th>Municipio</th><th class="num">Docentes</th><th class="num">Alumnos</th><th>Motivo</th></tr></thead>
+          <tbody>
+            <tr v-for="s in idle" :key="s.id">
+              <td>{{ s.name }}<br /><span class="small muted-text">{{ s.cct || "sin CCT" }}</span></td>
+              <td>{{ s.municipality }}</td><td class="num">{{ n(s.teachers) }}</td><td class="num">{{ n(s.students) }}</td>
+              <td>{{ s.reasons.join(". ") }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <section v-if="canExport" class="form-card" aria-labelledby="titulo-descargar">
       <h2 id="titulo-descargar" class="form-title">Descargar datos</h2>
       <p class="small muted-text">
-        Archivos CSV que se abren en Excel o en Google Sheets. Usan el municipio de arriba{{ municipio ? ` (${municipio})` : "" }} y las fechas que elijas.
+        Archivos CSV que se abren en Excel o en Google Sheets. Usan el municipio{{ municipio ? ` (${municipio})` : "" }} y las fechas que elijas arriba.
         Las actividades y Cimacoins cuentan solo esas fechas. Solo cifras, sin nombres de alumnos, códigos ni correos
       </p>
-      <div class="field-row export-dates">
-        <div class="field">
-          <label for="exportar-desde">Desde</label>
-          <input id="exportar-desde" v-model="desde" type="date" />
-        </div>
-        <div class="field">
-          <label for="exportar-hasta">Hasta</label>
-          <input id="exportar-hasta" v-model="hasta" type="date" :min="desde || undefined" />
-        </div>
-      </div>
-      <p v-if="badDates" class="form-alert is-error" role="alert">La fecha final tiene que ser después de la inicial</p>
+      <p class="small muted-text"><b>Fechas:</b> {{ desde || hasta ? `${desde || "el inicio"} a ${hasta || "hoy"}` : "todas" }} (se cambian arriba, en el resumen)</p>
       <ul class="export-list">
         <li v-for="item in exports" :key="item.id">
           <span><strong>{{ item.label }}</strong><span class="small muted-text">{{ item.text }}</span></span>

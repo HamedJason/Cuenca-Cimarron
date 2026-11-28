@@ -54,7 +54,15 @@ class StatsController extends Controller
     public function index(Request $request): JsonResponse
     {
         // Con ?municipio= todo el panel se limita a las escuelas de ese municipio (y a sus docentes y alumnos)
-        $data = $request->validate(['municipio' => ['nullable', 'string', 'max:60']]);
+        // Con desde y hasta, las actividades, puntos y Cimacoins cuentan solo esas fechas
+        $data = $request->validate([
+            'municipio' => ['nullable', 'string', 'max:60'],
+            'desde' => ['nullable', 'date_format:Y-m-d'],
+            'hasta' => ['nullable', 'date_format:Y-m-d', 'after_or_equal:desde'],
+        ]);
+        $from = isset($data['desde']) ? Carbon::parse($data['desde'])->startOfDay() : null;
+        $to = isset($data['hasta']) ? Carbon::parse($data['hasta'])->endOfDay() : null;
+        $dated = fn ($q, string $column = 'completions.completed_at') => $q->when($from, fn ($q) => $q->where($column, '>=', $from))->when($to, fn ($q) => $q->where($column, '<=', $to));
         $ids = ($data['municipio'] ?? null) ? SchoolMunicipality::idsIn($data['municipio']) : null;
         $teacherIds = $ids === null ? null : DB::table('teachers')->whereIn('school_id', $ids)->pluck('id')->all();
         $studentIds = $ids === null ? null : DB::table('students')
@@ -69,12 +77,19 @@ class StatsController extends Controller
             ->whereNull('students.anonymized_at')
             ->select('teachers.school_id', DB::raw('count(*) as total'))
             ->groupBy('teachers.school_id')->pluck('total', 'school_id');
-        $completionsBySchool = DB::table('completions')
+        $completionsBySchool = $dated(DB::table('completions'))
             ->join('students', 'students.id', '=', 'completions.student_id')
             ->join('classrooms', 'classrooms.id', '=', 'students.classroom_id')
             ->join('teachers', 'teachers.id', '=', 'classrooms.teacher_id')
             ->select('teachers.school_id', DB::raw('count(*) as total'))
             ->groupBy('teachers.school_id')->pluck('total', 'school_id');
+        // Última actividad de cada escuela (sin filtro de fechas), para ver cuáles están sin uso
+        $lastBySchool = DB::table('completions')
+            ->join('students', 'students.id', '=', 'completions.student_id')
+            ->join('classrooms', 'classrooms.id', '=', 'students.classroom_id')
+            ->join('teachers', 'teachers.id', '=', 'classrooms.teacher_id')
+            ->select('teachers.school_id', DB::raw('max(completions.completed_at) as last'))
+            ->groupBy('teachers.school_id')->pluck('last', 'school_id');
         $teachersBySchool = self::countBy('teachers', 'school_id', fn ($q) => $q->where('active', true));
         $classroomsBySchool = DB::table('classrooms')
             ->join('teachers', 'teachers.id', '=', 'classrooms.teacher_id')
@@ -98,6 +113,7 @@ class StatsController extends Controller
                 'status' => $s->status,
                 'lat' => $s->lat !== null ? (float) $s->lat : null,
                 'lng' => $s->lng !== null ? (float) $s->lng : null,
+                'last_activity' => isset($lastBySchool[$s->id]) ? Carbon::parse($lastBySchool[$s->id])->toDateString() : null,
                 'teachers' => (int) ($teachersBySchool[$s->id] ?? 0),
                 'classrooms' => (int) ($classroomsBySchool[$s->id] ?? 0),
                 'students' => (int) ($studentsBySchool[$s->id] ?? 0),
@@ -118,18 +134,23 @@ class StatsController extends Controller
         ])->sortByDesc(fn ($r) => [$r['students'], $r['schools']])->values();
 
         $activities = DB::table('activities')
-            ->leftJoin('completions', fn ($j) => $only($j->on('completions.activity_id', '=', 'activities.id'), 'completions.student_id', $studentIds))
+            ->leftJoin('completions', fn ($j) => $dated($only($j->on('completions.activity_id', '=', 'activities.id'), 'completions.student_id', $studentIds)))
             ->where('activities.active', true)
             ->groupBy('activities.id', 'activities.key', 'activities.title')
             ->orderByDesc(DB::raw('count(completions.id)'))->orderBy('activities.title')
             ->get(['activities.key', 'activities.title', DB::raw('count(completions.id) as total')])
             ->map(fn ($a) => ['key' => $a->key, 'title' => $a->title, 'completions' => (int) $a->total]);
 
-        // Crecimiento de las últimas 8 semanas: escuelas, alumnos y actividades nuevas.
-        $since = now()->startOfWeek()->subWeeks(7);
+        // Crecimiento por semana: escuelas, alumnos y actividades nuevas. Sin fechas, las últimas 8 semanas.
+        // Con fechas, las semanas del rango (hasta 26).
+        $until = $to ?? now()->endOfDay();
+        $since = ($from ?? $until->copy()->startOfWeek()->subWeeks(7))->copy()->startOfWeek();
+        if ($since->diffInWeeks($until) > 26) {
+            $since = $until->copy()->startOfWeek()->subWeeks(25);
+        }
         $weeks = [];
-        for ($i = 0; $i < 8; $i++) {
-            $weeks[$since->copy()->addWeeks($i)->toDateString()] = ['schools' => 0, 'students' => 0, 'completions' => 0];
+        for ($w = $since->copy(); $w <= $until; $w->addWeek()) {
+            $weeks[$w->toDateString()] = ['schools' => 0, 'students' => 0, 'completions' => 0];
         }
         $bucket = function (string $table, string $column, string $field, ?string $key = null, ?array $list = null) use (&$weeks, $since, $only): void {
             $only(DB::table($table), $key ?? 'id', $key ? $list : null)->where($column, '>=', $since)->pluck($column)->each(function ($at) use (&$weeks, $field): void {
@@ -144,7 +165,7 @@ class StatsController extends Controller
         $bucket('completions', 'completed_at', 'completions', $ids === null ? null : 'student_id', $studentIds);
 
         $statusCounts = self::countBy('schools', 'status', fn ($q) => $only($q, 'id', $ids));
-        $completions = fn () => $only(DB::table('completions'), 'student_id', $studentIds);
+        $completions = fn () => $dated($only(DB::table('completions'), 'student_id', $studentIds), 'completed_at');
 
         return response()->json([
             'totals' => [
@@ -163,6 +184,8 @@ class StatsController extends Controller
                 'catalog' => DB::table('school_catalog')->count(),
             ],
             'schools' => $approved->map(fn ($s) => collect($s)->except('created_at')->all())->values(),
+            'desde' => $data['desde'] ?? null,
+            'hasta' => $data['hasta'] ?? null,
             'municipio' => $ids === null ? null : (SchoolCatalogController::municipalityName($data['municipio']) ?? $data['municipio']),
             'municipalities' => $group('municipality'),
             'colonias' => $group('colonia'),
