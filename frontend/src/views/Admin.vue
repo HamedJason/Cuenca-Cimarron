@@ -4,6 +4,7 @@ import Icon from "../components/Icon.vue";
 import AdminSchoolItem from "../components/AdminSchoolItem.vue";
 import { api } from "../composables/api";
 import { account, accountState, loadAccount, logout } from "../composables/useAccount";
+import { municipios } from "../municipios";
 
 const AdminStats = defineAsyncComponent(() => import("../components/AdminStats.vue"));
 const AdminCatalog = defineAsyncComponent(() => import("../components/AdminCatalog.vue"));
@@ -50,6 +51,8 @@ const filters = [
   { id: "suspended", label: "Suspendidas" },
 ];
 const filter = ref("approved");
+// Municipio de las escuelas (nombre de la SEP). Vacío muestra todas
+const municipio = ref("");
 const schools = ref([]);
 const counts = ref({});
 const total = ref(0);
@@ -61,7 +64,8 @@ async function loadSchools() {
   loadingSchools.value = true;
   listError.value = "";
   try {
-    const data = await api(`/admin/escuelas?estado=${filter.value}&por=5`);
+    const params = new URLSearchParams({ estado: filter.value, por: "5", ...(municipio.value ? { municipio: municipio.value } : {}) });
+    const data = await api(`/admin/escuelas?${params}`);
     schools.value = data.schools;
     counts.value = data.counts;
     total.value = data.total;
@@ -71,7 +75,7 @@ async function loadSchools() {
     loadingSchools.value = false;
   }
 }
-watch([filter, isStaff], () => isStaff.value && loadSchools(), { immediate: true });
+watch([filter, municipio, isStaff], () => isStaff.value && loadSchools(), { immediate: true });
 const filterLabel = computed(() => filters.find((f) => f.id === filter.value)?.label ?? "");
 
 // Respaldos
@@ -133,6 +137,13 @@ watch(
       </div>
 
       <section v-if="tab === 'escuelas'" class="form-card" role="tabpanel">
+        <div class="field admin-muni">
+          <label for="municipio-escuelas">Municipio</label>
+          <select id="municipio-escuelas" v-model="municipio">
+            <option value="">Todos los municipios</option>
+            <option v-for="m in municipios" :key="m.id" :value="m.sep">{{ m.sep }}</option>
+          </select>
+        </div>
         <div class="chip-filter" role="group" aria-label="Mostrar">
           <button v-for="item in filters" :key="item.id" type="button" :class="['filter-chip', { active: filter === item.id }]" :aria-pressed="filter === item.id" @click="filter = item.id">
             {{ item.label }} <b>{{ counts[item.id] ?? 0 }}</b>
@@ -148,7 +159,7 @@ watch(
           <Icon name="search" :size="20" /> Ver todas ({{ total }})
         </button>
       </section>
-      <AdminSchoolsAll :open="showAll" :status="filter" :title="`Escuelas ${filterLabel.toLowerCase()}`" :is-admin="isAdmin" @close="showAll = false" @map="mapSchool = $event" @changed="loadSchools" />
+      <AdminSchoolsAll :open="showAll" :status="filter" :municipality="municipio" :title="`Escuelas ${filterLabel.toLowerCase()}`" :is-admin="isAdmin" @close="showAll = false" @map="mapSchool = $event" @changed="loadSchools" />
       <SchoolMapModal :school="mapSchool" @close="mapSchool = null" />
 
       <AdminCatalog v-if="tab === 'escuelas'" :can-edit="isAdmin" />

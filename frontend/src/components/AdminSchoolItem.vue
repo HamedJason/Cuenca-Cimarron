@@ -14,7 +14,7 @@ const open = ref(false);
     <div class="review-main">
       <h3>{{ school.name }}</h3>
       <p>{{ labelOf(levels, school.level) }} · {{ labelOf(shifts, school.shift) }} · {{ labelOf(sectors, school.sector) }}</p>
-      <p>{{ school.address }}, {{ school.colonia }}</p>
+      <p>{{ school.address }}, {{ school.colonia }}<template v-if="school.municipality">, {{ school.municipality }}</template></p>
       <p>CCT: <b>{{ school.cct || "sin CCT" }}</b> · {{ school.contact_name }} · {{ school.email }}</p>
       <p v-if="school.lat"><button class="text-link" type="button" @click="emit('map', school)">Ver en el mapa</button></p>
       <p v-if="school.status === 'suspended' && school.rejection_reason" class="small">Motivo de la suspensión: {{ school.rejection_reason }}</p>

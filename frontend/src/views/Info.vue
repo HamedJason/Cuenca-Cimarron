@@ -13,7 +13,8 @@ import { computed } from "vue";
 import { riesgosDe, textos } from "../municipios";
 import { municipioActual as muni } from "../composables/useMunicipio";
 const text = computed(() => textos(muni.value));
-// Riesgos del municipio elegido (municipios.js). Los que no tienen animación llevan un ícono fijo
+// Riesgos del municipio elegido (municipios.js): solo el nombre y un texto corto. Las zonas, la
+// temporada y la fuente de cada uno siguen guardadas en municipios.js
 const risks = computed(() => riesgosDe(muni.value));
 
 // Información: los temas abren su ventana en lugar de otra página.
@@ -147,16 +148,8 @@ watch(() => route.query.ver, scrollFromQuery);
           /></span>
           <strong>{{ risk.titulo }}</strong>
           <span>{{ risk.texto }}</span>
-          <span v-if="risk.zonas" class="risk-detail"><b>Dónde:</b> {{ risk.zonas }}</span>
-          <span v-if="risk.temporada" class="risk-detail"><b>Cuándo:</b> {{ risk.temporada }}</span>
-          <a v-if="risk.fuente" class="risk-source" :href="risk.fuente" target="_blank" rel="noopener"
-            ><Icon name="external" :size="14" /> {{ risk.antiguedad ? `Fuente: ${risk.antiguedad}` : "Fuente" }}</a
-          >
         </article>
       </div>
-      <p v-if="risks.some((risk) => risk.zonas)" class="section-note risk-note">
-        Las zonas vienen de los atlas de riesgo y de Protección Civil. No quiere decir que toda la colonia esté en riesgo
-      </p>
     </section>
 
     <section aria-labelledby="titulo-lecturas" class="section-space">

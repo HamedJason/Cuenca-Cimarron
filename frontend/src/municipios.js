@@ -167,10 +167,11 @@ export const municipios = [
       },
     ],
     // Se usaron como refugio en octubre de 2026 (ZETA, 29/10/2026). No prueba que estén abiertos hoy.
+    // Coordenadas: docs/refugios-coordenadas.md (aprox: true es el poblado o la calle, no el edificio)
     // Primo Tapia: el listado dice "Cipriano Portugal 23612" y no se sabe si es número o código postal.
     refugios: [
-      { name: "Unidad Deportiva Reforma", address: "Calle Plan de San Luis 157, Ampliación Reforma" },
-      { name: "Centro Comunitario Primo Tapia", address: "Cipriano Portugal, Primo Tapia" },
+      { name: "Unidad Deportiva Reforma", address: "Calle Plan de San Luis 157, Ampliación Reforma", lat: 32.383027, lng: -117.060293, aprox: true },
+      { name: "Centro Comunitario Primo Tapia", address: "Cipriano Portugal, Primo Tapia", lat: 32.222503, lng: -116.912516, aprox: true },
       { name: "Centro Comunitario Tonantzin", address: "Calle 5001, Ampliación Constitución" },
     ],
     // Riesgos naturales (consulta del 27/11/2026). Sin temporada cuando la fuente no la da.
@@ -281,11 +282,12 @@ export const municipios = [
       },
     ],
     // Se usaron como refugio en octubre de 2026 (ZETA, 29/10/2026, y boletín municipal del 11/10/2026).
+    // Coordenadas: docs/refugios-coordenadas.md (aprox: true es el poblado o la calle, no el edificio)
     // No prueba que estén abiertos hoy.
     refugios: [
       { name: "Centro Comunitario DIF Tecate", address: "Carretera Mexicali-Tijuana, col. Luis Echeverría" },
-      { name: "Salón Ejidal DIF Tecate", address: "Carretera Tecate-Ensenada, Nueva Colonia Hindú" },
-      { name: "Centro Comunitario DIF Tecate, La Rumorosa", address: "Carretera Mexicali-Tijuana, poblado La Rumorosa" },
+      { name: "Salón Ejidal DIF Tecate", address: "Carretera Tecate-Ensenada, Nueva Colonia Hindú", lat: 32.491785, lng: -116.578591, aprox: true },
+      { name: "Centro Comunitario DIF Tecate, La Rumorosa", address: "Carretera Mexicali-Tijuana, poblado La Rumorosa", lat: 32.524557, lng: -116.056869, aprox: true },
       { name: "DIF Municipal Tecate", address: "Calle Profesor José Gutiérrez Durán, fracc. La Hacienda" },
     ],
     // Riesgos naturales (consulta del 27/11/2026). Sin temporada cuando la fuente no la da.
@@ -397,10 +399,11 @@ export const municipios = [
       },
     ],
     // Se usaron como refugio en octubre de 2026 (ZETA, 29/10/2026). No prueba que estén abiertos hoy.
+    // Coordenadas: docs/refugios-coordenadas.md (aprox: true es el poblado o la calle, no el edificio)
     refugios: [
-      { name: "CDC DIF Floresta", address: "Av. Floresta 330, col. Obrera" },
-      { name: "CDC DIF Maneadero", address: "El Maneadero Parte Baja, Rodolfo Sánchez Taboada, C.P. 22790" },
-      { name: "Gimnasio de la Colonia Hidalgo, CART Ensenada", address: "Av. Diamante 2004, col. Hidalgo" },
+      { name: "CDC DIF Floresta", address: "Av. Floresta 330, col. Obrera", lat: 31.861532, lng: -116.61588, aprox: true },
+      { name: "CDC DIF Maneadero", address: "El Maneadero Parte Baja, Rodolfo Sánchez Taboada, C.P. 22790", lat: 31.721094, lng: -116.570967, aprox: true },
+      { name: "Gimnasio de la Colonia Hidalgo, CART Ensenada", address: "Av. Diamante 2004, col. Hidalgo", lat: 31.858396, lng: -116.586551, aprox: true },
     ],
     // Riesgos naturales (consulta del 27/11/2026). Sin temporada cuando la fuente no la da.
     riesgos: [
@@ -532,13 +535,14 @@ export const municipios = [
       },
     ],
     // Se usaron como refugio en octubre de 2026 (ZETA, 29/10/2026). No prueba que estén abiertos hoy.
+    // Coordenadas: docs/refugios-coordenadas.md (aprox: true es el poblado o la calle, no el edificio)
     refugios: [
-      { name: "Punto Eco DIF BC", address: "Parque Vicente Guerrero, Blvd. Adolfo López Mateos y Alfonso Esquer Sandez s/n, col. Industrial" },
-      { name: "CDC Pilares Baja California DIF BC", address: "Av. Bahía de Todos los Santos y Av. San Luis Potosí 2000, col. Baja California" },
-      { name: "Albergue Peregrino", address: "Calzada de los Presidentes casi esquina con calle Ciudad Victoria" },
-      { name: "CDHI Delta-Oaxaca", address: "Av. Lázaro Cárdenas s/n, Estación Delta, Valle de Mexicali" },
-      { name: "CDHI Carranza", address: "Calle Hipólito Rentería entre General Gil Dardo Magaña y Av. Valentín Gómez, Valle de Mexicali" },
-      { name: "Salón Ejidal del Ejido Nayarit", address: "Blvd. Lázaro Cárdenas frente al parque del Ejido Nayarit, Valle de Mexicali" },
+      { name: "Punto Eco DIF BC", address: "Parque Vicente Guerrero, Blvd. Adolfo López Mateos y Alfonso Esquer Sandez s/n, col. Industrial", lat: 32.654605, lng: -115.472372 },
+      { name: "CDC Pilares Baja California DIF BC", address: "Av. Bahía de Todos los Santos y Av. San Luis Potosí 2000, col. Baja California", lat: 32.650815, lng: -115.508261, aprox: true },
+      { name: "Albergue Peregrino", address: "Calzada de los Presidentes casi esquina con calle Ciudad Victoria", lat: 32.648458, lng: -115.481748, aprox: true },
+      { name: "CDHI Delta-Oaxaca", address: "Av. Lázaro Cárdenas s/n, Estación Delta, Valle de Mexicali", lat: 32.353675, lng: -115.187105, aprox: true },
+      { name: "CDHI Carranza", address: "Calle Hipólito Rentería entre General Gil Dardo Magaña y Av. Valentín Gómez, Valle de Mexicali", lat: 32.232222, lng: -115.167316, aprox: true },
+      { name: "Salón Ejidal del Ejido Nayarit", address: "Blvd. Lázaro Cárdenas frente al parque del Ejido Nayarit, Valle de Mexicali", lat: 32.583326, lng: -115.44257, aprox: true },
     ],
     // Riesgos naturales (consulta del 27/11/2026). Sin temporada cuando la fuente no la da.
     riesgos: [
@@ -599,7 +603,7 @@ export const municipios = [
     nombre: "San Quintín",
     sep: "San Quintín",
     centro: [30.5603, -115.9386],
-    caja: [-116.3, 30.9, -114.9, 28.0],
+    caja: [-116.3, 31.0, -112.7, 28.0],
     ayuntamiento: "https://www.sanquintin.gob.mx/",
     proteccionCivilUrl: null,
     atlas: null,
@@ -646,26 +650,27 @@ export const municipios = [
       },
     ],
     // Se usaron como refugio en octubre de 2026 (ZETA, 29/10/2026). No prueba que estén abiertos hoy.
+    // Coordenadas: docs/refugios-coordenadas.md (aprox: true es el poblado o la calle, no el edificio)
     refugios: [
-      { name: "Delegación Camalú, Escuela Secundaria 105", address: "Av. Emiliano Zapata, Camalú" },
+      { name: "Delegación Camalú, Escuela Secundaria 105", address: "Av. Emiliano Zapata, Camalú", lat: 30.840079, lng: -116.064194 },
       { name: "Iglesia Monte Horeb", address: "Av. Paralelo 28 núm. 27" },
-      { name: "Delegación Vicente Guerrero, Iglesia La Misión", address: "Calle Vicente Guerrero, Vicente Guerrero" },
-      { name: "Delegación San Quintín, Iglesia Metodista", address: "Poblado El Papalote" },
-      { name: "Delegación El Rosario, Salón DIF", address: "El Rosario de Abajo, col. Los Duarte" },
-      { name: "Asociación Pesquera Regasa Núm. 2 SPR de RL", address: "El Rosario de Abajo, col. Los Duarte" },
-      { name: "CEMSAD del Rosario", address: "El Rosario de Arriba, col. Misión" },
-      { name: "Gimnasio de Usos Múltiples", address: "El Rosario de Arriba, col. Misión" },
-      { name: "Delegación Punta Prieta, Telesecundaria Valentín Gómez Farías 30", address: "Santa Rosalita" },
-      { name: "Escuela Primaria Miguel Hidalgo y Costilla", address: "Santa Rosalita" },
-      { name: "Escuela Primaria Xicoténcatl Leyva Alemán", address: "" },
-      { name: "Escuela Primaria General Lázaro Cárdenas", address: "Punta Prieta" },
-      { name: "Delegación Villa Jesús María, Escuela Secundaria 91", address: "Villa Jesús María" },
-      { name: "Escuela Primaria Ignacio Zaragoza", address: "Villa Jesús María" },
+      { name: "Delegación Vicente Guerrero, Iglesia La Misión", address: "Calle Vicente Guerrero, Vicente Guerrero", lat: 30.730048, lng: -115.988224, aprox: true },
+      { name: "Delegación San Quintín, Iglesia Metodista", address: "Poblado El Papalote", lat: 30.470764, lng: -115.917998, aprox: true },
+      { name: "Delegación El Rosario, Salón DIF", address: "El Rosario de Abajo, col. Los Duarte", lat: 30.05877, lng: -115.724921, aprox: true },
+      { name: "Asociación Pesquera Regasa Núm. 2 SPR de RL", address: "El Rosario de Abajo, col. Los Duarte", lat: 30.05877, lng: -115.724921, aprox: true },
+      { name: "CEMSAD del Rosario", address: "El Rosario de Arriba, col. Misión", lat: 30.059378, lng: -115.726678 },
+      { name: "Gimnasio de Usos Múltiples", address: "El Rosario de Arriba, col. Misión", lat: 30.05877, lng: -115.724921, aprox: true },
+      { name: "Delegación Punta Prieta, Telesecundaria Valentín Gómez Farías 30", address: "Santa Rosalita", lat: 28.667984, lng: -114.235468 },
+      { name: "Escuela Primaria Miguel Hidalgo y Costilla", address: "Santa Rosalita", lat: 28.667984, lng: -114.235468 },
+      { name: "Escuela Primaria Xicoténcatl Leyva Alemán", address: "", lat: 28.634653, lng: -114.016194 },
+      { name: "Escuela Primaria General Lázaro Cárdenas", address: "Punta Prieta", lat: 28.929792, lng: -114.154916 },
+      { name: "Delegación Villa Jesús María, Escuela Secundaria 91", address: "Villa Jesús María", lat: 28.281353, lng: -114.00071, aprox: true },
+      { name: "Escuela Primaria Ignacio Zaragoza", address: "Villa Jesús María", lat: 28.281986, lng: -114.001649 },
       { name: "Clínica de la Mancha", address: "El Barril, Villa Jesús María" },
-      { name: "Delegación Bahía de los Ángeles", address: "Poblado Bahía de los Ángeles" },
-      { name: "Primaria Benito Juárez", address: "Poblado Bahía de los Ángeles" },
-      { name: "Salón Ejidal Tierra y Libertad", address: "Poblado Bahía de los Ángeles" },
-      { name: "Delegación El Mármol, Escuela Primaria Revolución", address: "Cataviña" },
+      { name: "Delegación Bahía de los Ángeles", address: "Poblado Bahía de los Ángeles", lat: 28.949451, lng: -113.561039, aprox: true },
+      { name: "Primaria Benito Juárez", address: "Poblado Bahía de los Ángeles", lat: 28.947209, lng: -113.560397 },
+      { name: "Salón Ejidal Tierra y Libertad", address: "Poblado Bahía de los Ángeles", lat: 28.949451, lng: -113.561039, aprox: true },
+      { name: "Delegación El Mármol, Escuela Primaria Revolución", address: "Cataviña", lat: 29.733315, lng: -114.719171 },
     ],
     // Riesgos naturales (consulta del 27/11/2026). Sin temporada cuando la fuente no la da.
     riesgos: [
@@ -778,10 +783,11 @@ export const municipios = [
       },
     ],
     // Se usaron como refugio en octubre de 2026 (ZETA, 29/10/2026). No prueba que estén abiertos hoy.
+    // Coordenadas: docs/refugios-coordenadas.md (aprox: true es el poblado o la calle, no el edificio)
     refugios: [
-      { name: "Salón Social Ejidal Plan Nacional Agrario", address: "Calle Independencia M. 25" },
+      { name: "Salón Social Ejidal Plan Nacional Agrario", address: "Calle Independencia M. 25", lat: 31.081313, lng: -114.888239, aprox: true },
       { name: "COBACH Plantel San Felipe", address: "Calle de los Pinos 601" },
-      { name: "Escuela Primaria Jaime Nuño", address: "Calle Acapulco 69" },
+      { name: "Escuela Primaria Jaime Nuño", address: "Calle Acapulco 69", lat: 31.026102, lng: -114.835333 },
     ],
     // Riesgos naturales (consulta del 27/11/2026). Sin temporada cuando la fuente no la da.
     riesgos: [

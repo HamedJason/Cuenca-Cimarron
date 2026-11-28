@@ -1,5 +1,5 @@
 <script setup>
-// Mapa chico del refugio elegido en el inicio. No se arrastra ni se acerca:
+// Mapa chico del refugio elegido en el inicio. Si el punto es del poblado o de la calle (aprox), lo dice. No se arrastra ni se acerca:
 // todo el mapa es un enlace que abre "Cómo llegar" en Google Maps, así en el
 // celular no atrapa el scroll de la página.
 import { ref, watch, onMounted, onBeforeUnmount } from "vue";
@@ -101,9 +101,10 @@ onBeforeUnmount(() => {
     :href="href"
     target="_blank"
     rel="noopener"
-    :aria-label="`Mapa de ${shelter.name}, ${shelter.address}. Abre Cómo llegar en Google Maps`"
+    :aria-label="`Mapa de ${shelter.name}, ${shelter.address}${shelter.aprox ? ', ubicación aproximada' : ''}. Abre Cómo llegar en Google Maps`"
   >
     <div ref="el" class="shelter-map-canvas" aria-hidden="true"></div>
+    <span v-if="shelter.aprox" class="shelter-map-badge">Ubicación aproximada</span>
     <p v-if="!ready && !failed" class="shelter-map-note">Cargando el mapa…</p>
     <p v-if="failed" class="shelter-map-note">
       No se pudo cargar el mapa. Toca aquí para verlo en Google Maps

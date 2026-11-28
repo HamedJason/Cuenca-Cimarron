@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\SchoolMunicipality;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -49,8 +51,17 @@ class StatsController extends Controller
         return $best;
     }
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        // Con ?municipio= todo el panel se limita a las escuelas de ese municipio (y a sus docentes y alumnos)
+        $data = $request->validate(['municipio' => ['nullable', 'string', 'max:60']]);
+        $ids = ($data['municipio'] ?? null) ? SchoolMunicipality::idsIn($data['municipio']) : null;
+        $teacherIds = $ids === null ? null : DB::table('teachers')->whereIn('school_id', $ids)->pluck('id')->all();
+        $studentIds = $ids === null ? null : DB::table('students')
+            ->join('classrooms', 'classrooms.id', '=', 'students.classroom_id')
+            ->whereIn('classrooms.teacher_id', $teacherIds)->pluck('students.id')->all();
+        $only = fn ($q, string $column, ?array $list) => $list === null ? $q : $q->whereIn($column, $list);
+
         // Alumnos, docentes, grupos y actividades por escuela.
         $studentsBySchool = DB::table('students')
             ->join('classrooms', 'classrooms.id', '=', 'students.classroom_id')
@@ -93,6 +104,9 @@ class StatsController extends Controller
                 'completions' => (int) ($completionsBySchool[$s->id] ?? 0),
                 'created_at' => $s->created_at,
             ]);
+        if ($ids !== null) {
+            $schools = $schools->whereIn('id', $ids)->values();
+        }
         $approved = $schools->where('status', 'approved')->values();
 
         $group = fn (string $key) => $approved->groupBy($key)->map(fn ($g, $name) => [
@@ -104,7 +118,7 @@ class StatsController extends Controller
         ])->sortByDesc(fn ($r) => [$r['students'], $r['schools']])->values();
 
         $activities = DB::table('activities')
-            ->leftJoin('completions', 'completions.activity_id', '=', 'activities.id')
+            ->leftJoin('completions', fn ($j) => $only($j->on('completions.activity_id', '=', 'activities.id'), 'completions.student_id', $studentIds))
             ->where('activities.active', true)
             ->groupBy('activities.id', 'activities.key', 'activities.title')
             ->orderByDesc(DB::raw('count(completions.id)'))->orderBy('activities.title')
@@ -117,37 +131,39 @@ class StatsController extends Controller
         for ($i = 0; $i < 8; $i++) {
             $weeks[$since->copy()->addWeeks($i)->toDateString()] = ['schools' => 0, 'students' => 0, 'completions' => 0];
         }
-        $bucket = function (string $table, string $column, string $field) use (&$weeks, $since): void {
-            DB::table($table)->where($column, '>=', $since)->pluck($column)->each(function ($at) use (&$weeks, $field): void {
+        $bucket = function (string $table, string $column, string $field, ?string $key = null, ?array $list = null) use (&$weeks, $since, $only): void {
+            $only(DB::table($table), $key ?? 'id', $key ? $list : null)->where($column, '>=', $since)->pluck($column)->each(function ($at) use (&$weeks, $field): void {
                 $key = Carbon::parse($at)->startOfWeek()->toDateString();
                 if (isset($weeks[$key])) {
                     $weeks[$key][$field]++;
                 }
             });
         };
-        $bucket('schools', 'created_at', 'schools');
-        $bucket('students', 'created_at', 'students');
-        $bucket('completions', 'completed_at', 'completions');
+        $bucket('schools', 'created_at', 'schools', $ids === null ? null : 'id', $ids);
+        $bucket('students', 'created_at', 'students', $ids === null ? null : 'id', $studentIds);
+        $bucket('completions', 'completed_at', 'completions', $ids === null ? null : 'student_id', $studentIds);
 
-        $statusCounts = self::countBy('schools', 'status');
+        $statusCounts = self::countBy('schools', 'status', fn ($q) => $only($q, 'id', $ids));
+        $completions = fn () => $only(DB::table('completions'), 'student_id', $studentIds);
 
         return response()->json([
             'totals' => [
                 'schools' => (int) ($statusCounts['approved'] ?? 0),
                 'suspended_schools' => (int) ($statusCounts['suspended'] ?? 0),
-                'teachers' => DB::table('teachers')->where('active', true)->count(),
-                'classrooms' => DB::table('classrooms')->whereNull('archived_at')->count(),
-                'students' => DB::table('students')->whereNull('anonymized_at')->count(),
-                'active_students' => DB::table('device_sessions')->where('kind', 'student')->where('last_used_on', '>=', now()->subDays(7)->toDateString())->distinct()->count('owner_id'),
-                'completions' => DB::table('completions')->count(),
-                'points' => (int) DB::table('completions')->sum('points'),
+                'teachers' => $only(DB::table('teachers'), 'school_id', $ids)->where('active', true)->count(),
+                'classrooms' => $only(DB::table('classrooms'), 'teacher_id', $teacherIds)->whereNull('archived_at')->count(),
+                'students' => $only(DB::table('students'), 'id', $studentIds)->whereNull('anonymized_at')->count(),
+                'active_students' => $only(DB::table('device_sessions'), 'owner_id', $studentIds)->where('kind', 'student')->where('last_used_on', '>=', now()->subDays(7)->toDateString())->distinct()->count('owner_id'),
+                'completions' => $completions()->count(),
+                'points' => (int) $completions()->sum('points'),
                 // Cimacoins ganadas por todos los alumnos (sin las 150 iniciales ni lo gastado)
-                'coins_earned' => (int) DB::table('completions')->sum('points') * (int) config('avatar.per_point')
-                    + DB::table('students')->whereNotNull('wallet')->pluck('wallet')
+                'coins_earned' => (int) $completions()->sum('points') * (int) config('avatar.per_point')
+                    + $only(DB::table('students'), 'id', $studentIds)->whereNotNull('wallet')->pluck('wallet')
                         ->sum(fn ($w) => max(0, (int) ((is_string($w) ? json_decode($w, true) : $w)['bonus'] ?? 0))),
                 'catalog' => DB::table('school_catalog')->count(),
             ],
             'schools' => $approved->map(fn ($s) => collect($s)->except('created_at')->all())->values(),
+            'municipio' => $ids === null ? null : (SchoolCatalogController::municipalityName($data['municipio']) ?? $data['municipio']),
             'municipalities' => $group('municipality'),
             'colonias' => $group('colonia'),
             'levels' => $group('level'),

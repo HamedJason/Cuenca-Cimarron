@@ -5,8 +5,11 @@ import { ref, computed, onMounted, onBeforeUnmount, nextTick } from "vue";
 import Icon from "./Icon.vue";
 import { api } from "../composables/api";
 import { labelOf, levels, sectors } from "../composables/useAccount";
+import { municipios } from "../municipios";
 
 const data = ref(null);
+// Municipio para limitar todo el panel (nombre de la SEP). Vacío muestra todo
+const municipio = ref("");
 // Desde dónde nos visitan: zona aproximada que manda el navegador, sin coordenadas
 const zones = ref(null);
 const error = ref("");
@@ -95,7 +98,7 @@ async function drawMap() {
 async function load() {
   error.value = "";
   try {
-    data.value = await api("/admin/estadisticas");
+    data.value = await api(`/admin/estadisticas${municipio.value ? `?${new URLSearchParams({ municipio: municipio.value })}` : ""}`);
     zones.value = await api("/admin/zonas").catch(() => null);
     await nextTick();
     map?.remove();
@@ -114,8 +117,15 @@ onBeforeUnmount(() => map?.remove());
   <template v-else>
     <section class="form-card" role="tabpanel">
       <div class="panel-head">
-        <h2 class="form-title">Resumen</h2>
+        <h2 class="form-title">Resumen{{ data.municipio ? ` de ${data.municipio}` : "" }}</h2>
         <button class="button secondary small-button" type="button" @click="load"><Icon name="reset" :size="18" />Actualizar</button>
+      </div>
+      <div class="field admin-muni">
+        <label for="municipio-panel">Municipio</label>
+        <select id="municipio-panel" v-model="municipio" @change="load">
+          <option value="">Todos los municipios</option>
+          <option v-for="m in municipios" :key="m.id" :value="m.sep">{{ m.sep }}</option>
+        </select>
       </div>
       <div class="stat-tiles">
         <div v-for="tile in tiles" :key="tile.label" class="stat-tile">

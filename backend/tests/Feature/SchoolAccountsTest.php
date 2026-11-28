@@ -144,6 +144,32 @@ class SchoolAccountsTest extends TestCase
             ->assertJsonPath('municipalities.0.name', 'Playas de Rosarito');
     }
 
+    public function test_el_panel_filtra_por_municipio(): void
+    {
+        $tj = $this->school();
+        $tj->school->forceFill(['cct' => null, 'lat' => 32.52, 'lng' => -117.03])->save();
+        $mxl = $this->school();
+        $mxl->school->forceFill(['cct' => null, 'name' => 'Primaria Cuauhtémoc', 'lat' => 32.62, 'lng' => -115.45])->save();
+        $sq = $this->school('suspended');
+        $sq->school->forceFill(['cct' => null, 'name' => 'Primaria Camalú', 'lat' => 30.55, 'lng' => -115.94])->save();
+        $admin = $this->admin();
+        // Sin filtro salen todas
+        $this->actingAs($admin)->getJson('/api/admin/estadisticas')->assertOk()->assertJsonPath('totals.schools', 2)->assertJsonPath('municipio', null);
+        $this->actingAs($admin)->getJson('/api/admin/escuelas')->assertOk()->assertJsonPath('total', 3);
+        // Con municipio, solo las de ese municipio, también en los conteos
+        $this->actingAs($admin)->getJson('/api/admin/estadisticas?municipio=Mexicali')->assertOk()
+            ->assertJsonPath('municipio', 'Mexicali')->assertJsonPath('totals.schools', 1)
+            ->assertJsonCount(1, 'schools')->assertJsonPath('schools.0.name', 'Primaria Cuauhtémoc');
+        $this->actingAs($admin)->getJson('/api/admin/escuelas?municipio=Mexicali')->assertOk()
+            ->assertJsonPath('total', 1)->assertJsonPath('schools.0.municipality', 'Mexicali')
+            ->assertJsonPath('counts.approved', 1);
+        $this->actingAs($admin)->getJson('/api/admin/escuelas?estado=suspended&municipio=San Quintín')->assertOk()
+            ->assertJsonPath('total', 1)->assertJsonPath('counts.suspended', 1);
+        // Rosarito también sirve con el nombre corto y aquí no hay ninguna
+        $this->actingAs($admin)->getJson('/api/admin/estadisticas?municipio=Rosarito')->assertOk()
+            ->assertJsonPath('municipio', 'Playas de Rosarito')->assertJsonPath('totals.schools', 0)->assertJsonPath('totals.students', 0);
+    }
+
     public function test_contrasena_nueva_con_codigo_de_un_solo_uso(): void
     {
         $codes = $this->postJson('/api/escuelas', $this->registration())->assertCreated()->json('recovery_codes');

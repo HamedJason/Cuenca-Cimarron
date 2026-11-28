@@ -6,7 +6,7 @@ import Icon from "./Icon.vue";
 import AdminSchoolItem from "./AdminSchoolItem.vue";
 import { api } from "../composables/api";
 
-const props = defineProps({ open: Boolean, status: { type: String, required: true }, title: String, isAdmin: Boolean });
+const props = defineProps({ open: Boolean, status: { type: String, required: true }, title: String, isAdmin: Boolean, municipality: { type: String, default: "" } });
 const emit = defineEmits(["close", "map", "changed"]);
 const q = ref("");
 const schools = ref([]);
@@ -30,6 +30,7 @@ async function loadPage(reset = false) {
   try {
     const params = new URLSearchParams({ estado: props.status, pagina: String(page.value + 1), por: "20" });
     if (q.value.trim()) params.set("q", q.value.trim());
+    if (props.municipality) params.set("municipio", props.municipality);
     const data = await api(`/admin/escuelas?${params}`);
     if (mine !== request) return;
     schools.value = [...schools.value, ...data.schools];

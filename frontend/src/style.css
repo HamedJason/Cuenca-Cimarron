@@ -10266,28 +10266,24 @@ details.call-more {
   text-align: center;
 }
 
-/* Riesgos por municipio (Info.vue): dónde, cuándo y de dónde sale el dato */
-.risk-detail {
-  font-size: 15px;
-  line-height: 1.4;
+/* Selector de municipio del panel de administración */
+.admin-muni {
+  max-width: 320px;
+  margin-bottom: 12px;
 }
-.risk-detail b {
-  color: var(--title);
-}
-.risk-source {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-top: auto;
+.shelter-map-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 500;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--gold-tint);
+  color: var(--gold-text);
   font-size: 14px;
-  font-weight: 700;
-  color: var(--title);
+  font-weight: 800;
 }
-.risk-note {
-  margin-top: 12px;
-}
-/* En celular la tarjeta es una cuadrícula (ícono y título): el dónde, el cuándo y la fuente van a lo ancho */
-.info-card > .risk-detail,
-.info-card > .risk-source {
-  grid-column: 1 / -1;
+/* El mapa no deja salir sus capas (Leaflet usa z-index altos) por encima de ventanas y avisos */
+.shelter-map {
+  isolation: isolate;
 }

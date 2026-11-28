@@ -135,7 +135,20 @@ describe("Datos por municipio", () => {
   it("refugios de octubre de 2026 en los otros municipios, sin coordenadas inventadas", () => {
     const counts = Object.fromEntries(municipios.map((m) => [m.id, m.refugios?.length ?? 0]));
     expect(counts).toEqual({ tijuana: 0, rosarito: 3, tecate: 4, ensenada: 3, mexicali: 6, "san-quintin": 19, "san-felipe": 3 });
-    for (const m of municipios) for (const r of m.refugios ?? []) expect(r.lat).toBeUndefined();
+    // Los puntos caen dentro de su municipio. Los aproximados son el poblado o la calle
+    const puntos = {};
+    for (const m of municipios) for (const r of m.refugios ?? []) {
+      if (r.lat == null) continue;
+      const [oeste, norte, este, sur] = m.caja;
+      expect(r.lat).toBeGreaterThanOrEqual(sur);
+      expect(r.lat).toBeLessThanOrEqual(norte);
+      expect(r.lng).toBeGreaterThanOrEqual(oeste);
+      expect(r.lng).toBeLessThanOrEqual(este);
+      puntos[m.id] = (puntos[m.id] ?? 0) + 1;
+    }
+    expect(puntos).toEqual({ rosarito: 2, tecate: 2, ensenada: 3, mexicali: 6, "san-quintin": 17, "san-felipe": 2 });
+    expect(buscarMunicipio("san-felipe").refugios.find((r) => r.name === "Escuela Primaria Jaime Nuño").aprox).toBeUndefined();
+    expect(buscarMunicipio("san-felipe").refugios.find((r) => r.name === "Salón Social Ejidal Plan Nacional Agrario").aprox).toBe(true);
     // Los de Tijuana sí tienen punto en el mapa
     expect(emergency.shelters.every((r) => r.lat && r.lng)).toBe(true);
   });

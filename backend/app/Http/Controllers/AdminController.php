@@ -7,6 +7,7 @@ use App\Models\School;
 use App\Support\Audit;
 use App\Support\DemoMode;
 use App\Support\Mailer;
+use App\Support\SchoolMunicipality;
 use App\Support\Settings;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -27,11 +28,16 @@ class AdminController extends Controller
             'q' => ['nullable', 'string', 'max:80'],
             'pagina' => ['nullable', 'integer', 'min:1'],
             'por' => ['nullable', 'integer', 'min:1', 'max:50'],
+            'municipio' => ['nullable', 'string', 'max:60'],
         ]);
         $demo = DemoMode::isDemoUser($request->user());
-        $scope = fn ($q) => $demo
+        // Con municipio, solo las escuelas de ese municipio (también en los conteos de arriba)
+        $municipio = $data['municipio'] ?? null;
+        $ids = $municipio ? SchoolMunicipality::idsIn($municipio) : null;
+        $scope = fn ($q) => ($demo
             ? $q->whereHas('user', fn ($u) => $u->where('email', 'like', '%@'.config('demo.domain')))
-            : $q;
+            : $q)->when($ids !== null, fn ($q) => $q->whereIn('schools.id', $ids));
+        $where = SchoolMunicipality::all();
         $query = $scope(School::with('user:id,email,email_verified_at'))
             ->when($data['estado'] ?? null, fn ($q, $status) => $q->where('status', $status));
         foreach (self::searchWords($data['q'] ?? '') as $word) {
@@ -48,6 +54,7 @@ class AdminController extends Controller
         $total = (clone $query)->count();
         $schools = $query->orderByDesc('created_at')->orderByDesc('id')->skip(($page - 1) * $per)->take($per)->get()
             ->map(fn (School $school) => $school->toPublic() + [
+                'municipality' => $where[$school->id] ?? 'Sin dato',
                 'email' => $school->user->email,
                 'email_verified' => $school->user->email_verified_at !== null,
                 'created_at' => $school->created_at?->toIso8601String(),
