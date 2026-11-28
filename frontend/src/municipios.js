@@ -57,6 +57,7 @@ export const municipios = [
     // Riesgos naturales (consulta del 27/11/2026). Sin temporada cuando la fuente no la da.
     riesgos: [
       {
+        destacado: false,
         tipo: "sismo",
         titulo: "Sismos",
         texto: "La tierra puede temblar en cualquier momento y sin aviso",
@@ -67,6 +68,7 @@ export const municipios = [
         fuente: "https://implan.tijuana.gob.mx/pdf/atlas/ATLASV2024.pdf",
       },
       {
+        destacado: false,
         tipo: "santa-ana",
         titulo: "Vientos de Santa Ana",
         texto: "Viento caliente y seco que sopla fuerte y hace que el fuego crezca rápido",
@@ -78,6 +80,7 @@ export const municipios = [
         fuente: "https://implan.tijuana.gob.mx/pdf/atlas/ATLASV2024.pdf",
       },
       {
+        destacado: false,
         tipo: "incendio",
         titulo: "Incendios forestales",
         texto: "El fuego puede quemar cerros y llegar a las casas que están cerca",
@@ -197,6 +200,7 @@ export const municipios = [
         antiguedad: "Atlas de 2015",
       },
       {
+        destacado: false,
         tipo: "santa-ana",
         titulo: "Vientos de Santa Ana",
         texto: "Viento caliente y seco que sopla fuerte y hace que el fuego crezca rápido",
@@ -287,6 +291,7 @@ export const municipios = [
     // Riesgos naturales (consulta del 27/11/2026). Sin temporada cuando la fuente no la da.
     riesgos: [
       {
+        destacado: false,
         tipo: "inundacion",
         titulo: "Inundaciones",
         texto: "El agua de la lluvia y de los arroyos puede llenar calles y casas muy rápido",
@@ -422,6 +427,7 @@ export const municipios = [
         fuente: "https://www.ensenada.gob.mx/?p=28398",
       },
       {
+        destacado: false,
         tipo: "santa-ana",
         titulo: "Vientos de Santa Ana",
         texto: "Viento caliente y seco que sopla fuerte y hace que el fuego crezca rápido",
@@ -433,6 +439,7 @@ export const municipios = [
         fuente: "https://www.ensenada.gob.mx/?p=22170",
       },
       {
+        destacado: false,
         tipo: "sismo",
         titulo: "Sismos",
         texto: "La tierra puede temblar en cualquier momento y sin aviso",
@@ -559,6 +566,7 @@ export const municipios = [
         antiguedad: "Atlas de 2011",
       },
       {
+        destacado: false,
         tipo: "inundacion",
         titulo: "Inundaciones",
         texto: "El agua de la lluvia y de los arroyos puede llenar calles y casas muy rápido",
@@ -662,6 +670,7 @@ export const municipios = [
     // Riesgos naturales (consulta del 27/11/2026). Sin temporada cuando la fuente no la da.
     riesgos: [
       {
+        destacado: false,
         tipo: "inundacion",
         titulo: "Inundaciones",
         texto: "El agua de la lluvia y de los arroyos puede llenar calles y casas muy rápido",
@@ -811,6 +820,7 @@ export const municipios = [
         antiguedad: "Atlas de Mexicali de 2011",
       },
       {
+        destacado: false,
         tipo: "inundacion",
         titulo: "Inundaciones por crecida de arroyos",
         texto: "El agua de la lluvia y de los arroyos puede llenar calles y casas muy rápido",
@@ -885,7 +895,24 @@ const TIJUANA_BASE = {
     fuente: "https://proteccioncivil.tijuana.gob.mx/pdf/progespecificos/PMC-RiesgosHidrometeorologicos_11-2026.pdf",
   },
 };
+// Los 3 riesgos más significativos de cada municipio, en este orden. Los demás se quedan en la
+// lista con destacado: false por si se usan después.
+export const RIESGOS_DESTACADOS = {
+  tijuana: ["lluvia", "deslave", "inundacion"],
+  rosarito: ["deslave", "inundacion", "tsunami"],
+  tecate: ["frio", "incendio", "deslave"],
+  ensenada: ["inundacion", "incendio", "tsunami"],
+  mexicali: ["calor", "sismo", "tolvanera"],
+  "san-quintin": ["sequia", "sismo", "tsunami"],
+  "san-felipe": ["calor", "sismo", "tsunami"],
+};
 export function riesgosDe(m) {
+  const orden = RIESGOS_DESTACADOS[m?.id] ?? [];
+  return todosLosRiesgos(m)
+    .filter((r) => r.destacado !== false)
+    .sort((a, b) => orden.indexOf(a.tipo) - orden.indexOf(b.tipo));
+}
+export function todosLosRiesgos(m) {
   const propios = m?.riesgos ?? [];
   if (!esTijuana(m)) return propios;
   const base = risks.map((item) => ({

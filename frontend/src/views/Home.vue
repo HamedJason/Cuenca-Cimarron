@@ -67,8 +67,6 @@ async function shareSite() {
   }
   setTimeout(() => (shareState.value = ""), 2600);
 }
-// Foto del equipo: cuando exista, poner aquí la ruta (por ejemplo /assets/images/equipo.webp).
-const teamPhoto = ref("");
 const telHref = (number) => `tel:${number.replace(/\s/g, "")}`;
 // Protección Civil y Bomberos son del municipio. El 089 es nacional.
 // Muchos son números de oficina: cada tarjeta dice de qué es y recuerda el 911.
@@ -693,21 +691,6 @@ const stationMapHref = (item) =>
       <FollowSection />
 
       <section class="team" aria-labelledby="titulo-equipo">
-        <figure class="team-photo">
-          <img
-            v-if="teamPhoto"
-            :src="teamPhoto"
-            alt="Equipo de profesores y estudiantes de Cuenca Cimarrona"
-            width="960"
-            height="640"
-            loading="lazy"
-            @error="teamPhoto = ''"
-          />
-          <div v-else class="team-photo-empty">
-            <Icon name="camera" :size="44" />
-            <span>Aquí va la foto del equipo</span>
-          </div>
-        </figure>
         <div class="team-text">
           <span class="label">Quiénes somos</span>
           <h2 id="titulo-equipo" class="section-title">

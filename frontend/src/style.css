@@ -5340,37 +5340,8 @@ a.game-card:active,
 /* ===== Quiénes somos (final del inicio) ===== */
 .team {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-  align-items: center;
+  max-width: 760px;
   gap: 32px 48px;
-}
-.team-photo {
-  margin: 0;
-  overflow: hidden;
-  aspect-ratio: 3 / 2;
-  border: 4px solid var(--edge);
-  border-radius: var(--radius-block);
-  box-shadow: 0 8px 0 var(--shadow);
-  background: var(--green-tint);
-}
-.team-photo img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.team-photo-empty {
-  display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: 10px;
-  height: 100%;
-  border: 3px dashed var(--uabc-green);
-  border-radius: calc(var(--radius-block) - 8px);
-  margin: 10px;
-  height: calc(100% - 20px);
-  color: var(--link);
-  font-weight: 700;
 }
 .team-text p {
   margin-top: 12px;

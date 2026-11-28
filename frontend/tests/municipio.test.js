@@ -2,7 +2,7 @@
 // Si falta un número del municipio se muestra el 911 con un aviso, nunca el número de Tijuana.
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mount } from "@vue/test-utils";
-import { buscarMunicipio, estacionesDe, faltantes, llamadas, municipios, riesgosDe, telefono, textos } from "../src/municipios.js";
+import { buscarMunicipio, estacionesDe, faltantes, llamadas, municipios, riesgosDe, telefono, textos, todosLosRiesgos } from "../src/municipios.js";
 import { emergency, helpLines } from "../src/data.js";
 import {
   MUNICIPIO_KEY,
@@ -151,21 +151,26 @@ describe("Datos por municipio", () => {
       expect(st.lat).toBeUndefined();
     }
   });
-  it("riesgos por municipio: Mexicali empieza con calor extremo y San Felipe no tiene deslaves", () => {
-    expect(riesgosDe(buscarMunicipio("mexicali"))[0]).toMatchObject({ tipo: "calor", titulo: "Calor extremo", antiguedad: "Atlas de 2011" });
-    expect(riesgosDe(buscarMunicipio("san-felipe"))[0].tipo).toBe("calor");
-    expect(riesgosDe(buscarMunicipio("san-felipe")).some((r) => r.tipo === "deslave")).toBe(false);
-    expect(riesgosDe(buscarMunicipio("tecate")).map((r) => r.tipo)).toContain("frio");
-    expect(riesgosDe(buscarMunicipio("san-quintin")).every((r) => r.antiguedad === "Dato histórico de 2012")).toBe(true);
-    // Tijuana conserva sus tres tarjetas y suma sismos, Santa Ana e incendios
-    expect(riesgosDe(buscarMunicipio("tijuana")).map((r) => r.titulo)).toEqual([
-      "Lluvias fuertes", "Deslaves", "Inundaciones", "Sismos", "Vientos de Santa Ana", "Incendios forestales",
-    ]);
+  it("cada municipio muestra sus 3 riesgos más significativos en orden", () => {
+    const tipos = (id) => riesgosDe(buscarMunicipio(id)).map((r) => r.tipo);
+    expect(tipos("tijuana")).toEqual(["lluvia", "deslave", "inundacion"]);
+    expect(riesgosDe(buscarMunicipio("tijuana")).map((r) => r.titulo)).toEqual(["Lluvias fuertes", "Deslaves", "Inundaciones"]);
+    expect(tipos("rosarito")).toEqual(["deslave", "inundacion", "tsunami"]);
+    expect(tipos("tecate")).toEqual(["frio", "incendio", "deslave"]);
+    expect(tipos("ensenada")).toEqual(["inundacion", "incendio", "tsunami"]);
+    expect(tipos("mexicali")).toEqual(["calor", "sismo", "tolvanera"]);
+    expect(tipos("san-quintin")).toEqual(["sequia", "sismo", "tsunami"]);
+    expect(tipos("san-felipe")).toEqual(["calor", "sismo", "tsunami"]);
+    for (const m of municipios) expect(riesgosDe(m)).toHaveLength(3);
+    // San Felipe ya no muestra inundación ni deslaves, pero el dato sigue guardado
+    expect(tipos("san-felipe")).not.toContain("inundacion");
+    expect(todosLosRiesgos(buscarMunicipio("san-felipe")).some((r) => r.tipo === "inundacion" && r.destacado === false)).toBe(true);
+    expect(riesgosDe(buscarMunicipio("san-quintin"))[0].antiguedad).toBe("Dato histórico de 2012");
   });
   it("cada riesgo tiene su animación y los archivos existen", async () => {
     const fs = await import("node:fs");
     const tipos = new Set();
-    for (const m of municipios) for (const r of riesgosDe(m)) {
+    for (const m of municipios) for (const r of todosLosRiesgos(m)) {
       expect(r.clip).toBeTruthy();
       tipos.add(r.clip);
     }
